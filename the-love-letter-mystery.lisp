@@ -1,18 +1,22 @@
-(defun split-by-one-space (string)
-  (loop for i = 0 then (1+ j)
-     as j = (position #\Space string :start i)
-     collect (subseq string i j)
-     while j))
+(defun palindromep (str)
+  (equal str (nreverse str)))
 
-(defun split-and-parse (string)
-  (map 'list
-       (lambda (x) (parse-integer x))
-       (split-by-one-space string)))
+(defun char-dist (pair)
+  (abs (- (char-code (car pair)) (char-code (cdr pair)))))
+
+(defun str-ends (str x)
+  (let ((strlen (length str)))
+    (if (> x (floor (/ strlen 2)))
+        (cons (elt str (- x 1)) (elt str (- strlen x)))
+        (cons (elt str (- strlen x 1)) (elt str x)))))
+
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
          (strings (loop repeat tests collect (read-line stream))))
-
+    (loop for str in strings
+       collecting
+         )
 
     ))
 
