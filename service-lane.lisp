@@ -6,7 +6,10 @@
 ;; (main) ; uncomment this when running on hacker-rank
 
 (defun repl-main ()
-  (with-open-file (s "/home/jacek/Programming/HackerRank/service-lane.input1.txt")
-    (main s)))
+  (let ((path (if (search "chess" (machine-instance))
+                  "/Users/jacekpodkanski/Documents/hackerrank/"
+                  "/home/jacek/Programming/HackerRank/")))
+    (with-open-file (s (concatenate 'string path "service-lane.input1.txt"))
+      (main s))))
 
 (repl-main)
