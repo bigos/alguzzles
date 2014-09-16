@@ -6,15 +6,23 @@
      collect (subseq string i j)
      while j))
 
+(defun split-and-parse (string)
+  (map 'list
+       (lambda (x) (parse-integer x))
+       (split-by-one-space string)))
+
 (defun solution (&optional stream)
-  (let* ((first-input) (n) (tests) (width))
+  (let* ((first-input) (n) (tests) (width) (test-cases))
     (setf first-input (split-by-one-space (read-line stream)))
     (setf n (parse-integer (elt first-input 0))
           tests (parse-integer (elt first-input 1))
-          width (map 'list (lambda (x) (parse-integer x)) (split-by-one-space (read-line stream)))
-          )
+          width (split-and-parse (read-line stream)))
+    (loop repeat tests
+       do (push (split-and-parse (read-line stream)) test-cases))
+    (setf test-cases (nreverse test-cases))
 
-    (format t "n ~a tests ~a width ~s~%" n tests width)
+
+    (format t "n ~a tests ~a width ~s test cases~S~%" n tests width test-cases)
     ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
