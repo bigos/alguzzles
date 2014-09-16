@@ -12,17 +12,25 @@
        (split-by-one-space string)))
 
 (defun solution (&optional stream)
-  (let* ((first-input) (n) (tests) (width) (test-cases))
-    (setf first-input (split-by-one-space (read-line stream)))
-    (setf n (parse-integer (elt first-input 0))
+  (let ((first-input) (n) (tests) (width) (test-cases) (result))
+    (setf first-input (split-by-one-space (read-line stream))
+          n (parse-integer (elt first-input 0))
           tests (parse-integer (elt first-input 1))
-          width (split-and-parse (read-line stream)))
-    (loop repeat tests
-       do (push (split-and-parse (read-line stream)) test-cases))
-    (setf test-cases (nreverse test-cases))
+          width (split-and-parse (read-line stream))
+          test-cases (loop repeat tests
+                        collect  (split-and-parse (read-line stream))))
 
+    (format t "submitted data: n ~a tests ~a width ~s test cases ~S~%" n tests width test-cases)
+    (setf result (loop for tc in test-cases
+                    collecting
+                      (loop for z in (subseq width (car tc) (cadr tc))
+                         do (format t "z ~S ~S-~S ~S tc -- ~S--  ~%" z (car tc) (cadr tc)  (subseq width (car tc) (cadr tc)) tc )
+                         minimize z))
+          )
 
-    (format t "n ~a tests ~a width ~s test cases~S~%" n tests width test-cases)
+    (loop for r in result
+       do
+         (format t "~&~A~%" r))
     ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
@@ -35,6 +43,13 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "service-lane.input1.txt"))
-      (solution s))))
+      (solution s)
+      (format t "------------~%"))
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    "service-lane.input2.txt"))
+      (solution s)
+      (format t "------------~%"))))
 
 (repl-main)
