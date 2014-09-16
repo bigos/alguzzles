@@ -20,25 +20,20 @@
           test-cases (loop repeat tests
                         collect  (split-and-parse (read-line stream))))
 
-    (format t "submitted data: n ~a tests ~a width ~s test cases ~S~%" n tests width test-cases)
+    (format nil "submitted data: n ~a tests ~a width ~s test cases ~S~%" n tests width test-cases)
     (setf result (loop for tc in test-cases
                     collecting
-                      (loop for z in (subseq width (car tc) (cadr tc))
-                         do (format t "z ~S ~S-~S ~S tc -- ~S--  ~%" z (car tc) (cadr tc)  (subseq width (car tc) (cadr tc)) tc )
-                         minimize z))
-          )
-
+                      (loop for z in (subseq width (car tc) (1+ (cadr tc)))
+                         minimize z)))
     (loop for r in result
-       do
-         (format t "~&~A~%" r))
-    ))
+       do (format t "~&~A~%" r))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
 (defun repl-main ()
-  (let ((path (if (search "chess" (machine-instance))
-                  "Documents/hackerrank/"
-                  "Programming/HackerRank/")))
+  (let ((path (if(search "chess" (machine-instance))
+                 "Documents/hackerrank/"
+                 "Programming/hackerrank/")))
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
