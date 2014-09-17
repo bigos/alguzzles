@@ -1,15 +1,24 @@
 (defun string-to-char (str)
   (map 'list (lambda (x) x) str))
 
+(defun counts (a uniques)
+  (let (counts)
+    (loop for u in uniques do
+         (push (count u a ) counts))
+    counts))
+
 (defun solution (&optional stream)
   (let* ((a (string-to-char (read-line stream)))
          (uniques (remove-duplicates  a))
-         (counts))
-    (format t "~A" a)
-    (loop for u in uniques do
-         (push (count u a ) counts))
-    (format t "~a" counts)
-    ))
+         (cts (counts a uniques))
+         (odd-cts 0))
+    (format nil "~A" a)
+    (format nil "~a" cts)
+    (loop for c in cts
+       until (> odd-cts 1)
+       do (when (oddp c)
+            (incf odd-cts)))
+    (format t "~a" (if (> odd-cts 1) "NO" "YES"))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
