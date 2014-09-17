@@ -1,7 +1,15 @@
+(defun string-to-char (str)
+  (map 'list (lambda (x) x) str))
+
 (defun solution (&optional stream)
-  (let* ((a (read-line stream)))
+  (let* ((a (string-to-char (read-line stream)))
+         (uniques (remove-duplicates  a))
+         (counts))
     (format t "~A" a)
-   ))
+    (loop for u in uniques do
+         (push (count u a ) counts))
+    (format t "~a" counts)
+    ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
