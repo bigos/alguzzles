@@ -1,11 +1,10 @@
 (defun solution (&optional stream)
   (let* ((a (parse-integer (read-line stream)))
          (b (parse-integer (read-line stream))))
-    (format t "ab ~A ~A" a b)
-    (loop for x from a to b do
-         (loop for y from (1+ x) to b
-            do (format t "~A ~A~%" x y)))
-    ))
+    (format t "~A"
+            (loop for x from a to (1- b) maximize
+                 (loop for y from (1+ x) to b
+                    maximize (boole boole-xor x y))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
