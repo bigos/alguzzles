@@ -9,13 +9,20 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-
+(defun task (n c m)
+  (let* ((bought (floor (/ n c)))
+         (offer (floor (/ bought m))))
+    (princ (+ bought offer))
+    (terpri)))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
-         (ncms (split-and-parse (read-line stream))))
-
-    ))
+         (ncms (loop repeat tests
+                  collect (split-and-parse (read-line stream)))))
+    (loop for z in ncms do
+         (task (nth 0 z)
+               (nth 1 z)
+               (nth 2 z)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
