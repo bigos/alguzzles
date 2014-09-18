@@ -11,8 +11,9 @@
 
 (defun task (n c m)
   (let* ((bought (floor (/ n c)))
-         (offer (floor (/ bought m))))
-    (princ (+ bought offer))
+         (offer (floor (/ bought m)))
+
+         )
     (terpri)))
 
 (defun solution (&optional stream)
