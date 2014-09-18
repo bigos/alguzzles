@@ -13,21 +13,21 @@
   (let ((shortest))
     (loop do
          (progn
-           (setf shortest (loop for s in sticks
-                             minimizing s))
-           (setf sticks (remove 0
-                                (map 'list
-                                     (lambda (x) (- x shortest))
-                                     sticks)))
-           (format t ">> ~A~%" sticks))
-       while sticks)
-    ))
+           (format t "~A~%" (length sticks)))
+         (setf shortest (loop for s in sticks
+                           minimizing s))
+         (setf sticks (remove 0
+                              (map 'list
+                                   (lambda (x) (- x shortest))
+                                   sticks)))
+       while sticks)))
 
 (defun solution (&optional stream)
-  (let* ((sticks-no (parse-integer (read-line stream)))
-         (sticks (split-and-parse (read-line stream)))
-         (cut-sticks sticks)
-         )))
+  (let* ((no (read-line stream))
+         (sticks (split-and-parse (read-line stream))))
+    (eq no no)
+    (cut-sticks sticks)
+    ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
