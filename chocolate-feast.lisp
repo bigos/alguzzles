@@ -12,9 +12,9 @@
 (defun task (n c m)
   (let* ((bought (floor (/ n c)))
          (offer (floor (/ bought m)))
-
-         )
-    (terpri)))
+         (rest (mod bought m))
+         (rest-used (if (zerop rest) 0 (/ offer rest))))
+    (format t "~A~%" (+ bought offer rest-used))))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
