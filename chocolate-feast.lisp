@@ -12,10 +12,10 @@
 (defun idea (x m)
   (+
    (* m
-      (floor (/ (1- x) (1- m))))
-   (if (zerop (mod x (1- m)))
-       (1- m)
-       (mod x (1- m)))))
+      (floor (/ (- x 1)
+                (- m 1))))
+   (+ (mod (- x 1) m)
+      1)))
 
 (defun task (n c m)
   (let* ((bought (floor (/ n c))))
