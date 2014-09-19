@@ -13,17 +13,13 @@
   (+
    (* m
       (floor (/ (1- x) (1- m))))
-   (if (zerop (mod x 3)) 3 (mod x 3)))
-  )
+   (if (zerop (mod x (1- m)))
+       (1- m)
+       (mod x (1- m)))))
 
 (defun task (n c m)
-  (let* ((bought (floor (/ n c)))
-         (offer (floor (/ bought m)))
-         (rest (mod bought m))
-         (rest-used (if (zerop rest) 0 (/ offer rest))))
-    (princ (list bought m (list offer) (list rest) rest-used))
-    (terpri)
-    (format t "~A~%" (+ bought offer rest-used))))
+  (let* ((bought (floor (/ n c))))
+    (format t "~A~%" (idea bought m))))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
