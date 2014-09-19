@@ -9,6 +9,13 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun idea (x m)
+  (+
+   (* m
+      (floor (/ (1- x) (1- m))))
+   (if (zerop (mod x 3)) 3 (mod x 3)))
+  )
+
 (defun task (n c m)
   (let* ((bought (floor (/ n c)))
          (offer (floor (/ bought m)))
