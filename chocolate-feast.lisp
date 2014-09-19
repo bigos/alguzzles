@@ -14,6 +14,8 @@
          (offer (floor (/ bought m)))
          (rest (mod bought m))
          (rest-used (if (zerop rest) 0 (/ offer rest))))
+    (princ (list bought m (list offer) (list rest) rest-used))
+    (terpri)
     (format t "~A~%" (+ bought offer rest-used))))
 
 (defun solution (&optional stream)
