@@ -18,6 +18,7 @@
 
 (defun decentp (n)
   ;; TODO: finish it
+
   (= n 2))
 
 (defun largest-decent (ndigits)
@@ -53,13 +54,3 @@
       (solution s))))
 
 (repl-main)
-
-;; Input Format
-;; The 1st line will contain an integer T, the number of test cases. This is followed by T lines, each containing an integer N i.e. the number of digits in the number
-
-;; Output Format
-;; Largest Decent number having N digits. If no such number exists, tell Sherlock that he is wrong and print '-1'
-
-;; Constraints
-;; 1<=T<=20
-;; 1<=N<=100000
