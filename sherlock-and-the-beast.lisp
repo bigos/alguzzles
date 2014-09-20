@@ -17,12 +17,6 @@
      1))
 
 (defun decentp (n)
-  ;; TODO: finish it
-  ;; A 'Decent' Number has -
-  ;; 1. Only 3 and 5 as its digits.
-  ;; 2. Number of times 3 appears is divisible by 5.
-  ;; 3. Number of times 5 appears is divisible by 3.
-  ;; 555 or 33333 or 55555533333
   (let* ((nstr (format nil "~A" n))
          (count3 (count #\3 nstr))
          (count5 (count #\5 nstr)))
@@ -31,7 +25,7 @@
              (zerop (rem count3 5))
              (zerop (rem count5 3)))
         n
-        -1)))
+        nil)))
 
 (defun largest-decent (ndigits)
   (let ((big-decent))
