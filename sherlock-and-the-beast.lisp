@@ -16,24 +16,48 @@
   (+ (largest-ndigits (1- n))
      1))
 
-(defun decentp (n)
-  (let* ((nstr (format nil "~A" n))
+(defun binary-to-decent (bin len)
+  (let* ((nstr (substitute #\5
+                           #\1
+                           (substitute #\3
+                                       #\0
+                                       (format nil
+                                               (format nil "~~~d,'0b" len)
+                                               bin) )))
          (count3 (count #\3 nstr))
          (count5 (count #\5 nstr)))
+    (format t "~a~%" nstr)
+    (if (and (= (+ count3 count5)
+                (length nstr))
+             (zerop (rem count3 5))
+             (zerop (rem count5 3)))
+        (parse-integer nstr)
+        nil)))
+
+(defun decentp (n)
+  ;; (format t "~A~%" n)
+  (let* ((nstr (format nil "~A" n))
+         (count3 (count #\3 nstr))
+         (count5 (count #\5 nstr))
+)
     (if (and (= (+ count3 count5)
                 (length nstr))
              (zerop (rem count3 5))
              (zerop (rem count5 3)))
         n
-        nil)))
+        nil)
+))
 
 (defun largest-decent (ndigits)
   (let ((big-decent))
-    (loop for x from (largest-ndigits ndigits)
+    (loop for x from (1+ (largest-ndigits ndigits))
        downto (smallest-ndigits ndigits)
-       do (when (decentp x)
-            (setf big-decent x))
-       until (decentp x))
+       by 10
+       do (progn (when (decentp (+ x 3))
+                   (setf big-decent (+ x 3)))
+                 (when (decentp (+ x 5))
+                   (setf big-decent (+ x 5))))
+       until big-decent)
     (if big-decent
         big-decent
         -1)))
