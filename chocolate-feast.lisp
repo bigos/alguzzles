@@ -10,12 +10,13 @@
        (split-by-one-space string)))
 
 (defun idea (x m)
-  (+
-   (* m
-      (floor (/ (- x 1)
-                (- m 1))))
-   (+ (mod (- x 1) m)
-      1)))
+  (let ((x1 (- x 1))
+        (m1 (- m 1)))
+    (+
+     (* m
+        (floor (/ x1 m1)))
+     (mod x1 m1)
+     1)))
 
 (defun task (n c m)
   (let* ((bought (floor (/ n c))))
