@@ -26,7 +26,6 @@
                                                bin) )))
          (count3 (count #\3 nstr))
          (count5 (count #\5 nstr)))
-    (format t "~a~%" nstr)
     (if (and (= (+ count3 count5)
                 (length nstr))
              (zerop (rem count3 5))
@@ -34,42 +33,21 @@
         (parse-integer nstr)
         nil)))
 
-(defun decentp (n)
-  ;; (format t "~A~%" n)
-  (let* ((nstr (format nil "~A" n))
-         (count3 (count #\3 nstr))
-         (count5 (count #\5 nstr))
-)
-    (if (and (= (+ count3 count5)
-                (length nstr))
-             (zerop (rem count3 5))
-             (zerop (rem count5 3)))
-        n
-        nil)
-))
-
-(defun largest-decent (ndigits)
-  (let ((big-decent))
-    (loop for x from (1+ (largest-ndigits ndigits))
-       downto (smallest-ndigits ndigits)
-       by 10
-       do (progn (when (decentp (+ x 3))
-                   (setf big-decent (+ x 3)))
-                 (when (decentp (+ x 5))
-                   (setf big-decent (+ x 5))))
-       until big-decent)
-    (if big-decent
-        big-decent
-        -1)))
+(defun largest-decent (len)
+  (let ((res))
+    (loop for bin from (expt 2 len) downto 0
+       do (setf res (binary-to-decent bin len))
+       until res
+       finally (return res))))
 
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream)))
-         (nums (loop repeat tc collect (parse-integer (read-line stream)))))
+         (nums (loop repeat tc collect (parse-integer (read-line stream))))
+         (r))
     ;; (princ  nums)
     (loop for x in nums
-       do (princ (largest-decent x))
-         (terpri))
-    ))
+       do (progn (setf r (largest-decent x))
+                 (format t "~A~%" (if r r -1))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
