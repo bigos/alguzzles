@@ -9,12 +9,35 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun largest-ndigits (n)
+  (1- (expt 10 n)))
 
+(defun smallest-ndigits (n)
+  (+ (largest-ndigits (1- n))
+     1))
+
+(defun decentp (n)
+  ;; TODO: finish it
+  (= n 2))
+
+(defun largest-decent (ndigits)
+  (let ((big-decent))
+    (loop for x from (largest-ndigits ndigits)
+       downto (smallest-ndigits ndigits)
+       do (when (decentp x)
+            (setf big-decent x))
+       until (decentp x))
+    (if big-decent
+        big-decent
+        -1)))
 
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream)))
          (nums (loop repeat tc collect (parse-integer (read-line stream)))))
-    (princ  nums)
+    ;; (princ  nums)
+    (loop for x in nums
+       do (princ (largest-decent x))
+         (terpri))
     ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
@@ -30,3 +53,13 @@
       (solution s))))
 
 (repl-main)
+
+;; Input Format
+;; The 1st line will contain an integer T, the number of test cases. This is followed by T lines, each containing an integer N i.e. the number of digits in the number
+
+;; Output Format
+;; Largest Decent number having N digits. If no such number exists, tell Sherlock that he is wrong and print '-1'
+
+;; Constraints
+;; 1<=T<=20
+;; 1<=N<=100000
