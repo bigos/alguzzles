@@ -1,21 +1,3 @@
-(defun split-by-one-space (string)
-  (loop for i = 0 then (1+ j)
-     as j = (position #\Space string :start i)
-     collect (subseq string i j)
-     while j))
-
-(defun split-and-parse (string)
-  (map 'list
-       (lambda (x) (parse-integer x))
-       (split-by-one-space string)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun largest-ndigits (n)
-  (1- (expt 10 n)))
-
-(defun smallest-ndigits (n)
-  (+ (largest-ndigits (1- n))
-     1))
-
 (defun binary-to-decent (bin len)
   (let* ((nstr (substitute #\5
                            #\1
@@ -42,12 +24,10 @@
 
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream)))
-         (nums (loop repeat tc collect (parse-integer (read-line stream))))
-         (r))
-    ;; (princ  nums)
+         (nums (loop repeat tc collect (parse-integer (read-line stream)))))
     (loop for x in nums
-       do (progn (setf r (largest-decent x))
-                 (format t "~A~%" (if r r -1))))))
+       with r = (largest-decent x)
+       do (format t "~A~%" (if r r -1)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
