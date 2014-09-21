@@ -1,3 +1,7 @@
+(require :sb-sprof)
+
+(declaim (optimize speed))
+
 (defun decent-binary (bin format-str)
   (let* ((nstr (format nil format-str bin))
          (count3 (count #\0 nstr))
@@ -17,7 +21,6 @@
        finally (return res))))
 
 (defun solution (&optional stream)
-  (declare (optimize (debug 3)))
   (let* ((tc (parse-integer (read-line stream)))
          (nums (loop repeat tc collect (parse-integer (read-line stream)))))
     (loop for x in nums
@@ -37,3 +40,10 @@
       (solution s))))
 
 (repl-main)
+;; using profiler
+;; (sb-sprof:with-profiling (:max-samples 1000
+;;                                        :report :flat
+;;                                        :loop nil))
+;; (sb-sprof:start-profiling)
+;; (largest-decent 96388)
+;; (sb-sprof:report)
