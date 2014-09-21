@@ -13,12 +13,25 @@
         (parse-integer (substitute #\5 #\1 (substitute #\3 #\0 nstr)))
         nil)))
 
+(defun decent-fast (len)
+  (let* ((threes (case (rem len 3) ((0) 0) ((1) 10) ((2) 5)))
+         (fives (- len threes)))
+    (list threes fives)
+    (let ((string (make-array '(0) :element-type 'base-char
+                              :fill-pointer 0 :adjustable t)))
+      (with-output-to-string (stream string)
+        (loop repeat fives do (format stream "~A" 5))
+        (loop repeat threes do (format stream "~A" 3)))
+      string)))
+
 (defun largest-decent (len)
   (let ((format-str (format nil "~~~D,'0b" len)))
-    (loop for bin from (expt 2 len) downto 0
-       for res = (decent-binary bin format-str)
-       until res
-       finally (return res))))
+    (if (> len 10)
+        (decent-fast len)
+        (loop for bin from (expt 2 len) downto 0
+           for res = (decent-binary bin format-str)
+           until res
+           finally (return res)))))
 
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream)))
@@ -39,16 +52,10 @@
                                     "sherlock-and-the-beast.input.11.txt"))
       (solution s))))
 
-(repl-main)
 ;; using profiler
-;; (sb-sprof:with-profiling (:max-samples 1000
-;;                                        :report :flat
-;;                                        :loop nil))
-;; (sb-sprof:start-profiling)
-;; (largest-decent 96388)
-;; (sb-sprof:report)
-;;
-;;sequences for large numbers
-;; (case (rem 7 3) ((0) 0) ((1) 10) ((2) 5) )
-;; (loop for x from 1 to 19 for d = (largest-decent x) do
-;;      (format t "x ~A = ~a | ~a ~a ~%" x d (count #\3 (format nil "~a" d)) (count #\5 (format nil "~a" d))))
+(sb-sprof:with-profiling (:max-samples 1000
+                                       :report :flat
+                                       :loop nil))
+(sb-sprof:start-profiling)
+(repl-main)
+(sb-sprof:report)
