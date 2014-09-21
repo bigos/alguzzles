@@ -1,10 +1,25 @@
+(defun find-me (n r values)
+  (format t "~A ~A ~% " n r)
+  (loop for v in values
+     do (progn (if (> n 0)
+                   (find-me (1- n)  (+ r v)  values))
+               )))
+
+(defun find-values (n a b)
+  (find-me n 0 (list a b))
+  (format t "~%"))
+
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
-         (ncms (loop repeat tests
-                  collect (list (read-line stream)
-                                (read-line stream)
-                                (read-line stream)))))
-    (format t "~A~%" ncms)))
+         (data (loop repeat tests
+                  collect (list (parse-integer (read-line stream))
+                                (parse-integer (read-line stream))
+                                (parse-integer (read-line stream))))))
+    (format t ">>> ~A~%" data)
+    (loop for dataset in data
+       do (find-values (nth 0 dataset)
+                       (nth 1 dataset)
+                       (nth 2 dataset)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
