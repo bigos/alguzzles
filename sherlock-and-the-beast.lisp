@@ -47,3 +47,8 @@
 ;; (sb-sprof:start-profiling)
 ;; (largest-decent 96388)
 ;; (sb-sprof:report)
+;;
+;;sequences for large numbers
+;; (case (rem 7 3) ((0) 0) ((1) 10) ((2) 5) )
+;; (loop for x from 1 to 19 for d = (largest-decent x) do
+;;      (format t "x ~A = ~a | ~a ~a ~%" x d (count #\3 (format nil "~a" d)) (count #\5 (format nil "~a" d))))
