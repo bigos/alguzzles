@@ -11,11 +11,12 @@
        do
          (progn
            (setf d (floor (/ n1 (car divs))))
-           (setf r (if T
-                       (rem n1 (car divs))))
-           (format t "~A ~A ~A~%" n1 divs r)
+           (setf r (if (>= n1 (car divs))
+                       (rem n1 (car divs))
+                       999))
+           (format t "~A ~A ~A ~A~%" n1 divs d r)
            (setf divs (cdr divs))
-           (setf n1 d))
+           (setf n1 r))
        collect d)))
 
 (defun puzzle (a b)
