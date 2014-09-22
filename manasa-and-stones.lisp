@@ -21,7 +21,7 @@
 (defun puzzle (a b)
   (let ((term (expt 2 2)))
     (loop for x from 0 to (1- term)
-       collect (format nil "~2,'0b" x)
+       collect (apply '+ (substitute a 0 (substitute b 1 (pad-min-len (calc-base x 2) 2))))
          )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
