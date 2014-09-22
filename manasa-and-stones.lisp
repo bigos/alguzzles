@@ -17,7 +17,7 @@
     (concatenate 'list
                  (loop repeat padl collect 0)
                  core)))
-
+;;; todo: fix me
 (defun puzzle (a b l)
   (let ((term (expt l 2)))
     (loop for x from 0 to (1- term)
