@@ -1,3 +1,13 @@
+(defparameter dat '(a b c))
+
+(defun loopy (l d)
+  (let ((ld (length d)))
+    (loop for x in d
+       collect (list x (if (> l 0)
+                           (loopy (1- l) d))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun find-me (n r values)
   (format t "~A ~A ~% " n r)
   (loop for v in values
