@@ -2,12 +2,21 @@
 (defun expotential-divisors (n expot)
   (loop for x = 1 then (* x expot ) until (> x n) collect x))
 
-(defun calculi (n expot)
+(defun calc-base (n expot)
   (declare (optimize (debug 3)))
   (let ((divs (reverse (expotential-divisors n expot))))
     (loop for d in divs
        collect (floor (/ n d))
        do (if (>= n d) (setf n (rem n d))))))
+
+(defun pad-min-len (core len)
+  (let* ((cl (length core))
+         (padl (if (< cl len)
+                   (- len cl)
+                   0)))
+    (concatenate 'list
+                 (loop repeat padl collect 0)
+                 core)))
 
 (defun puzzle (a b)
   (let ((term (expt 2 2)))
