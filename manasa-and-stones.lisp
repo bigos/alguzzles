@@ -10,11 +10,12 @@
        while divs
        do
          (progn
-            (setf d (floor (/ n1 (car divs))))
-            (setf r (rem n1 (car divs)))
-            (setf divs (cdr divs))
-(princ n1)
-            (setf n1 d))
+           (setf d (floor (/ n1 (car divs))))
+           (setf r (if T
+                       (rem n1 (car divs))))
+           (format t "~A ~A ~A~%" n1 divs r)
+           (setf divs (cdr divs))
+           (setf n1 d))
        collect d)))
 
 (defun puzzle (a b)
