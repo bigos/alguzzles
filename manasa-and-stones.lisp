@@ -18,20 +18,14 @@
                  (loop repeat padl collect 0)
                  core)))
 
-(defun puzzle (a b)
-  (let ((term (expt 2 2)))
+(defun puzzle (a b l)
+  (let ((term (expt l 2)))
     (loop for x from 0 to (1- term)
-       collect (apply '+ (substitute a 0 (substitute b 1 (pad-min-len (calc-base x 2) 2))))
-         )))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+       collect (apply '+ (substitute a 0 (substitute b 1 (pad-min-len (calc-base x 2) l)))))))
 
 (defun find-me (n r values)
   (format t "~A ~A ~% " n r)
-  (loop for v in values
-     do (progn (if (> n 0)
-                   (find-me (1- n)  (+ r v)  values))
-               )))
+)
 
 (defun find-values (n a b)
   (find-me n 0 (list a b))
