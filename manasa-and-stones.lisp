@@ -1,10 +1,11 @@
-(defparameter dat '(a b c))
+;;; this is going to be useful
+(loop for x = 1 then (* x 2 ) until (> x 32) collect x)
 
-(defun loopy (l d)
-  (let ((ld (length d)))
-    (loop for x in d
-       collect (list x (if (> l 0)
-                           (loopy (1- l) d))))))
+(defun puzzle (a b)
+  (let ((term (expt 2 2)))
+    (loop for x from 0 to (1- term)
+       collect (format nil "~2,'0b" x)
+         )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
