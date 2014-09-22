@@ -4,13 +4,17 @@
 
 (defun calculi (n expot)
   (declare (optimize (debug 3)))
-  (let ((divs (reverse (expotential-divisors n expot))))
+  (let ((divs (reverse (expotential-divisors n expot)))
+        (n1 n) (d) (r))
     (loop
-       for n1 = n then d
-       for d = (floor (/ n1 (car divs)))
-       for r = (rem n1 (car divs))
+       while divs
        do
-       (setf divs (cdr divs))
+         (progn
+            (setf d (floor (/ n1 (car divs))))
+            (setf r (rem n1 (car divs)))
+            (setf divs (cdr divs))
+(princ n1)
+            (setf n1 d))
        collect d)))
 
 (defun puzzle (a b)
