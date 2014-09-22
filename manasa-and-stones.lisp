@@ -1,5 +1,17 @@
 ;;; this is going to be useful
-(loop for x = 1 then (* x 2 ) until (> x 32) collect x)
+(defun expotential-divisors (n expot)
+  (loop for x = 1 then (* x expot ) until (> x n) collect x))
+
+(defun calculi (n expot)
+  (declare (optimize (debug 3)))
+  (let ((divs (reverse (expotential-divisors n expot))))
+    (loop
+       for n1 = n then d
+       for d = (floor (/ n1 (car divs)))
+       for r = (rem n1 (car divs))
+       do
+       (setf divs (cdr divs))
+       collect d)))
 
 (defun puzzle (a b)
   (let ((term (expt 2 2)))
