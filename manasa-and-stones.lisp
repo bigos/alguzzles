@@ -19,23 +19,22 @@
                  core)))
 ;;; todo: fix me
 (defun puzzle (a b l)
-  (let ((term (expt l 2)))
-    (loop for x from 0 to (- term 1)
-       collect (list '+
-                      (substitute a
-                                  0
-                                  (substitute b
-                                              1
-                                              (pad-min-len (calc-base x 2)
-                                                           l)))))))
+  (let ( (term (expt 2 l)))
+    (remove-duplicates
+     (loop for x from 0 to (- term 1)
+        collect (apply '+
+                       (substitute a
+                                   0
+                                   (substitute b
+                                               1
+                                               (pad-min-len (calc-base x 2)
+                                                            l))))))))
 
-(defun find-me (n r values)
-  (format t "~A ~A ~% " n r)
-)
-
-(defun find-values (n a b)
-  (find-me n 0 (list a b))
-  (format t "~%"))
+(defun find-vals (n a b)
+  (let ((res (puzzle a b (1- n))))
+    (loop for x in res
+       do (format t "~a " x))
+    (terpri)))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
@@ -43,9 +42,8 @@
                   collect (list (parse-integer (read-line stream))
                                 (parse-integer (read-line stream))
                                 (parse-integer (read-line stream))))))
-    (format t ">>> ~A~%" data)
     (loop for dataset in data
-       do (find-values (nth 0 dataset)
+       do (find-vals (nth 0 dataset)
                        (nth 1 dataset)
                        (nth 2 dataset)))))
 
