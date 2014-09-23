@@ -69,9 +69,9 @@
 (repl-main)
 
 (require :sb-sprof)
-;; (sb-sprof:with-profiling (:max-samples 1000
-;;                                        :report :flat
-;;                                        :loop nil))
+(sb-sprof:with-profiling (:max-samples 1000
+                                       :report :flat
+                                       :loop nil))
 (sb-sprof:start-profiling)
-(puzzle 10 200 22)
+(puzzle 10 200 23)
 (sb-sprof:report)
