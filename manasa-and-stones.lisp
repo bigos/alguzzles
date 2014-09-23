@@ -26,9 +26,7 @@
                                   0
                                   (substitute b
                                               1
-                                              (pad-min-len (calc-base
-                                                            x
-                                                            2)
+                                              (pad-min-len (calc-base x 2)
                                                            l)))))))
 
 (defun find-me (n r values)
