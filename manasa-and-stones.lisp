@@ -21,7 +21,15 @@
 (defun puzzle (a b l)
   (let ((term (expt l 2)))
     (loop for x from 0 to (1- term)
-       collect (apply '+ (substitute a 0 (substitute b 1 (pad-min-len (calc-base x 2) l)))))))
+       collect (apply '+
+                      (substitute a
+                                  0
+                                  (substitute b
+                                              1
+                                              (pad-min-len (calc-base
+                                                            x
+                                                            2)
+                                                           l)))))))
 
 (defun find-me (n r values)
   (format t "~A ~A ~% " n r)
