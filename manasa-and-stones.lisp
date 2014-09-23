@@ -17,7 +17,7 @@
     (concatenate 'list
                  (loop repeat padl collect 0)
                  core)))
-;;; todo: fix me
+;;; fixed but slow
 (defun puzzle (a b l)
   (let ( (term (expt 2 l)))
     (remove-duplicates
@@ -57,6 +57,12 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "manasa-and-stones.input.1.txt"))
-      (solution s))))
+      (solution s))
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    "manasa-and-stones.input.2.txt"))
+      (solution s))
+    ))
 
 (repl-main)
