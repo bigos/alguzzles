@@ -18,6 +18,7 @@
                  (loop repeat padl collect 0)
                  core)))
 ;;; fixed but slow
+;;; substitute might be a problem
 (defun puzzle (a b l)
   (let ( (term (expt 2 l)))
     (remove-duplicates
@@ -58,11 +59,19 @@
                                     path
                                     "manasa-and-stones.input.1.txt"))
       (solution s))
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    "manasa-and-stones.input.2.txt"))
-      (solution s))
+    ;; (with-open-file (s (concatenate 'string
+    ;;                                 (directory-namestring (user-homedir-pathname))
+    ;;                                 path
+    ;;                                 "manasa-and-stones.input.2.txt"))
+    ;;   (solution s))
     ))
 
 (repl-main)
+
+(require :sb-sprof)
+;; (sb-sprof:with-profiling (:max-samples 1000
+;;                                        :report :flat
+;;                                        :loop nil))
+(sb-sprof:start-profiling)
+(puzzle 10 200 22)
+(sb-sprof:report)
