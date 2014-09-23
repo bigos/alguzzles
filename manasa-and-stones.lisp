@@ -20,8 +20,8 @@
 ;;; todo: fix me
 (defun puzzle (a b l)
   (let ((term (expt l 2)))
-    (loop for x from 0 to (1- term)
-       collect (apply '+
+    (loop for x from 0 to (- term 1)
+       collect (list '+
                       (substitute a
                                   0
                                   (substitute b
