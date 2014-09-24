@@ -4,24 +4,22 @@
   (declare (type fixnum n expot))
   (reverse (loop for x = 1 then (* x expot ) until (> x n) collect x)))
 
-(defun calc-base (n expot a b)
+(defun calc-base (n expot)
   (declare (optimize (speed 3)))
   (declare (type fixnum base expot))
   (let ((divs (expotential-divisors n expot)))
     (loop for d in divs
-       collect (if (zerop (floor (/ n d)))
-                   b
-                   a)
+       collect (floor (/ n d))
        do (if (>= n d) (setf n (rem n d))))))
 
-(defun pad-min-len (core len val)
+(defun pad-min-len (core len)
   (declare (optimize (speed 3)))
   (declare (type fixnum len)
-           )
+      )
   (let* ((cl (length core))
          (padl (if (< cl len)
                    (- len cl)
-                   val)))
+                   0)))
     (concatenate 'list
                  (loop repeat padl collect 0)
                  core)))
@@ -33,12 +31,16 @@
   (let* ((term (expt 2 l)))
     (remove-duplicates
      (loop for x from 0 to (- term 1)
-        collect (list '+ (pad-min-len (calc-base x 2 a b)
-                                       l
-                                       a))))))
+        collect (apply '+
+                       (substitute a
+                                   0
+                                   (substitute b
+                                               1
+                                               (pad-min-len (calc-base x 2)
+                                                            l))))))))
 
 (defun find-vals (n a b)
-  (let ((res  (puzzle a b (1- n))))
+  (let ((res (puzzle a b (1- n))))
     (loop for x in res
        do (format t "~a " x))
     (terpri)))
@@ -65,19 +67,19 @@
                                     path
                                     "manasa-and-stones.input.1.txt"))
       (solution s))
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    "manasa-and-stones.input.2.txt"))
-      (solution s))
+    ;; (with-open-file (s (concatenate 'string
+    ;;                                 (directory-namestring (user-homedir-pathname))
+    ;;                                 path
+    ;;                                 "manasa-and-stones.input.2.txt"))
+    ;;   (solution s))
     ))
 
 (repl-main)
 
-;; (require :sb-sprof)
-;; (sb-sprof:with-profiling (:max-samples 10
-;;                                        :report :flat
-;;                                        :loop nil))
-;; (sb-sprof:start-profiling)
-;; (puzzle 10 200 23)
-;; (sb-sprof:report)
+(require :sb-sprof)
+(sb-sprof:with-profiling (:max-samples 10
+                                       :report :flat
+                                       :loop nil))
+(sb-sprof:start-profiling)
+(puzzle 10 200 23)
+(sb-sprof:report)
