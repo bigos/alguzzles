@@ -1,15 +1,21 @@
 ;;; this is going to be useful
 (defun expotential-divisors (n expot)
-  (loop for x = 1 then (* x expot ) until (> x n) collect x))
+  (declare (optimize (speed 3)))
+  (declare (type fixnum n expot))
+  (reverse (loop for x = 1 then (* x expot ) until (> x n) collect x)))
 
 (defun calc-base (n expot)
-  (declare (optimize (debug 3)))
-  (let ((divs (reverse (expotential-divisors n expot))))
+  (declare (optimize (speed 3)))
+  (declare (type fixnum base expot))
+  (let ((divs (expotential-divisors n expot)))
     (loop for d in divs
        collect (floor (/ n d))
        do (if (>= n d) (setf n (rem n d))))))
 
 (defun pad-min-len (core len)
+  (declare (optimize (speed 3)))
+  (declare (type fixnum len)
+      )
   (let* ((cl (length core))
          (padl (if (< cl len)
                    (- len cl)
@@ -20,7 +26,9 @@
 ;;; fixed but slow
 ;;; substitute might be a problem
 (defun puzzle (a b l)
-  (let ( (term (expt 2 l)))
+  (declare (optimize (speed 3)))
+  (declare (type fixnum a b l))
+  (let* ((term (expt 2 l)))
     (remove-duplicates
      (loop for x from 0 to (- term 1)
         collect (apply '+
@@ -69,7 +77,7 @@
 (repl-main)
 
 (require :sb-sprof)
-(sb-sprof:with-profiling (:max-samples 1000
+(sb-sprof:with-profiling (:max-samples 10
                                        :report :flat
                                        :loop nil))
 (sb-sprof:start-profiling)
