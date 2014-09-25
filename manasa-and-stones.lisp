@@ -29,13 +29,15 @@
   (let* ((term (expt 2 l)))
     (remove-duplicates
      (loop for x from 0 to (- term 1)
-        collect (apply '+
-                       (substitute a
-                                   0
-                                   (substitute b
-                                               1
-                                               (pad-min-len (calc-base x  (expotential-divisors x 2))
-                                                            l))))))))
+        collect (list '+
+                      (substitute a
+                                  0
+                                  (substitute b
+                                              1
+                                              (loop for d in (expotential-divisors x 2)
+                                                 for n = x then (if (>= n d) (rem n d) n)
+                                                 collecting (floor (/ n d))
+                                                   ))))))))
 
 (defun find-vals (n a b)
   (let ((res (puzzle a b (1- n))))
