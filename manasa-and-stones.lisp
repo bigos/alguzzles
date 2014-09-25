@@ -34,10 +34,7 @@
                                   0
                                   (substitute b
                                               1
-                                              (loop for d in (expotential-divisors x 2)
-                                                 for n = x then (if (>= n d) (rem n d) n)
-                                                 collecting (floor (/ n d))
-                                                   ))))))))
+                                              (calc-base x (expotential-divisors (1+ x) 2)))))))))
 
 (defun find-vals (n a b)
   (let ((res (puzzle a b (1- n))))
