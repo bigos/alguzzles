@@ -4,13 +4,12 @@
   (declare (type fixnum n expot))
   (reverse (loop for x = 1 then (* x expot ) until (> x n) collect x)))
 
-(defun calc-base (n expot)
+(defun calc-base (n divisors)
   (declare (optimize (speed 3)))
-  (declare (type fixnum base expot))
-  (let ((divs (expotential-divisors n expot)))
-    (loop for d in divs
-       collect (floor (/ n d))
-       do (if (>= n d) (setf n (rem n d))))))
+  (declare (type fixnum n))
+  (loop for d in divisors
+     collect (floor (/ n d))
+     do (if (>= n d) (setf n (rem n d)))))
 
 (defun pad-min-len (core len)
   (declare (optimize (speed 3)))
@@ -23,8 +22,7 @@
     (concatenate 'list
                  (loop repeat padl collect 0)
                  core)))
-;;; fixed but slow
-;;; substitute might be a problem
+;;; fixed but slow  ;;; substitute might be a problem
 (defun puzzle (a b l)
   (declare (optimize (speed 3)))
   (declare (type fixnum a b l))
@@ -36,7 +34,7 @@
                                    0
                                    (substitute b
                                                1
-                                               (pad-min-len (calc-base x 2)
+                                               (pad-min-len (calc-base x  (expotential-divisors x 2))
                                                             l))))))))
 
 (defun find-vals (n a b)
