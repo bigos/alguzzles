@@ -1,6 +1,9 @@
 (defun expotential-divisors (n expot)
   (reverse (loop for x = 1 then (* x expot ) until (> x n) collect x)))
 
+(defun expot-len (n)
+  (1- (expt 2 (1- n))))
+
 (defun calc-base (n divs a b)
   (loop for d in divs
      collect (if (zerop (floor (/ n d)))
@@ -11,10 +14,10 @@
 (defun puzzle (n a b)
   (let* ((divs (expotential-divisors n 2))
          (res))
-    (loop for x from 0 to n
+    (loop for x from 0 to (expot-len n)
        do (progn
             (setf res (calc-base x divs a b))
-            (format t "~a ~%"  res)
+            (format t "~a ~%" (apply '+ res))
             )))
   )
 
