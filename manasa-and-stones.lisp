@@ -11,10 +11,10 @@
   ;; (format t "~&divs: ~A~%" divs)
   ;; (2048 1024 512 256 128 64 32 16 8 4 2 1)
   (loop for d in divs
-     sum (if (zerop (floor n d))
-                     a
-                     b)
-     do (if (>= n d) (setf n (rem n d)))))
+     sum (if (< n d)
+             a
+             b)
+     do (when (>= n d) (setf n (rem n d)))))
 
 (defun puzzle (n a b)
   (let* ((divs (expotential-divisors n 2))
