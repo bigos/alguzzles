@@ -25,6 +25,7 @@
     (concatenate 'list
                  (loop repeat padl collect 0)
                  core)))
+
 ;;; fixed but slow
 ;;; substitute might be a problem
 (defun puzzle (a b l)
