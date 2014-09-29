@@ -1,6 +1,25 @@
+(defun expotential-divisors (n expot)
+  (reverse (loop for x = 1 then (* x expot ) until (> x n) collect x)))
+
+(defun calc-base (n divs a b)
+  (loop for d in divs
+     collect (if (zerop (floor (/ n d)))
+                     a
+                     b)
+     do (if (>= n d) (setf n (rem n d)))))
+
+(defun puzzle (n a b)
+  (let* ((divs (expotential-divisors n 2))
+         (res))
+    (loop for x from 0 to n
+       do (progn
+            (setf res (calc-base x divs a b))
+            (format t "~a ~%"  res)
+            )))
+  )
+
 (defun find-values (n a b)
   (format t "arguments: ~a ~a ~a~%" n a b))
-
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
