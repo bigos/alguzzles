@@ -48,7 +48,7 @@
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
-                                    "manasa-and-stones.input.1.txt"))
+                                    "manasa-and-stones.input.2.txt"))
       (solution s))))
 
 (repl-main)
