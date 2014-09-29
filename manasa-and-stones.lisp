@@ -8,8 +8,10 @@
   (1- (expt 2 n)))
 
 (defun calc-base (n divs a b)
+  ;; (format t "~&divs: ~A~%" divs)
+  ;; (2048 1024 512 256 128 64 32 16 8 4 2 1)
   (loop for d in divs
-     sum (if (zerop (floor (/ n d)))
+     sum (if (zerop (floor n d))
                      a
                      b)
      do (if (>= n d) (setf n (rem n d)))))
@@ -48,7 +50,14 @@
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
-                                    "manasa-and-stones.input.2.txt"))
+                                    "manasa-and-stones.input.3.txt"))
       (solution s))))
 
 (repl-main)
+(require :sb-sprof)
+(sb-sprof:with-profiling (:max-samples 10
+                                       :report :flat
+                                       :loop nil))
+(sb-sprof:start-profiling)
+(puzzle 22 900 23)
+(sb-sprof:report)
