@@ -9,21 +9,24 @@
 
 (defun calc-base (n divs a b)
   (loop for d in divs
-     collect (if (zerop (floor (/ n d)))
+     sum (if (zerop (floor (/ n d)))
                      a
                      b)
      do (if (>= n d) (setf n (rem n d)))))
 
 (defun puzzle (n a b)
   (let* ((divs (expotential-divisors n 2))
-         (res))
+         (res) (found))
     (loop for x from 0 to (expot-len n)
        do (progn
             (setf res (calc-base x divs a b))
-            (format t "~a ~a~%" (apply '+ res) res)))))
+            (unless (search (list res) found)
+              (push res found)
+              (format t "~a " res ))))))
 
 (defun find-values (n a b)
-  (puzzle (1- n) a b))
+  (puzzle (1- n) a b)
+  (terpri))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
