@@ -8,7 +8,7 @@
   (1- (expt 2 n)))
 
 (defun calc-base (n divs a b)
-  ;; (format t "~&divs: ~A~%" divs)
+  ;; (format t "~&divs: ~A ~A~%" divs n)
   ;; (2048 1024 512 256 128 64 32 16 8 4 2 1)
   (loop for d in divs
      sum (if (< n d)
@@ -17,14 +17,11 @@
      do (when (>= n d) (setf n (rem n d)))))
 
 (defun puzzle (n a b)
-  (let* ((divs (expotential-divisors n 2))
-         (res) (found))
-    (loop for x from 0 to (expot-len n)
-       do (progn
-            (setf res (calc-base x divs a b))
-            (unless (search (list res) found)
-              (push res found)
-              (format t "~a " res ))))))
+  (let* ((divs (expotential-divisors (1- n) 2))
+         (res (loop for x from 0
+                 until (>= x n)
+                 collect (calc-base (1- (expt 2 x)) divs a b))))
+    (format t "~{~a~^ ~}~%" (sort res '<) )))
 
 (defun formula (n a b)
   (sort (remove-duplicates
@@ -34,10 +31,9 @@
         '<))
 
 (defun find-values (n a b)
-  ;; (puzzle (1- n) a b)
-  (loop for res in (formula n a b)
-       do (format t "~A " res))
-  (terpri))
+  (puzzle  n a b)
+  ;; (loop for res in (formula n a b) do (format t "~A " res))
+  )
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
@@ -68,5 +64,5 @@
                                        :report :flat
                                        :loop nil))
 (sb-sprof:start-profiling)
-(puzzle 22 900 23)
+(find-values 22 900 23)
 (sb-sprof:report)
