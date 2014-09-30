@@ -17,6 +17,7 @@
      do (when (>= n d) (setf n (rem n d)))))
 
 (defun puzzle (n a b)
+  ;; this one doesn't time out but gives wrong answers
   (let* ((divs (expotential-divisors (1- n) 2))
          (res (loop for x from 0
                  until (>= x n)
@@ -31,8 +32,8 @@
         '<))
 
 (defun find-values (n a b)
-  (puzzle  n a b)
-  ;; (loop for res in (formula n a b) do (format t "~A " res))
+  ;; (puzzle  n a b)
+  (format t  "~{~a~^ ~}~%" (formula n a b))
   )
 
 (defun solution (&optional stream)
