@@ -26,8 +26,17 @@
               (push res found)
               (format t "~a " res ))))))
 
+(defun formula (n a b)
+  (sort (remove-duplicates
+          (loop for i from 0 upto (1- n)
+             collect (+ (* a i)
+                        (* b (- n 1 i)))))
+        '<))
+
 (defun find-values (n a b)
-  (puzzle (1- n) a b)
+  ;; (puzzle (1- n) a b)
+  (loop for res in (formula n a b)
+       do (format t "~A " res))
   (terpri))
 
 (defun solution (&optional stream)
