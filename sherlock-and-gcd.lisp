@@ -1,8 +1,5 @@
-;; Sample output
-;; YES
-;; NO
-
-;; Sherlock is stuck. He has an array A1,A2,⋯,AN. He wants to know if there exists a subset, B={Ai1,Ai2,…,Aik} where 1≤i1<i2<…<ik≤N, of this array which follows the property
+;; Sherlock is stuck. He has an array A1,A2,⋯,AN. He wants to know if there exists a subset, B={Ai1,Ai2,…,Aik}
+;; where 1≤i1<i2<…<ik≤N, of this array which follows the property
 
 ;; B is non-empty subset.
 ;; There exists no integer x(x>1) which divides all elements of B. Note that x may or may not be an element of A.
@@ -46,6 +43,18 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun puzzle-2 (n mums)
+  (oddp n))
+
+(defun puzzle (data)
+  (let ((n (car data))
+        (nums (cadr data)))
+    ;; (format t "~A ~A~%" n nums)
+    (if (puzzle-2 n nums)
+        (princ "YES")
+        (princ "NO"))
+    (terpri)
+    ))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
@@ -53,7 +62,7 @@
                   collect (list (parse-integer (read-line stream))
                                 (split-and-parse (read-line stream))))))
     (loop for dataset in data
-       do (format t "~A~%" dataset))))
+       do (puzzle dataset))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
