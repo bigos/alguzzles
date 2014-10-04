@@ -43,8 +43,10 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-(defun puzzle-2 (n mums)
-  (oddp n))
+(defun puzzle-2 (n nums)
+  (if (>= (length nums) 3)
+      (princ (subseq nums 0 3))
+      nil))
 
 (defun puzzle (data)
   (let ((n (car data))
