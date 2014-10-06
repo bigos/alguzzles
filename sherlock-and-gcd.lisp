@@ -45,8 +45,12 @@
 
 (defun puzzle-2 (n nums)
   (if (>= (length nums) 3)
-      (princ (subseq nums 0 3))
-      nil))
+      (cond ((< n 3) nil)
+            ((eq n 3) (apply '<= nums))
+            (T (progn
+                 (princ nums)
+                 nil)))
+      ))
 
 (defun puzzle (data)
   (let ((n (car data))
