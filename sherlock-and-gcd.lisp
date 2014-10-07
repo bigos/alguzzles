@@ -9,6 +9,21 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun factor (n &optional (acc '()))
+  (when (> n 1) (loop with max-d = (isqrt n)
+                   for d = 2 then (if (evenp d) (1+ d) (+ d 2)) do
+                     (cond ((> d max-d) (return (cons (list n 1) acc)))
+                           ((zerop (rem n d))
+                            (return (factor (truncate n d) (if (eq d (caar acc))
+                                                               (cons
+                                                                (list (caar acc) (1+ (cadar acc)))
+                                                                (cdr acc))
+                                                               (cons (list d 1) acc)))))))))
+
+(defun primep (n)
+  (equalp (car (factor n))
+           (list n 1)))
+
 (defun puzzle-2 (n nums)
   (if (>= (length nums) 3)
       (cond ((< n 3) nil)
@@ -18,12 +33,10 @@
                     for x = 0 then (+ x 1)
                     for y = (+ x 3) then (+ y 1)
                     for z = (subseq nums x y)
-                    for res = (apply '< z)
+                    for res = (apply '<= z)
                     do (format nil "~A ~A~%" nums z)
                     until res
-                    finally (return res))
-                 )))
-      ))
+                    finally (return res)))))))
 
 (defun puzzle (data)
   (let ((n (car data))
@@ -32,8 +45,7 @@
     (if (puzzle-2 n nums)
         (princ "YES")
         (princ "NO"))
-    (terpri)
-    ))
+    (terpri)))
 
 (defun solution (&optional stream)
   (let* ((tests (parse-integer (read-line stream)))
