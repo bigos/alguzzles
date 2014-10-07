@@ -19,7 +19,7 @@
                     for y = (+ x 3) then (+ y 1)
                     for z = (subseq nums x y)
                     for res = (apply '< z)
-                    do (format t "~A ~A~%" nums z)
+                    do (format nil "~A ~A~%" nums z)
                     until res
                     finally (return res))
                  )))
