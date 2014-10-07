@@ -46,9 +46,13 @@
 (defun puzzle-2 (n nums)
   (if (>= (length nums) 3)
       (cond ((< n 3) nil)
-            ((eq n 3) (apply '<= nums))
+            ((eq n 3) (apply '< nums))
             (T (progn
-                 (princ nums)
+                 (loop repeat 4
+                    for x = 0 then (+ x 1)
+                    for y = (+ x 2) then (+ y 1)
+                    until (>= y (length nums))
+                    do (format t "~A ~A~%" x y))
                  nil)))
       ))
 
