@@ -25,6 +25,7 @@
            (list n 1)))
 
 (defun puzzle-2 (n nums)
+  (format t "nums are: ~A ~%" nums)
   (if (>= (length nums) 3)
       (cond ((< n 3) nil)
             ((eq n 3) (apply '< nums))
@@ -34,7 +35,7 @@
                     for y = (+ x 3) then (+ y 1)
                     for z = (subseq nums x y)
                     for res = (apply '<= z)
-                    do (format nil "~A ~A~%" nums z)
+                    do (format t "~A ~%" z)
                     until res
                     finally (return res)))))))
 
@@ -61,10 +62,17 @@
   (let ((path (if(search "chess" (machine-instance))
                  "Documents/hackerrank/"
                  "Programming/hackerrank/")))
+
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "sherlock-and-gcd.input.1.txt"))
-      (solution s))))
+      (solution s))
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    "sherlock-and-gcd.input.2.txt"))
+      (solution s))
+    ))
 
 (repl-main)
