@@ -9,20 +9,21 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-(defun factor (n &optional (acc '()))
-  (when (> n 1) (loop with max-d = (isqrt n)
-                   for d = 2 then (if (evenp d) (1+ d) (+ d 2)) do
-                     (cond ((> d max-d) (return (cons (list n 1) acc)))
-                           ((zerop (rem n d))
-                            (return (factor (truncate n d) (if (eq d (caar acc))
-                                                               (cons
-                                                                (list (caar acc) (1+ (cadar acc)))
-                                                                (cdr acc))
-                                                               (cons (list d 1) acc)))))))))
+(defun small-divisors (n)
+  (loop for x from 1 to (isqrt n)
+     if (zerop (mod n x))
+     collect x))
+
+(defun divisors (n)
+  (let ((big-divs))
+    (loop for sd in (small-divisors n)
+       do
+         (push (floor n sd) big-divs))
+    (append (small-divisors n) big-divs)))
 
 (defun primep (n)
-  (equalp (car (factor n))
-           (list n 1)))
+  (= (length (divisors n))
+     2))
 
 (defun puzzle-2 (n nums)
   (format t "nums are: ~A ~%" nums)
@@ -34,10 +35,13 @@
                     for x = 0 then (+ x 1)
                     for y = (+ x 3) then (+ y 1)
                     for z = (subseq nums x y)
-                    for res = (apply '<= z)
-                    do (format t "~A ~%" z)
-                    until res
-                    finally (return res)))))))
+                    for res1 = (apply #'<= z)
+                    for res2 = (if res1
+                                   (every #'primep z)
+                                   nil)
+                    do (format nil "~A ~A <<<~%" z res2)
+                    until (and res1 res2)
+                    finally (return (and res1 res2))))))))
 
 (defun puzzle (data)
   (let ((n (car data))
@@ -63,11 +67,11 @@
                  "Documents/hackerrank/"
                  "Programming/hackerrank/")))
 
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    "sherlock-and-gcd.input.1.txt"))
-      (solution s))
+    ;; (with-open-file (s (concatenate 'string
+    ;;                                 (directory-namestring (user-homedir-pathname))
+    ;;                                 path
+    ;;                                 "sherlock-and-gcd.input.1.txt"))
+    ;;   (solution s))
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
