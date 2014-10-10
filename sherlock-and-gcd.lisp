@@ -15,18 +15,20 @@
      collect x))
 
 (defun divisors (n)
-  (let ((big-divs))
+  (let ((big-divs) (isqrtn (isqrt n)))
     (loop for sd in (small-divisors n)
+       for res = (floor n sd)
        do
-         (push (floor n sd) big-divs))
-    (append (small-divisors n) big-divs)))
+         (unless (= res isqrtn)
+           (push res big-divs)))
+    (cdr (append (small-divisors n) big-divs))))
 
 (defun primep (n)
   (= (length (divisors n))
-     2))
+     1))
 
 (defun puzzle-2 (n nums)
-  (format t "nums are: ~A ~%" nums)
+  (format t "nums are: ~A ~A ~%" n nums)
   (if (>= (length nums) 3)
       (cond ((< n 3) nil)
             ((eq n 3) (apply '< nums))
@@ -37,7 +39,8 @@
                     for z = (subseq nums x y)
                     for res1 = (apply #'<= z)
                     for res2 = (if res1
-                                   (every #'primep z)
+                                   (<= (count-if-not #'primep z)
+                                       1)
                                    nil)
                     do (format nil "~A ~A <<<~%" z res2)
                     until (and res1 res2)
