@@ -34,8 +34,10 @@
         (t (mapcan #'flatten structure))))
 
 (defun test-divisors (nums)
-  (let* ((all-divs (flatten (loop for l in '(4 6 8) collect (divisors l))))
+  (let* ((all-divs (flatten (loop for l in nums collect (divisors l))))
          (unique-divs (remove-duplicates all-divs)))
+    (every (lambda (x) (<= x 2))  (loop for ud in unique-divs
+                                     collect (count ud all-divs)))
     ))
 
 (defun puzzle-2 (n nums)
