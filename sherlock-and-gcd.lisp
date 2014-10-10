@@ -40,7 +40,7 @@
                     for res1 = (apply #'<= z)
                     for res2 = (if res1
                                    (<= (count-if-not #'primep z)
-                                       1)
+                                       2)
                                    nil)
                     do (format nil "~A ~A <<<~%" z res2)
                     until (and res1 res2)
