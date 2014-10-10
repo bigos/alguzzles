@@ -27,6 +27,17 @@
   (= (length (divisors n))
      1))
 
+(defun flatten (structure)
+  ;;TODO doesn't work with '((1 . :a) (2 . :b))
+  (cond ((null structure) nil)
+        ((atom structure) (list structure))
+        (t (mapcan #'flatten structure))))
+
+(defun test-divisors (nums)
+  (let* ((all-divs (flatten (loop for l in '(4 6 8) collect (divisors l))))
+         (unique-divs (remove-duplicates all-divs)))
+    ))
+
 (defun puzzle-2 (n nums)
   (format t "nums are: ~A ~A ~%" n nums)
   (if (>= (length nums) 3)
@@ -39,8 +50,7 @@
                     for z = (subseq nums x y)
                     for res1 = (apply #'<= z)
                     for res2 = (if res1
-                                   (<= (count-if-not #'primep z)
-                                       2)
+                                   (test-divisors z)
                                    nil)
                     do (format nil "~A ~A <<<~%" z res2)
                     until (and res1 res2)
