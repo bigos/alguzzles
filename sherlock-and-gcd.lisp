@@ -89,8 +89,21 @@
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
-                                    "sherlock-and-gcd.input.2.txt"))
+                                    "sherlock-and-gcd-test-cases/input00.txt"))
       (solution s))
+    (format t "------------------------~%")
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    "sherlock-and-gcd-test-cases/input11.txt"))
+      (solution s))
+    ;; should be yes
+    '(14 '(66694 14259 1710 57758 10303 28775 10037 7706 88458 76927 73054 56600 92544 7414))
+
+    '(11 '(4679 47454 36018 28542 21813 94535 41021 32041 45985 29580 82823))
+
+
+
     ))
 
 (repl-main)
