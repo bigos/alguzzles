@@ -35,10 +35,12 @@
 
 (defun test-divisors (nums)
   (let* ((all-divs (flatten (loop for l in nums collect (divisors l))))
-         (unique-divs (remove-duplicates all-divs)))
+         (unique-divs (remove-duplicates all-divs))
+         (counted-divs (loop for ud in unique-divs
+                          collecting (count ud all-divs))))
+    (format t "~a ~a ~a~%" all-divs unique-divs counted divs)
     (every (lambda (x) (< x (length nums)))
-           (loop for ud in unique-divs
-              collecting (count ud all-divs)))))
+           counted-divs)))
 
 (defun puzzle-2 (n nums)
   (if (>= (length nums) 3)
