@@ -38,26 +38,12 @@
          (unique-divs (remove-duplicates all-divs))
          (counted-divs (loop for ud in unique-divs
                           collecting (count ud all-divs))))
-    (format t "~a ~a ~a~%" all-divs unique-divs counted divs)
+    ;; (format t "~a ~a ~a~%" all-divs unique-divs counted-divs)
     (every (lambda (x) (< x (length nums)))
            counted-divs)))
 
 (defun puzzle-2 (n nums)
-  (if (>= (length nums) 3)
-      (cond ((< n 3) nil)
-            ((eq n 3) (apply '< nums))
-            (T (progn
-                 (loop repeat (- (length nums) 2)
-                    for x = 0 then (+ x 1)
-                    for y = (+ x 3) then (+ y 1)
-                    for z = (subseq nums x y)
-                    for res1 = (apply #'<= z)
-                    for res2 = (if res1
-                                   (test-divisors z)
-                                   nil)
-                    do (format nil "~A ~A <<<~%" z res2)
-                    until (and res1 res2)
-                    finally (return (and res1 res2))))))))
+ (test-divisors nums))
 
 (defun puzzle (data)
   (let ((n (car data))
@@ -100,8 +86,8 @@
                                     "sherlock-and-gcd-test-cases/input11.txt"))
       (solution s))
     ;; both should be yes
-    (puzzle-2 14 '(66694 14259 1710 57758 10303 28775 10037 7706 88458 76927 73054 56600 92544 7414))
-    (puzzle-2 11 '(4679 47454 36018 28542 21813 94535 41021 32041 45985 29580 82823))
+    (test-divisors '(66694 14259 1710 57758 10303 28775 10037 7706 88458 76927 73054 56600 92544 7414))
+    (test-divisors '(4679 47454 36018 28542 21813 94535 41021 32041 45985 29580 82823))
     ))
 
 (repl-main)
