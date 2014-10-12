@@ -9,19 +9,16 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-(defun puzzle (n data)
-  (format t "~a ~a~%" n data)
-  )
-
 (defun solution (&optional stream)
   (let* ((nm (split-and-parse (read-line stream)))
          (data (loop repeat (cadr nm)
                   collect (split-and-parse (read-line stream)))))
-    (format t "~a ~a ~%" nm data)
-    (loop for d in data
-       do
-         (puzzle (car nm) d))
-    ))
+    (format t "~A~%"
+            (floor  (apply #'+
+                           (loop for d in data
+                              for res = (* (caddr d) (1+ (- (cadr d) (car d))))
+                              collect res))
+                    (car nm)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
