@@ -10,15 +10,14 @@
        (split-by-one-space string)))
 
 (defun split-string-to-chars (str)
-  (loop for x from 0 to (1- (length str))
+  (loop for x from 0 to (- (length str) 1)
      collecting (char str x)))
 
 (defun solution (&optional stream)
   (let* ((nm (split-and-parse (read-line stream)))
          (data (loop repeat (car nm)
-                  collect (parse-integer (read-line stream)
-                                         :radix 2))))
-    (format t "~A ~A~%" nm data)))
+                  collect (split-string-to-chars (read-line stream)))))
+    (format t "~A ~s~%" nm data)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
