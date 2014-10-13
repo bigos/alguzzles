@@ -9,6 +9,10 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun split-string-to-chars (str)
+  (loop for x from 0 to (1- (length str))
+     collecting (char str x)))
+
 (defun solution (&optional stream)
   (let* ((nm (split-and-parse (read-line stream)))
          (data (loop repeat (car nm)
