@@ -3,7 +3,7 @@
          (data (make-array (list testcases 1)
                            :initial-contents
                            (loop repeat testcases
-                              collect (parse-integer (read-line stream))))))
+                              collect (list (parse-integer (read-line stream)))))))
    (format t "~S ~S~%" testcases data)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
