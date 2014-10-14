@@ -10,14 +10,25 @@
        (split-by-one-space string)))
 
 (defun split-string-to-chars (str)
-  (loop for x from 0 to (- (length str) 1)
-     collecting (char str x)))
+  (map 'list #'character str))
+
+(defun teams (count)
+  (loop for x from 0 below count
+     do
+       (loop for y from (1+ x) below count
+          do (format t "~A ~A~%" x y))))
+
+
+(defun puzzle (people topics topic-data)
+  (format t "~A ~A ~s~%" people topics topic-data)
+  (loop for t from 0 to (1- topics)
+       ))
 
 (defun solution (&optional stream)
   (let* ((nm (split-and-parse (read-line stream)))
          (data (loop repeat (car nm)
                   collect (split-string-to-chars (read-line stream)))))
-    (format t "~A ~s~%" nm data)))
+    (puzzle (car nm) (cadr nm) data)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
