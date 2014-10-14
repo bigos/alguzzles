@@ -23,12 +23,12 @@
 (defun puzzle (people topics topic-data)
   (let ((results) (max-result) (max-count))
     (loop for x from 0 below people
-         do
-           (loop for y from (1+ x) below people
-              do
-                (push
-                 (known-by-team x y topics topic-data)
-                 results)))
+       do
+         (loop for y from (1+ x) below people
+            do
+              (push
+               (known-by-team x y topics topic-data)
+               results)))
     (setf max-result (apply #'max results ))
     (setf max-count (count max-result results))
     (format t "~A~%~A~%" max-result max-count)))
@@ -52,12 +52,6 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     puzzle "/" "input.1.txt"))
-      (solution s))
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    puzzle "/" "input.2.txt"))
-      (solution s))
-    ))
+      (solution s))))
 
 (repl-main)
