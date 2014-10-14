@@ -9,13 +9,22 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun squarep (i)
+  (zerop (multiple-value-bind (x y)
+             (floor (sqrt i))
+           (declare (ignore x)) y)))
+
+(defun puzzle (a b)
+  (loop for i from a to b counting (squarep i)))
+
 (defun solution (&optional stream)
   (let* ((testcases (parse-integer (read-line stream)))
          (data (make-array (list testcases 2)
                            :initial-contents
                            (loop repeat testcases
                               collect (split-and-parse (read-line stream))))))
-    (format t "~A ~s~%" testcases data)))
+    (loop for x from 0 below testcases
+       do (format t "~A~%" (puzzle (aref data x 0) (aref data x 1))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
