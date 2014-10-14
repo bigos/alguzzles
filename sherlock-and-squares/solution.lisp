@@ -9,13 +9,12 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-(defun squarep (i)
-  (zerop (multiple-value-bind (x y)
-             (floor (sqrt i))
-           (declare (ignore x)) y)))
-
 (defun puzzle (a b)
-  (loop for i from a to b counting (squarep i)))
+  (loop for i = (isqrt a) then (1+ i)
+       for sq = (* i i)
+     counting (and (>= sq a)
+                   (<= sq b))
+     until (> sq b)))
 
 (defun solution (&optional stream)
   (let* ((testcases (parse-integer (read-line stream)))
