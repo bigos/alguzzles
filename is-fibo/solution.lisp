@@ -10,16 +10,15 @@
 
 (defun solution (&optional stream)
   (let* ((testcases (parse-integer (read-line stream)))
-         (data (make-array (list testcases 1)
+         (data (make-array (list testcases )
                            :initial-contents
                            (loop repeat testcases
-                              collect (list (parse-integer (read-line stream)))))))
-    (format t "~S ~S~%" testcases data)
+                              collect  (parse-integer (read-line stream))))))
     (loop for x from 0 below testcases
        do
          (format t
                  "~a~%"
-                 (if (fibonaccip x)
+                 (if (fibonaccip (aref data x))
                      "IsFibo"
                      "IsNotFibo")))))
 
