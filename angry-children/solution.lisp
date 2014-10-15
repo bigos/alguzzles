@@ -1,3 +1,12 @@
+;; this generates correct data
+;; (loop for a from 0 to 4 do
+;;      (loop for b from (1+ a) to 4 do
+;;           (loop for c from (1+ b) to 4 do
+;;                (progn
+;;                  (when (apply #'/= (list a b c))
+;;                    (format t "----- "))
+;;                  (format t " ~A~%" (sort (list a b c) #'<))))))
+
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
   (format t "~A ~A ~A ~A~%" n k  data level)
