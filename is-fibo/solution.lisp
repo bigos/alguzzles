@@ -1,5 +1,12 @@
 (defun fibonaccip (i)
-  (oddp i))
+  (if (zerop i)
+      T
+      (= i
+         (loop
+            for y = 0 then x
+            and x = 1 then (+ x y)
+            until (>= x i)
+            finally (return x)))))
 
 (defun solution (&optional stream)
   (let* ((testcases (parse-integer (read-line stream)))
