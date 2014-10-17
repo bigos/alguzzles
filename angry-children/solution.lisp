@@ -4,19 +4,13 @@
 ;;           (loop for c from (1+ b) to 4 do
 ;;                (format t " ~A~%" (list a b c)))))
 
-(defun ppp (v level maxlevel ar)
-  (loop for x from (+ v 1) upto  4 do
-       (if (>= level maxlevel)
-           (format nil "~A ~A ~A~%" v level ar)
-           (progn
-             (if (/= (aref ar 0)
-                     (aref ar 1)
-                     (aref ar 2))
-                 (format t "+++ ~A ~A ~A~%" v level ar)
-                 (format t "----- ~A ~A ~A~%" v level ar))
-             (setf (aref ar level) x)
-             (ppp x (1+ level) maxlevel ar))))
-  (format nil "------------~%" ))
+(defun ppp (level maxlevel ar)
+  (format t "~A ~A~%" level ar)
+  (loop for x from (elt ar level) upto  (1+ maxlevel) do
+       (incf (elt ar level))
+       (when (< level maxlevel)
+           (ppp (1+ level) maxlevel ar)
+           )))
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
