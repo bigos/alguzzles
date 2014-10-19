@@ -4,6 +4,7 @@
 ;;           (loop for c from (1+ b) to 4 do
 ;;                (format t " ~A~%" (list a b c)))))
 
+<<<<<<< HEAD
 
 (defun ppp (ar maxval &optional (level 0))
   (format nil "~&ar + level: ~a ~a~%" ar level)
@@ -16,6 +17,15 @@
            (format t "~&the end ~A ~A ~A~%" ar maxval level)
            ))
   ar)
+=======
+(defun ppp (level maxlevel ar)
+  (format t "~A ~A~%" level ar)
+  (loop for x from (elt ar level) upto  (1+ maxlevel) do
+       (incf (elt ar level))
+       (when (< level maxlevel)
+           (ppp (1+ level) maxlevel ar)
+           )))
+>>>>>>> c4fd609ad900e018bcbe7bccc9d7e1830a5fc584
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
