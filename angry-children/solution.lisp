@@ -6,7 +6,7 @@
 
 
 (defun ppp (ar maxval &optional (level 0))
-  (format nil "~&ar + lev: ~a ~a~%" ar level)
+  (format nil "~&ar + level: ~a ~a~%" ar level)
   (loop repeat maxval do
        (incf (elt ar level))
        (if (< level maxval)
