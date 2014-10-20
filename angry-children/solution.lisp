@@ -6,13 +6,16 @@
 
 
 (defun ppp (ar maxval &optional (level 0))
-  (loop repeat maxval do
-       (if (< level maxval)
-           (progn
-             (setf ar (ppp ar maxval (+ level 1))))
-           (format t "~&the end ~A ~A ~A~%" ar maxval level)
-           )
-       (incf (elt ar level)))
+  (loop repeat (1+ maxval)
+     do
+       (progn
+         (format t "~A ~A ~A~%" ar level (elt ar level))
+         (if (< (elt ar level) maxval)
+             (progn (incf (elt ar level)))
+             (progn (setf (elt ar level) 0)
+                    (ppp ar maxval (1+ level))
+                    )
+             )))
   ar)
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
