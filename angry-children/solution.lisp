@@ -5,17 +5,17 @@
 ;;                (format t " ~A~%" (list a b c)))))
 
 
-(defun ppp (ar maxval &optional (level 0))
-  (loop repeat maxval do
-       (if (< level maxval)
-           (progn
-             (setf ar (ppp ar maxval (+ level 1))))
-           (format t "~&the end ~A ~A ~A~%" ar maxval level)
-           )
-       (incf (elt ar level))
-       (when (>= (elt ar level) maxval)
-         (setf (elt ar level) 0))
-       )
+(defun ppp (ar &optional (level 0))
+  (let ((maxval (1- (length ar))))
+      (loop repeat maxval do
+           (if (< level maxval)
+               (progn
+                 (setf ar (ppp ar (+ level 1))))
+               (format t "~&the end ~A ~A~%" ar level)
+               )
+           (incf (elt ar level))
+           (when (>= (elt ar level) maxval)
+             (setf (elt ar level) 0))))
   ar)
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
