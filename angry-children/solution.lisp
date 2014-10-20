@@ -12,16 +12,11 @@
              (setf ar (ppp ar maxval (+ level 1))))
            (format t "~&the end ~A ~A ~A~%" ar maxval level)
            )
-       (incf (elt ar level)))
+       (incf (elt ar level))
+       (when (>= (elt ar level) maxval)
+         (setf (elt ar level) 0))
+       )
   ar)
-
-;; (defun ppp (level maxlevel ar)
-;;   (format t "~A ~A~%" level ar)
-;;   (loop for x from (elt ar level) upto  (1+ maxlevel) do
-;;        (incf (elt ar level))
-;;        (when (< level maxlevel)
-;;            (ppp (1+ level) maxlevel ar)
-;;            )))
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
