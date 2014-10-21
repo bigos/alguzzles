@@ -12,6 +12,21 @@
                    (format t "~a~%" (list a1 a2 a3))
                    )))))
 
+(defmacro loopy ( count &optional (depth 0) )
+  (if (> depth count)
+      `(format t "~A~%"
+               (list
+                ,@(loop for x from 1 to count
+                     collect (intern (format nil "A~a" x)))))
+      `(loop for ,(intern (format nil "A~A" depth))
+          from (1+ ,(intern (format nil "A~A" (1- depth))))
+          to ,count
+          do
+            (loopy ,count ,(1+ depth))
+             )))
+
+(loopy 3 )
+
 (defun ppp (ar &optional (level 0))
   (let ((maxval (1- (length ar))))
     (loop repeat maxval do
