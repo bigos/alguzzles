@@ -4,6 +4,13 @@
 ;;           (loop for c from (1+ b) to 4 do
 ;;                (format t " ~A~%" (list a b c)))))
 
+(defmacro qqq (n &optional (level 0))
+  (if `(< ,level ,n)
+      `(loop for a from ,1 to 4 do (qqq ,n ,(+ 1 level)))
+      `(format t "~A~%" (list ,@(loop for x from 0 below n collect (intern (format nil "A~A" x)))))))
+
+(qqq 3)
+
 (defun aaa ()
   (let ((a0 -1))
     (loop for a1 from (1+ a0) to 4 do
