@@ -7,11 +7,15 @@
 (defparameter *z* '(0 0 0))
 
 (defun aaa (n &optional (l 0))
-  (when (= l 0)
-    (defparameter *z* '(0 1 2)))
-  (if (< l n)
-      (loop for a from 1 to 2 do (aaa n (1+ l)))
-      (format t " ~a~%" l)))
+  (when (= l 0) (defparameter *z* '(0 1 2)))
+  (format t "~&>>>>~A~%" *z*)
+  (if (< l (1- (length *z*)))
+      (progn
+        (incf (elt *z* l) )
+        (loop for a from 1 to 2 do (aaa n (1+ l))))
+      (progn
+        (format t " ~a~%" l)
+        (setf (elt *z* l) 0))))
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
