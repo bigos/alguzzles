@@ -4,35 +4,10 @@
 ;;           (loop for c from (1+ b) to 4 do
 ;;                (format t " ~A~%" (list a b c)))))
 
-(defmacro qqq (n &optional (level 0))
-  (if `(< ,level ,n)
-      `(loop for a from ,1 to 4 do (qqq ,n ,(+ 1 level)))
-      `(format t "~A~%" (list ,@(loop for x from 0 below n collect (intern (format nil "A~A" x)))))))
-
-(qqq 3)
-
-(defun aaa ()
-  (let ((a0 -1))
-    (loop for a1 from (1+ a0) to 4 do
-         (loop for a2 from (1+ a1) to 4 do
-              (loop for a3 from (1+ a2) to 4 do
-                   (format t "~a~%" (list a1 a2 a3))
-                   )))))
-
-(defmacro loopy ( count &optional (depth 0) )
-  (if (> depth count)
-      `(format t "~A~%"
-               (list
-                ,@(loop for x from 1 to count
-                     collect (intern (format nil "A~a" x)))))
-      `(loop for ,(intern (format nil "A~A" depth))
-          from (1+ ,(intern (format nil "A~A" (1- depth))))
-          to ,count
-          do
-            (loopy ,count ,(1+ depth))
-             )))
-
-(loopy 3 )
+(defun aaa (n &optional (l 0))
+  (if (< l n)
+      (loop for a from 1 to 2 do (aaa n (1+ l)))
+      (format t " ~a~%" l)))
 
 (defun ppp (ar &optional (level 0))
   (let ((maxval (1- (length ar))))
