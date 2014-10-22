@@ -9,17 +9,6 @@
       (loop for a from 1 to 2 do (aaa n (1+ l)))
       (format t " ~a~%" l)))
 
-(defun ppp (ar &optional (level 0))
-  (let ((maxval (1- (length ar))))
-    (loop repeat maxval do
-         (if (< level maxval)
-             (setf ar (ppp ar (+ level 1)))
-             (format t "~&the end ~A ~A~%" ar level))
-         (incf (elt ar level))
-         (when (>= (elt ar level) maxval)
-           (setf (elt ar level) 0))))
-  ar)
-
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
   (format t "~A ~A ~A ~A~%" n k  data level)
