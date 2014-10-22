@@ -4,7 +4,11 @@
 ;;           (loop for c from (1+ b) to 4 do
 ;;                (format t " ~A~%" (list a b c)))))
 
+(defparameter *z* '(0 0 0))
+
 (defun aaa (n &optional (l 0))
+  (when (= l 0)
+    (defparameter *z* '(0 1 2)))
   (if (< l n)
       (loop for a from 1 to 2 do (aaa n (1+ l)))
       (format t " ~a~%" l)))
