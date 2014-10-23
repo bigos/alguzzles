@@ -6,7 +6,10 @@
 
 (defparameter *z* '(0 0 0))
 
-(defun aaa (n &optional (l 0))
+(defun aaa (n &optional (nn 0) (l 0))
+  (format t "~A ~A ~A~%" n nn l)
+  (when (< l n) (aaa n nn (1+ l)))
+  (when (< nn n) (aaa n (1+ nn) l))
   )
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
@@ -19,7 +22,7 @@
           (progn  (setf (aref ar level) x)
                   (format t ">>>>  ~A ~A ~%"  ar  level )))))
 
-(defun solution (&optional stream)
+(defun solution (&optional streamba)
   (let* ((n (parse-integer (read-line stream)))
          (k (parse-integer (read-line stream)))
          (data (make-array (list n)
