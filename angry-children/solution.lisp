@@ -1,15 +1,16 @@
 ;; this generates correct data
-;; (loop for a from 0 to 4 do
-;;      (loop for b from (1+ a) to 4 do
-;;           (loop for c from (1+ b) to 4 do
-;;                (format t " ~A~%" (list a b c)))))
+;; (loop for a0 from 0 to 4 do
+;;      (loop for a1 from (1+ a0) to 4 do
+;;           (loop for a2 from (1+ a1) to 4 do
+;;                (format t " ~A~%" (list a0 a1 a2)))))
 
 (defparameter *z* '(0 0 0))
 
-(defun aaa (n &optional (nn 0) (l 0))
-  (format t "~A ~A ~A~%" n nn l)
-  (when (< l n) (aaa n nn (1+ l)))
-  (when (< nn n) (aaa n (1+ nn) l))
+(defmacro qqq (x &optional (level 0))
+  (format t "~A~%" level)
+  (if (<= level x)
+      `(qqq ,x ,(1+ level))
+      )
   )
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
