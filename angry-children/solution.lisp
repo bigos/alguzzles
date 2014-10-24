@@ -4,14 +4,15 @@
 ;;           (loop for a2 from (1+ a1) to 4 do
 ;;                (format t " ~A~%" (list a0 a1 a2)))))
 
-(defparameter *z* '(0 0 0))
+(defun aaa (prev last &optional (level 0))
+  (loop for x from (1+ prev) to last do
+       (progn
+         (format t "~A ~A ~A   " prev last level)
+         (if (>= level last)
+             (format t "~&----~%")
+             (aaa (1+ prev) last (1+ level))))))
 
-(defmacro qqq (x &optional (level 0))
-  (format t "~A~%" level)
-  (if (<= level x)
-      `(qqq ,x ,(1+ level))
-      )
-  )
+
 
 ;; (puzzle 7 3 #(1 2 3 4 5 6 7))
 (defun puzzle (n k data ar &optional (level 0))
