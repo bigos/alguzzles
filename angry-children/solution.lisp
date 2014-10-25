@@ -4,13 +4,14 @@
 ;;           (loop for a2 from (1+ a1) to 4 do
 ;;                (format t " ~A~%" (list a0 a1 a2)))))
 
-(defun aaa (prev last &optional (level 0))
-  (loop for x from (1+ prev) to last do
-       (progn
-         (format t "~A ~A ~A   " prev last level)
-         (if (>= level last)
-             (format t "~&----~%")
-             (aaa (1+ prev) last (1+ level))))))
+(defparameter zzz '(0 1 2))
+
+(defmacro qqq (maxv var &optional (level 0))
+  `(format t "~a ~a ~a ~a~%" ,maxv ,var ,(elt var level) ,level)
+  `(loop for x from ,`(1+ ,`(elt ,var ,level)) to 4 do
+      ,(qqq ,maxv ,var ,(1+ level))))
+
+(qqq 3 '(0 1 2))
 
 
 
