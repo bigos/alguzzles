@@ -7,11 +7,13 @@
 (defparameter zzz '(0 1 2))
 
 (defmacro qqq (maxv var &optional (level 0))
-  `(format t "~a ~a ~a ~a~%" ,maxv ,var ,(elt var level) ,level)
-  `(loop for x from ,`(1+ ,`(elt ,var ,level)) to 4 do
-      ,(qqq ,maxv ,var ,(1+ level))))
+  `(loop for ,(intern (format nil "X~a" level))
+      from ,`(1+ ,`(elt ,var ,level))
+      to 4 do
+        ,`(if ,`(< ,level ,maxv)
+              ,`(qqq ,maxv ,var ,`(1+ ,level)))))
 
-(qqq 3 '(0 1 2))
+(qqq 2 '(0 1 2))
 
 
 
