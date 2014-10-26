@@ -4,7 +4,8 @@
 ;;           (loop for a2 from (1+ a1) to 4 do
 ;;                (format t " ~A~%" (list a0 a1 a2)))))
 
-(defparameter zzz '(0 1 2))
+
+
 
 (defun genvarnum (num)
   (intern (format nil "A~A" num)))
