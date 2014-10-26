@@ -15,6 +15,7 @@
 (defun results (num)
   (loop for x from 0 below num collect (generate-variable x)))
 
+;; recursive macro
 (defmacro qqq (maxv &optional (level 0))
   (if (< level maxv)
       `(loop for ,(generate-variable level)
