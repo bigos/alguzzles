@@ -9,14 +9,26 @@
 (defun genvarnum (num)
   (intern (format nil "A~A" num)))
 
-(defmacro qqq (maxv var &optional (level 0))
+(defun genprevvarnum (num)
+(if (zerop num)
+    0
+    (intern (format nil "A~A" (1- num)))))
+
+(defmacro qqq (maxv &optional (level 0))
   (if (< level maxv)
-      `(loop for ,(genvarnum (1+ level))
-          from (1+ ,(genvarnum level))
-          to 4 do ,`(qqq ,maxv ,var ,(1+ level)))
+      `(loop for ,(genvarnum level)
+          from (1+ ,(genprevvarnum level))
+          to ,maxv do ,`(qqq ,maxv ,(1+ level)))
+      `(format t "finished~%")
       ))
 
-(qqq 3 '(0 1 2))
+(qqq 2)
+
+(defun defvars (maxv)
+  (concatenate 'list
+               '((A0 0))
+               (loop for x from 1 to maxv
+                  collect (list (intern (format nil "A~A" x))))))
 
 
 
