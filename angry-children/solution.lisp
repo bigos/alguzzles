@@ -9,15 +9,18 @@
 
 (defun genprevvarnum (num)
 (if (zerop num)
-    0
+    -1
     (intern (format nil "A~A" (1- num)))))
+
+(defun myres (num)
+  (loop for x from 0 below num collect (genvarnum x)))
 
 (defmacro qqq (maxv &optional (level 0))
   (if (< level maxv)
       `(loop for ,(genvarnum level)
           from (1+ ,(genprevvarnum level))
           to ,maxv do ,`(qqq ,maxv ,(1+ level)))
-      `(format t "finished~%")
+      `(format t "finished ~a ~%" (list ,@(myres level)))
       ))
 
 (qqq 2)
