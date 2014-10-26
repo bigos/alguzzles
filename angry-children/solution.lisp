@@ -8,10 +8,11 @@
 
 (defmacro qqq (maxv var &optional (level 0))
   `(loop for ,(intern (format nil "X~a" level))
-      from ,`(1+ ,`(elt ,var ,level))
+      from (1+ ,`(elt ,var ,level))
       to 4 do
         ,`(if ,`(< ,level ,maxv)
-              ,`(qqq ,maxv ,var ,`(1+ ,level)))))
+              ,`(qqq ,maxv ,var ,(1+ level))
+              (format t "end~%"))))
 
 (qqq 2 '(0 1 2))
 
