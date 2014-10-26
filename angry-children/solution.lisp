@@ -8,9 +8,9 @@
   (intern (format nil "A~A" num)))
 
 (defun previous-variable (num)
-(if (zerop num)
-    -1
-    (intern (format nil "A~A" (1- num)))))
+  (if (zerop num)
+      -1
+      (intern (format nil "A~A" (1- num)))))
 
 (defun results (num)
   (loop for x from 0 below num collect (generate-variable x)))
@@ -20,10 +20,7 @@
       `(loop for ,(generate-variable level)
           from (1+ ,(previous-variable level))
           to ,maxv do ,`(qqq ,maxv ,(1+ level)))
-      `(format t "finished ~a ~%" (list ,@(results level)))
-      ))
-
-(qqq 2)
+      `(format t "finished ~a ~%" (list ,@(results level)))))
 
 (defun defvars (maxv)
   (concatenate 'list
@@ -31,17 +28,7 @@
                (loop for x from 1 to maxv
                   collect (list (intern (format nil "A~A" x))))))
 
-
-
-;; (puzzle 7 3 #(1 2 3 4 5 6 7))
-(defun puzzle (n k data ar &optional (level 0))
-  (format t "~A ~A ~A ~A~%" n k  data level)
-  (loop for x from (- n k level) below (- n level)
-     do (progn
-          (if (< level (1- k))
-              (puzzle 5 3 data ar (1+ level)))
-          (progn  (setf (aref ar level) x)
-                  (format t ">>>>  ~A ~A ~%"  ar  level )))))
+;; -------- above is unfinished recursive macro solution -----------------------
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
@@ -49,11 +36,11 @@
          (data (make-array (list n)
                            :initial-contents
                            (loop repeat n
-                              collect  (parse-integer (read-line stream)))))
-         (ar (make-array (list k)
-                         :initial-element 0)))
-    (format nil "~a ~a ~a~%" n k data)
-    (puzzle n k data ar)))
+                              collect  (parse-integer (read-line stream))))))
+    (setf data (sort data #'<))
+    (format T "~a~%"
+            (loop for i below (- n k)
+               minimize  (- (aref data (+ (1- k) i)) (aref data i))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
