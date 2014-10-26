@@ -4,23 +4,23 @@
 ;;           (loop for a2 from (1+ a1) to 4 do
 ;;                (format t " ~A~%" (list a0 a1 a2)))))
 
-(defun genvarnum (num)
+(defun generate-variable (num)
   (intern (format nil "A~A" num)))
 
-(defun genprevvarnum (num)
+(defun previous-variable (num)
 (if (zerop num)
     -1
     (intern (format nil "A~A" (1- num)))))
 
-(defun myres (num)
-  (loop for x from 0 below num collect (genvarnum x)))
+(defun results (num)
+  (loop for x from 0 below num collect (generate-variable x)))
 
 (defmacro qqq (maxv &optional (level 0))
   (if (< level maxv)
-      `(loop for ,(genvarnum level)
-          from (1+ ,(genprevvarnum level))
+      `(loop for ,(generate-variable level)
+          from (1+ ,(previous-variable level))
           to ,maxv do ,`(qqq ,maxv ,(1+ level)))
-      `(format t "finished ~a ~%" (list ,@(myres level)))
+      `(format t "finished ~a ~%" (list ,@(results level)))
       ))
 
 (qqq 2)
@@ -43,7 +43,7 @@
           (progn  (setf (aref ar level) x)
                   (format t ">>>>  ~A ~A ~%"  ar  level )))))
 
-(defun solution (&optional streamba)
+(defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (k (parse-integer (read-line stream)))
          (data (make-array (list n)
