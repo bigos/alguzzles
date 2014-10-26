@@ -6,15 +6,17 @@
 
 (defparameter zzz '(0 1 2))
 
+(defun genvarnum (num)
+  (intern (format nil "A~A" num)))
+
 (defmacro qqq (maxv var &optional (level 0))
   (if (< level maxv)
-      `(loop for ,(intern (format nil "X~a" level))
-          from (1+ ,`(elt ,var ,level))
+      `(loop for ,(genvarnum (1+ level))
+          from (1+ ,(genvarnum level))
           to 4 do ,`(qqq ,maxv ,var ,(1+ level)))
-      `(format t "-----------------~%")
       ))
 
-(qqq 2 '(0 1 2))
+(qqq 3 '(0 1 2))
 
 
 
