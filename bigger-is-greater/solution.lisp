@@ -19,18 +19,24 @@
                    (rotatef (el i) (el k)))
               (return-from next-perm vec)))))
 
-(defun puzzle (x perm)
-  (loop for a = x then (next-perm a #'char<) while a do
-       (format t "~s ~s ~s~%" perm a (string-greaterp a  perm ))))
+(defun puzzle (x)
+  ;; (loop for a = x then (next-perm a #'char<) while a do (format nil "~s ~s ~s~%" perm a (string-greaterp a  perm )))
+  (let ((res))
+    (setf res (next-perm x #'char<))
+    (if res
+        (format t "~a~%" res)
+        (format t "no answer~%"))))
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (data (loop repeat n
                   collect (read-line stream))))
     (format nil "~A ~A~%" n data)
-    (loop for x in data do (puzzle x (concatenate 'string "" x)))))
+    (loop for x in data do (puzzle x) ;; (concatenate 'string "" x)
+         )))
 
-;; (solution) ; uncomment this when running on hacker-rank
+;;
+(solution) ; uncomment this when running on hacker-rank
 
 (defun repl-main ()
   (let ((path (if(search "chess" (machine-instance))
