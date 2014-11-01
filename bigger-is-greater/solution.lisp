@@ -22,7 +22,7 @@
 (defun puzzle (x)
   (let ((o (concatenate 'string "" x)))
     (loop for a = x then (next-perm a #'char<) while a do
-         (format t "~a ~a ~a~%" a o (string< a (concatenate 'string "" o))))))
+         (format t "~a ~a ~a~%" a o (string<  (concatenate 'string "" o) a)))))
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
