@@ -21,7 +21,7 @@
 
 (defun puzzle (x perm)
   (loop for a = x then (next-perm a #'char<) while a do
-       (format t "~s ~s ~s~%" perm a (string-lessp  perm a))))
+       (format t "~s ~s ~s~%" perm a (string-greaterp a  perm ))))
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
