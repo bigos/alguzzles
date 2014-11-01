@@ -19,17 +19,16 @@
                    (rotatef (el i) (el k)))
               (return-from next-perm vec)))))
 
-(defun puzzle (x)
-  (let ((o (concatenate 'string "" x)))
-    (loop for a = x then (next-perm a #'char<) while a do
-         (format t "~a ~a ~a~%" a o (string<  (concatenate 'string "" o) a)))))
+(defun puzzle (x perm)
+  (loop for a = x then (next-perm a #'char<) while a do
+       (format t "~s ~s ~s~%" perm a (string-lessp  perm a))))
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (data (loop repeat n
                   collect (read-line stream))))
     (format nil "~A ~A~%" n data)
-    (loop for x in data do (puzzle x))))
+    (loop for x in data do (puzzle x (concatenate 'string "" x)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
