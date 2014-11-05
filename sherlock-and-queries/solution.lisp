@@ -18,8 +18,9 @@
             (progn
               (if (zerop (mod j (melt b i)))
                   (setf (nth (1- j) a ) (* (melt a j)
-                              (melt c i)))))
-            (format t "~A " (melt a j)))))
+                                           (melt c i)))))))
+  (loop for x below n do
+       (format t "~A " (nth x a))))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
