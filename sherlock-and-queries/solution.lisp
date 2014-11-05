@@ -20,7 +20,9 @@
                   (setf (nth (1- j) a ) (* (melt a j)
                                            (melt c i)))))))
   (loop for x below n do
-       (format t "~A ~%" (nth x a))))
+       (format t
+               "~A "
+               (mod (nth x a) (+  (expt 10 9) 7)))))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
