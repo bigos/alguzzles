@@ -29,7 +29,6 @@
          (a (split-and-parse (read-line stream)))
          (b (split-and-parse (read-line stream)))
          (c (split-and-parse (read-line stream))))
-    (format nil "data: ~A ~A ~A ~A ~A~%" n m a b c)
     (puzzle m n a b c)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
