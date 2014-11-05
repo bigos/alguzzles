@@ -51,6 +51,12 @@
                                     path
                                     puzzle "/" "input00.txt"))
       (solution s))
+    (format t "~&=========================~%")
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input13.txt"))
+      (solution s))
     ))
 
 (repl-main)
