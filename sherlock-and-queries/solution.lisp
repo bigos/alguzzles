@@ -20,7 +20,7 @@
                   (setf (nth (1- j) a ) (* (melt a j)
                                            (melt c i)))))))
   (loop for x below n do
-       (format t "~A " (nth x a))))
+       (format t "~A ~%" (nth x a))))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
@@ -42,6 +42,13 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     puzzle "/" "input.1.txt"))
-      (solution s))))
+      (solution s))
+    (format t "~&=========================~%")
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input00.txt"))
+      (solution s))
+    ))
 
 (repl-main)
