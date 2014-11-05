@@ -15,7 +15,14 @@
          (m (cadr first-line))
          (a (split-and-parse (read-line stream)))
          (b (split-and-parse (read-line stream)))
-         (c (split-and-parse (read-line stream))))))
+         (c (split-and-parse (read-line stream))))
+    (format nil "data: ~A ~A ~A ~A ~A~%" n m a b c)
+    (loop for i from 1 to m do
+         (loop for j from 1 to n do
+              (if (zerop (mod j (elt b i)))
+                  (setf (elt a j) (* (elt a j)
+                                     (elt c j))))
+              (format t "~A " (elt a j))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
