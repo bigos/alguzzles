@@ -10,28 +10,32 @@
        (split-by-one-space string)))
 
 (defun melt (seq i)
-  (nth (1- i) seq))
+  (elt seq (1- i)))
 
 (defun puzzle (m n a b c)
   (loop for i from 1 to m do
        (loop for j from 1 to n do
             (progn
-              (if (zerop (mod j (melt b i)))
-                  (setf (nth (1- j) a ) (* (melt a j)
-                                           (melt c i)))))))
-  (loop for x below n do
-       (format t
-               "~A "
-               (mod (nth x a) (+  (expt 10 9) 7)))))
+              (when (zerop (mod j (melt b i)))
+                  (setf (aref a (1- j)) (* (melt a j)
+                                           (melt c i))))
+              (when (= i m)
+                  (format t "~A " (mod (aref a (1- j)) (+  (expt 10 9) 7))))
+
+              )
+            ))
+
+  )
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
          (n (car first-line))
          (m (cadr first-line))
-         (a (split-and-parse (read-line stream)))
-         (b (split-and-parse (read-line stream)))
-         (c (split-and-parse (read-line stream))))
-    (puzzle m n a b c)))
+         (a (make-array (list n) :initial-contents (split-and-parse (read-line stream))))
+         (b (make-array (list m) :initial-contents (split-and-parse (read-line stream))))
+         (c (make-array (list m):initial-contents (split-and-parse (read-line stream)))))
+    (puzzle m n a b c)
+    ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -46,17 +50,17 @@
                                     puzzle "/" "input.1.txt"))
       (solution s))
     (format t "~&=========================~%")
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    puzzle "/" "input00.txt"))
-      (solution s))
-    (format t "~&=========================~%")
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    puzzle "/" "input13.txt"))
-      (solution s))
+    ;; (with-open-file (s (concatenate 'string
+    ;;                                 (directory-namestring (user-homedir-pathname))
+    ;;                                 path
+    ;;                                 puzzle "/" "input00.txt"))
+    ;;   (solution s))
+    ;; (format t "~&=========================~%")
+    ;; (with-open-file (s (concatenate 'string
+    ;;                                 (directory-namestring (user-homedir-pathname))
+    ;;                                 path
+    ;;                                 puzzle "/" "input13.txt"))
+    ;;   (solution s))
     ))
 
 (repl-main)
