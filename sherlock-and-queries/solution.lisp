@@ -10,17 +10,17 @@
        (split-by-one-space string)))
 
 (defun melt (seq i)
-  (elt seq (1- i)))
+  (elt seq i))
 
 (defun puzzle (m n a b c)
-  (loop for i from 1 to m do
-       (loop for j from 1 to n do
+  (loop for i from 0 below m do
+       (loop for j from 0 below n do
             (progn
-              (when (zerop (mod j (melt b i)))
-                  (setf (aref a (1- j)) (* (melt a j)
+              (when (zerop (mod (1+ j) (melt b i)))
+                (setf (aref a j) (* (melt a j)
                                            (melt c i))))
-              (when (= i m)
-                  (format t "~A " (mod (aref a (1- j)) (+  (expt 10 9) 7))))
+              (when (= i (1- m))
+                (format t "~A " (mod (aref a j) (+  (expt 10 9) 7))))
 
               )
             ))
