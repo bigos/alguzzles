@@ -10,7 +10,8 @@
        (split-by-one-space string)))
 
 (defun puzzle (m n a b c)
-  (let ((big-no (+ (expt 10 9) 7)))
+  (let ((big-no (+ (expt 10 9) 7))
+        (factors (make-array (list m) :initial-value 1)))
     (loop for i from 0 below m do
          (loop for j from 0 below n do
               (progn
