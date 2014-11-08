@@ -9,23 +9,19 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-(defun melt (seq i)
-  (elt seq i))
-
 (defun puzzle (m n a b c)
-  (loop for i from 0 below m do
-       (loop for j from 0 below n do
-            (progn
-              (when (zerop (mod (1+ j) (melt b i)))
-                (setf (aref a j) (* (melt a j)
-                                           (melt c i))))
-              (when (= i (1- m))
-                (format t "~A " (mod (aref a j) (+  (expt 10 9) 7))))
-
-              )
-            ))
-
-  )
+  (let ((big-no (+ (expt 10 9) 7)))
+    (loop for i from 0 below m do
+         (loop for j from 0 below n do
+              (progn
+                (when (zerop (mod (1+ j) (aref b i)))
+                  (setf (aref a j) (* (aref a j)
+                                      (aref c i))))
+                (when (= i (1- m))
+                  (format t "~A " (mod (aref a j) big-no))
+                                        ; (format t "~a ~a ~A   " (aref a j) big-no (mod (aref a j) big-no))
+                  ))
+              ))))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
@@ -50,12 +46,12 @@
                                     puzzle "/" "input.1.txt"))
       (solution s))
     (format t "~&=========================~%")
-    ;; (with-open-file (s (concatenate 'string
-    ;;                                 (directory-namestring (user-homedir-pathname))
-    ;;                                 path
-    ;;                                 puzzle "/" "input00.txt"))
-    ;;   (solution s))
-    ;; (format t "~&=========================~%")
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input00.txt"))
+      (solution s))
+    (format t "~&=========================~%")
     ;; (with-open-file (s (concatenate 'string
     ;;                                 (directory-namestring (user-homedir-pathname))
     ;;                                 path
