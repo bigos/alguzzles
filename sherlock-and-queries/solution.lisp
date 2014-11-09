@@ -10,21 +10,16 @@
        (split-by-one-space string)))
 
 (defun puzzle (m n a b c)
-  (let ((big-no (+ (expt 10 9) 7))
-        (factors (make-array (list m) :initial-element 1)))
+  (let ((big-no (+ (expt 10 9) 7)))
     (loop for i from 0 below m do
-)
-    (loop for i from 0 below m do
-         (loop for j from 0 below n do
+         (loop for j from (1- (aref b i)) below n by (aref b i) do
               (progn
-                (when (zerop (mod (1+ j) (aref b i)))
+                (when (zerop (mod (1+ j)
+                                  (aref b i)))
                   (setf (aref a j) (* (aref a j)
-                                      (aref c i))))
-                (when (= i (1- m))
-                  (format t "~A " (mod (aref a j) big-no))
-                                        ; (format t "~a ~a ~A   " (aref a j) big-no (mod (aref a j) big-no))
-                  ))
-              ))))
+                                      (aref c i)))))))
+    (loop for x from 0 below n do
+         (format t "~A " (mod (aref a x) big-no)))))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
@@ -55,11 +50,11 @@
                                     puzzle "/" "input00.txt"))
       (solution s))
     (format t "~&=========================~%")
-    ;; (with-open-file (s (concatenate 'string
-    ;;                                 (directory-namestring (user-homedir-pathname))
-    ;;                                 path
-    ;;                                 puzzle "/" "input13.txt"))
-    ;;   (solution s))
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input13.txt"))
+      (solution s))
     ))
 
 (repl-main)
