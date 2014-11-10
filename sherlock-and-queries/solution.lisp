@@ -16,10 +16,11 @@
               (progn
                 (when (zerop (mod (1+ j)
                                   (aref b i)))
-                  (setf (aref a j) (* (aref a j)
-                                      (aref c i)))))))
+                  (setf (aref a j) (mod (* (aref a j)
+                                           (aref c i))
+                                        big-no))))))
     (loop for x from 0 below n do
-         (format t "~A " (mod (aref a x) big-no)))))
+         (format t "~A "  (aref a x)))))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
@@ -27,7 +28,7 @@
          (m (cadr first-line))
          (a (make-array (list n) :initial-contents (split-and-parse (read-line stream))))
          (b (make-array (list m) :initial-contents (split-and-parse (read-line stream))))
-         (c (make-array (list m):initial-contents (split-and-parse (read-line stream)))))
+         (c (make-array (list m) :initial-contents (split-and-parse (read-line stream)))))
     (puzzle m n a b c)
     ))
 
