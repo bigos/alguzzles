@@ -1,6 +1,7 @@
 (declaim (optimize (speed 3) (debug 0) (safety 1)))
 
 (defun split-by-one-space (string)
+  (declare (type string string))
   (loop for i = 0 then (1+ j)
      as j = (position #\Space string :start i)
      collect (subseq string i j)
@@ -18,25 +19,27 @@
   (declare (type  (simple-array fixnum (*)) a))
   (declare (type  (simple-array fixnum (*)) b))
   (declare (type  (simple-array fixnum (*)) c))
-  (declare (inline mod) (inline *) (inline aref) (inline princ) (inline 1-))
   (let ((big-no (+ (expt 10 9) 7)))
-    (loop for i from 0 below m do
-         (loop for j from (1- (aref b i)) below n by (aref b i) do
+    (loop for i fixnum from 0 below m do
+         (loop for j fixnum from (1- (aref b i)) below n by (aref b i) do
               (setf (aref a j) (mod (* (aref a j)
                                        (aref c i))
                                     big-no))))
-    (loop for x from 0 below n do
-         (princ  (aref a x))
-         (princ " "))))
+    (format t "~&finished~%")
+    ;; (loop for x fixnum from 0 below n do
+    ;;      (princ  (aref a x))
+    ;;       (princ " ")
+    ;;      )
+    ))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
          (n (car first-line))
          (m (cadr first-line))
-         (a (make-array n :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
-         (b (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
-         (c (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream)))))
-    (format t "~A ~%" (type-of a))
+         (a (make-array (list n) :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
+         (b (make-array (list m) :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
+         (c (make-array (list m) :element-type 'fixnum :initial-contents (split-and-parse (read-line stream)))))
+    (format nil "~A ~%" (type-of a))
     (require :sb-sprof)
     (puzzle m n a b c)
     ))
@@ -44,7 +47,7 @@
 ;; (solution) ; uncomment this when running on hacker-rank
 
 (defun repl-main ()
-  (let ((path (if(search "chess" (machine-instance))
+  (let ((path (if (search "chess" (machine-instance))
                  "Documents/hackerrank/"
                  "Programming/hackerrank/"))
         (puzzle "sherlock-and-queries"))
