@@ -10,15 +10,13 @@
        (split-by-one-space string)))
 
 (defun puzzle (m n a b c)
+
   (let ((big-no (+ (expt 10 9) 7)))
     (loop for i from 0 below m do
          (loop for j from (1- (aref b i)) below n by (aref b i) do
-              (progn
-                (when (zerop (mod (1+ j)
-                                  (aref b i)))
-                  (setf (aref a j) (mod (* (aref a j)
-                                           (aref c i))
-                                        big-no))))))
+              (setf (aref a j) (mod (* (aref a j)
+                                       (aref c i))
+                                    big-no))))
     (loop for x from 0 below n do
          (format t "~A "  (aref a x)))))
 
@@ -26,9 +24,9 @@
   (let* ((first-line (split-and-parse (read-line stream)))
          (n (car first-line))
          (m (cadr first-line))
-         (a (make-array (list n) :initial-contents (split-and-parse (read-line stream))))
-         (b (make-array (list m) :initial-contents (split-and-parse (read-line stream))))
-         (c (make-array (list m) :initial-contents (split-and-parse (read-line stream)))))
+         (a (make-array n :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
+         (b (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
+         (c (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream)))))
     (puzzle m n a b c)
     ))
 
