@@ -32,7 +32,7 @@
          (a (make-array n :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
          (b (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
          (c (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream)))))
-    (for t "~A ~%" (type-of a))
+    (format t "~A ~%" (type-of a))
     (puzzle m n a b c)
     ))
 
