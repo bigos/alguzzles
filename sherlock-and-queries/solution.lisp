@@ -10,7 +10,9 @@
        (split-by-one-space string)))
 
 (defun puzzle (m n a b c)
-  (declare (inline mod) (inline *) (inline aref))
+  (declare (optimize (speed 3)))
+  (declare (fixnum m n))
+  (declare (inline mod) (inline *) (inline aref) (inline princ) (inline 1-))
   (let ((big-no (+ (expt 10 9) 7)))
     (loop for i from 0 below m do
          (loop for j from (1- (aref b i)) below n by (aref b i) do
@@ -18,9 +20,9 @@
                                        (aref c i))
                                     big-no))
               ))
-    (loop for x from 0 below n do
-         (princ  (aref a x))
-         (princ " "))
+    ;; (loop for x from 0 below n do
+    ;;      (princ  (aref a x))
+    ;;      (princ " "))
     ))
 
 (defun solution (&optional stream)
@@ -30,6 +32,7 @@
          (a (make-array n :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
          (b (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
          (c (make-array m :element-type 'fixnum :initial-contents (split-and-parse (read-line stream)))))
+    (for t "~A ~%" (type-of a))
     (puzzle m n a b c)
     ))
 
