@@ -24,8 +24,8 @@
     (loop for i fixnum   from 0 below m do
          (loop for j fixnum from (1- (aref b i)) below n by (aref b i) do
               (progn
-                (setf (aref a j) (mod (* (aref a j)
-                                         (aref c i))
+                (setf (aref a j) (mod (the fixnum (* (the fixnum (aref a j))
+                                                     (the fixnum (aref c i))))
                                       big-no)))))
     (format t "~&finished~%")
     ;; (loop for x '(unsigned-byte 64) from 0 below n do
@@ -49,7 +49,7 @@
 ;; (solution) ; uncomment this when running on hacker-rank
 
 (defun repl-main ()
-  (let ((path (if (search "chess" (machine-instance))
+  (let ((path (if (search "chess" (the string (machine-instance)))
                  "Documents/hackerrank/"
                  "Programming/hackerrank/"))
         (puzzle "sherlock-and-queries"))
