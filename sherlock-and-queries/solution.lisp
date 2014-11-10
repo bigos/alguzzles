@@ -10,15 +10,18 @@
        (split-by-one-space string)))
 
 (defun puzzle (m n a b c)
-
+  (declare (inline mod) (inline *) (inline aref))
   (let ((big-no (+ (expt 10 9) 7)))
     (loop for i from 0 below m do
          (loop for j from (1- (aref b i)) below n by (aref b i) do
               (setf (aref a j) (mod (* (aref a j)
                                        (aref c i))
-                                    big-no))))
+                                    big-no))
+              ))
     (loop for x from 0 below n do
-         (format t "~A "  (aref a x)))))
+         (princ  (aref a x))
+         (princ " "))
+    ))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
