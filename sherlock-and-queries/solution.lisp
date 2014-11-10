@@ -20,13 +20,15 @@
   (declare (type  (simple-array fixnum (*)) b))
   (declare (type  (simple-array fixnum (*)) c))
   (let ((big-no (+ (expt 10 9) 7)))
-    (loop for i fixnum from 0 below m do
+
+    (loop for i fixnum   from 0 below m do
          (loop for j fixnum from (1- (aref b i)) below n by (aref b i) do
-              (setf (aref a j) (mod (* (aref a j)
-                                       (aref c i))
-                                    big-no))))
+              (progn
+                (setf (aref a j) (mod (* (aref a j)
+                                         (aref c i))
+                                      big-no)))))
     (format t "~&finished~%")
-    ;; (loop for x fixnum from 0 below n do
+    ;; (loop for x '(unsigned-byte 64) from 0 below n do
     ;;      (princ  (aref a x))
     ;;       (princ " ")
     ;;      )
