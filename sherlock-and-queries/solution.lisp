@@ -14,33 +14,37 @@
 
 (defun puzzle (m n a b c)
   (declare (optimize (speed 3)))
-  (declare (type fixnum m))
-  (declare (type fixnum n))
-  (declare (type  (simple-array fixnum (*)) a))
-  (declare (type  (simple-array fixnum (*)) b))
-  (declare (type  (simple-array fixnum (*)) c))
+  (declare (type unsigned-byte m))
+  (declare (type unsigned-byte n))
+  (declare (type (simple-array unsigned-byte (*)) a))
+  (declare (type (simple-array unsigned-byte (*)) b))
+  (declare (type (simple-array unsigned-byte (*)) c))
   (let ((big-no (+ (expt 10 9) 7)))
-
-    (loop for i fixnum   from 0 below m do
-         (loop for j fixnum from (1- (aref b i)) below n by (aref b i) do
+    (declare (type unsigned-byte  big-no))
+    (loop for i of-type unsigned-byte  from 0 below m do
+         (loop for j of-type unsigned-byte from (1- (aref b i)) below n by (aref b i) do
               (progn
-                (setf (aref a j) (mod (the fixnum (* (the fixnum (aref a j))
-                                                     (the fixnum (aref c i))))
-                                      big-no)))))
+                (setf (aref a j) (the unsigned-byte (mod (the unsigned-byte
+                                                              (* (the unsigned-byte (aref a j))
+                                                                 (the unsigned-byte (aref c i))))
+                                                         (the unsigned-byte big-no)))))))
     (format t "~&finished~%")
-    ;; (loop for x '(unsigned-byte 64) from 0 below n do
-    ;;      (princ  (aref a x))
-    ;;       (princ " ")
-    ;;      )
+    (loop for x of-type unsigned-byte from 0 below n do
+         (princ  (aref a x))
+          (princ " ")
+         )
     ))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
          (n (car first-line))
          (m (cadr first-line))
-         (a (make-array (list n) :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
-         (b (make-array (list m) :element-type 'fixnum :initial-contents (split-and-parse (read-line stream))))
-         (c (make-array (list m) :element-type 'fixnum :initial-contents (split-and-parse (read-line stream)))))
+         (a (make-array (list n) :element-type 'unsigned-byte
+                        :initial-contents (split-and-parse (read-line stream))))
+         (b (make-array (list m) :element-type 'unsigned-byte
+                        :initial-contents (split-and-parse (read-line stream))))
+         (c (make-array (list m) :element-type 'unsigned-byte
+                        :initial-contents (split-and-parse (read-line stream)))))
     (format nil "~A ~%" (type-of a))
     (require :sb-sprof)
     (puzzle m n a b c)
