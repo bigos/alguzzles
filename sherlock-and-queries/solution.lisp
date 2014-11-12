@@ -12,6 +12,7 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+# read about montgomery reduction
 (defun puzzle (m n a b c)
   (declare (optimize (speed 3)))
   (declare (type unsigned-byte m))
