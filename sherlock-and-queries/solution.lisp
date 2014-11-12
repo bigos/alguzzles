@@ -12,7 +12,22 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-# read about montgomery reduction
+(defun naiive (a b)
+  (let ((big-no (+ (expt 10 9) 7)))
+    (declare (type fixnum  big-no a b))
+      (mod (* a b)
+           big-no)))
+
+(defun montgomery (x y)
+  (let ((big-no (+ (expt 10 9) 7))
+        (a 0))
+    (declare (type fixnum  big-no a x y))
+    (loop for k from 0 below m do
+         )
+
+    ))
+
+;; read about montgomery reduction
 (defun puzzle (m n a b c)
   (declare (optimize (speed 3)))
   (declare (type unsigned-byte m))
@@ -20,22 +35,13 @@
   (declare (type (simple-array unsigned-byte (*)) a))
   (declare (type (simple-array unsigned-byte (*)) b))
   (declare (type (simple-array unsigned-byte (*)) c))
-  (let ((big-no (+ (expt 10 9) 7))
-        (prod))
-    (declare (type fixnum  big-no))
-    (loop for i of-type unsigned-byte  from 0 below m do
-         (loop for j of-type unsigned-byte from (1- (aref b i)) below n by (aref b i) do
-              (progn
-                (setf prod (* (aref a j) (aref c i)))
-                (setf (aref a j) (if (> prod big-no)
-                                     (mod prod big-no)
-                                     prod)))))
-    (format t "~&finished~%")
-    (loop for x of-type unsigned-byte from 0 below n do
-         (princ  (aref a x))
-          (princ " ")
-         )
-    ))
+  (loop for i of-type unsigned-byte  from 0 below m do
+       (loop for j of-type unsigned-byte from (1- (aref b i)) below n by (aref b i) do
+            (setf (aref a j) (naiive  (aref a j) (aref c i)))))
+  (format t "~&finished~%")
+  (loop for x of-type unsigned-byte from 0 below n do
+       (princ  (aref a x))
+       (princ " ")))
 
 (defun solution (&optional stream)
   (let* ((first-line (split-and-parse (read-line stream)))
