@@ -20,15 +20,16 @@
   (declare (type (simple-array unsigned-byte (*)) a))
   (declare (type (simple-array unsigned-byte (*)) b))
   (declare (type (simple-array unsigned-byte (*)) c))
-  (let ((big-no (+ (expt 10 9) 7)))
+  (let ((big-no (+ (expt 10 9) 7))
+        (prod))
     (declare (type fixnum  big-no))
     (loop for i of-type unsigned-byte  from 0 below m do
          (loop for j of-type unsigned-byte from (1- (aref b i)) below n by (aref b i) do
               (progn
-                (setf (aref a j) (the unsigned-byte (mod (the (unsigned-byte 64)
-                                                              (* (the unsigned-byte (aref a j))
-                                                                 (the unsigned-byte (aref c i))))
-                                                         big-no))))))
+                (setf prod (* (aref a j) (aref c i)))
+                (setf (aref a j) (if (> prod big-no)
+                                     (mod prod big-no)
+                                     prod)))))
     (format t "~&finished~%")
     (loop for x of-type unsigned-byte from 0 below n do
          (princ  (aref a x))
