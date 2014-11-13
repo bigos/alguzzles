@@ -26,7 +26,7 @@
          )
 
     ))
-
+;; http://stackoverflow.com/questions/9009139/optimising-multiplication-modulo-a-small-prime
 ;; read about montgomery reduction
 (defun puzzle (m n a b c)
   (declare (optimize (speed 3)))
