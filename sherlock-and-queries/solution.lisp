@@ -14,10 +14,10 @@
 
 (defun naiive (a b)
   (let ((big-no 1000000007))
-    (declare (type integer a b))
+    (declare (type fixnum a b))
     (declare (type integer  big-no))
     ;(format t ":::: ~A ~A~%" a b)
-    (mod (* a b)
+    (mod (the (unsigned-byte 32) (* a b))
             big-no)))
 
 ;; (defun montgomery (x y)
