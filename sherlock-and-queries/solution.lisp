@@ -13,10 +13,12 @@
        (split-by-one-space string)))
 
 (defun naiive (a b)
-  (let ((big-no (+ (expt 10 9) 7)))
-    (declare (type unsigned-byte  big-no a b))
-    (the (unsigned-byte 64) (mod (the (unsigned-byte 64) (the unsigned-byte (* a b)))
-                                 big-no))))
+  (let ((big-no 1000000007))
+    (declare (type integer a b))
+    (declare (type integer  big-no))
+    ;(format t ":::: ~A ~A~%" a b)
+    (mod (* a b)
+            big-no)))
 
 ;; (defun montgomery (x y)
 ;;   (let ((big-no (+ (expt 10 9) 7))
@@ -30,13 +32,14 @@
 
 (defun puzzle (m n a b c)
   (declare (optimize (speed 3)))
-  (declare (type unsigned-byte m))
-  (declare (type unsigned-byte n))
-  (declare (type (simple-array unsigned-byte (*)) a))
-  (declare (type (simple-array unsigned-byte (*)) b))
-  (declare (type (simple-array unsigned-byte (*)) c))
-  (loop for i of-type unsigned-byte  from 0 below m do
-       (loop for j of-type unsigned-byte from (1- (aref b i)) below n by (aref b i) do
+  (declare (type integer m))
+  (declare (type integer n))
+  (declare (type (simple-array integer (*)) a))
+  (declare (type (simple-array integer (*)) b))
+  (declare (type (simple-array integer (*)) c))
+  ;(setf n 2 m 2)
+  (loop for i of-type integer  from 0 below m do
+       (loop for j of-type integer from (1- (aref b i)) below n by (aref b i) do
             (setf (aref a j) (naiive (aref a j) (aref c i)))))
   (format t "~&finished~%")
   (loop for x from 0 below n do
