@@ -14,20 +14,20 @@
 
 (defun naiive (a b)
   (let ((big-no (+ (expt 10 9) 7)))
-    (declare (type fixnum  big-no a b))
-      (mod (* a b)
-           big-no)))
+    (declare (type unsigned-byte  big-no a b))
+    (the (unsigned-byte 64) (mod (the (unsigned-byte 64) (the unsigned-byte (* a b)))
+                                 big-no))))
 
-(defun montgomery (x y)
-  (let ((big-no (+ (expt 10 9) 7))
-        (a 0))
-    (declare (type fixnum  big-no a x y))
-    (loop for k from 0 below m do
-         )
+;; (defun montgomery (x y)
+;;   (let ((big-no (+ (expt 10 9) 7))
+;;         (a 0))
+;;     (declare (type fixnum  big-no a x y))
+;;     (loop for k from 0 below m do
+;;          )))
 
-    ))
 ;; http://stackoverflow.com/questions/9009139/optimising-multiplication-modulo-a-small-prime
 ;; read about montgomery reduction
+
 (defun puzzle (m n a b c)
   (declare (optimize (speed 3)))
   (declare (type unsigned-byte m))
@@ -37,9 +37,9 @@
   (declare (type (simple-array unsigned-byte (*)) c))
   (loop for i of-type unsigned-byte  from 0 below m do
        (loop for j of-type unsigned-byte from (1- (aref b i)) below n by (aref b i) do
-            (setf (aref a j) (naiive  (aref a j) (aref c i)))))
+            (setf (aref a j) (naiive (aref a j) (aref c i)))))
   (format t "~&finished~%")
-  (loop for x of-type unsigned-byte from 0 below n do
+  (loop for x from 0 below n do
        (princ  (aref a x))
        (princ " ")))
 
@@ -58,12 +58,13 @@
     (puzzle m n a b c)
     ))
 
-;; (solution) ; uncomment this when running on hacker-rank
+  ;; (solution) ; uncomment this when running on hacker-rank
+
 
 (defun repl-main ()
   (let ((path (if (search "chess" (the string (machine-instance)))
-                 "Documents/hackerrank/"
-                 "Programming/hackerrank/"))
+                  "Documents/hackerrank/"
+                  "Programming/hackerrank/"))
         (puzzle "sherlock-and-queries"))
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
