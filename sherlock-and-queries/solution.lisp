@@ -12,7 +12,7 @@
 (defun primos(n)
   (loop with s = (list 2)
      for i from 3 to (1+ (sqrt n)) do
-       (when  (loop for p in s never  (zerop (mod i p)))
+       (when (loop for p in s never (zerop (mod i p)))
          (setq s (nconc s (list i))))
      finally (return s)))
 
@@ -39,8 +39,8 @@
   (loop with s1 = (list 1)
      with s = nil
      for (p e) in (divisores num) do
-       (loop  for i from 1 to e do
-            (loop for x in s1  do (push (* x (expt p i)) s)))
+       (loop for i from 1 to e do
+            (loop for x in s1 do (push (* x (expt p i)) s)))
        (setq s1 (append s1 s))
        (setq s nil)
      finally (return s1)))
@@ -71,17 +71,17 @@
     (loop for i from 1 to nm do (setf (aref ac i) (read)))
     (procesa2)))
 
-(setq  lprimos (primos 100000))
+(setq lprimos (primos 100000))
 
 (defun multiplo(num n)
   (loop for i from 1
      while (<= (* num i) n) collect (* num i)))
 
 (defun tarta(num)
-  (loop with ee = 0  with pp = nil with pe = nil
+  (loop with ee = 0 with pp = nil with pe = nil
      for (p e) in (divisores num) do
        (when (> e ee)
-         (setq  ee e  pp p))
+         (setq ee e pp p))
      finally (return (list (/ num pp) (progn (setq pe (expt pp ee))
                                              (mapcar (lambda(x)(* x pe)) (ldivisores (/ num pe))))))))
 
@@ -102,15 +102,15 @@
   (setf (aref ak 1) (aref as 1))
   (loop for i from 2 to nn
      for (u v) = (tarta i) do
-       (setf (aref ak i)  (mod (* (aref ak u)
+       (setf (aref ak i) (mod (* (aref ak u)
                                   (loop with prod = 1
-                                     for x in v  do (setq prod (mod (* (aref as x) prod) modulo))
+                                     for x in v do (setq prod (mod (* (aref as x) prod) modulo))
                                      finally (return prod)))
                                modulo))))
 
 (defun pon-aa()
   (loop for i from 1 to nn do
-       (setf (aref aa i) (mod  (* (aref aa i) (aref ak i)) modulo))))
+       (setf (aref aa i) (mod (* (aref aa i) (aref ak i)) modulo))))
 
 (defun procesa2()
   (crea-as)
