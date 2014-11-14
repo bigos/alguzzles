@@ -69,8 +69,8 @@
  (princ (aref aa nn))))
 
 
-(defun haz()
-(let ((*standard-input* *standard-input*))
+(defun haz(strm)
+(let ((*standard-input* strm))
     (setq nn (read)
           nm (read))
     (setq aa (make-array (1+ nn) :element-type 'fixnum)
@@ -137,5 +137,30 @@
   (pon-aa)
   (out-aa))
 
+;;;;;;;;;;;;;;;
 
-(haz)
+(defun repl-main ()
+  (let ((path (if (search "chess" (the string (machine-instance)))
+                  "Documents/hackerrank/"
+                  "Programming/hackerrank/"))
+        (puzzle "sherlock-and-queries"))
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input.1.txt"))
+      (haz s))
+    (format t "~&=========================~%")
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input00.txt"))
+      (haz s))
+    (format t "~&=========================~%")
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "/" "input13.txt"))
+      (haz s))
+    ))
+
+(repl-main)
