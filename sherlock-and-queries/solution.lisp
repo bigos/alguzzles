@@ -13,12 +13,15 @@
        (split-by-one-space string)))
 
 (defun naiive (a b)
-  (let ((big-no 1000000007))
-    (declare (type fixnum a b))
+  (let ((big-no 1000000007) (prod 0))
+    (declare (type unsigned-byte a ))
+    (declare (type integer  b))
+    (declare (type integer prod))
     (declare (type integer  big-no))
-    ;(format t ":::: ~A ~A~%" a b)
-    (mod (the (unsigned-byte 32) (* a b))
-            big-no)))
+    ;; (format t ":::: ~A ~A~%" a b)
+    (setf prod (* a b))
+    (mod prod
+         big-no)))
 
 ;; (defun montgomery (x y)
 ;;   (let ((big-no (+ (expt 10 9) 7))
