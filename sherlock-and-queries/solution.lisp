@@ -1,94 +1,141 @@
-(declaim (optimize (speed 3) (debug 0) (safety 1)))
-
-(defun split-by-one-space (string)
-  (declare (type string string))
-  (loop for i = 0 then (1+ j)
-     as j = (position #\Space string :start i)
-     collect (subseq string i j)
-     while j))
-
-(defun split-and-parse (string)
-  (map 'list
-       (lambda (x) (parse-integer x))
-       (split-by-one-space string)))
-
-(defun naiive (a b)
-  (let ((big-no 1000000007) (prod 0))
-    (declare (type unsigned-byte a ))
-    (declare (type integer  b))
-    (declare (type integer prod))
-    (declare (type integer  big-no))
-    ;; (format t ":::: ~A ~A~%" a b)
-    (setf prod (* a b))
-    (mod prod
-         big-no)))
-
-;; (defun montgomery (x y)
-;;   (let ((big-no (+ (expt 10 9) 7))
-;;         (a 0))
-;;     (declare (type fixnum  big-no a x y))
-;;     (loop for k from 0 below m do
-;;          )))
-
-;; http://stackoverflow.com/questions/9009139/optimising-multiplication-modulo-a-small-prime
-;; read about montgomery reduction
-
-(defun puzzle (m n a b c)
-  (declare (optimize (speed 3)))
-  (declare (type integer m))
-  (declare (type integer n))
-  (declare (type (simple-array integer (*)) a))
-  (declare (type (simple-array integer (*)) b))
-  (declare (type (simple-array integer (*)) c))
-  ;(setf n 2 m 2)
-  (loop for i of-type integer  from 0 below m do
-       (loop for j of-type integer from (1- (aref b i)) below n by (aref b i) do
-            (setf (aref a j) (naiive (aref a j) (aref c i)))))
-  (format t "~&finished~%")
-  (loop for x from 0 below n do
-       (princ  (aref a x))
-       (princ " ")))
-
-(defun solution (&optional stream)
-  (let* ((first-line (split-and-parse (read-line stream)))
-         (n (car first-line))
-         (m (cadr first-line))
-         (a (make-array (list n) :element-type 'unsigned-byte
-                        :initial-contents (split-and-parse (read-line stream))))
-         (b (make-array (list m) :element-type 'unsigned-byte
-                        :initial-contents (split-and-parse (read-line stream))))
-         (c (make-array (list m) :element-type 'unsigned-byte
-                        :initial-contents (split-and-parse (read-line stream)))))
-    (format nil "~A ~%" (type-of a))
-    (require :sb-sprof)
-    (puzzle m n a b c)
-    ))
-
-  ;; (solution) ; uncomment this when running on hacker-rank
+ (defvar lprimos nil)
+(defvar ta nil)
+(defvar modulo (+ (expt 10 9) 7))
+(defvar ak nil)
+(defvar aa nil)
+(defvar ab nil)
+(defvar ac nil)
+(defvar as nil)
+(defvar nn nil)
+(defvar nm nil)
 
 
-(defun repl-main ()
-  (let ((path (if (search "chess" (the string (machine-instance)))
-                  "Documents/hackerrank/"
-                  "Programming/hackerrank/"))
-        (puzzle "sherlock-and-queries"))
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    puzzle "/" "input.1.txt"))
-      (solution s))
-    (format t "~&=========================~%")
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    puzzle "/" "input00.txt"))
-      (solution s))
-    (format t "~&=========================~%")
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    puzzle "/" "input13.txt"))
-      (solution s))
-    ))
 
-(repl-main)
+(defun primos(n)
+  (loop with s = (list 2)
+    for i from 3 to (1+ (sqrt n)) do
+      (when  (loop for p in s never  (zerop (mod i p)))
+        (setq s (nconc s (list i))))
+       finally (return s)))
+
+
+(defun exponente(n p)
+  (loop with num = n
+        with e = 0
+     while (zerop (mod num p)) do
+       (incf e)
+       (setq num (/ num p))
+       finally (return e)))
+
+
+
+(defun divisores(num)
+  (loop with n = num
+       with expo = nil
+     for p in lprimos
+     when (zerop (mod n p)) collect
+       (progn (setq expo (exponente n p)
+                    n (/ n (expt p expo)))
+              (list p expo))
+       into list
+     finally (return (if (= n 1) list (cons (list n 1) list)))))
+
+
+
+
+(defun ldivisores(num)
+  (loop with s1 = (list 1)
+     with s = nil
+     for (p e) in (divisores num) do
+       (loop  for i from 1 to e do
+            (loop for x in s1  do (push (* x (expt p i)) s)))
+       (setq s1 (append s1 s))
+       (setq s nil)
+     finally (return s1)))
+
+(defun procesa(a b c n m)
+  (loop for i from 1 to m do
+       (loop for j in (multiplo (aref b i) n) do
+            (setf (aref a j) (mod (* (aref a j) (aref c i)) modulo))))
+  (fresh-line)
+  (loop for i from 1 to (1- n) do (princ (aref a i)) (princ #\Space))
+  (princ (aref a n)))
+
+
+(defun out-aa()
+  (let ((*standard-output* *standard-output*))
+ (fresh-line)
+ (loop for i from 1 to (1- nn) do (princ (aref aa i)) (princ #\Space))
+ (princ (aref aa nn))))
+
+
+(defun haz()
+(let ((*standard-input* *standard-input*))
+    (setq nn (read)
+          nm (read))
+    (setq aa (make-array (1+ nn) :element-type 'fixnum)
+          ab (make-array (1+ nm) :element-type 'fixnum)
+          ac (make-array (1+ nm) :element-type 'fixnum))
+    (loop for i from 1 to nn do (setf (aref aa i) (read)))
+    (loop for i from 1 to nm do (setf (aref ab i) (read)))
+    (loop for i from 1 to nm do (setf (aref ac i) (read)))
+    (procesa2)))
+
+
+(setq  lprimos (primos 100000))
+
+(defun multiplo(num n)
+  (loop for i from 1
+    while (<= (* num i) n) collect (* num i)))
+
+(defun tarta(num)
+  (loop with ee = 0  with pp = nil with pe = nil
+     for (p e) in (divisores num) do
+       (when (> e ee)
+         (setq  ee e  pp p))
+     finally (return (list (/ num pp) (progn (setq pe (expt pp ee))
+                                              (mapcar (lambda(x)(* x pe)) (ldivisores (/ num pe))))))))
+
+
+
+(defun crea-tarta()
+  (setq ta (make-array (1+ nn)))
+ (loop for i from 2 to nn do
+      (setf (aref ta i) (tarta i))))
+
+
+
+(defun crea-as()
+  (setq as (make-array (1+ nn) :initial-element 1))
+  (loop for i from 1 to nm
+        for j = (aref ab i) do
+       (when (<= 1 j nn)
+         (setf (aref as j) (mod (* (aref as j) (aref ac i)) modulo)))))
+
+(defun crea-st()
+  (setq ak (make-array (1+ nn) :initial-element 1))
+  (setf (aref ak 1) (aref as 1))
+  (loop for i from 2 to nn
+     for (u v) = (tarta i) do
+       (setf (aref ak i)  (mod (* (aref ak u)
+                                  (loop with prod = 1
+                                     for x in v  do (setq prod (mod (* (aref as x) prod) modulo))
+                                     finally (return prod)))
+                               modulo))))
+
+
+
+(defun pon-aa()
+  (loop for i from 1 to nn do
+       (setf (aref aa i) (mod  (* (aref aa i) (aref ak i)) modulo))))
+
+
+(defun procesa2()
+  (crea-as)
+  (crea-tarta)
+  (crea-st)
+  (pon-aa)
+  (out-aa))
+
+
+(haz)
