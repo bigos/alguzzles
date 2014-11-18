@@ -9,11 +9,30 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun puzzle (w cost group-min &optional (group 0))
+  (cond
+    ((> (car w) (+ group-min 4))
+     (setf group-min (car w))
+     (setf group 0)
+     (incf cost))
+    ((>= group 4)
+     (setf group-min (car w))
+     (incf cost)
+     (setf group 0))
+    (T
+     (incf group)))
+  (if (cdr w)
+      (puzzle (cdr w) cost group-min group)
+      (format t "##### ~a~%" cost))
+  )
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (w (split-and-parse (read-line stream))))
-    (format T "~a~%~A~%" n w)))
+    (format T "~a~%~A~%" n w)
+    (setf w (sort w #'<))
+    (format t "~&sorted ~a~%" w)
+    (puzzle w 1 (car w))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
