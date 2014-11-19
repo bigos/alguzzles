@@ -9,10 +9,36 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defparameter *bot-energy* 0)
+(defparameter *min-bot* 0)
+
+(defun calc-energy (h)
+  (when h
+    (setf *bot-energy* (funcall
+                        (if (> h *bot-energy*)
+                            #'+
+                            #'-)
+                        *bot-energy*
+                        (- h
+                           *bot-energy*)))
+    (when (< *bot-energy* *min-bot*)
+      (setf *min-bot* *bot-energy*))))
+
+(defun puzzle (i n buildings)
+  (format nil "~&||| ~a ~A ~A ~A ~A~%" i n buildings *bot-energy* *min-bot*)
+  (calc-energy (cadr buildings))
+  (format t "~&--- ~a ~A ~A ~A ~A~%" i n buildings *bot-energy* *min-bot*)
+  (when (< i n)
+    (puzzle (1+ i) n (cdr buildings))))
+
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (buildings (split-and-parse (read-line stream))))
-    (format T "~a~%~A~%" n buildings)))
+    (setf *bot-energy* 4
+          *min-bot* 9999)
+    (push 0 buildings)
+    (format T "~a~%~A~%~A ~A~%" n buildings *bot-energy* *min-bot*)
+    (puzzle 0 n buildings)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -25,6 +51,12 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     puzzle "input.1.txt"))
-      (solution s))))
+      (solution s))
+    (with-open-file (s (concatenate 'string
+                                    (directory-namestring (user-homedir-pathname))
+                                    path
+                                    puzzle "input.2.txt"))
+      (solution s))
+    ))
 
 (repl-main)
