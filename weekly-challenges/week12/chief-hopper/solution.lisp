@@ -10,33 +10,46 @@
        (split-by-one-space string)))
 
 (defparameter *bot-energy* 0)
+(defparameter *start-bot* 0)
 (defparameter *min-bot* 0)
 
 (defun calc-energy (h)
-  (when h
-    (if (> h *bot-energy*)
-        (decf *bot-energy*
-              (- h *bot-energy*))
-        (incf *bot-energy*
-              (-  *bot-energy* h)))
-    (when (< *bot-energy* *min-bot*)
-      (setf *min-bot* *bot-energy*))))
+  (if h
+      (progn
+        (if (> h *bot-energy*)
+            (decf *bot-energy*
+                  (- h *bot-energy*))
+            (incf *bot-energy*
+                  (-  *bot-energy* h)))
+        (when (< *bot-energy* *min-bot*)
+          (setf *min-bot* *bot-energy*)))
+      (format t "~A~%" *start-bot*)))
 
 (defun puzzle (i n buildings)
-  (format nil "~&||| ~a ~A ~A ~A ~A~%" i n buildings *bot-energy* *min-bot*)
+  ;; (format t "~&||| ~a ~A ~A -- ~A ~A~%" i n buildings *bot-energy* *min-bot*)
   (calc-energy (cadr buildings))
-  (format t "~&--- ~a ~A ~A ~A ~A~%" i n buildings *bot-energy* *min-bot*)
-  (when (< i n)
+  ;; (format t "~&--- ~a ~A ~A -- ~A ~A~%" i n buildings *bot-energy* *min-bot*)
+  (when (and (< i n) (>= *min-bot* 0))
     (puzzle (1+ i) n (cdr buildings))))
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (buildings (split-and-parse (read-line stream))))
-    (setf *bot-energy* 3
-          *min-bot* 9999)
     (push 0 buildings)
-    (format T "~a~%~A~%~A ~A~%" n buildings *bot-energy* *min-bot*)
-    (puzzle 0 n buildings)))
+    (setf *min-bot* -1)
+    (dotimes (x 100000)
+      ;; (format t "~&==== ~A~%" x)
+      (if (< *min-bot* 0)
+          (progn
+            ;; (format t "~&gasgasgasggs")
+            (setf *bot-energy* x
+                  *start-bot* x
+                  *min-bot* x)
+            (puzzle 0 n buildings))
+          (progn
+            ;; (format t "~&..................")
+            ;; (format t "~A " x)
+            (return x))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
