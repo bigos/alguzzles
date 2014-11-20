@@ -14,13 +14,11 @@
 
 (defun calc-energy (h)
   (when h
-    (setf *bot-energy* (funcall
-                        (if (> h *bot-energy*)
-                            #'+
-                            #'-)
-                        *bot-energy*
-                        (- h
-                           *bot-energy*)))
+    (if (> h *bot-energy*)
+        (decf *bot-energy*
+              (- h *bot-energy*))
+        (incf *bot-energy*
+              (-  *bot-energy* h)))
     (when (< *bot-energy* *min-bot*)
       (setf *min-bot* *bot-energy*))))
 
@@ -34,7 +32,7 @@
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream)))
          (buildings (split-and-parse (read-line stream))))
-    (setf *bot-energy* 4
+    (setf *bot-energy* 3
           *min-bot* 9999)
     (push 0 buildings)
     (format T "~a~%~A~%~A ~A~%" n buildings *bot-energy* *min-bot*)
