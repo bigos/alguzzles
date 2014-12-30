@@ -9,11 +9,13 @@ select_input() ->
        true -> standard_io
     end.
 
+read_integers(Device) ->
+   io:fread(Device, [], "~d").
 
 main() ->
     Dev = select_input(),
-    Line = io:get_line(Dev,"prompt"),
-    io:format("your first line is: ~p~n",[Line]),
+    {ok, Line} = read_integers(Dev),
+    io:format("your first line is: ~p~n",[hd(Line)]),
     Line2 = io:get_line(Dev,"prompt"),
     io:format("your first line is: ~p~n",[Line2]),
     Line3 = io:get_line(Dev,"prompt"),
