@@ -1,17 +1,20 @@
 -module(input_experiment).
--export([main/0, hst/0,select_input/0]).
-
-hst() ->
-    net_adm:localhost().
+-export([main/0,select_input/0]).
 
 select_input() ->
-    Hst = hst(),
-    if Hst == "jacek-desktops" -> 
-            file:open("./input_experiment.erl",[read]);
-       true -> 
-            standard_io
+    Hst = net_adm:localhost(),
+    if Hst == "jacek-desktop" -> 
+            {ok, Device} = file:open("./input1.txt",[read]),
+            Device;
+       true -> standard_io
     end.
 
 
 main() ->
-    io:format("your localhost is: ~p~n",[net_adm:localhost()]).
+    Dev = select_input(),
+    Line = io:get_line(Dev,"prompt"),
+    io:format("your first line is: ~p~n",[Line]),
+    Line2 = io:get_line(Dev,"prompt"),
+    io:format("your first line is: ~p~n",[Line2]),
+    Line3 = io:get_line(Dev,"prompt"),
+    io:format("your first line is: ~p~n",[Line3]).
