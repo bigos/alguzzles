@@ -1,4 +1,4 @@
--module(input_experiment).
+-module(solution).
 -export([main/0,select_input/0, repeat_testcases/2, solution/4]).
 
 select_input() ->
@@ -37,8 +37,8 @@ repeat_testcases(Dev,Times) when Times > 0 ->
     Formattednum = io_lib:format("~p",[hd(Num)]),
     %% io:format("got formatted ~p ~p~n",[hd(Num), Formattednum]),
     Fnl= string:len(hd(Formattednum)),
-    input_experiment:solution(hd(Num),hd(Formattednum),Fnl,0),
-    input_experiment:repeat_testcases(Dev,Times-1);
+    solution:solution(hd(Num),hd(Formattednum),Fnl,0),
+    solution:repeat_testcases(Dev,Times-1);
 repeat_testcases(_,_) ->
     false.
 
