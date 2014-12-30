@@ -1,9 +1,15 @@
 -module(input_experiment).
--export([main/0]).
+-export([main/0, hst/0,select_input/0]).
+
+hst() ->
+    net_adm:localhost().
 
 select_input() ->
-    if net_adm:localhost() == "jacek-desktop" -> file:open("./input1.txt",[read]);
-       true -> standard_io
+    Hst = hst(),
+    if Hst == "jacek-desktops" -> 
+            file:open("./input_experiment.erl",[read]);
+       true -> 
+            standard_io
     end.
 
 
