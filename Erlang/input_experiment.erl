@@ -17,8 +17,9 @@ solution(_,[],0,Count) ->
     io:format("~p~n",[Count]),
     false;
 solution(Num,Formattednum,Fnl,Count) when Fnl > 0 ->
-    %% io:format("formatted num is ~p   ~p~n",[Formattednum, Count]),
+    %% io:format("args are: ~p ~p ~p  ~p~n",[Num, Formattednum, Fnl, Count]),
     Asciibase = 48,
+    %% io:format("hd of formatted num ~p~n",[hd(Formattednum)]),
     Numx = hd(Formattednum) - Asciibase,
     %% io:format("~p ~p ~p~n",[Num, Numx, Fnl]),
     if Numx > 0 -> Res = Num rem Numx;
@@ -31,12 +32,12 @@ solution(Num,Formattednum,Fnl,Count) when Fnl > 0 ->
     %% io:format("newcount ~p  ~p ~p~n",[Newcount, Res,Numx]),
     solution(Num,tl(Formattednum),Fnl-1,Newcount).
 
-
 repeat_testcases(Dev,Times) when Times > 0 ->   
     {ok,Num} = io:fread(Dev,[],"~d"),
-    Formattednum = io_lib:format("~p",[hd(Num)],0),
-    Fnl= string:len(Formattednum),
-    input_experiment:solution(Num,Formattednum,Fnl,0),
+    Formattednum = io_lib:format("~p",[hd(Num)]),
+    %% io:format("got formatted ~p ~p~n",[hd(Num), Formattednum]),
+    Fnl= string:len(hd(Formattednum)),
+    input_experiment:solution(hd(Num),hd(Formattednum),Fnl,0),
     input_experiment:repeat_testcases(Dev,Times-1);
 repeat_testcases(_,_) ->
     false.
