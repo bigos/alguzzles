@@ -12,7 +12,6 @@ select_input() ->
 read_integers(Device) ->
     io:fread(Device, [], "~d").
 
-
 solution(_,[],0,Count) -> 
     io:format("~p~n",[Count]),
     false;
