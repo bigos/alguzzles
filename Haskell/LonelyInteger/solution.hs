@@ -3,6 +3,6 @@ main = do
   val2 <- getLine
 
   print val1
-  print val2
+  print (map read (words val2) :: [Int])
 
   -- don't waste your time with functional programming go back to Lisp
