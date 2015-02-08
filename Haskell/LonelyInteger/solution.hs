@@ -15,16 +15,8 @@ main :: IO ()
 main = do
   (val1, val2) <- get2Lines
   let va = (read val1 :: Int)
-  let vb = (map read (words val2) :: [Int])
-  let vr = (isTheSame (va, head vb) )
-  let sl = splitList (va, vb)
-  print sl
-  let sorted = sortLists sl
-  print sorted
-  print "sorted ^"
-  let foundDifferent = findDifferent sorted
-  print foundDifferent
-  print "above is the result"
-  print vr
+  let vb = sort (map read (words val2) :: [Int])
+
+
   print va
   print vb
