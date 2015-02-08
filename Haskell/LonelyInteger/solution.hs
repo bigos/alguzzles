@@ -1,4 +1,5 @@
 import Data.List
+import Debug.Trace
 -- very good writeup
 -- http://blog.sigfpe.com/2007/11/io-monad-for-people-who-simply-dont.html
 
@@ -14,6 +15,7 @@ sortLists sl =
       l2 = Data.List.sort (snd sl)
   in (l1, l2)
 
+get2Lines :: IO (String, String)
 get2Lines = do
   print "enter line 1"
   line1 <- getLine
@@ -21,6 +23,20 @@ get2Lines = do
   line2 <- getLine
   return (line1, line2)
 
+
+findDifferent :: ([Int], [Int]) -> Int
+findDifferent (x, y) | trace ("+++++ " ++ show x ++ " " ++ show y) False = undefined
+findDifferent ([x], []) = x
+findDifferent ([], [y]) = y
+findDifferent sorted =
+  let fh = head (fst sorted)
+      sh = head (snd sorted)
+  in (if fh == sh
+      then findDifferent ((drop 1 (fst sorted)),(drop 1 (snd sorted)) )
+      else fh)
+
+
+main :: IO ()
 main = do
   (val1, val2) <- get2Lines
   let va = (read val1 :: Int)
@@ -29,6 +45,9 @@ main = do
   let sl = splitList (va, vb)
   let sorted = sortLists sl
   print sorted
+  let foundDifferent = findDifferent sorted
+  print foundDifferent
+  print "above is the result"
   print vr
   print va
   print vb
