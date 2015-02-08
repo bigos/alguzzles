@@ -7,6 +7,7 @@ isTheSame :: (Int, Int) -> Bool
 isTheSame (x, y) = (x == y)
 
 splitList :: (Int, [a]) -> ([a], [a])
+splitList (ln, lst) | trace (">>>> " ++ show ln ++ " ") False = undefined
 splitList (ln, lst) = splitAt (div ln 2) lst
 
 sortLists :: Ord a => ([a], [a]) -> ([a], [a])
@@ -22,7 +23,6 @@ get2Lines = do
   print "enter line 2"
   line2 <- getLine
   return (line1, line2)
-
 
 findDifferent :: ([Int], [Int]) -> Int
 findDifferent (x, y) | trace ("+++++ " ++ show x ++ " " ++ show y) False = undefined
@@ -43,8 +43,10 @@ main = do
   let vb = (map read (words val2) :: [Int])
   let vr = (isTheSame (va, head vb) )
   let sl = splitList (va, vb)
+  print sl
   let sorted = sortLists sl
   print sorted
+  print "sorted ^"
   let foundDifferent = findDifferent sorted
   print foundDifferent
   print "above is the result"
