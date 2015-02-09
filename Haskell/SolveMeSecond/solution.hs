@@ -1,20 +1,18 @@
 import Control.Monad
-import Data.List
-import Network.BSD
+import System.IO
 
 main :: IO ()
 main = do
-  hostName <- getHostName
-  if isInfixOf "acek" hostName
+  if 1 == 1
     then do
-    print "zzz"
-    fh <- open "input1.txt" ReadMode
-    n <- readLn fh :: IO Int
-    str <- replicateM n (getLine fh)
+      let stdin = openFile "input1.txt" ReadMode
+      print "---"
+      return ()
     else do
-    n <- readLn :: IO Int
-    str <- replicateM n getLine
+      return ()
 
+  n <- readLn :: IO Int
+  str <- replicateM n getLine
   let
     ans = map (sum. map read. words) str
-          mapM_ print ans
+  mapM_ print ans
