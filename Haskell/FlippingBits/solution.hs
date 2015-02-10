@@ -11,5 +11,7 @@ main = do
   t0 <- readLn :: IO Int
   str <- replicateM t0 getLine
   let nums = map read str :: [Word32]
-  print nums
-  print (complement (head nums) )
+  -- print nums
+  let results = (map complement nums)
+  -- print results
+  forM_ results print
