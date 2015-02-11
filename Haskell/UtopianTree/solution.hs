@@ -24,3 +24,5 @@ main = do
   print cycles
   let answers = map calcGrowth cycles
   forM_ answers print
+  -- this gives same alues astheLisp loop
+  print  (join [ [2 ^ x - 2 ,2 ^ x - 1] | x <- [1..5] ])
