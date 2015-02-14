@@ -1,7 +1,21 @@
 import Data.Bits
+import Control.Monad
+
+xorVal :: (Int, Int) -> Int
+xorVal args = xor (fst args) (snd args)
+
+argEnds l r =
+  (map (\x ->  [x..(last [l..r] )]) [l..r])
+
+argStarts l r =
+  map (\x ->(take (length x) (repeat (head x))) ) (argEnds l r)
+
+argPairs l r = zip
+               (join (argStarts l r))
+               (join (argEnds l r))
 
 maxXor :: Int -> Int -> Int
-maxXor l r = -- complete this function.
+maxXor l r =  maximum (map xorVal (argPairs l r))
 
 main :: IO ()
 main = do
