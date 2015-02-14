@@ -17,6 +17,9 @@ argPairs l r = zip
 maxXor :: Int -> Int -> Int
 maxXor l r =  maximum (map xorVal (argPairs l r))
 
+-- copied from elsewhere
+-- maxXor l r = maximum [x `xor` y | x <- [l, l+1.. r], y <- [l, l+1.. r]]
+
 main :: IO ()
 main = do
   l <- readLn
