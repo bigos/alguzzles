@@ -1,5 +1,9 @@
 import Control.Monad
 
+-- solution suggestion, 4 removed
+-- a-a-a+b-b-b+
+-- - -   - -
+
 solve :: [String] -> [Int]
 solve strs = [1,2,3] -- finish me
 
