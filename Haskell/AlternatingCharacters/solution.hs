@@ -4,8 +4,24 @@ import Control.Monad
 -- a-a-a+b-b-b+(end)
 -- - -   - -
 
+recme s e acc
+  | s >= e = acc
+  | otherwise = recme (s + 1) e s
+
+res (x:y:ys) acc
+  | ys == [] = acc
+  |
+
+
+solveOne :: String -> Int
+solveOne "A" = 0
+solveOne "B" = 0
+-- solveOne "AA" = 1
+-- solveOne "BB" = 1
+solveOne s = 1
+
 solve :: [String] -> [Int]
-solve strs = [1,2,3] -- finish me
+solve strs = map solveOne strs
 
 main :: IO ()
 main = do
