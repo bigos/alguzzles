@@ -1,7 +1,7 @@
 import Control.Monad
 
 -- solution suggestion, 4 removed
--- a-a-a+b-b-b+
+-- a-a-a+b-b-b+(end)
 -- - -   - -
 
 solve :: [String] -> [Int]
