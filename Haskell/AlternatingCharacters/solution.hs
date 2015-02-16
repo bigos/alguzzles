@@ -1,33 +1,15 @@
 import Control.Monad
-import Debug.Trace
-
-
--- solution suggestion, 4 removed
--- a-a-a+b-b-b+(end)
--- - -   - -
-
-recme s e acc
-  | s >= e = acc
-  | otherwise = recme (s + 1) e s
-
--- trace :: String -> a -> a
-res :: [Int] -> Int -> Int
-res (x:y:ys) acc -- how do i trace it?
-  | trace ("res " ++ show (x:y:ys) ++ " " ++ show acc) False = undefined
-  | ys == [] = acc
+-- import Debug.Trace
+                --
+res :: [Char] -> Int -> Int
+res (x:y:ys) acc
+  -- | trace ("in res " ++ show (x:y:[]) ++ " - " ++ show ys ++ " " ++ show acc) False = undefined
+  | ys == [] = if x== y then (acc+1) else acc
   | x == y = res (y:ys) (acc + 1)
   | otherwise = res (y:ys) (acc + 0)
 
-
-solveOne :: String -> Int
-solveOne "A" = 0
-solveOne "B" = 0
--- solveOne "AA" = 1
--- solveOne "BB" = 1
-solveOne s = 1
-
 solve :: [String] -> [Int]
-solve strs = map solveOne strs
+solve strs = map (\x -> res x 0) strs
 
 main :: IO ()
 main = do
