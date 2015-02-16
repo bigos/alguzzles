@@ -8,9 +8,10 @@ recme s e acc
   | s >= e = acc
   | otherwise = recme (s + 1) e s
 
-res (x:y:ys) acc
+res (x:y:ys) acc -- how do i trace it?
   | ys == [] = acc
-  |
+  | x == y = res (y:ys) (acc + 1)
+  | otherwise = res (y:ys) (acc + 0)
 
 
 solveOne :: String -> Int
