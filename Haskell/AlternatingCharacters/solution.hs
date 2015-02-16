@@ -1,4 +1,6 @@
 import Control.Monad
+import Debug.Trace
+
 
 -- solution suggestion, 4 removed
 -- a-a-a+b-b-b+(end)
@@ -8,7 +10,10 @@ recme s e acc
   | s >= e = acc
   | otherwise = recme (s + 1) e s
 
+-- trace :: String -> a -> a
+res :: [Int] -> Int -> Int
 res (x:y:ys) acc -- how do i trace it?
+  | trace ("res " ++ show (x:y:ys) ++ " " ++ show acc) False = undefined
   | ys == [] = acc
   | x == y = res (y:ys) (acc + 1)
   | otherwise = res (y:ys) (acc + 0)
