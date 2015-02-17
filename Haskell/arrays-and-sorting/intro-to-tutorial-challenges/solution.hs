@@ -1,4 +1,5 @@
 import Data.List
+import Data.Maybe
 
 main :: IO ()
 main = do
@@ -8,7 +9,4 @@ main = do
   arstr <- getLine
   let arl = words arstr
   let ar = map read arl :: [Int]
-  print v
-  print n
-  print ar
-  print (elemIndex v ar)
+  print (fromJust (elemIndex v ar))
