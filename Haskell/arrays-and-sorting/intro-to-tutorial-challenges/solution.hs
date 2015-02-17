@@ -1,4 +1,4 @@
-import System.IO
+import Data.List
 
 main :: IO ()
 main = do
@@ -11,3 +11,4 @@ main = do
   print v
   print n
   print ar
+  print (elemIndex v ar)
