@@ -8,23 +8,14 @@ myfin i ar = drop (i+1) ar
 
 aiv i v ar = join [(mybeg i ar) , [v] , (myfin i ar)]
 
-insort i v ar
-  | trace (show i ++ show v ++ show ar ++ "  >"++show start++show finish) False = undefined
+-- run like this: insort 5 3 3 [0,1,2,4,5,3]
+insort i v iv ar
+  | trace (show i ++ show v ++ show iv ++ show ar ++ "  >"++show start++show finish) False = undefined
   | i < 1 = i
-  | otherwise = insort (i-1) v (aiv i v ar)
+  | otherwise = insort (i-1) v niv (aiv i v ar)
   where start = take i ar
         finish = drop (i+1) ar
-
--- myy n v ar
---   | trace (show v) False = undefined
---   | otherwise = (ss, vi, sr)
---   where vi = fromJust (elemIndex v ar)
---         ss = splitAt vi ar
---         firstlast = (last (fst ss))
---         secondfirst = (head (snd ss))
---         sr = if secondfirst >= firstlast then secondfirst else firstlast
-
-
+        niv = ar !! (i-1)
 
 main :: IO ()
 main = do
