@@ -19,11 +19,12 @@ sliced i ar = (mybeg i ar, myfin i ar)
 disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
 
 -- insort 3 3 [2,4,6,8]
-insort i v ar
---  | trace (show i ++ show v ++ show ar) False = undefined
-  | trace (show (disp done sl v)) False = undefined
-  | i < 1 = i
-  | otherwise = insort (i-1) v ar
+insort :: Int -> Int -> [Int] -> [String] -> [String]
+insort i v ar res
+  | trace (concatMap show (disp done sl v)) False = undefined
+  | trace (show res) False = undefined
+  | i < 1 = res
+  | otherwise = insort (i-1) v ar [res++(concatMap show (disp done sl v))]
   where sl = sliced i ar
         head2nd = (head $ snd sl)
         done = if head2nd <= v then True else False
@@ -36,3 +37,5 @@ main = do
   let ar = (map read arwords) :: [Int]
   print s
   print ar
+  --print insort (length ar) (last ar) (init ar)
+  print ""
