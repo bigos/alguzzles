@@ -16,10 +16,12 @@ myfin i ar = drop i ar
 
 sliced i ar = (mybeg i ar, myfin i ar)
 
+disp done sl v = (fst sl, if done then ([v]++ tail (snd sl)) else snd sl)
+
 -- insort 3 3 [2,4,6,8]
 insort i v ar
-  | trace (show i ++ show v ++ show ar) False = undefined
-  | trace (show head2nd++show sl++show done) False = undefined
+--  | trace (show i ++ show v ++ show ar) False = undefined
+  | trace (show (disp done sl v)) False = undefined
   | i < 1 = i
   | otherwise = insort (i-1) v ar
   where sl = sliced i ar
