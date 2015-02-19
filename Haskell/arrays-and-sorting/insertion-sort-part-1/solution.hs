@@ -5,7 +5,7 @@ import Debug.Trace
 
 -- 2468 (3) replace 3 with nothing if 3 < 8
 -- 2468 ()
--- 2468 (8) 2468 ++ last of 2468 ++ () ;  (mybeg 3 [2,4,6,8], myfin 3 [2,4,6,8])
+-- 2468 (8) 2468 ++ last of 2468 ++ () ;  sliced 3 [2,4,6,8]
 -- 246 (68) 246 ++ last of 246 ++ (8)
 -- 24 (468) 24 ++ last of 24 ++ (68)
 -- 2 (2468) replace 2 with 3 because 3 >= 2 ; 2 ++ last of 2 ++ (468)
@@ -14,17 +14,17 @@ import Debug.Trace
 mybeg i ar = take (i+1) ar
 myfin i ar = drop i ar
 
-aiv i v ar = join [(mybeg i ar) , [v] , (myfin i ar)]
+sliced i ar = (mybeg i ar, myfin i ar)
 
--- run like this: insort 5 3 3 [0,1,2,4,5,3]
-insort i v iv ar
-  | trace (show i ++ show v ++ show iv ++ show ar) False = undefined
-  | trace ("  >"++show start++show finish++show niv) False = undefined
+-- insort 3 3 [2,4,6,8]
+insort i v ar
+  | trace (show i ++ show v ++ show ar) False = undefined
+  | trace (show head2nd++show sl++show done) False = undefined
   | i < 1 = i
-  | otherwise = insort (i-1) v niv (aiv i v ar)
-  where start = take i ar
-        finish = drop (i+1) ar
-        niv = if i > 1 then ar !! (i-1) else (0)
+  | otherwise = insort (i-1) v ar
+  where sl = sliced i ar
+        head2nd = (head $ snd sl)
+        done = if head2nd <= v then True else False
 
 main :: IO ()
 main = do
