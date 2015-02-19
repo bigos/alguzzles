@@ -16,7 +16,7 @@ myfin i ar = drop i ar
 
 sliced i ar = (mybeg i ar, myfin i ar)
 
-disp done sl v = (fst sl, if done then ([v]++ tail (snd sl)) else snd sl)
+disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
 
 -- insort 3 3 [2,4,6,8]
 insort i v ar
