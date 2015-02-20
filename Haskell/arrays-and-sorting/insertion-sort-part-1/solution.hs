@@ -1,6 +1,7 @@
 import Control.Monad
 import Data.List
 import Data.Maybe
+import Data.Text (strip)
 import Debug.Trace
 
 -- 2468 (3) replace 3 with nothing if 3 < 8
@@ -18,7 +19,7 @@ sliced i ar = (mybeg i ar, myfin i ar)
 
 disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
 
--- insort 3 3 [2,4,6,8]
+-- insort 3 3 [2,4,6,8] []
 insort i v ar res
 -- | trace (show i ++ show v ++ show ar) False = undefined
 -- | trace (show (disp done sl v)) False = undefined
@@ -28,13 +29,16 @@ insort i v ar res
         head2nd = (head $ snd sl)
         done = if head2nd <= v then True else False
 
+ar2str ar = (concatMap (\x -> (show x)++" " ) ar)
+
 main :: IO ()
 main = do
   s <- readLn :: IO Int
   arstr <- getLine
   let arwords = words arstr
   let ar = (map read arwords) :: [Int]
-  print s
-  print ar
+  -- print s
+  -- print ar
   let ans = insort ((length ar)-2) (last ar) (init ar) []
-  print ans
+  mapM_ (\x -> print (ar2str x)) ans
+  -- print ""
