@@ -51,4 +51,3 @@ main = do
   -- print ar
   let ans = insort ((length ar)-2) (last ar) (init ar) []
   mapM_ (\x -> putStrLn (ar2str x)) ans
-  -- putStrLn "aaa"
