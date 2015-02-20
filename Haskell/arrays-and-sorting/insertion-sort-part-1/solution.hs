@@ -20,8 +20,8 @@ disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
 
 -- insort 3 3 [2,4,6,8]
 insort i v ar res
---  | trace (show i ++ show v ++ show ar) False = undefined
-  | trace (show (disp done sl v)) False = undefined
+-- | trace (show i ++ show v ++ show ar) False = undefined
+-- | trace (show (disp done sl v)) False = undefined
   | i < 1 = res ++ [(disp done sl v)]
   | otherwise = insort (i-1) v ar (res++ [ (disp done sl v)])
   where sl = sliced i ar
@@ -36,3 +36,5 @@ main = do
   let ar = (map read arwords) :: [Int]
   print s
   print ar
+  let ans = insort ((length ar)-2) (last ar) (init ar) []
+  print ans
