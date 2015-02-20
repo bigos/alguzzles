@@ -1,7 +1,7 @@
 import Control.Monad
 import Data.List
 import Data.Maybe
-import Data.Text (strip)
+import Data.Char
 import Debug.Trace
 
 -- 2468 (3) replace 3 with nothing if 3 < 8
@@ -29,7 +29,17 @@ insort i v ar res
         head2nd = (head $ snd sl)
         done = if head2nd <= v then True else False
 
-ar2str ar = (concatMap (\x -> (show x)++" " ) ar)
+trimLeft :: String -> String
+trimLeft = dropWhile isSpace
+
+trimRight :: String -> String
+trimRight str | all isSpace str = ""
+trimRight (c : cs) = c : trimRight cs
+
+trim :: String -> String
+trim = trimLeft . trimRight
+
+ar2str ar = trim (concatMap (\x -> (show x)++" " ) ar)
 
 main :: IO ()
 main = do
