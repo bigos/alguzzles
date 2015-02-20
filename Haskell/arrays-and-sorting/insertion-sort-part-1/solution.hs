@@ -23,7 +23,7 @@ disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
 insort i v ar res
 -- | trace (show i ++ show v ++ show ar) False = undefined
 -- | trace (show (disp done sl v)) False = undefined
-  | i < 1 = res ++ [(disp done sl v)]
+  | done = res ++ [(disp done sl v)]
   | otherwise = insort (i-1) v ar (res++ [ (disp done sl v)])
   where sl = sliced i ar
         head2nd = (head $ snd sl)
