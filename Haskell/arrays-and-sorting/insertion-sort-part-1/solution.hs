@@ -21,13 +21,14 @@ disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
 
 -- insort 3 3 [2,4,6,8] []
 insort i v ar res
--- | trace (show i ++ show v ++ show ar) False = undefined
--- | trace (show (disp done sl v)) False = undefined
+  | trace (show i ++ show v ++ show ar++ show sl ) False = undefined
+  | trace (show (disp done sl v)) False = undefined
   | done = res ++ [(disp done sl v)]
+  | i < 0 =  res ++ [[v]++(disp done sl v)]
   | otherwise = insort (i-1) v ar (res++ [ (disp done sl v)])
   where sl = sliced i ar
         head2nd = (head $ snd sl)
-        done = if head2nd <= v then True else False
+        done = if head2nd <= v  then True else False
 
 trimLeft :: String -> String
 trimLeft = dropWhile isSpace
