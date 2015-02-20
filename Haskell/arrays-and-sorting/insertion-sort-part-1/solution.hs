@@ -4,14 +4,6 @@ import Data.Maybe
 import Data.Char
 import Debug.Trace
 
--- 2468 (3) replace 3 with nothing if 3 < 8
--- 2468 ()
--- 2468 (8) 2468 ++ last of 2468 ++ () ;  sliced 3 [2,4,6,8]
--- 246 (68) 246 ++ last of 246 ++ (8)
--- 24 (468) 24 ++ last of 24 ++ (68)
--- 2 (2468) replace 2 with 3 because 3 >= 2 ; 2 ++ last of 2 ++ (468)
--- 2 (3468) DONE
-
 mybeg i ar = take (i+1) ar
 myfin i ar = drop i ar
 
