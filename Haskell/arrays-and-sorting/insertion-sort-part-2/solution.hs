@@ -1,5 +1,6 @@
 import Control.Monad
 import Debug.Trace
+import Data.List
 
 mybeg i ar = take (i+1) ar
 myfin i ar = drop (i+1) ar
@@ -7,6 +8,13 @@ myfin i ar = drop (i+1) ar
 sliced i ar = (mybeg i ar, myfin i ar)
 
 disp done sl v = join [fst sl, if done then ([v]++ tail (snd sl)) else snd sl]
+
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+  let smallerSorted = quicksort [a | a <- xs, a <= x]
+      biggerSorted  = quicksort [a | a <- xs, a >  x]
+  in  smallerSorted ++ [x] ++ biggerSorted
 
 -- insort 3 3 [2,4,6,8] []
 insort i v ar res
