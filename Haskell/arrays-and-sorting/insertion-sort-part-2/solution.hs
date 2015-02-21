@@ -20,14 +20,19 @@ quicksort (x:xs) =
 insort i ar res
   -- | trace (show i ++ show ar++ show sl ++">>> " ++show res) False = undefined
   | i == length ar = res
-  | otherwise = insort (i+1) ar (res ++  [join [(quicksort (fst sl)), snd sl] ])
+  | otherwise = insort (i+1) ar (res ++ [join [(quicksort (fst sl)), snd sl]])
   where sl = sliced i ar
-        range = [1..(length ar - 1)]
+
+ar2str :: [Int] -> String
+ar2str ar = init (concatMap (\x -> (show x) ++ " ") ar)
 
 main :: IO ()
 main = do
   s <- readLn :: IO Int
   arstr <- getLine
   let ar = (map read (words arstr)) :: [Int]
-  print s
-  print ar
+  -- print s
+  -- print ar
+  let answers = tail ( insort 0 ar [])
+  -- print answers
+  mapM_ (\x -> putStrLn (ar2str x)) answers
