@@ -16,16 +16,13 @@ quicksort (x:xs) =
       biggerSorted  = quicksort [a | a <- xs, a >  x]
   in  smallerSorted ++ [x] ++ biggerSorted
 
--- insort 3 3 [2,4,6,8] []
-insort i v ar res
-  | trace (show i ++ show v ++ show ar++ show sl ) False = undefined
-  | trace (show (disp done sl v)) False = undefined
-  | done = res ++ [(disp done sl v)]
-  | i < 0 =  res ++ [[v]++(disp done sl v)]
-  | otherwise = insort (i-1) v ar res
+-- insort 0 [2,4,6,8] []
+insort i ar res
+  -- | trace (show i ++ show ar++ show sl ++">>> " ++show res) False = undefined
+  | i == length ar = res
+  | otherwise = insort (i+1) ar (res ++  [join [(quicksort (fst sl)), snd sl] ])
   where sl = sliced i ar
-        head2nd = (head $ snd sl)
-        done = if head2nd <= v  then True else False
+        range = [1..(length ar - 1)]
 
 main :: IO ()
 main = do
