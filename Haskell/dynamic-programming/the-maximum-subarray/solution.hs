@@ -21,6 +21,29 @@ maxnoncont ar = (foldl (\acc x -> acc+x) 0 (filter (\y -> y>=0) ar))
 -- maxnoncont ar = if res == 0 then maxcont ar else res
 --   where res = maximum ( map (\x -> sum (filter (\y -> y >= 0) x)) (slices ar))
 
+maxSubarray :: (Num a, Ord a) => [a] -> a
+maxSubarray [x] = x
+maxSubarray (x:xs) = snd $ foldl msReducer (x, x) xs
+
+msReducer :: (Num a, Ord a) => (a, a) -> a -> (a, a)
+msReducer (maxEndingHere, maxSoFar) x = (meh, maxSoFar `max` meh)
+    where meh = x `max` (maxEndingHere + x)
+
+maxsubseq = snd . foldl f ((0,[]),(0,[])) where
+	f ((h1,h2),sofar) x = (a,b) where
+		a = max (0,[]) (h1 + x, h2 ++ [x])
+		b = max sofar a
+
+max_sublist l = reverse $ fst $ foldl find_max ([],(0,[],0)) l where
+  find_max (max, (sum, r, rsum)) x = (max', (sum', r', rsum'))
+    where
+    (r', rsum')  = if (rsum > 0)
+                   then (x:r, rsum+x)
+                   else ([x], x)
+    (max', sum') = if (rsum' > sum)
+                   then (r', rsum')
+                   else (max, sum)
+
 showmaxes :: [Int] -> String
 showmaxes ar = show (maxcont ar) ++ " " ++show (maxnoncont ar)
 
