@@ -10,13 +10,16 @@ getData = do
 str2Int :: String -> Int
 str2Int = read :: String -> Int
 
-slices :: Eq a => [a] -> [[a]]
-slices [] = []
-slices xs = tail $ inits xs ++ slices (tail xs)
+-- slices :: Eq a => [a] -> [[a]]
+-- slices [] = []
+-- slices xs = tail $ inits xs ++ slices (tail xs)
 
-maxcont ar =  maximum ( map (\x -> sum x) (slices ar))
-maxnoncont ar = if res == 0 then maxcont ar else res
-  where res = maximum ( map (\x -> sum (filter (\y -> y >= 0) x)) (slices ar))
+maxcont ar = maximum (scanl (\acc x -> acc+x) 0 ar)
+-- maxcont ar =  maximum ( map (\x -> sum x) (slices ar))
+maxnoncont ar = (foldl (\acc x -> acc+x) 0 (filter (\y -> y>=0) ar))
+
+-- maxnoncont ar = if res == 0 then maxcont ar else res
+--   where res = maximum ( map (\x -> sum (filter (\y -> y >= 0) x)) (slices ar))
 
 showmaxes :: [Int] -> String
 showmaxes ar = show (maxcont ar) ++ " " ++show (maxnoncont ar)
