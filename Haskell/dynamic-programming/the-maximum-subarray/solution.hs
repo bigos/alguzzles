@@ -2,17 +2,18 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
+kodan :: [Int] -> Int -> Int -> Int -> Int
+kodan [] max_ending_here max_so_far largest
+  | trace (show (max_ending_here, max_so_far, largest) ++ " <====== ") False = undefined
+  | otherwise = largest
 
-kodan [] max_ending_here max_so_far
-  | trace (show (max_ending_here, max_so_far) ++ " <====== ") False = undefined
-  | otherwise = max_so_far
-
-kodan ar max_ending_here max_so_far
-  | trace (show (ar, max_ending_here, max_so_far) ++ " <++++++ ") False = undefined
-  | otherwise = kodan (tail ar) max_ending_here2 max_so_far2
+kodan ar max_ending_here max_so_far largest_neg
+  | trace (show (ar, max_ending_here, max_so_far, largest_neg) ++ " <++++++ ") False = undefined
+  | otherwise = kodan (tail ar) max_ending_here2 max_so_far2 largest_neg2
   where x = head ar
         max_ending_here2 = (0 `max` (max_ending_here) + x)
         max_so_far2 = max_so_far `max` max_ending_here2
+        largest_neg2 = if x > largest_neg then x else largest_neg
 
 
 getData :: IO (Int, [Int])
