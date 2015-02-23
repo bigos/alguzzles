@@ -1,6 +1,14 @@
 import Control.Monad
 import Data.List
 
+solve :: Int -> [Int] -> Int
+solve k ar = 1
+
+process :: (Int,Int,[Int]) -> String
+process dat
+  | otherwise = show (solve k ar)
+  where (_, k, ar) = dat
+
 getData :: IO  (Int, Int, [Int])
 getData = do
   dd <- fmap (map read . words) getLine
@@ -12,7 +20,5 @@ getData = do
 main :: IO ()
 main = do
   t <- readLn :: IO Int
-  -- print t
   inputs <- replicateM t getData
-  print inputs
-  --mapM_ (\x -> putStrLn (showmaxes (snd x))) inputs
+  mapM_ (\x -> putStrLn (process x)) inputs
