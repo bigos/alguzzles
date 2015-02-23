@@ -2,6 +2,7 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
+-- kodan [2,-1,2,3,4,-5] 0 0 (-10000)
 kodan :: [Int] -> Int -> Int -> Int -> Int
 kodan [] max_ending_here max_so_far largest
   | trace (show (max_ending_here, max_so_far, largest) ++ " <====== ") False = undefined
@@ -16,6 +17,7 @@ kodan ar max_ending_here max_so_far largest_neg
         largest_neg2 = if x > largest_neg then x else largest_neg
 
 -- not finished yet, just copied kodan
+-- non contiguous max will be here
 kodanNc :: [Int] -> Int -> Int -> Int -> Int
 kodanNc [] max_ending_here max_so_far largest
   | trace (show (max_ending_here, max_so_far, largest) ++ " <====== ") False = undefined
