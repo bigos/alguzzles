@@ -5,6 +5,7 @@ import Debug.Trace
 -- test case 01 terminates due to timeout
 -- WRONG: need to be able to accumulate values vithout using sort in showmaxes function
 -- getting rid of the sort still times out, perhaps need to get rid of recutsion or make sure it's tailoptimised?
+-- could it be that the problem was with array of results?
 
 -- kodan [2,-1,2,3,4,-5] 0 0 (-10000)
 kodan :: [Int] -> Int -> Int -> Int -> Int
