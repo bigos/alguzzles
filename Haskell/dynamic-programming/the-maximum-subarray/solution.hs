@@ -4,12 +4,16 @@ import Debug.Trace
 
 
 kodan [] max_ending_here max_so_far
-  | trace (show max_so_far ++ " <====== ") False = undefined
+  | trace (show (max_ending_here, max_so_far) ++ " <====== ") False = undefined
   | otherwise = max_so_far
 
 kodan ar max_ending_here max_so_far
   | trace (show (ar, max_ending_here, max_so_far) ++ " <++++++ ") False = undefined
-  | otherwise = kodan (tail ar) max_ending_here max_so_far
+  | otherwise = kodan (tail ar) max_ending_here2 max_so_far2
+  where x = head ar
+        max_ending_here2 = (0 `max` (max_ending_here) + x)
+        max_so_far2 = max_so_far `max` max_ending_here2
+
 
 getData :: IO (Int, [Int])
 getData = do
