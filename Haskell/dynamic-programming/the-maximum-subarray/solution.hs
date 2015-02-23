@@ -1,6 +1,15 @@
 import Control.Monad
 import Data.List
-import Test.QuickCheck
+import Debug.Trace
+
+
+kodan [] max_ending_here max_so_far
+  | trace (show max_so_far ++ " <====== ") False = undefined
+  | otherwise = max_so_far
+
+kodan ar max_ending_here max_so_far
+  | trace (show (ar, max_ending_here, max_so_far) ++ " <++++++ ") False = undefined
+  | otherwise = kodan (tail ar) max_ending_here max_so_far
 
 getData :: IO (Int, [Int])
 getData = do
@@ -10,11 +19,6 @@ getData = do
 
 str2Int :: String -> Int
 str2Int = read :: String -> Int
-
-
-
-
-
 
 maxSubarray :: (Num a, Ord a) => [a] -> a
 maxSubarray [x] = x
