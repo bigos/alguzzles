@@ -1,8 +1,11 @@
 import Control.Monad
 import Data.List
+import Debug.Trace
 
 solve :: Int -> [Int] -> Int
-solve k ar = 1
+solve k ar
+  | trace (show (k,ar) ) False = undefined
+  | otherwise = 1
 
 process :: (Int,Int,[Int]) -> String
 process dat
