@@ -7,6 +7,8 @@ import Debug.Trace
 -- getting rid of the sort still times out, perhaps need to get rid of recutsion or make sure it's tailoptimised?
 -- could it be that the problem was with array of results?
 
+-- other successful solution still times out
+
 -- kodan [2,-1,2,3,4,-5] 0 0 (-10000)
 kodan :: [Int] -> Int -> Int -> Int -> Int
 kodan [] _ max_so_far largest
