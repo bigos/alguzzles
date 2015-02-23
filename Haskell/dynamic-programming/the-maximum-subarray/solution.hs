@@ -3,11 +3,12 @@ import Data.List
 import Debug.Trace
 
 -- test case 01 terminates due to timeout
--- need to be able to accumulate values vithout using sort in showmaxes function
+-- WRONG: need to be able to accumulate values vithout using sort in showmaxes function
+-- getting rid of the sort still times out, perhaps need to get rid of recutsion or make sure it's tailoptimised?
 
 -- kodan [2,-1,2,3,4,-5] 0 0 (-10000)
 kodan :: [Int] -> Int -> Int -> Int -> Int
-kodan [] max_ending_here max_so_far largest
+kodan [] _ max_so_far largest
   -- | trace (show (max_ending_here, max_so_far, largest) ++ " <====== ") False = undefined
   | otherwise = if max_so_far == 0 then largest else max_so_far
 
@@ -37,7 +38,7 @@ msReducer (maxEndingHere, maxSoFar) x = (meh, maxSoFar `max` meh)
     where meh = x `max` (maxEndingHere + x)
 
 showmaxes :: [Int] -> String
-showmaxes ar = show (kodan ar 0 0 (-10000)) ++ " " ++show ( kodan (sort  ar) 0 0 (-10000))
+showmaxes ar = show (kodan ar 0 0 (-10000)) ++ " " ++show ( kodan (sort ar) 0 0 (-10000))
 
 main :: IO ()
 main = do
