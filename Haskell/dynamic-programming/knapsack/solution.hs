@@ -2,10 +2,12 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
-solve :: Int -> [Int] -> Int
+divmods x y = (x, y, div x y, mod x y)
+
+solve :: Int -> [Int] -> [(Int,Int,Int,Int)]
 solve k ar
-  | trace (show (k,ar) ) False = undefined
-  | otherwise = 1
+  -- | trace (show (k,ar) ) False = undefined
+  | otherwise = (map (\x -> (divmods k x) ) ar)
 
 process :: (Int,Int,[Int]) -> String
 process dat
