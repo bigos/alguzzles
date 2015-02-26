@@ -7,10 +7,10 @@ sequences max num = inits $ take max $ repeat num
 
 divmods x y = (x, y, div x y, mod x y)
 
-solve :: Int -> [Int] -> [(String,[[Int]],String,(Int, Int, Int, Int))]
+solve :: Int -> [Int] -> [[[Int]]]
 solve k ar
-  -- | trace (show (k,ar) ) False = undefined
-  | otherwise = (map (\x -> ("sequences",(sequences (div k x) x),"numbers",(divmods k x)) ) ar)
+  | trace (show (k,ar) ) False = undefined
+  | otherwise = (map (\x -> ((sequences (div k x) x) ) ) ar)
 
 process :: (Int,Int,[Int]) -> String
 process dat
