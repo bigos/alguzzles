@@ -2,6 +2,9 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
+sequences :: Int -> Int -> [[Int]]
+sequences max num = inits $ take max $ repeat num
+
 divmods x y = (x, y, div x y, mod x y)
 
 solve :: Int -> [Int] -> [(Int,Int,Int,Int)]
