@@ -2,6 +2,12 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
+-- fun :: [Int] -> Int -> [Int] -> Int
+fun [] = []
+fun (x:xs)
+  | trace (show x++"###" ++ show (length xs)) False = undefined
+  | otherwise = fun xs
+
 sequences :: Int -> Int -> [[Int]]
 sequences max num = inits $ take max $ repeat num
 
