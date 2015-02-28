@@ -2,6 +2,8 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
+group :: Int -> [Int] -> [[Int]] -> [Int]
+group node found ar = [1]
 
 connections node ar = filter (\x -> x/= node ) (join (vertices node ar))
 
