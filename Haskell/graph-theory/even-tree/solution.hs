@@ -2,10 +2,14 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
-group :: Int -> [Int] -> [[Int]] -> [Int]
-group node found ar = [1]
+-- finish me
+nodeGroup :: Int -> [Int] -> [[Int]] -> [Int]
+nodeGroup node found ar
+  | elem node found = found
+  | otherwise = nodeGroup node found ar
+  where cs = connections node ar
 
-connections node ar = filter (\x -> x/= node ) (join (vertices node ar))
+connections node ar = nub $ filter (\x -> x/= node ) (join (vertices node ar))
 
 vertices node ar = filter (\x -> (head x == node || (head $ tail x) == node) ) ar
 
