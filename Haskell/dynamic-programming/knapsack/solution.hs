@@ -2,21 +2,15 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
--- fun :: [Int] -> Int -> [Int] -> Int
-fun [] = []
-fun (x:xs)
-  | trace (show x++"###" ++ show (length xs)) False = undefined
-  | otherwise = fun xs
-
+sumingredients k ar = join $ (map (\x -> (last (sequences (div k x) x) ) ) ar)
 sequences :: Int -> Int -> [[Int]]
 sequences max num = inits $ take max $ repeat num
 
-divmods x y = (x, y, div x y, mod x y)
-
-solve :: Int -> [Int] -> [[[Int]]]
+solve :: Int -> [Int] -> Int
 solve k ar
   | trace (show (k,ar) ) False = undefined
-  | otherwise = (map (\x -> ((sequences (div k x) x) ) ) ar)
+  | otherwise = maximum maxes
+  where maxes = filter (\x -> x <= k)$ map sum $ subsequences $ sumingredients k ar
 
 process :: (Int,Int,[Int]) -> String
 process dat
