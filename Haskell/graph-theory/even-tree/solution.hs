@@ -20,3 +20,16 @@ main = do
   -- print inputs
   -- print ar
   print (process  ar)
+
+
+-- graph in the example test case
+--
+--    5
+--    |
+-- 1--2--3--4
+-- |  |
+-- 6   7
+-- |
+-- 8--10
+-- |
+-- 9
