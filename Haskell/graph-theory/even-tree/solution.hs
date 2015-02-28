@@ -2,6 +2,11 @@ import Control.Monad
 import Data.List
 import Debug.Trace
 
+
+connections node ar = filter (\x -> x/= node ) (join (vertices node ar))
+
+vertices node ar = filter (\x -> (head x == node || (head $ tail x) == node) ) ar
+
 process ::[[Int]] -> Int
 process ar = 1 -- fixme
 
@@ -18,17 +23,20 @@ main = do
   inputs <- getData
   let (_, _, ar) = inputs
   -- print inputs
-  -- print ar
+  print ar
   print (process  ar)
 
 
 -- graph in the example test case
 --
---    5
---    |
--- 1--2--3--4
+--
+-- 4
+-- |
+-- 3  5
 -- |  |
--- 6   7
+-- 1--2
+-- |  |
+-- 6  7
 -- |
 -- 8--10
 -- |
