@@ -1,15 +1,18 @@
 import Control.Monad
+import Data.Graph
 import Data.List
 import Debug.Trace
 
--- finish me
-nodeGroup :: Int -> [Int] -> [[Int]] -> [Int]
-nodeGroup node found ar
-  | elem node found = found
-  | otherwise = nodeGroup node found ar
-  where cs = connections node ar
+mygr = buildG (1,6) [(1,2),(1,3),(1,6),(2,4),(5,6)]
 
-connections node ar = nub $ filter (\x -> x/= node ) (join (vertices node ar))
+-- finish me
+-- nodeGroup :: Int -> [Int] -> [[Int]] -> [Int]
+-- nodeGroup node found ar
+--   | elem node found = nub found
+--   | otherwise = nodeGroup node found ar
+--   where cs = connections node ar
+
+-- connections node ar = nub $ filter (\x -> x/= node ) (join (vertices node ar))
 
 vertices node ar = filter (\x -> (head x == node || (head $ tail x) == node) ) ar
 
