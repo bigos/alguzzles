@@ -7,7 +7,23 @@ mygr = buildG (minmaxvert ar) (allverts ar)
   where ar = [[2,1],[3,1],[4,3],[5,2],[6,1],[7,2],[8,6],[9,8],[10,8]]
 
 -- removing edges from a graph
-diflit = (edges mygr) \\ [(1,3),(3,1)]
+diflit = (edges mygr) \\ (allverts [[1,3],[6,1]])
+
+remedges :: Graph -> [[Int]] -> Graph
+remedges gr reme = buildG range newedges
+  where newedges = (edges gr) \\ (allverts reme)
+        eds = map (\x ->  fst x) newedges ++ map (\x -> snd x) newedges
+        range = (minimum eds, maximum eds)
+
+
+wow = reachable rme 6
+  where gr = mygr
+        grWithRemovedEdges = remedges gr [[1,3],[1,6]]
+        res1 = reachable grWithRemovedEdges 1
+        res2 = reachable grWithRemovedEdges 6 -- finds connections in decomposed tree
+
+-- last thing to do is removing edge combinations
+
 
 allverts :: [[Int]] -> [(Int, Int)]
 allverts ar = (map (\x -> (last x, head x)) ar) ++ (map (\x -> (head x, last x)) ar)
