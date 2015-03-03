@@ -17,10 +17,17 @@ import Debug.Trace
 
 -- connections node ar = nub $ filter (\x -> x/= node ) (join (vertices node ar))
 
-vertices node ar = filter (\x -> (head x == node || (head $ tail x) == node) ) ar
+allverts :: [[Int]] -> [(Int, Int)]
+allverts ar = (map (\x -> (last x, head x)) ar) ++ (map (\x -> (head x, last x)) ar)
 
-process :: Int -> Int -> [[Int]] -> Int
-process n m ar = n + 1
+process :: Int -> Int -> [[Int]] -> Graph
+process n m ar
+  | trace (show "------------") False = undefined
+  | trace (show ar) False = undefined
+  | trace (show "+++ "++ show revs) False = undefined
+  | otherwise = buildG (1, 10) (allverts ar)
+  where
+    revs = allverts ar
 
 getData :: IO (Int, Int,[[Int]])
 getData = do
