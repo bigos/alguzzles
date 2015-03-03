@@ -3,7 +3,10 @@ import Data.Graph
 import Data.List
 import Debug.Trace
 
-mygr = buildG (1,6) [(1,2),(1,3),(1,6),(2,4),(5,6)]
+-- mygr = buildG (1,6) [(1,2),(1,3),(1,6),(2,4),(5,6)]
+
+
+
 
 -- finish me
 -- nodeGroup :: Int -> [Int] -> [[Int]] -> [Int]
@@ -16,24 +19,25 @@ mygr = buildG (1,6) [(1,2),(1,3),(1,6),(2,4),(5,6)]
 
 vertices node ar = filter (\x -> (head x == node || (head $ tail x) == node) ) ar
 
-process ::[[Int]] -> Int
-process ar = 1 -- fixme
+process :: Int -> Int -> [[Int]] -> Int
+process n m ar = n + 1
 
 getData :: IO (Int, Int,[[Int]])
 getData = do
   dd <- fmap (map read . words) getLine
-  let n = head dd
-  let m = last dd
+  let n = head dd :: Int
+  let m = last dd :: Int
   ar <- replicateM m (fmap (map read . words) getLine)
   return (n, m, ar)
 
 main :: IO ()
 main = do
   inputs <- getData
-  let (_, _, ar) = inputs
-  -- print inputs
+  let (n, m, ar) = inputs
+  print n
+  print m
   print ar
-  print (process  ar)
+  print (process n m ar)
 
 
 -- graph in the example test case
