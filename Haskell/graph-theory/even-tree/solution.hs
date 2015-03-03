@@ -3,6 +3,11 @@ import Data.Graph
 import Data.List
 import Debug.Trace
 
+mygr = buildG (minmaxvert ar) (allverts ar)
+  where ar = [[2,1],[3,1],[4,3],[5,2],[6,1],[7,2],[8,6],[9,8],[10,8]]
+
+-- removing edges from a graph
+diflit = (edges mygr) \\ [(1,3),(3,1)]
 
 allverts :: [[Int]] -> [(Int, Int)]
 allverts ar = (map (\x -> (last x, head x)) ar) ++ (map (\x -> (head x, last x)) ar)
