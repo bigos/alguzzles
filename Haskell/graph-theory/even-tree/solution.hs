@@ -13,6 +13,9 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 -- *Main> components reme
 -- *Main> map (\x -> flatten x) (components reme) -- yess!!!
 
+solved gr r = map (\x -> flatten x) (components reme)
+  where reme = remedges gr r
+
 -- removing edges from a graph
 diflit = (edges mygr) \\ (allverts [[1,3],[6,1]])
 
