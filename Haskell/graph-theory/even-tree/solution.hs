@@ -1,6 +1,7 @@
 import Control.Monad
 import Data.Graph
 import Data.List
+import Data.Tree
 import Debug.Trace
 
 arr =  [[2,1],[3,1],[4,3],[5,2],[6,1],[7,2],[8,6],[9,8],[10,8]]
@@ -10,6 +11,7 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 
 -- *Main> let reme = remedges mygr [[1,3],[1,6]]
 -- *Main> components reme
+-- *Main> map (\x -> flatten x) (components reme) -- yess!!!
 
 -- removing edges from a graph
 diflit = (edges mygr) \\ (allverts [[1,3],[6,1]])
