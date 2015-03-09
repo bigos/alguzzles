@@ -16,7 +16,7 @@ remedges gr reme = buildG range newedges
         range = (minimum eds, maximum eds)
 
 
-wow = reachable rme 6
+wow = reachable grWithRemovedEdges 6
   where gr = mygr
         grWithRemovedEdges = remedges gr [[1,3],[1,6]]
         res1 = reachable grWithRemovedEdges 1
