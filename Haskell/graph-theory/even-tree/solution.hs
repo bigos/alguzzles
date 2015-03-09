@@ -17,7 +17,11 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 
 
 -- third result is the puzzle solution
-zeroOddforests = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests mygr x) , x)) (vertComb arr)
+-- many results are not forests, but single nodes
+zeroOddforests = filter (\y -> fst y == 0) ress
+
+ress ::[ (Int,( [[Int]],[Char], [[Vertex]]))]
+ress = map (\x -> ((numberOfOddForests mygr x) ,( x,"ooo",  (forests mygr x))) ) (vertComb ( arr))
 
 vertComb :: [[Int]] -> [[[Int]]]
 vertComb ar = tail $ init $ subsequences (ar)
