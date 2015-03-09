@@ -13,6 +13,9 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 -- *Main> components reme
 -- *Main> map (\x -> flatten x) (components reme) -- yess!!!
 
+-- yay
+-- filter (\y -> odd (length y)) (solved mygr [[1,3],[1,2]])
+
 solved gr r = map (\x -> flatten x) (components reme)
   where reme = remedges gr r
 
