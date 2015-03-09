@@ -15,13 +15,24 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 -- *Main> components reme
 -- *Main> map (\x -> flatten x) (components reme) -- yess!!!
 
+-- this one finds correct results
+gettingThere = ( (map (\x -> (length $ join $ forests mygr x,x, numberOfOddForests mygr x)) (vertComb (take 5 arr))))
+
+
 
 -- third result is the puzzle solution
 -- many results are not forests, but single nodes
 zeroOddforests = filter (\y -> fst y == 0) ress
 
-ress ::[ (Int,( [[Int]],[Char], [[Vertex]]))]
-ress = map (\x -> ((numberOfOddForests mygr x) ,( x,"ooo",  (forests mygr x))) ) (vertComb ( arr))
+vertlen :: [Vertex] -> Int
+vertlen vv = length (vv)
+
+finalResult =  maximum $ map (\x ->  length x)  ress2
+
+ress2 = map (\y -> fst (snd y)) $ filter (\x -> (snd (snd x)) == vertlen( vertices mygr)) ress
+
+ress ::[ (Int,( [[Int]], Int))]
+ress = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests mygr x) ,( x, ( length (join $ forests mygr x)))) ) (vertComb ( arr))
 
 vertComb :: [[Int]] -> [[[Int]]]
 vertComb ar = tail $ init $ subsequences (ar)
