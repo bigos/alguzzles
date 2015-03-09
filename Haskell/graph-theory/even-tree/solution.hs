@@ -2,8 +2,10 @@ import Control.Monad
 import Data.Graph
 import Data.List
 import Data.Tree
+import Data.Function (on)
 import Debug.Trace
 
+arr :: [[Int]]
 arr =  [[2,1],[3,1],[4,3],[5,2],[6,1],[7,2],[8,6],[9,8],[10,8]]
 
 mygr = buildG (minmaxvert ar) (allverts ar)
@@ -13,9 +15,16 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 -- *Main> components reme
 -- *Main> map (\x -> flatten x) (components reme) -- yess!!!
 
--- yay
--- filter (\y -> odd (length y)) (solved mygr [[1,3],[1,2]])
 
+-- third result is the puzzle solution
+zeroOddforests = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests mygr x) , x)) (vertComb arr)
+
+vertComb :: [[Int]] -> [[[Int]]]
+vertComb ar = tail $ init $ subsequences (ar)
+
+sortListOfLists arl = groupBy ((==) `on` length) $ sortBy (compare `on` length) arl
+
+numberOfOddForests :: Graph -> [[Int]] -> Int
 numberOfOddForests gr remd = length $ filter (\x -> odd (length x)) (forests gr remd)
 
 forests gr remd = map (\x -> flatten x) (components reme)
