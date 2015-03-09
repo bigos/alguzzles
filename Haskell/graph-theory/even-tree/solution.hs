@@ -3,8 +3,13 @@ import Data.Graph
 import Data.List
 import Debug.Trace
 
+arr =  [[2,1],[3,1],[4,3],[5,2],[6,1],[7,2],[8,6],[9,8],[10,8]]
+
 mygr = buildG (minmaxvert ar) (allverts ar)
   where ar = [[2,1],[3,1],[4,3],[5,2],[6,1],[7,2],[8,6],[9,8],[10,8]]
+
+-- *Main> let reme = remedges mygr [[1,3],[1,6]]
+-- *Main> components reme
 
 -- removing edges from a graph
 diflit = (edges mygr) \\ (allverts [[1,3],[6,1]])
@@ -16,7 +21,7 @@ remedges gr reme = buildG range newedges
         range = (minimum eds, maximum eds)
 
 
-wow = reachable grWithRemovedEdges 6
+wow nd = reachable grWithRemovedEdges nd -- nd is a node number eg. 6
   where gr = mygr
         grWithRemovedEdges = remedges gr [[1,3],[1,6]]
         res1 = reachable grWithRemovedEdges 1
