@@ -16,8 +16,10 @@ mygr = buildG (minmaxvert ar) (allverts ar)
 -- yay
 -- filter (\y -> odd (length y)) (solved mygr [[1,3],[1,2]])
 
-solved gr r = map (\x -> flatten x) (components reme)
-  where reme = remedges gr r
+numberOfOddForests gr remd = length $ filter (\x -> odd (length x)) (forests gr remd)
+
+forests gr remd = map (\x -> flatten x) (components reme)
+  where reme = remedges gr remd
 
 -- removing edges from a graph
 diflit = (edges mygr) \\ (allverts [[1,3],[6,1]])
