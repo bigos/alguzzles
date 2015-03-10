@@ -20,24 +20,19 @@ gettingThere = ( (map (\x -> (length $ join $ forests mygr x,x, numberOfOddFores
 
 
 
--- third result is the puzzle solution
--- many results are not forests, but single nodes
-zeroOddforests = filter (\y -> fst y == 0) ress
 
 vertlen :: [Vertex] -> Int
 vertlen vv = length (vv)
 
-finalResult =  maximum $ map (\x ->  length x)  ress2
+finalResult gr ar = maximum $ map (\x -> length x) (ress2 gr ar)
 
-ress2 = map (\y -> fst (snd y)) $ filter (\x -> (snd (snd x)) == vertlen( vertices mygr)) ress
+ress2 gr ar = map (\y -> fst (snd y)) $ filter (\x -> (snd (snd x)) == vertlen( vertices gr)) (ress gr ar)
 
-ress ::[ (Int,( [[Int]], Int))]
-ress = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests mygr x) ,( x, ( length (join $ forests mygr x)))) ) (vertComb ( arr))
+ress :: Graph -> [[Int]] ->[ (Int,( [[Int]], Int))]
+ress gr ar = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests gr x) ,( x, ( length (join $ forests gr x)))) ) (vertComb ( ar))
 
 vertComb :: [[Int]] -> [[[Int]]]
 vertComb ar = tail $ init $ subsequences (ar)
-
-sortListOfLists arl = groupBy ((==) `on` length) $ sortBy (compare `on` length) arl
 
 numberOfOddForests :: Graph -> [[Int]] -> Int
 numberOfOddForests gr remd = length $ filter (\x -> odd (length x)) (forests gr remd)
@@ -61,18 +56,15 @@ wow nd = reachable grWithRemovedEdges nd -- nd is a node number eg. 6
         res1 = reachable grWithRemovedEdges 1
         res2 = reachable grWithRemovedEdges 6 -- finds connections in decomposed tree
 
--- last thing to do is removing edge combinations
-
-
 allverts :: [[Int]] -> [(Int, Int)]
 allverts ar = (map (\x -> (last x, head x)) ar) ++ (map (\x -> (head x, last x)) ar)
 
 minmaxvert :: [[Int]] -> (Int, Int)
 minmaxvert ar = (minimum (map (\x -> (minimum x) ) ar), maximum (map (\x -> (maximum x)) ar) )
 
-process :: Int -> Int -> [[Int]] -> Int
-process n m ar
-  | otherwise = 1
+process :: Int -> Int -> [[Int]] -> Graph -> Int
+process n m ar gr
+  | otherwise = finalResult gr ar
 
 
 getData :: IO (Int, Int,[[Int]])
@@ -87,13 +79,13 @@ main :: IO ()
 main = do
   inputs <- getData
   let (n, m, ar) = inputs
-  print n
-  print m
-  print ar
-  print (minmaxvert ar)
+  -- print n
+  -- print m
+  -- print ar
+  -- print (minmaxvert ar)
   let mygraph = buildG (minmaxvert ar) (allverts ar)
-  print mygraph
-  print (process n m ar)
+  -- print mygraph
+  print (process n m ar mygraph)
 
 
 -- graph in the example test case
