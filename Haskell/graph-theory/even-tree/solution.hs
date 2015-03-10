@@ -21,6 +21,7 @@ gettingThere = ( (map (\x -> (length $ join $ forests mygr x,x, numberOfOddFores
 
 
 
+
 vertlen :: [Vertex] -> Int
 vertlen vv = length (vv)
 
