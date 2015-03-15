@@ -18,7 +18,7 @@ finalResult gr ar = maximum $ map (\x -> length x) (ress2 gr ar)
 ress2 gr ar = map (\y -> fst (snd y)) $ filter (\x -> (snd (snd x)) == length (vertices gr)) (ress gr ar)
 
 ress :: Graph -> [[Int]] ->[ (Int,( [[Int]], Int))]
-ress gr ar = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests gr x) ,( x, ( length (join $ forests gr x)))) ) (vertComb ( ar))
+ress gr ar = filter (\y -> fst y == 0) $ map (\x -> ((numberOfOddForests gr x) ,( x, ( length (join $ forests gr x)))) ) (vertComb ar)
 
 vertComb :: [[Int]] -> [[[Int]]]
 vertComb ar = tail $ init $ subsequences (ar)
