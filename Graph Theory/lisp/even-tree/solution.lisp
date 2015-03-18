@@ -1,11 +1,43 @@
 (require :sb-sprof)
 
-(declaim (optimize speed))
+;;; (declaim (optimize speed))
+
+(defun split-by-one-space (string)
+  (loop for i = 0 then (1+ j)
+     as j = (position #\Space string :start i)
+     collect (subseq string i j)
+     while j))
+
+(defun split-and-parse (string)
+  (map 'list
+       (lambda (x) (parse-integer x))
+       (split-by-one-space string)))
+
 
 ;;; insert your code here
+(defun connected-nodes (node nodes)
+  (append
+   (loop for n in nodes
+      when (eq node (car n)) collect (cadr n)
+      when (eq node (cadr n)) collect (car n))))
+
+(defun vertices (nodes)
+  (remove-duplicates
+   (loop for n in nodes
+      append (list (car n) (cadr n)))))
 
 (defun solution (&optional stream)
-  (format t "going to solve"))
+  (let* ((dd (split-and-parse (read-line stream)))
+         (n (car dd))
+         (m (cadr dd))
+         (ar)
+         (graph))
+    (loop for x in
+         (loop for row below m
+            collecting (split-and-parse (read-line stream)))
+       do (push (cons (car x) (cadr x)) ar))
+
+    (format t "going to solve ~A ~A ~A~%" n m ar)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
