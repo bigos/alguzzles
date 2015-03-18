@@ -15,7 +15,7 @@
 
 
 ;;; insert your code here
-(defun connected-nodes (node nodes)
+(defun neighbours (node nodes)
   (append
    (loop for n in nodes
       when (eq node (car n)) collect (cadr n)
