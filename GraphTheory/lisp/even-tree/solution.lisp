@@ -20,6 +20,10 @@
               append (mapcar (lambda (l) (cons element l))
                              (all-permutations (remove element list)))))))
 
+(defun subsequences (list fn)
+  (loop for l from 1 to (1- (length list))
+       collecting (comb l list fn)))
+
 (defun comb (m list fn)
   (labels ((comb1 (l c m)
              (when (>= (length l) m)
@@ -27,6 +31,8 @@
                (comb1 (cdr l) c m)
                (comb1 (cdr l) (cons (first l) c) (1- m)))))
     (comb1 list nil m)))
+                                        ; usage
+                                        ; (comb 3 '(0 1 2 3 4 5) #'print)
 
 ;;; insert your code here
 (defun neighbours (node nodes)
