@@ -13,6 +13,20 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+(defun all-permutations (list)
+  (cond ((null list) nil)
+        ((null (cdr list)) (list list))
+        (t (loop for element in list
+              append (mapcar (lambda (l) (cons element l))
+                             (all-permutations (remove element list)))))))
+
+(defun comb (m list fn)
+  (labels ((comb1 (l c m)
+             (when (>= (length l) m)
+               (if (zerop m) (return-from comb1 (funcall fn c)))
+               (comb1 (cdr l) c m)
+               (comb1 (cdr l) (cons (first l) c) (1- m)))))
+    (comb1 list nil m)))
 
 ;;; insert your code here
 (defun neighbours (node nodes)
@@ -25,6 +39,9 @@
   (remove-duplicates
    (loop for n in nodes
       append (list (car n) (cadr n)))))
+
+(defun arr ()
+  '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
 
 (defun solution (&optional stream)
   (let* ((dd (split-and-parse (read-line stream)))
@@ -48,7 +65,7 @@
     (with-open-file (s (concatenate 'string
                                     (directory-namestring (user-homedir-pathname))
                                     path
-                                    "Graph Theory/lisp/even-tree/"
+                                    "GraphTheory/lisp/even-tree/"
                                     "input0.txt"))
       (solution s))))
 
