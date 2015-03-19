@@ -36,18 +36,12 @@
                                         ; usage
                                         ; (comb 3 '(0 1 2 3 4 5) #'print)
 
-(defun delete-pairs (lst pairs)
-  (append pairs '(nil . nil))
+(defun remove-pairs (lst pairs)
   (loop for pair in pairs do
        (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst)))
   lst)
 
-
-(defun remove-pair (lst pair)
-  (remove-if (lambda (x) (eq-pair x pair)) lst))
-
 (defun eq-pair (pair1 pair2)
-  (format t "companing ~A with ~a ~%" pair1 pair2)
   (or (equal pair1 pair2)
       (equal pair1 (cons (cdr pair2) (car pair2)))))
 
