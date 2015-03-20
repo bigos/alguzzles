@@ -13,6 +13,15 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
+
+
+(defun split-to-forests (gr)
+  (let* ((removal-combinations (subsequences gr))
+         (new-forest))
+    (loop for e in removal-combinations do
+         (setq new-forest (delete-pairs gr e))
+         (format t "------ ~A ~a~%~%" e new-forest))))
+
 (defun all-permutations (list)
   (cond ((null list) nil)
         ((null (cdr list)) (list list))
@@ -20,6 +29,8 @@
               append (mapcar (lambda (l) (cons element l))
                              (all-permutations (remove element list)))))))
 
+;; usage
+;; (comb 3 '(0 1 2 3 4 5) #'print)
 (defun comb (m list fn)
   (labels ((comb1 (l c m)
              (when (>= (length l) m)
@@ -27,8 +38,6 @@
                (comb1 (cdr l) c m)
                (comb1 (cdr l) (cons (first l) c) (1- m)))))
     (comb1 list nil m)))
-                                        ; usage
-                                        ; (comb 3 '(0 1 2 3 4 5) #'print)
 
 (defun subsequences (list)
   (let ((res))
@@ -37,7 +46,6 @@
     res))
 
 (defun eq-pair (pair1 pair2)
-  (format t "companing ~A with ~a ~%" pair1 pair2)
   (or (equal pair1 pair2)
       (equal pair1 (cons (cdr pair2) (car pair2)))))
 
@@ -46,7 +54,6 @@
   (loop for pair in pairs do
        (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst)))
   lst)
-
 
 (defun remove-pair (lst pair)
   (remove-if (lambda (x) (eq-pair x pair)) lst))
