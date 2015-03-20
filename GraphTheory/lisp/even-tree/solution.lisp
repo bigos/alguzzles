@@ -20,7 +20,8 @@
          (new-forest))
     (loop for e in removal-combinations do
          (setq new-forest (delete-pairs gr e))
-         (format t "------ ~A ~a~%~%" e new-forest))))
+         (format t "------ ~A ~a~%~%" e new-forest))
+    new-forest))
 
 (defun all-permutations (list)
   (cond ((null list) nil)
@@ -72,6 +73,10 @@
 
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+
+(defun splitters () '((3 . 1) (6 . 1)))
+(defun split-arr () '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
+(defun dynamic-split-arr () (delete-pairs (arr) (splitters)))
 
 (defun solution (&optional stream)
   (let* ((dd (split-and-parse (read-line stream)))
