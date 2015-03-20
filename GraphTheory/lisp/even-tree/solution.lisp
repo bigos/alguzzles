@@ -20,12 +20,6 @@
               append (mapcar (lambda (l) (cons element l))
                              (all-permutations (remove element list)))))))
 
-(defun subsequences (list)
-  (let ((res))
-    (loop for l from 1 to (1- (length list))
-       collecting (comb l list (lambda (x) (push x res))))
-    res))
-
 (defun comb (m list fn)
   (labels ((comb1 (l c m)
              (when (>= (length l) m)
@@ -36,14 +30,26 @@
                                         ; usage
                                         ; (comb 3 '(0 1 2 3 4 5) #'print)
 
-(defun remove-pairs (lst pairs)
+(defun subsequences (list)
+  (let ((res))
+    (loop for l from 1 to (1- (length list))
+       collecting (comb l list (lambda (x) (push x res))))
+    res))
+
+(defun eq-pair (pair1 pair2)
+  (format t "companing ~A with ~a ~%" pair1 pair2)
+  (or (equal pair1 pair2)
+      (equal pair1 (cons (cdr pair2) (car pair2)))))
+
+(defun delete-pairs (lst pairs)
+  (append pairs '(nil . nil))
   (loop for pair in pairs do
        (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst)))
   lst)
 
-(defun eq-pair (pair1 pair2)
-  (or (equal pair1 pair2)
-      (equal pair1 (cons (cdr pair2) (car pair2)))))
+
+(defun remove-pair (lst pair)
+  (remove-if (lambda (x) (eq-pair x pair)) lst))
 
 ;;; insert your code here
 (defun neighbours (node nodes)
@@ -64,8 +70,7 @@
   (let* ((dd (split-and-parse (read-line stream)))
          (n (car dd))
          (m (cadr dd))
-         (ar)
-         (graph))
+         (ar))
     (loop for x in
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
