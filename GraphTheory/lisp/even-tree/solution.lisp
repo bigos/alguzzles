@@ -60,12 +60,16 @@
 (defun remove-pair (lst pair)
   (remove-if (lambda (x) (eq-pair x pair)) lst))
 
+;; (neighbour-list 8 (dynamic-split-arr))
+(defun neighbour-list (node)
+  (neighbours node (dynamic-split-arr)))
+
 ;;; insert your code here
 (defun neighbours (node nodes)
   (append
    (loop for n in nodes
-      when (eq node (car n)) collect (cadr n)
-      when (eq node (cadr n)) collect (car n))))
+      when (eq node (car n)) collect (cdr n)
+      when (eq node (cdr n)) collect (car n))))
 
 (defun vertices (nodes)
   (remove-duplicates
@@ -109,3 +113,17 @@
 ;; (sb-sprof:start-profiling)
 ;; (repl-main)
 ;; (sb-sprof:report)
+
+
+;;
+;; 4
+;; |
+;; 3  5
+;; +  |
+;; 1--2
+;; +  |
+;; 6  7
+;; |
+;; 8--10
+;; |
+;; 9
