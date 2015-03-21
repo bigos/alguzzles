@@ -51,9 +51,10 @@
       (equal pair1 (cons (cdr pair2) (car pair2)))))
 
 (defun delete-pairs (lst pairs)
-  (append pairs '(nil . nil))
+
   (loop for pair in pairs do
-       (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst)))
+       (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst))
+       )
   lst)
 
 (defun remove-pair (lst pair)
