@@ -66,15 +66,19 @@
 
 ;;; insert your code here
 (defun neighbours (node nodes)
-  (append
-   (loop for n in nodes
-      when (eq node (car n)) collect (cdr n)
-      when (eq node (cdr n)) collect (car n))))
+  (loop for n in nodes
+     when (eq node (car n)) collect (cdr n)
+     when (eq node (cdr n)) collect (car n)))
+
+(defun forest (node nodes &optional found)
+  (let ((a))
+    (format t "found ~a~%" found)
+    ))
 
 (defun vertices (nodes)
   (remove-duplicates
    (loop for n in nodes
-      append (list (car n) (cadr n)))))
+      append (list (car n) (cdr n)))))
 
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
