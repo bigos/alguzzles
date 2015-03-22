@@ -70,10 +70,16 @@
      when (eq node (car n)) collect (cdr n)
      when (eq node (cdr n)) collect (car n)))
 
-(defun forest (node nodes &optional found)
-  (let ((a))
-    (format t "found ~a~%" found)
+(defparameter *found* nil)
+
+(defun forest (node nodes )
+  (let ((ns (neighbours node nodes)))
+    (push ns *found*)
     ))
+
+(defun find-forest (node nodes)
+  (setq *found* nil)
+  (forest node nodes))
 
 (defun vertices (nodes)
   (remove-duplicates
@@ -99,7 +105,8 @@
 
     (format t "going to solve ~A ~A ~A~%" n m ar)))
 
-;; (solution) ; uncomment this when running on hacker-rank
+ ;; (solution) ; uncomment this when running on hacker-rank
+
 
 (defun repl-main ()
   (let ((path (if(search "chess" (machine-instance))
