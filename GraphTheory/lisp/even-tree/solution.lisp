@@ -153,14 +153,14 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input0.txt"))
+                                    "input1.txt"))
       (solution s))))
 
 ;; using profiler
-;; (sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop nil))
-;; (sb-sprof:start-profiling)
-;; (repl-main)
-;; (sb-sprof:report)
+(sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop nil))
+(sb-sprof:start-profiling)
+(repl-main)
+(sb-sprof:report)
 
 
 ;;
