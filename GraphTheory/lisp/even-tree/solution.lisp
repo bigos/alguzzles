@@ -84,10 +84,25 @@
       (forest node1 nodes1))
     found))
 
+(defun node-in-forest? (node forest)
+  (position node forest))
+
+(defun in-forests? (node forests)
+  (let ((result))
+    (loop for f in forests do
+         (when (node-in-forest? node f)
+           (setq result T)))
+    result))
+
 (defun forests (nodes)
   (let ((fs))
     (loop for v in (vertices nodes) do
-         )))
+         (if (in-forests? v fs)
+             (progn (format t "~A in forest~%" v))
+             (progn
+               (format t "~a adding ~%" v)
+               (push (find-forest v nodes) fs))))
+    fs))
 
 (defun vertices (nodes)
   (remove-duplicates
