@@ -17,11 +17,22 @@
 
 (defun split-to-forests (gr)
   (let* ((removal-combinations (subsequences gr))
-         (new-forest))
+         (new-forest)
+         (verts)
+         (forests)
+         (res))
     (loop for e in removal-combinations do
          (setq new-forest (delete-pairs gr e))
-         (format t "------ ~A ~a~%~%" e new-forest))
-    new-forest))
+         (setq verts (vertices gr))
+         (setq forests (forests new-forest))
+         (if (and (all-even? forests)
+                  (eq (length verts)
+                      (apply #'+  (map 'list #'length forests))) )
+             (progn
+               (setq res e)
+               (format nil "------ ~A ~a ~%~%" e new-forest)))
+       until res)
+    (length res)))
 
 (defun all-permutations (list)
   (cond ((null list) nil)
@@ -51,7 +62,6 @@
       (equal pair1 (cons (cdr pair2) (car pair2)))))
 
 (defun delete-pairs (lst pairs)
-
   (loop for pair in pairs do
        (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst))
        )
@@ -69,6 +79,11 @@
   (loop for n in nodes
      when (eq node (car n)) collect (cdr n)
      when (eq node (cdr n)) collect (car n)))
+
+(defun vertices (nodes)
+  (remove-duplicates
+   (loop for n in nodes
+      append (list (car n) (cdr n)))))
 
 (defparameter *found* nil)
 
@@ -94,20 +109,19 @@
            (setq result T)))
     result))
 
+(defun all-even? (forests)
+  (let ((res T))
+    (loop for f in forests do
+         (when (oddp (length f))
+           (setq res nil)))
+    res))
+
 (defun forests (nodes)
   (let ((fs))
     (loop for v in (vertices nodes) do
-         (if (in-forests? v fs)
-             (progn (format t "~A in forest~%" v))
-             (progn
-               (format t "~a adding ~%" v)
-               (push (find-forest v nodes) fs))))
+         (unless (in-forests? v fs)
+           (push (find-forest v nodes) fs)))
     fs))
-
-(defun vertices (nodes)
-  (remove-duplicates
-   (loop for n in nodes
-      append (list (car n) (cdr n)))))
 
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
@@ -126,7 +140,7 @@
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
 
-    (format t "going to solve ~A ~A ~A~%" n m ar)))
+    (format t "~A~%" (split-to-forests ar))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
