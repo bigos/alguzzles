@@ -72,25 +72,25 @@
 
 (defparameter *found* nil)
 
-(defun forest (node nodes )
-  (format t "looking for neightbours of ~A~%" node)
+(defun forest1 (node nodes)
   (let ((ns (neighbours node nodes)))
     (loop for n in ns do
-         (format t "~A ---~%" n)
-         (if (position n *found*)
-             (progn
-               (format t "~a !!!~%" n)
-               )
-             (progn
-               (format t "~a not found~%" n)
-         (pushnew  n *found*)
-                    (forest n nodes)
-                    )))))
+         (unless (position n *found*)
+           (progn
+             (pushnew n *found*)
+             (forest1 n nodes))))))
 
-(defun find-forest (node nodes)
-  (setq *found* nil)
-  (forest node nodes)
-  *found*)
+(defun find-forest (node1 nodes1)
+  (let ((found))
+    (labels ((forest (node nodes)
+                (let ((ns (neighbours node nodes)))
+                  (loop for n in ns do
+                       (unless (position n found)
+                         (progn
+                           (pushnew n found)
+                           (forest n nodes)))))))
+      (forest node1 nodes1))
+    found))
 
 (defun vertices (nodes)
   (remove-duplicates
