@@ -72,14 +72,6 @@
 
 (defparameter *found* nil)
 
-(defun forest1 (node nodes)
-  (let ((ns (neighbours node nodes)))
-    (loop for n in ns do
-         (unless (position n *found*)
-           (progn
-             (pushnew n *found*)
-             (forest1 n nodes))))))
-
 (defun find-forest (node1 nodes1)
   (let ((found))
     (labels ((forest (node nodes)
@@ -91,6 +83,11 @@
                            (forest n nodes)))))))
       (forest node1 nodes1))
     found))
+
+(defun forests (nodes)
+  (let ((fs))
+    (loop for v in (vertices nodes) do
+         )))
 
 (defun vertices (nodes)
   (remove-duplicates
