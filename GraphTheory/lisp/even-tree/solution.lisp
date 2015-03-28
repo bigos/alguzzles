@@ -135,6 +135,7 @@
          (n (car dd))
          (m (cadr dd))
          (ar))
+    (declare (ignore n)) ;; ignore unused n
     (loop for x in
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
@@ -157,10 +158,10 @@
       (solution s))))
 
 ;; using profiler
-(sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop nil))
-(sb-sprof:start-profiling)
-(repl-main)
-(sb-sprof:report)
+;; (sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop nil))
+;; (sb-sprof:start-profiling)
+;; (repl-main)
+;; (sb-sprof:report)
 
 
 ;;
