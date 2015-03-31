@@ -1,6 +1,6 @@
 (require :sb-sprof)
 
-(declaim (optimize speed))
+;; (declaim (optimize speed))
 
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -140,6 +140,7 @@
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
+    (format t "ar is: ~A~%" ar)
 
     (format t "~A~%" (split-to-forests ar))))
 
@@ -158,9 +159,10 @@
       (solution s))))
 
 ;; using profiler
-(sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop T :show-progress T)
-  (repl-main))
-
+;; (sb-sprof:start-profiling)
+;; (sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop T :show-progress T)
+;;   (repl-main))
+;;(sb-sprof:stop-profiling)
 ;; (sb-sprof:report)
 
 
