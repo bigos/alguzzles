@@ -1,6 +1,6 @@
 (require :sb-sprof)
 
-;;; (declaim (optimize speed))
+(declaim (optimize speed))
 
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -158,9 +158,9 @@
       (solution s))))
 
 ;; using profiler
-;; (sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop nil))
-;; (sb-sprof:start-profiling)
-;; (repl-main)
+(sb-sprof:with-profiling (:max-samples 1000 :report :flat :loop T :show-progress T)
+  (repl-main))
+
 ;; (sb-sprof:report)
 
 
