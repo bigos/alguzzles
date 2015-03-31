@@ -178,3 +178,8 @@
 ;; 8--10
 ;; |
 ;; 9
+
+
+;; (sb-sprof:with-profiling
+;;     (:max-samples 1000 :show-progress T :mode :cpu :report :flat)
+;;   (dotimes (x 1)  (repl-main)))
