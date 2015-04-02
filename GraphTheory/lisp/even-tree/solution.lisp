@@ -1,6 +1,7 @@
-(require :sb-sprof)
+;; (require :sb-sprof)
 
-;; (declaim (optimize speed))
+
+(declaim (optimize (speed 3) (safety 0) (space 0)))
 
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -57,9 +58,16 @@
        collecting (comb l list (lambda (x) (push x res))))
     res))
 
+;; (defun eq-pair (pair1 pair2)
+;;   (or (equal pair1 pair2)
+;;       (equal pair1 (cons (cdr pair2) (car pair2)))))
+
 (defun eq-pair (pair1 pair2)
-  (or (equal pair1 pair2)
-      (equal pair1 (cons (cdr pair2) (car pair2)))))
+  (or
+   (and (eq (car pair1) (car pair2))
+        (eq (cdr pair1) (cdr pair2)))
+   (and (eq (car pair1) (cdr pair2))
+        (eq (cdr pair1) (car pair2)))))
 
 (defun delete-pairs (lst pairs)
   (loop for pair in pairs do
@@ -99,13 +107,10 @@
       (forest node1 nodes1))
     found))
 
-(defun node-in-forest? (node forest)
-  (position node forest))
-
 (defun in-forests? (node forests)
   (let ((result))
     (loop for f in forests do
-         (when (node-in-forest? node f)
+         (when (position node f)
            (setq result T)))
     result))
 
@@ -123,12 +128,12 @@
            (push (find-forest v nodes) fs)))
     fs))
 
-(defun arr ()
-  '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+;; (defun arr ()
+;;   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
 
-(defun splitters () '((3 . 1) (6 . 1)))
-(defun split-arr () '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
-(defun dynamic-split-arr () (delete-pairs (arr) (splitters)))
+;; (defun splitters () '((3 . 1) (6 . 1)))
+;; (defun split-arr () '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
+;; (defun dynamic-split-arr () (delete-pairs (arr) (splitters)))
 
 (defun solution (&optional stream)
   (let* ((dd (split-and-parse (read-line stream)))
@@ -185,3 +190,7 @@
 ;;   (dotimes (x 1)  (repl-main)))
 
 ;;; (sb-sprof:with-profiling (:max-samples 100 :mode :cpu :report :flat)  (repl-main))
+
+
+;; obtaining optimisation notes
+;; (compile-file "~/Programming/hackerrank/GraphTheory/lisp/even-tree/solution.lisp" )
