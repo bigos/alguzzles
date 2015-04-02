@@ -1,8 +1,6 @@
 (require :sb-sprof)
 
-
-(declaim (optimize (speed 3) (safety 0) ; (space 0)
-                   ))
+(declaim (optimize (speed 3)))
 
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
