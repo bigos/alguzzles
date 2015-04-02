@@ -1,7 +1,8 @@
-;; (require :sb-sprof)
+(require :sb-sprof)
 
 
-(declaim (optimize (speed 3) (safety 0) (space 0)))
+(declaim (optimize (speed 3) (safety 0) ; (space 0)
+                   ))
 
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -79,8 +80,8 @@
   (remove-if (lambda (x) (eq-pair x pair)) lst))
 
 ;; (neighbour-list 8 (dynamic-split-arr))
-(defun neighbour-list (node)
-  (neighbours node (dynamic-split-arr)))
+;; (defun neighbour-list (node)
+;;   (neighbours node (dynamic-split-arr)))
 
 ;;; insert your code here
 (defun neighbours (node nodes)
