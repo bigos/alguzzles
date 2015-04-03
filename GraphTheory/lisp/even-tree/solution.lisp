@@ -16,12 +16,11 @@
 
 
 (defun split-to-forests (gr)
-  (let* ((removal-combinations (subsequences gr))
-         (new-forest)
+  (let* ((new-forest)
          (verts)
          (forests)
          (res))
-    (loop for e in removal-combinations do
+    (loop for e in (subsequences gr) do
          (setq new-forest (delete-pairs gr e))
          (setq verts (vertices gr))
          (setq forests (forests new-forest))
@@ -33,13 +32,6 @@
                (format nil "------ ~A ~a ~%~%" e new-forest)))
        until res)
     (length res)))
-
-(defun all-permutations (list)
-  (cond ((null list) nil)
-        ((null (cdr list)) (list list))
-        (t (loop for element in list
-              append (mapcar (lambda (l) (cons element l))
-                             (all-permutations (remove element list)))))))
 
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
