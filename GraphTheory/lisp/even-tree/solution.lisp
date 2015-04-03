@@ -13,14 +13,13 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-
-
+;; usage
+;; (split-to-forests '((20 . 8) (19 . 1) (18 . 10) (17 . 6) (16 . 6) (15 . 12) (14 . 8) (13 . 7) (12 . 3) (11 . 10) (10 . 7) (9 . 2) (8 . 1) (7 . 1) (6 . 5) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
 (defun split-to-forests (gr)
   (let* ((new-forest)
          (forests)
          (res))
     (loop for e in (subsequences gr) do
-         ;;(format t "~A~%" e)
          (setq new-forest (delete-pairs gr e))
          (setq forests (forests new-forest))
          (if (and (all-even? forests)
@@ -42,7 +41,7 @@
 ;;          (e))
 ;;     (loop for l from 1 to (1- (length gr)) do
 ;;          (comb l gr (lambda (x) (setq e x)))
-;;          (format t "~A~%" e)
+;;          (format t "~A ~%" e )
 ;;          (setq new-forest (delete-pairs gr e))
 ;;          (setq verts (vertices gr))
 ;;          (setq forests (forests new-forest))
