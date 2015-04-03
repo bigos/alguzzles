@@ -66,9 +66,11 @@
 
 (defun subsequences (list)
   (let ((res))
-    (loop for l from 1 below (length list)
-       do (comb l list (lambda (x) (push x res))))
-    res))
+    (loop for l from 1 below (length list) do
+         (comb l list (lambda (x) (push x res)))
+         (format t "~A " (length res))
+         )
+    (length res)))
 
 (defun eq-pair (pair1 pair2)
   (or
