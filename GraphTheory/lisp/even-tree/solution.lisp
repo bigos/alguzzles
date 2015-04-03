@@ -159,7 +159,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input2.txt"))
+                                    "input1.txt"))
       (solution s))))
 
 ;; using profiler
