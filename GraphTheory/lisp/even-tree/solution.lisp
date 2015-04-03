@@ -21,6 +21,7 @@
          (forests)
          (res))
     (loop for e in (subsequences gr) do
+         (format t "~A~%" e)
          (setq new-forest (delete-pairs gr e))
          (setq verts (vertices gr))
          (setq forests (forests new-forest))
@@ -32,6 +33,29 @@
                (format nil "------ ~A ~a ~%~%" e new-forest)))
        until res)
     (length res)))
+
+;; This is much faster but combinations a re wrong
+
+;; (defun split-to-forests (gr)
+;;   (let* ((new-forest)
+;;          (verts)
+;;          (forests)
+;;          (res)
+;;          (e))
+;;     (loop for l from 1 to (1- (length gr)) do
+;;          (comb l gr (lambda (x) (setq e x)))
+;;          (format t "~A~%" e)
+;;          (setq new-forest (delete-pairs gr e))
+;;          (setq verts (vertices gr))
+;;          (setq forests (forests new-forest))
+;;          (if (and (all-even? forests)
+;;                   (eq (length verts)
+;;                       (apply #'+  (map 'list #'length forests))) )
+;;              (progn
+;;                (setq res e)
+;;                (format nil "------ ~A ~a ~%~%" e new-forest)))
+;;        until res)
+;;     (length res)))
 
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
@@ -48,10 +72,6 @@
     (loop for l from 1 to (1- (length list))
        collecting (comb l list (lambda (x) (push x res))))
     res))
-
-;; (defun eq-pair (pair1 pair2)
-;;   (or (equal pair1 pair2)
-;;       (equal pair1 (cons (cdr pair2) (car pair2)))))
 
 (defun eq-pair (pair1 pair2)
   (or
