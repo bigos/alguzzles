@@ -17,16 +17,14 @@
 
 (defun split-to-forests (gr)
   (let* ((new-forest)
-         (verts)
          (forests)
          (res))
     (loop for e in (subsequences gr) do
-         (format t "~A~%" e)
+         ;;(format t "~A~%" e)
          (setq new-forest (delete-pairs gr e))
-         (setq verts (vertices gr))
          (setq forests (forests new-forest))
          (if (and (all-even? forests)
-                  (eq (length verts)
+                  (eq (length (vertices gr))
                       (apply #'+  (map 'list #'length forests))) )
              (progn
                (setq res e)
@@ -69,8 +67,8 @@
 
 (defun subsequences (list)
   (let ((res))
-    (loop for l from 1 to (1- (length list))
-       collecting (comb l list (lambda (x) (push x res))))
+    (loop for l from 1 below (length list)
+       do (comb l list (lambda (x) (push x res))))
     res))
 
 (defun eq-pair (pair1 pair2)
@@ -139,8 +137,15 @@
            (push (find-forest v nodes) fs)))
     fs))
 
-;; (defun arr ()
-;;   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+(defun arr ()
+  '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+
+(defun arr2 ()
+  '((30 . 25) (29 . 4) (28 . 27) (27 . 5) (26 . 17) (25 . 21)
+    (24 . 12) (23 . 2) (22 . 20) (21 . 15) (20 . 4) (19 . 18)
+    (18 . 17) (17 . 1) (16 . 10) (15 . 8) (14 . 2) (13 . 2) (12 . 8)
+    (11 . 4) (10 . 4) (9 . 5) (8 . 1) (7 . 4) (6 . 4) (5 . 2) (4 . 3)
+    (3 . 2) (2 . 1)))
 
 ;; (defun splitters () '((3 . 1) (6 . 1)))
 ;; (defun split-arr () '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
@@ -171,7 +176,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input1.txt"))
+                                    "input2.txt"))
       (solution s))))
 
 ;; using profiler
