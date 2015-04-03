@@ -31,9 +31,23 @@
 ;;        until res)
 ;;     (length res)))
 
-;;; this is the way to go
+(defun split-inner (gr e)
+  (format nil "~A~%" e)
+  (let* (                               ;this one takes too long on arr2
+         (new-forest (delete-pairs gr e))
+         ;; (forests (forests new-forest))
+         (res))
+    ;; (when (and (all-even? forests)
+    ;;            (eq (length (vertices gr))
+    ;;                (apply #'+  (map 'list #'length forests))) )
+    ;;   (progn
+    ;;     (setq res e)
+    ;;     (format nil "------ ~A ~a ~%~%" e new-forest)))
+    ))
+
+;; this is the way to go
 (defun split-to-forests (gr)
-  (subsequences gr (lambda (x) (format t "~a~%" x))))
+  (subsequences gr (lambda (x) (split-inner gr x))))
 
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
