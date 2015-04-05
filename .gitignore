@@ -1,0 +1,2 @@
+# ignore Emacs' dir-locals.el files
+.dir-locals.el
