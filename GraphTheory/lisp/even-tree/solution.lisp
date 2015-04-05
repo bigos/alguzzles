@@ -15,15 +15,38 @@
 
 ;; usage
 ;; (split-to-forests '((20 . 8) (19 . 1) (18 . 10) (17 . 6) (16 . 6) (15 . 12) (14 . 8) (13 . 7) (12 . 3) (11 . 10) (10 . 7) (9 . 2) (8 . 1) (7 . 1) (6 . 5) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+(defun split-to-forests (gr)
+  (let* ((new-forest)
+         (forests)
+         (res))
+    (loop for e in (subsequences gr) do
+         (setq new-forest (delete-pairs gr e))
+         (setq forests (forests new-forest))
+         (if (and (all-even? forests)
+                  (eq (length (vertices gr))
+                      (apply #'+  (map 'list #'length forests))) )
+             (progn
+               (setq res e)
+               (format nil "------ ~A ~a ~%~%" e new-forest)))
+       until res)
+    (length res)))
+
+;; This is much faster but combinations a re wrong
+
 ;; (defun split-to-forests (gr)
 ;;   (let* ((new-forest)
+;;          (verts)
 ;;          (forests)
-;;          (res))
-;;     (loop for e in (subsequences gr) do
+;;          (res)
+;;          (e))
+;;     (loop for l from 1 to (1- (length gr)) do
+;;          (comb l gr (lambda (x) (setq e x)))
+;;          (format t "~A ~%" e )
 ;;          (setq new-forest (delete-pairs gr e))
+;;          (setq verts (vertices gr))
 ;;          (setq forests (forests new-forest))
 ;;          (if (and (all-even? forests)
-;;                   (eq (length (vertices gr))
+;;                   (eq (length verts)
 ;;                       (apply #'+  (map 'list #'length forests))) )
 ;;              (progn
 ;;                (setq res e)
@@ -31,28 +54,8 @@
 ;;        until res)
 ;;     (length res)))
 
-(defun split-inner (gr e)
-  (format nil "~A~%" e)
-  (let* (                             ;this one takes too long on arr2
-         (new-forest (delete-pairs gr e))
-         ;; (forests (forests new-forest))
-         (res))
-    ;; (when (and (all-even? forests)
-    ;;            (eq (length (vertices gr))
-    ;;                (apply #'+  (map 'list #'length forests))) )
-    ;;   (progn
-    ;;     (setq res e)
-    ;;     (format nil "------ ~A ~a ~%~%" e new-forest)))
-    ))
-
-
-;; this is the way to go
-(defun split-to-forests (gr)
-  (subsequences gr (lambda (x) (split-inner gr x))))
-
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
-;;; could i make it tail recursive ?
 (defun comb (m list fn)
   (labels ((comb1 (l c m)
              (when (>= (length l) m)
@@ -61,10 +64,13 @@
                (comb1 (cdr l) (cons (first l) c) (1- m)))))
     (comb1 list nil m)))
 
-;;; need to get rid of res and do all processing inside comb
-(defun subsequences (list fn)
-  (loop for l from 1 below (length list) do
-       (comb l list fn)))
+(defun subsequences (list)
+  (let ((res))
+    (loop for l from 1 below (length list) do
+         (comb l list (lambda (x) (push x res)))
+         (format t "~A " (length res))
+         )
+    (length res)))
 
 (defun eq-pair (pair1 pair2)
   (or
