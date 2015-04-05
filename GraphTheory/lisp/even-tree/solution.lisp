@@ -33,7 +33,7 @@
 
 (defun split-inner (gr e)
   (format nil "~A~%" e)
-  (let* (                               ;this one takes too long on arr2
+  (let* (                             ;this one takes too long on arr2
          (new-forest (delete-pairs gr e))
          ;; (forests (forests new-forest))
          (res))
@@ -50,12 +50,6 @@
 (defun split-to-forests (gr)
   (subsequences gr (lambda (x) (split-inner gr x))))
 
-(defun all-permutations (list)
-  (cond ((null list) nil)
-        ((null (cdr list)) (list list))
-        (t (loop for element in list
-              append (mapcar (lambda (l) (cons element l))
-                             (all-permutations (remove element list)))))))
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
 ;;; could i make it tail recursive ?
