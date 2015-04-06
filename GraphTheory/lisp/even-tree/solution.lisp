@@ -64,6 +64,10 @@
 ;;; need to get rid of res and do all processing inside comb
 (defun subsequences (list fn)
   (loop for l from 1 below (length list) do
+     ;; running ...
+     ;; (comb 2 (arr) (lambda (x) (format t "~A~%" x)))
+     ;; gives interesting results
+       (sb-ext:gc :full t)
        (comb l list fn)))
 
 (defun eq-pair (pair1 pair2)
