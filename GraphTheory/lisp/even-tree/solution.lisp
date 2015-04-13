@@ -13,38 +13,15 @@
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
 
-;; usage
-;; (split-to-forests '((20 . 8) (19 . 1) (18 . 10) (17 . 6) (16 . 6) (15 . 12) (14 . 8) (13 . 7) (12 . 3) (11 . 10) (10 . 7) (9 . 2) (8 . 1) (7 . 1) (6 . 5) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
-;; (defun split-to-forests-old (gr)
-;;   (let* ((new-forest)
-;;          (forests)
-;;          (res))
-;;     (loop for e in (subsequences gr) do
-;;          (setq new-forest (delete-pairs gr e))
-;;          (setq forests (forests new-forest))
-;;          (if (and (all-even? forests)
-;;                   (eq (length (vertices gr))
-;;                       (apply #'+  (map 'list #'length forests))) )
-;;              (progn
-;;                (setq res e)
-;;                (format nil "------ ~A ~a ~%~%" e new-forest)))
-;;        until res)
-;;     (length res)))
-
 (defun split-inner (gr e)
-  (format nil "~A~%" e)
+  ;; (format nil "~A~%" e)
   (let* ((new-forest (delete-pairs gr e))
-         (forests (forests new-forest))
-         (res))
+         (forests (forests new-forest)))
     (when (and (all-even? forests)
                (eq (length (vertices gr))
-                   (apply #'+  (map 'list #'length forests))) )
-      (progn
-        (setq res e)
-        (setq *last-found-length* (length  e))
-        (format nil "------ ~A ~a ~%~%" e new-forest)))
-    ))
-
+                   (apply #'+  (map 'list #'length forests))))
+        ;; (format T "------ ~A ~a ~%~%" e new-forest)
+        (setq *last-found-length* (length  e)))))
 
 ;; this is the way to go
 (defun split-to-forests (gr)
@@ -53,7 +30,6 @@
 
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
-;;; could i make it tail recursive ?
 (defun comb (m list fn)
   (labels ((comb1 (l c m)
              (when (>= (length l) m)
@@ -65,9 +41,9 @@
 (defparameter *last-found-length* 0)
 (defun subsequences (list fn)
   (loop for l from 1 below (length list)
-     until (> l (+ *last-found-length* 2))
+     until (> l (+ *last-found-length* 1))
      do
-       (sb-ext:gc :full t)
+       ;; (sb-ext:gc :full t)
        (comb l list fn)))
 
 (defun eq-pair (pair1 pair2)
@@ -86,11 +62,6 @@
 (defun remove-pair (lst pair)
   (remove-if (lambda (x) (eq-pair x pair)) lst))
 
-;; (neighbour-list 8 (dynamic-split-arr))
-;; (defun neighbour-list (node)
-;;   (neighbours node (dynamic-split-arr)))
-
-;;; insert your code here
 (defun neighbours (node nodes)
   (loop for n in nodes
      when (eq node (car n)) collect (cdr n)
@@ -174,7 +145,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input2.txt"))
+                                    "input1.txt"))
       (solution s))))
 
 ;; using profiler
