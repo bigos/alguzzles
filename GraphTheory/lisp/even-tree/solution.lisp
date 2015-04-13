@@ -15,7 +15,7 @@
 
 ;; usage
 ;; (split-to-forests '((20 . 8) (19 . 1) (18 . 10) (17 . 6) (16 . 6) (15 . 12) (14 . 8) (13 . 7) (12 . 3) (11 . 10) (10 . 7) (9 . 2) (8 . 1) (7 . 1) (6 . 5) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
-;; (defun split-to-forests (gr)
+;; (defun split-to-forests-old (gr)
 ;;   (let* ((new-forest)
 ;;          (forests)
 ;;          (res))
@@ -33,22 +33,23 @@
 
 (defun split-inner (gr e)
   (format nil "~A~%" e)
-  (let* (                             ;this one takes too long on arr2
-         (new-forest (delete-pairs gr e))
-         ;; (forests (forests new-forest))
+  (let* ((new-forest (delete-pairs gr e))
+         (forests (forests new-forest))
          (res))
-    ;; (when (and (all-even? forests)
-    ;;            (eq (length (vertices gr))
-    ;;                (apply #'+  (map 'list #'length forests))) )
-    ;;   (progn
-    ;;     (setq res e)
-    ;;     (format nil "------ ~A ~a ~%~%" e new-forest)))
+    (when (and (all-even? forests)
+               (eq (length (vertices gr))
+                   (apply #'+  (map 'list #'length forests))) )
+      (progn
+        (setq res e)
+        (setq *last-found-length* (length  e))
+        (format nil "------ ~A ~a ~%~%" e new-forest)))
     ))
 
 
 ;; this is the way to go
 (defun split-to-forests (gr)
-  (subsequences gr (lambda (x) (split-inner gr x))))
+  (subsequences gr (lambda (x) (split-inner gr x)))
+  *last-found-length*)
 
 ;; usage
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
@@ -61,12 +62,11 @@
                (comb1 (cdr l) (cons (first l) c) (1- m)))))
     (comb1 list nil m)))
 
-;;; need to get rid of res and do all processing inside comb
+(defparameter *last-found-length* 0)
 (defun subsequences (list fn)
-  (loop for l from 1 below (length list) do
-     ;; running ...
-     ;; (comb 2 (arr) (lambda (x) (format t "~A~%" x)))
-     ;; gives interesting results
+  (loop for l from 1 below (length list)
+     until (> l (+ *last-found-length* 2))
+     do
        (sb-ext:gc :full t)
        (comb l list fn)))
 
@@ -161,7 +161,6 @@
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
     (format t "ar is: ~A~%" ar)
-
     (format t "~A~%" (split-to-forests ar))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
