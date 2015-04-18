@@ -59,6 +59,10 @@
        )
   lst)
 
+(defun connections (gr)
+  (loop for v in (vertices gr)
+     collect (list v (neighbours v gr))))
+
 (defun remove-pair (lst pair)
   (remove-if (lambda (x) (eq-pair x pair)) lst))
 
