@@ -39,6 +39,7 @@
     (comb1 list nil m)))
 
 (defparameter *last-found-length* 0)
+
 (defun subsequences (list fn)
   (loop for l from 1 below (length list)
      until (> l (+ *last-found-length* 1))
@@ -83,7 +84,7 @@
     (labels ((forest (node nodes)
                 (let ((ns (neighbours node nodes)))
                   (loop for n in ns do
-                       (unless (position n found)
+                       (unless (position n found) ; sloooooow!
                          (progn
                            (pushnew n found)
                            (forest n nodes)))))))
