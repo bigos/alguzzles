@@ -82,12 +82,11 @@
 (defun find-forest (node1 nodes1)
   (let ((found))
     (labels ((forest (node nodes)
-                (let ((ns (neighbours node nodes)))
-                  (loop for n in ns do
-                       (unless (position n found) ; sloooooow!
-                         (progn
-                           (pushnew n found)
-                           (forest n nodes)))))))
+                (loop for n in (neighbours node nodes) do
+                     (unless (position n found) ; sloooooow!
+                       (progn
+                         (pushnew n found)
+                         (forest n nodes))))))
       (forest node1 nodes1))
     found))
 
