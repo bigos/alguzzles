@@ -1,4 +1,4 @@
-(require :sb-sprof)
+;; (require :sb-sprof)
 
 (declaim (optimize (speed 3)))
 
@@ -79,16 +79,16 @@
 
 (defparameter *found* nil)
 
+(defun find-forest-inner (node nodes)
+  (loop for n in (neighbours node nodes) do
+       (unless (position n *found*)     ; sloooooow!
+         (pushnew n *found*)
+         (find-forest-inner n nodes))))
+
 (defun find-forest (node1 nodes1)
-  (let ((found))
-    (labels ((forest (node nodes)
-                (loop for n in (neighbours node nodes) do
-                     (unless (position n found) ; sloooooow!
-                       (progn
-                         (pushnew n found)
-                         (forest n nodes))))))
-      (forest node1 nodes1))
-    found))
+  (setq *found* nil)
+  (find-forest-inner node1 nodes1)
+  *found*)
 
 (defun in-forests? (node forests)
   (let ((result))
@@ -135,7 +135,7 @@
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
-    (format t "ar is: ~A~%" ar)
+    (format nil "ar is: ~A~%" ar)
     (format t "~A~%" (split-to-forests ar))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
@@ -149,7 +149,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input1.txt"))
+                                    "input2.txt"))
       (solution s))))
 
 ;; using profiler
