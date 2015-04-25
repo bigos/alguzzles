@@ -12,104 +12,8 @@
   (map 'list
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun split-inner (gr e)
-  ;; (format nil "~A~%" e)
-  (let* ((new-forest (delete-pairs gr e))
-         (forests (forests new-forest)))
-    (when (and (all-even? forests)
-               (eq (length (vertices gr))
-                   (apply #'+  (map 'list #'length forests))))
-        ;; (format T "------ ~A ~a ~%~%" e new-forest)
-        (setq *last-found-length* (length  e)))))
-
-;; this is the way to go
-(defun split-to-forests (gr)
-  (subsequences gr (lambda (x) (split-inner gr x)))
-  *last-found-length*)
-
-;; usage
-;; (comb 3 '(0 1 2 3 4 5) #'print)
-(defun comb (m list fn)
-  (labels ((comb1 (l c m)
-             (when (>= (length l) m)
-               (if (zerop m) (return-from comb1 (funcall fn c)))
-               (comb1 (cdr l) c m)
-               (comb1 (cdr l) (cons (first l) c) (1- m)))))
-    (comb1 list nil m)))
-
-(defparameter *last-found-length* 0)
-
-(defun subsequences (list fn)
-  (loop for l from 1 below (length list)
-     until (> l (+ *last-found-length* 1))
-     do
-       ;; (sb-ext:gc :full t)
-       (comb l list fn)))
-
-(defun eq-pair (pair1 pair2)
-  (or
-   (and (eq (car pair1) (car pair2))
-        (eq (cdr pair1) (cdr pair2)))
-   (and (eq (car pair1) (cdr pair2))
-        (eq (cdr pair1) (car pair2)))))
-
-(defun delete-pairs (lst pairs)
-  (loop for pair in pairs do
-       (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst))
-       )
-  lst)
-
-(defun connections (gr)
-  (loop for v in (vertices gr)
-     collect (list v (neighbours v gr))))
-
-(defun remove-pair (lst pair)
-  (remove-if (lambda (x) (eq-pair x pair)) lst))
-
-(defun neighbours (node nodes)
-  (loop for n in nodes
-     when (eq node (car n)) collect (cdr n)
-     when (eq node (cdr n)) collect (car n)))
-
-(defun vertices (nodes)
-  (remove-duplicates
-   (loop for n in nodes
-      append (list (car n) (cdr n)))))
-
-(defparameter *found* nil)
-
-(defun find-forest-inner (node nodes)
-  (loop for n in (neighbours node nodes) do
-       (unless (position n *found*)     ; sloooooow!
-         (pushnew n *found*)
-         (find-forest-inner n nodes))))
-
-(defun find-forest (node1 nodes1)
-  (setq *found* nil)
-  (find-forest-inner node1 nodes1)
-  *found*)
-
-(defun in-forests? (node forests)
-  (let ((result))
-    (loop for f in forests do
-         (when (position node f)
-           (setq result T)))
-    result))
-
-(defun all-even? (forests)
-  (let ((res T))
-    (loop for f in forests do
-         (when (oddp (length f))
-           (setq res nil)))
-    res))
-
-(defun forests (nodes)
-  (let ((fs))
-    (loop for v in (vertices nodes) do
-         (unless (in-forests? v fs)
-           (push (find-forest v nodes) fs)))
-    fs))
 
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
@@ -121,9 +25,7 @@
     (11 . 4) (10 . 4) (9 . 5) (8 . 1) (7 . 4) (6 . 4) (5 . 2) (4 . 3)
     (3 . 2) (2 . 1)))
 
-;; (defun splitters () '((3 . 1) (6 . 1)))
-;; (defun split-arr () '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
-;; (defun dynamic-split-arr () (delete-pairs (arr) (splitters)))
+;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
   (let* ((dd (split-and-parse (read-line stream)))
@@ -135,8 +37,8 @@
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
-    (format nil "ar is: ~A~%" ar)
-    (format t "~A~%" (split-to-forests ar))))
+    (format T "ar is: ~A~%" ar)
+    (format t "~%finished~%" )))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
