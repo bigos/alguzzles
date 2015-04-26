@@ -20,6 +20,32 @@
    (loop for edge in edges
       collect (car edge)
       collect (cdr edge))))
+
+(defun connections (edges)
+  (let ((neighbours) (found))
+    (loop for edge in edges do
+         (if (setq found (position (car edge) neighbours :key 'car))
+             (push (car edge) (cadr (elt neighbours found)))
+             (push `(,(car edge) (,(cdr edge))) neighbours)))
+    (loop for edge in edges do
+         (if (setq found (position (cdr edge) neighbours :key 'car))
+             (push (car edge) (cadr (elt neighbours found)))
+             (push `(,(cdr edge) (,(car edge))) neighbours)))
+
+
+    neighbours))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (defun connections (gr)
+;;   (loop for v in (vertices gr)
+;;      collect (list v (neighbours v gr))))
+
+;; (defun remove-pair (lst pair)
+;;   (remove-if (lambda (x) (eq-pair x pair)) lst))
+
+;; (defun neighbours (node nodes)
+;;   (loop for n in nodes
+;;      when (eq node (car n)) collect (cdr n)
+;;      when (eq node (cdr n)) collect (car n)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defpackage :my-solution
