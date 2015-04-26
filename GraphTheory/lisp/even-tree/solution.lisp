@@ -2,6 +2,31 @@
 
 (declaim (optimize (speed 3)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defpackage :graph
+  (:use :common-lisp))
+
+(in-package :graph)
+
+(defparameter *original-edges* nil)
+
+(defun initialize (edges)
+  (format t "~%~A ~%" edges)
+  (setq graph::*original-edges* edges))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defpackage :my-solution
+  (:use :common-lisp :graph))
+
+(in-package :my-solution)
+
+;;;;;;;;; finally return to repl package ;;;;
+
+(in-package :common-lisp-user)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
      as j = (position #\Space string :start i)
