@@ -13,7 +13,13 @@
 
 (defun initialize (edges)
   (format t "~%~A ~%" edges)
-  (setq graph::*original-edges* edges))
+  (setq *original-edges* edges))
+
+(defun nodes (edges)
+  (remove-duplicates
+   (loop for edge in edges
+      collect (car edge)
+      collect (cdr edge))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defpackage :my-solution
