@@ -24,16 +24,15 @@
 (defun connections (edges)
   (let ((neighbours) (found))
     (loop for edge in edges do
-         (if (setq found (position (car edge) neighbours :key 'car))
-             (push (car edge) (cadr (elt neighbours found)))
-             (push `(,(car edge) (,(cdr edge))) neighbours)))
+         (unless (setq found (position (car edge) neighbours :key 'car))
+           (push `(,(car edge) (,(cdr edge))) neighbours)))
     (loop for edge in edges do
          (if (setq found (position (cdr edge) neighbours :key 'car))
-             (push (car edge) (cadr (elt neighbours found)))
+             (unless (position (car edge) (cadr (elt neighbours found)))
+               (push (car edge)  (cadr (elt neighbours found))))
              (push `(,(cdr edge) (,(car edge))) neighbours)))
-
-
     neighbours))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (defun connections (gr)
 ;;   (loop for v in (vertices gr)
