@@ -33,24 +33,21 @@
              (push `(,(cdr edge) (,(car edge))) neighbours)))
     neighbours))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun connections (gr)
-;;   (loop for v in (vertices gr)
-;;      collect (list v (neighbours v gr))))
+(defparameter *forests* nil)
 
-;; (defun remove-pair (lst pair)
-;;   (remove-if (lambda (x) (eq-pair x pair)) lst))
+(defun forests (edges)
+  (let ((connections (connections edges))
+        (forestlings (loop for n in (graph::nodes (arx)) collect (list n))))
+    ;; removing forestlings
+    ;; (delete-if (lambda (x) (equalp x '(1)))
+    ;;            (loop for n in (graph::nodes (arx)) collect (list n)))
 
-;; (defun neighbours (node nodes)
-;;   (loop for n in nodes
-;;      when (eq node (car n)) collect (cdr n)
-;;      when (eq node (cdr n)) collect (car n)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; findin which forest has the forestling
+    ;; (loop for n in '((10 9) (8) (6) (7) (5) (4 3) (2) (1))
+    ;;    until (position 9 n) finally (return n))
+    ))
 
-(defpackage :my-solution
-  (:use :common-lisp :graph))
-
-(in-package :my-solution)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;; finally return to repl package ;;;;
 
@@ -70,6 +67,8 @@
        (split-by-one-space string)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun arx ()
+  '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
 
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
