@@ -37,7 +37,7 @@
 
 (defun forests (edges)
   (let ((connections (connections edges))
-        (forestlings (loop for n in (graph::nodes (arx)) collect (list n))))
+        (forestlings (loop for n in (graph::nodes edges) collect (list n))))
     ;; removing forestlings
     ;; (delete-if (lambda (x) (equalp x '(1)))
     ;;            (loop for n in (graph::nodes (arx)) collect (list n)))
@@ -45,7 +45,7 @@
     ;; findin which forest has the forestling
     ;; (loop for n in '((10 9) (8) (6) (7) (5) (4 3) (2) (1))
     ;;    until (position 9 n) finally (return n))
-    ))
+    forestlings))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
