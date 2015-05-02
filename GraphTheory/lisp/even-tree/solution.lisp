@@ -47,6 +47,17 @@
     ;;    until (position 9 n) finally (return n))
     forestlings))
 
+;; get connections for node 1
+;; it's 2
+;; put 1 and to in found list
+;; move 2 and its connections to node 1
+;; move connections of 2 in found list
+
+;; repeat 1 with new connection list
+;; until found stays the same
+
+;; repeat for another node left in connections of finish
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;; finally return to repl package ;;;;
