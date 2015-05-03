@@ -47,6 +47,40 @@
     ;;    until (position 9 n) finally (return n))
     forestlings))
 
+;;;;;;;;;;;;;;;;; old neighbours code ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (defun find-forest-inner (node nodes)
+;;   (loop for n in (neighbours node nodes) do
+;;        (unless (position n *found*)     ; sloooooow!
+;;          (pushnew n *found*)
+;;          (find-forest-inner n nodes))))
+
+;; (defun find-forest (node1 nodes1)
+;;   (setq *found* nil)
+;;   (find-forest-inner node1 nodes1)
+;;   *found*)
+
+;; (defun in-forests? (node forests)
+;;   (let ((result))
+;;     (loop for f in forests do
+;;          (when (position node f)
+;;            (setq result T)))
+;;     result))
+
+;; (defun all-even? (forests)
+;;   (let ((res T))
+;;     (loop for f in forests do
+;;          (when (oddp (length f))
+;;            (setq res nil)))
+;;     res))
+
+;; (defun forests (nodes)
+;;   (let ((fs))
+;;     (loop for v in (vertices nodes) do
+;;          (unless (in-forests? v fs)
+;;            (push (find-forest v nodes) fs)))
+;;     fs))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;; finally return to repl package ;;;;
