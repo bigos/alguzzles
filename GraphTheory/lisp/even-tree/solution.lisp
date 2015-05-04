@@ -68,13 +68,8 @@
   (let ((from-connections (connections-for from connections)))
     (setf connections (append-connections to from-connections connections))
     (setq connections (remove-connections from connections))
-    (format t "~&~A  ~A~%~A~%" from to from-connections )
+    ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
     connections))
-
-(defun merge-nodes-for (node connections)
-  (loop for c in (connections-for node connections) do
-       (setq connections (move-connections c node connections))
-     finally (return connections)))
 
   ;; ----------------------------------
   ;; get connections for node 1
