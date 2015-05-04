@@ -47,54 +47,80 @@
     ;;    until (position 9 n) finally (return n))
     forestlings))
 
-;; get connections for node 1
-;; it's 2
-;; put 1 and to in found list
-;; move 2 and its connections to node 1
-;; move connections of 2 in found list
+(defun connections-for (node vertices)
+  (loop for c in (connections vertices)
+     until (eq node (car c))
+     finally (return (cadr c))))
 
-;; repeat 1 with new connection list
-;; until found stays the same
+(defun remove-connections (node connections)
+  (remove-if (lambda (x) (eq (car x) node)) connections))
 
-;; repeat for another node left in connections of finish
+(defun move-connections (from to connections)
+  (format t " ~A~%" connections)
+  (let ((from-connections (caar (connections-for from connections)))
+        (to-connections (caar (connections-for to connections))))
+    (format t "~&from: ~A~%to: ~A~%" from-connections to-connections)
+    (setq connections (remove-connections from connections))
+    (setq connections (remove-connections to connections))
+
+    (push (list from (list (concatenate 'list from-connections to-connections))) connections)
+
+    (format t "~%~%done: ~A ~A~&~A~%" from-connections to-connections connections)))
+
+
+  ;; ----------------------------------
+  ;; get connections for node 1
+  ;; it's (2)
+  ;; put 1 and (2) in found list
+  ;; move 2 and its connections to node 1
+  ;; move connections of 2 in found list
+
+  ;; repeat 1 with new connection list
+  ;; until found stays the same
+
+  ;; repeat for another node left in connections of finish
+
+
+(format t "~%finished~%~%")
 
 ;;;;;;;;;;;;;;;;; old neighbours code ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (defun find-forest-inner (node nodes)
-;;   (loop for n in (neighbours node nodes) do
-;;        (unless (position n *found*)     ; sloooooow!
-;;          (pushnew n *found*)
-;;          (find-forest-inner n nodes))))
+  ;; (defun find-forest-inner (node nodes)
+  ;;   (loop for n in (neighbours node nodes) do
+  ;;        (unless (position n *found*)     ; sloooooow!
+  ;;          (pushnew n *found*)
+  ;;          (find-forest-inner n nodes))))
 
-;; (defun find-forest (node1 nodes1)
-;;   (setq *found* nil)
-;;   (find-forest-inner node1 nodes1)
-;;   *found*)
+  ;; (defun find-forest (node1 nodes1)
+  ;;   (setq *found* nil)
+  ;;   (find-forest-inner node1 nodes1)
+  ;;   *found*)
 
-;; (defun in-forests? (node forests)
-;;   (let ((result))
-;;     (loop for f in forests do
-;;          (when (position node f)
-;;            (setq result T)))
-;;     result))
+  ;; (defun in-forests? (node forests)
+  ;;   (let ((result))
+  ;;     (loop for f in forests do
+  ;;          (when (position node f)
+  ;;            (setq result T)))
+  ;;     result))
 
-;; (defun all-even? (forests)
-;;   (let ((res T))
-;;     (loop for f in forests do
-;;          (when (oddp (length f))
-;;            (setq res nil)))
-;;     res))
+  ;; (defun all-even? (forests)
+  ;;   (let ((res T))
+  ;;     (loop for f in forests do
+  ;;          (when (oddp (length f))
+  ;;            (setq res nil)))
+  ;;     res))
 
-;; (defun forests (nodes)
-;;   (let ((fs))
-;;     (loop for v in (vertices nodes) do
-;;          (unless (in-forests? v fs)
-;;            (push (find-forest v nodes) fs)))
-;;     fs))
+  ;; (defun forests (nodes)
+  ;;   (let ((fs))
+  ;;     (loop for v in (vertices nodes) do
+  ;;          (unless (in-forests? v fs)
+  ;;            (push (find-forest v nodes) fs)))
+  ;;     fs))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;; finally return to repl package ;;;;
+
 
 (in-package :common-lisp-user)
 
