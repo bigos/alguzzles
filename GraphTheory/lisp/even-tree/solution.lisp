@@ -59,20 +59,22 @@
   (loop for c in connections
      as i = 0 then (1+ i)
      until (eq node (car c))
-     finally (progn (setf (cadr c) (concatenate 'list (cadr c) appended-nodes))
-                   (return connections))))
+     finally (progn
+               (setf (cadr c) (remove-duplicates
+                               (concatenate 'list (cadr c) appended-nodes)))
+               (return connections))))
 
 (defun move-connections (from to connections)
-  (let ((from-connections (connections-for from connections))
-        (to-connections (connections-for to connections)))
+  (let ((to-connections (connections-for to connections)))
     (setq connections (remove-connections from connections))
-    ;; (setq connections (remove-connections to connections))
-
-    (push (list from (remove-duplicates
-                      (concatenate 'list from-connections to-connections)))
-          connections)
+    (setq connections (append-connections to to-connections connections))
+    (format t "~&~A  ~A~%~A~%" from to to-connections )
     connections))
 
+(defun merge-nodes-for (node connections)
+  (loop for c in (connections-for node connections) do
+       (setq connections (move-connections c node connections))
+     finally (return connections)))
 
   ;; ----------------------------------
   ;; get connections for node 1
