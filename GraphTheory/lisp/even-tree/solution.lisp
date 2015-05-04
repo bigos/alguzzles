@@ -55,14 +55,19 @@
 (defun remove-connections (node connections)
   (remove-if (lambda (x) (eq (car x) node)) connections))
 
+(defun append-connections (node appended-nodes connections)
+  (loop for c in connections
+     as i = 0 then (1+ i)
+     until (eq node (car c))
+     finally (progn (setf (cadr c) (concatenate 'list (cadr c) appended-nodes))
+                   (return connections))))
+
 (defun move-connections (from to connections)
   (let ((from-connections (connections-for from connections))
         (to-connections (connections-for to connections)))
     (setq connections (remove-connections from connections))
     ;; (setq connections (remove-connections to connections))
-    (loop for c in connections
-       until (eq to (car c))
-       finally )
+
     (push (list from (remove-duplicates
                       (concatenate 'list from-connections to-connections)))
           connections)
