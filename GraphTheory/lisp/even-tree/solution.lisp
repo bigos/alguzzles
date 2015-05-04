@@ -47,8 +47,8 @@
     ;;    until (position 9 n) finally (return n))
     forestlings))
 
-(defun connections-for (node vertices)
-  (loop for c in (connections vertices)
+(defun connections-for (node connections)
+  (loop for c in connections
      until (eq node (car c))
      finally (return (cadr c))))
 
@@ -56,16 +56,17 @@
   (remove-if (lambda (x) (eq (car x) node)) connections))
 
 (defun move-connections (from to connections)
-  (format t " ~A~%" connections)
-  (let ((from-connections (caar (connections-for from connections)))
-        (to-connections (caar (connections-for to connections))))
-    (format t "~&from: ~A~%to: ~A~%" from-connections to-connections)
+  (let ((from-connections (connections-for from connections))
+        (to-connections (connections-for to connections)))
     (setq connections (remove-connections from connections))
-    (setq connections (remove-connections to connections))
-
-    (push (list from (list (concatenate 'list from-connections to-connections))) connections)
-
-    (format t "~%~%done: ~A ~A~&~A~%" from-connections to-connections connections)))
+    ;; (setq connections (remove-connections to connections))
+    (loop for c in connections
+       until (eq to (car c))
+       finally )
+    (push (list from (remove-duplicates
+                      (concatenate 'list from-connections to-connections)))
+          connections)
+    connections))
 
 
   ;; ----------------------------------
