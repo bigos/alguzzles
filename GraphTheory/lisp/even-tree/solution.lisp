@@ -57,7 +57,6 @@
 
 (defun append-connections (node appended-nodes connections)
   (loop for c in connections
-     as i = 0 then (1+ i)
      until (eq node (car c))
      finally (progn
                (setf (cadr c) (remove-duplicates
@@ -66,11 +65,18 @@
 
 (defun move-connections (from to connections)
   (let ((from-connections (connections-for from connections)))
-    (setf connections (append-connections to from-connections connections))
-    (setq connections (remove-connections from connections))
+    (unless (eq from to)
+      (setf connections (append-connections to from-connections connections))
+      (setq connections (remove-connections from connections)))
     ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
     connections))
 
+(defun start-looking (connections)
+  (setq *forests* connections))
+
+(defun find-forest-now ()
+  (setq *forests* (move-connections a b *forests*))
+  )
   ;; ----------------------------------
   ;; get connections for node 1
   ;; it's (2)
