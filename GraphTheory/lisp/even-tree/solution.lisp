@@ -71,7 +71,14 @@
     ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
     connections))
 
-  ;; ----------------------------------
+(defun merge-connections (connections)
+  (loop for c in connections do
+       (format nil "~&~A ~A ~A~%" (car c) c (cadr c))
+       (loop for cx in (cadr c) do
+            (move-connections (car c) (cadr c) connections)
+            (format t "~&~A~%" connections))))
+
+;; ----------------------------------
   ;; get connections for node 1
   ;; it's (2)
   ;; put 1 and (2) in found list
