@@ -10,11 +10,13 @@
 (in-package :graph)
 
 (defparameter *original-edges* nil)
+(defparameter *forests* nil)
 
 (defun initialize (edges)
   (format t "~%~A ~%" edges)
   (setq *original-edges* edges)
-  (setq *forests* (connections edges)))
+  (setq *forests* (connections edges))
+  (setq *nodes* (nodes edges)))
 
 (defun nodes (edges)
   (remove-duplicates
@@ -33,8 +35,6 @@
                (push (car edge)  (cadr (elt neighbours found))))
              (push `(,(cdr edge) (,(car edge))) neighbours)))
     neighbours))
-
-(defparameter *forests* nil)
 
 (defun forests (edges)
   (let ((connections (connections edges))
@@ -72,17 +72,7 @@
     ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
     connections))
 
-
-(defun merge-connections (connections)
-  (loop for c in connections do
-       (format nil "~&~A ~A ~A~%" (car c) c (cadr c))
-       (loop for cx in (cadr c) do
-            (move-connections (car c) (cadr c) connections)
-            (format t "~&~A~%" connections))))
-
-
-
-(defun find-forest-now ()
+(defun a2b (a b)
   (setq *forests* (move-connections a b *forests*))
   )
 
