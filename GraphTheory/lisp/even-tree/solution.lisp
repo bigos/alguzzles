@@ -61,9 +61,32 @@
     ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
     connections))
 
+(defun connection-points (connections)
+  (loop for cp in connections collecting (car cp)))
+
+;;; match for the first connection
+(defun find-matching-first (seek connections)
+  (map 'list (lambda (x) (or (equalp (car x) seek)
+                             (position seek (cadr x))))
+       connections))
+
+(defun find-matching-rest (seeks connections)
+  (map 'list
+       (lambda (x)
+         (map 'list
+              (lambda (z) (position z seeks))
+              (cadr x)))
+       connections))
+
 (defun a2b (a b)
-  (setq *forests* (move-connections a b *forests*))
-  )
+  (let ((old-forests *forests*))
+    (setq *forests* (move-connections a b *forests*))
+    (format t "~&~A ~A ~&~A~a~%"
+            *forests*
+            (equalp old-forests *forests*)
+            (connection-points *forests*)
+            (find-matching (caar *forests*) *forests*))
+    ))
 
   ;; ----------------------------------
   ;; get connections for node 1
