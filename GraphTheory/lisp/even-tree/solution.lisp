@@ -70,7 +70,7 @@
                              (position seek (cadr x))))
        connections))
 
-(defun find-matching-rest (seeks connections)
+(defun find-matching-rest (seeks connections) ;stuck again
   (map 'list
        (lambda (x)
          (map 'list
