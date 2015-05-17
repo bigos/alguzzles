@@ -13,7 +13,8 @@
 
 (defun initialize (edges)
   (format t "~%~A ~%" edges)
-  (setq *original-edges* edges))
+  (setq *original-edges* edges)
+  (setq *forests* (connections edges)))
 
 (defun nodes (edges)
   (remove-duplicates
@@ -70,9 +71,6 @@
       (setq connections (remove-connections from connections)))
     ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
     connections))
-
-(defun start-looking (connections)
-  (setq *forests* connections))
 
 (defun find-forest-now ()
   (setq *forests* (move-connections a b *forests*))
