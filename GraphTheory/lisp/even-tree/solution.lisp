@@ -85,8 +85,9 @@
             *forests*
             (equalp old-forests *forests*)
             (connection-points *forests*)
-            (find-matching (caar *forests*) *forests*))
-    ))
+            (find-matching-first (caar *forests*) *forests*)
+            (find-matching-rest (cadar *forests*) *forests*)
+            )))
 
   ;; ----------------------------------
   ;; get connections for node 1
