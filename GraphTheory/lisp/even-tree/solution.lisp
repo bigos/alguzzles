@@ -81,7 +81,7 @@
 (defun a2b (a b)
   (let ((old-forests *forests*))
     (setq *forests* (move-connections a b *forests*))
-    (format t "~&~A ~A ~&~A~a~%"
+    (format t "~&~A ~A ~&~A~&~a~&~A~%"
             *forests*
             (equalp old-forests *forests*)
             (connection-points *forests*)
