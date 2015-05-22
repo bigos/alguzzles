@@ -1,13 +1,8 @@
 ;; (require :sb-sprof)
 
-(declaim (optimize (speed 3)))
+;; (declaim (optimize (speed 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defpackage :graph
-  (:use :common-lisp))
-
-(in-package :graph)
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
@@ -88,62 +83,6 @@
             (find-matching-first (caar *forests*) *forests*)
             (find-matching-rest 0 (cadar *forests*) *forests*)
             )))
-
-  ;; ----------------------------------
-  ;; get connections for node 1
-  ;; it's (2)
-  ;; put 1 and (2) in found list
-  ;; move 2 and its connections to node 1
-  ;; move connections of 2 in found list
-
-  ;; repeat 1 with new connection list
-  ;; until found stays the same
-
-  ;; repeat for another node left in connections of finish
-
-
-(format t "~%finished~%~%")
-
-;;;;;;;;;;;;;;;;; old neighbours code ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;; (defun find-forest-inner (node nodes)
-  ;;   (loop for n in (neighbours node nodes) do
-  ;;        (unless (position n *found*)     ; sloooooow!
-  ;;          (pushnew n *found*)
-  ;;          (find-forest-inner n nodes))))
-
-  ;; (defun find-forest (node1 nodes1)
-  ;;   (setq *found* nil)
-  ;;   (find-forest-inner node1 nodes1)
-  ;;   *found*)
-
-  ;; (defun in-forests? (node forests)
-  ;;   (let ((result))
-  ;;     (loop for f in forests do
-  ;;          (when (position node f)
-  ;;            (setq result T)))
-  ;;     result))
-
-  ;; (defun all-even? (forests)
-  ;;   (let ((res T))
-  ;;     (loop for f in forests do
-  ;;          (when (oddp (length f))
-  ;;            (setq res nil)))
-  ;;     res))
-
-  ;; (defun forests (nodes)
-  ;;   (let ((fs))
-  ;;     (loop for v in (vertices nodes) do
-  ;;          (unless (in-forests? v fs)
-  ;;            (push (find-forest v nodes) fs)))
-  ;;     fs))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;; finally return to repl package ;;;;
-
-
-(in-package :common-lisp-user)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -241,83 +180,83 @@
 
 ;;; REPL
 
-(load "/Users/jacekpodkanski/Documents/hackerrank/GraphTheory/lisp/even-tree/solution.lisp")
+;; (load "/Users/jacekpodkanski/Documents/hackerrank/GraphTheory/lisp/even-tree/solution.lisp")
 
-finished
+;; finished
 
-T
-CL-USER> (graph::initialize (ary))
+;; T
+;; CL-USER> (graph::initialize (ary))
 
-((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (1 . 3) (2 . 1))
-(10 9 8 6 7 5 4 3 2 1)
-CL-USER> (graph::a2b   3 4 )
-((6 (8)) (2 (5 7 1)) (1 (2 3)) (4 (3 1 4)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8))
- (10 (8))) NIL
-(6 2 1 4 5 7 8 9 10)
-(T NIL NIL NIL NIL NIL 2 NIL NIL)
-((0) (NIL NIL NIL) (NIL NIL) (NIL NIL NIL) (NIL) (NIL) (NIL NIL NIL) (0) (0))
-NIL
-CL-USER> (graph::find-matching-rest 0 '(8) graph::*forests*)
-((0) (NIL NIL NIL) (NIL NIL) (NIL NIL NIL) (NIL) (NIL) (NIL NIL NIL) (0) (0))
-CL-USER> (graph::a2b   6 10  )
-((2 (5 7 1)) (1 (2 3)) (4 (3 1 4)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8))
- (10 (8))) NIL
-(2 1 4 5 7 8 9 10)
-(T 0 NIL 0 0 NIL NIL NIL)
-((0 1 2) (NIL NIL) (NIL 2 NIL) (NIL) (NIL) (NIL NIL NIL) (NIL) (NIL))
-NIL
-CL-USER> (graph::find-matching-rest 0 '(5 7 1) graph::*forests*)
-((0 1 2) (NIL NIL) (NIL 2 NIL) (NIL) (NIL) (NIL NIL NIL) (NIL) (NIL))
-CL-USER> (graph::a2b   2 4  )
-((1 (2 3)) (4 (3 4 5 7 1)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
-(1 4 5 7 8 9 10)
-(T 4 NIL NIL NIL NIL NIL)
-((0 1) (1 NIL NIL NIL NIL) (0) (0) (NIL NIL NIL) (NIL) (NIL))
-NIL
-CL-USER> (graph::find-matching-rest 0 '(2 3) graph::*forests*)
-((0 1) (1 NIL NIL NIL NIL) (0) (0) (NIL NIL NIL) (NIL) (NIL))
-CL-USER> (graph::a2b   1 4  )
-((4 (4 5 7 1 2 3)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
-(4 5 7 8 9 10)
-(T NIL NIL NIL NIL NIL)
-((0 1 2 3 4 5) (4) (4) (NIL NIL NIL) (NIL) (NIL))
-NIL
-CL-USER> (graph::find-matching-rest 0 '(4 5 7 1 2 3) graph::*forests*)
-((0 1 2 3 4 5) (4) (4) (NIL NIL NIL) (NIL) (NIL))
-CL-USER> (graph::a2b   4 5  )
-((5 (4 5 7 1 2 3)) (7 (2)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
-(5 7 8 9 10)
-(T NIL NIL NIL NIL)
-((0 1 2 3 4 5) (4) (NIL NIL NIL) (NIL) (NIL))
-NIL
-CL-USER> (graph::find-matching-rest 0 '(4 5 7 1 2 3) graph::*forests*)
-((0 1 2 3 4 5) (4) (NIL NIL NIL) (NIL) (NIL))
-CL-USER> (graph::a2b   5 7  )
-((7 (4 5 7 1 2 3)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
-(7 8 9 10)
-(T NIL NIL NIL)
-((0 1 2 3 4 5) (NIL NIL NIL) (NIL) (NIL))
-NIL
-CL-USER> (graph::find-matching-rest 0 '(4 5 7 1 2 3) graph::*forests*)
-((0 1 2 3 4 5) (NIL NIL NIL) (NIL) (NIL))
-CL-USER> (graph::find-matching-rest 1 '(9 10 6) graph::*forests*)
-((0 1 2) (NIL) (NIL))
-CL-USER> (graph::a2b   8 9  )
-((7 (4 5 7 1 2 3)) (9 (8 9 10 6)) (10 (8))) NIL
-(7 9 10)
-(T NIL NIL)
-((0 1 2 3 4 5) (NIL NIL NIL NIL) (NIL))
-NIL
-CL-USER> (graph::find-matching-rest 1 '(8 9 10 6) graph::*forests*)
-((0 1 2 3) (0))
-CL-USER> (graph::a2b    9 10  )
-((7 (4 5 7 1 2 3)) (10 (8 9 10 6))) NIL
-(7 10)
-(T NIL)
-((0 1 2 3 4 5) (NIL NIL NIL NIL))
-NIL
-CL-USER> (graph::find-matching-rest 1 '(8 9 10 6) graph::*forests*)
-((0 1 2 3))
-CL-USER> (graph::find-matching-rest 0 '(8 9 10 6) graph::*forests*)
-((NIL NIL NIL NIL NIL NIL) (0 1 2 3))
-CL-USER>
+;; ((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (1 . 3) (2 . 1))
+;; (10 9 8 6 7 5 4 3 2 1)
+;; CL-USER> (graph::a2b   3 4 )
+;; ((6 (8)) (2 (5 7 1)) (1 (2 3)) (4 (3 1 4)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8))
+;;  (10 (8))) NIL
+;; (6 2 1 4 5 7 8 9 10)
+;; (T NIL NIL NIL NIL NIL 2 NIL NIL)
+;; ((0) (NIL NIL NIL) (NIL NIL) (NIL NIL NIL) (NIL) (NIL) (NIL NIL NIL) (0) (0))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 0 '(8) graph::*forests*)
+;; ((0) (NIL NIL NIL) (NIL NIL) (NIL NIL NIL) (NIL) (NIL) (NIL NIL NIL) (0) (0))
+;; CL-USER> (graph::a2b   6 10  )
+;; ((2 (5 7 1)) (1 (2 3)) (4 (3 1 4)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8))
+;;  (10 (8))) NIL
+;; (2 1 4 5 7 8 9 10)
+;; (T 0 NIL 0 0 NIL NIL NIL)
+;; ((0 1 2) (NIL NIL) (NIL 2 NIL) (NIL) (NIL) (NIL NIL NIL) (NIL) (NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 0 '(5 7 1) graph::*forests*)
+;; ((0 1 2) (NIL NIL) (NIL 2 NIL) (NIL) (NIL) (NIL NIL NIL) (NIL) (NIL))
+;; CL-USER> (graph::a2b   2 4  )
+;; ((1 (2 3)) (4 (3 4 5 7 1)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
+;; (1 4 5 7 8 9 10)
+;; (T 4 NIL NIL NIL NIL NIL)
+;; ((0 1) (1 NIL NIL NIL NIL) (0) (0) (NIL NIL NIL) (NIL) (NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 0 '(2 3) graph::*forests*)
+;; ((0 1) (1 NIL NIL NIL NIL) (0) (0) (NIL NIL NIL) (NIL) (NIL))
+;; CL-USER> (graph::a2b   1 4  )
+;; ((4 (4 5 7 1 2 3)) (5 (2)) (7 (2)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
+;; (4 5 7 8 9 10)
+;; (T NIL NIL NIL NIL NIL)
+;; ((0 1 2 3 4 5) (4) (4) (NIL NIL NIL) (NIL) (NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 0 '(4 5 7 1 2 3) graph::*forests*)
+;; ((0 1 2 3 4 5) (4) (4) (NIL NIL NIL) (NIL) (NIL))
+;; CL-USER> (graph::a2b   4 5  )
+;; ((5 (4 5 7 1 2 3)) (7 (2)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
+;; (5 7 8 9 10)
+;; (T NIL NIL NIL NIL)
+;; ((0 1 2 3 4 5) (4) (NIL NIL NIL) (NIL) (NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 0 '(4 5 7 1 2 3) graph::*forests*)
+;; ((0 1 2 3 4 5) (4) (NIL NIL NIL) (NIL) (NIL))
+;; CL-USER> (graph::a2b   5 7  )
+;; ((7 (4 5 7 1 2 3)) (8 (9 10 6)) (9 (8)) (10 (8))) NIL
+;; (7 8 9 10)
+;; (T NIL NIL NIL)
+;; ((0 1 2 3 4 5) (NIL NIL NIL) (NIL) (NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 0 '(4 5 7 1 2 3) graph::*forests*)
+;; ((0 1 2 3 4 5) (NIL NIL NIL) (NIL) (NIL))
+;; CL-USER> (graph::find-matching-rest 1 '(9 10 6) graph::*forests*)
+;; ((0 1 2) (NIL) (NIL))
+;; CL-USER> (graph::a2b   8 9  )
+;; ((7 (4 5 7 1 2 3)) (9 (8 9 10 6)) (10 (8))) NIL
+;; (7 9 10)
+;; (T NIL NIL)
+;; ((0 1 2 3 4 5) (NIL NIL NIL NIL) (NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 1 '(8 9 10 6) graph::*forests*)
+;; ((0 1 2 3) (0))
+;; CL-USER> (graph::a2b    9 10  )
+;; ((7 (4 5 7 1 2 3)) (10 (8 9 10 6))) NIL
+;; (7 10)
+;; (T NIL)
+;; ((0 1 2 3 4 5) (NIL NIL NIL NIL))
+;; NIL
+;; CL-USER> (graph::find-matching-rest 1 '(8 9 10 6) graph::*forests*)
+;; ((0 1 2 3))
+;; CL-USER> (graph::find-matching-rest 0 '(8 9 10 6) graph::*forests*)
+;; ((NIL NIL NIL NIL NIL NIL) (0 1 2 3))
+;; CL-USER>
