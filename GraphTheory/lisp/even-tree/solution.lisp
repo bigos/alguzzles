@@ -62,7 +62,7 @@
 ;;; match for the first connection
 (defun find-matching-first (seek connections)
   (map 'list (lambda (x) (or (equalp (car x) seek)
-                             (position seek (cadr x))))
+                             (not (not (position seek (cadr x))))))
        connections))
 
 (defun find-matching-rest (from seeks connections) ;stuck again
