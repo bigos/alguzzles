@@ -66,14 +66,15 @@
        connections))
 
 (defun find-matching-rest (from seeks connections) ;stuck again
-  (map 'list
-       (lambda (x)
-         (map 'list
-              (lambda (z) (position z seeks))
-              (cadr x)))
-       (subseq connections from)))
+  (map 'list (lambda (x) (not (every #'null x)))
+       (map 'list
+            (lambda (x)
+              (map 'list
+                   (lambda (z) (position z seeks))
+                   (cadr x)))
+            (subseq connections from))))
 
-(defun a2b (a b)
+(defun a2b (skip a b)
   (let ((old-forests *forests*))
     (setq *forests* (move-connections a b *forests*))
     (format t "~&~A ~A ~&~A~&~a~&~A~%"
