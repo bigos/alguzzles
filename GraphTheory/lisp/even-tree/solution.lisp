@@ -66,23 +66,25 @@
        (subseq connections from)))
 
 (defun find-matching-rest (from seeks connections) ;stuck again
-  (map 'list (lambda (x) (not (every #'null x)))
-       (map 'list
-            (lambda (x)
-              (map 'list
-                   (lambda (z) (position z seeks))
-                   (cadr x)))
-            (subseq connections from))))
+  (map 'list
+       (lambda (z) (common-els? (cadr z) seeks))
+       (subseq connections from)))
 
-(defun a2b (a b)
-  (let ((old-forests *forests*))
+(defun common-els? (l1 l2)
+  (some  (lambda (x) (if x T nil))
+         (map 'list
+              (lambda (z) (not (null z)))
+              (map 'list (lambda (x) (position x l2)) l1))))
+
+(defun a2b (x a b)
+  (let ((old-forests))
     (setq *forests* (move-connections a b *forests*))
     (format t "~&~A ~A ~&~A~&~a~&~A~%"
             *forests*
             (equalp old-forests *forests*)
             (connection-points *forests*)
-            (find-matching-first 0 (caar *forests*) *forests*)
-            (find-matching-rest 0 (cadar *forests*) *forests*)
+            (find-matching-first x (car (elt *forests* x)) *forests*)
+            (find-matching-rest x (cadr (elt *forests* x)) *forests*)
             )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
