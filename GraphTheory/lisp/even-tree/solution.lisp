@@ -60,10 +60,10 @@
   (loop for cp in connections collecting (car cp)))
 
 ;;; match for the first connection
-(defun find-matching-first (seek connections)
+(defun find-matching-first (from seek connections)
   (map 'list (lambda (x) (or (equalp (car x) seek)
                              (not (not (position seek (cadr x))))))
-       connections))
+       (subseq connections from)))
 
 (defun find-matching-rest (from seeks connections) ;stuck again
   (map 'list (lambda (x) (not (every #'null x)))
@@ -74,14 +74,14 @@
                    (cadr x)))
             (subseq connections from))))
 
-(defun a2b (skip a b)
+(defun a2b (a b)
   (let ((old-forests *forests*))
     (setq *forests* (move-connections a b *forests*))
     (format t "~&~A ~A ~&~A~&~a~&~A~%"
             *forests*
             (equalp old-forests *forests*)
             (connection-points *forests*)
-            (find-matching-first (caar *forests*) *forests*)
+            (find-matching-first 0 (caar *forests*) *forests*)
             (find-matching-rest 0 (cadar *forests*) *forests*)
             )))
 
