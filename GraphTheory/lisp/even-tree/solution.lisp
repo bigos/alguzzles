@@ -76,15 +76,22 @@
               (lambda (z) (not (null z)))
               (map 'list (lambda (x) (position x l2)) l1))))
 
+(defun my-matches (pos)
+  (list
+   (find-matching-first 0 (car (elt *forests* pos)) *forests*)
+   (find-matching-rest 0 (cadr (elt *forests* pos)) *forests*)))
+
 (defun a2b (x a b)
-  (let ((old-forests))
+  (let ((old-forests)
+        (cpts))
     (setq *forests* (move-connections a b *forests*))
+    (setq cpts (connection-points *forests*))
     (format t "~&~A ~A ~&~A~&~a~&~A~%"
             *forests*
             (equalp old-forests *forests*)
-            (connection-points *forests*)
-            (find-matching-first x (car (elt *forests* x)) *forests*)
-            (find-matching-rest x (cadr (elt *forests* x)) *forests*)
+            cpts
+            (find-matching-first 0 (car (elt *forests* x)) *forests*)
+            (find-matching-rest 0 (cadr (elt *forests* x)) *forests*)
             )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
