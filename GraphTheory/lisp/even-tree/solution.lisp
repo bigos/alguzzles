@@ -60,15 +60,19 @@
   (loop for cp in connections collecting (car cp)))
 
 ;;; match for the first connection
-(defun find-matching-first (from seek connections)
-  (map 'list (lambda (x) (or (equalp (car x) seek)
-                             (not (not (position seek (cadr x))))))
-       (subseq connections from)))
+(defun find-matching-first (seek connections)
+  (map 'list (lambda (x) (if (or (equalp (car x) seek)
+                                 (not (not (position seek (cadr x)))))
+                             (car x)
+                             nil))
+       connections))
 
-(defun find-matching-rest (from seeks connections) ;stuck again
+(defun find-matching-rest (seeks connections) ;stuck again
   (map 'list
-       (lambda (z) (common-els? (cadr z) seeks))
-       (subseq connections from)))
+       (lambda (z) (if (common-els? (cadr z) seeks)
+                       (car z)
+                       nil))
+       connections))
 
 (defun common-els? (l1 l2)
   (some  (lambda (x) (if x T nil))
@@ -78,21 +82,30 @@
 
 (defun my-matches (pos)
   (list
-   (find-matching-first 0 (car (elt *forests* pos)) *forests*)
-   (find-matching-rest 0 (cadr (elt *forests* pos)) *forests*)))
+   (find-matching-first (car (elt *forests* pos)) *forests*)
+   (find-matching-rest  (cadr (elt *forests* pos)) *forests*)))
 
-(defun a2b (x a b)
+(defun all-matches ()
+  (loop for x from 0 below (length (connection-points *forests*))
+       do (format t "~a~%~%" (my-matches x))))
+
+(defun a2b (a b)
   (let ((old-forests)
+        (old-cpts (connection-points *forests*))
         (cpts))
-    (setq *forests* (move-connections a b *forests*))
-    (setq cpts (connection-points *forests*))
-    (format t "~&~A ~A ~&~A~&~a~&~A~%"
-            *forests*
-            (equalp old-forests *forests*)
-            cpts
-            (find-matching-first 0 (car (elt *forests* x)) *forests*)
-            (find-matching-rest 0 (cadr (elt *forests* x)) *forests*)
-            )))
+    (if (and (position a old-cpts)
+             (position b old-cpts))
+        (progn
+          (setq *forests* (move-connections a b *forests*))
+          (setq cpts (connection-points *forests*))
+          (format t "~&~A ~A ~&~A~&~a~&~A~%"
+                  *forests*
+                  (equalp old-forests *forests*)
+                  cpts
+                  (find-matching-first (car (elt *forests* 0)) *forests*)
+                  (find-matching-rest  (cadr (elt *forests* 0)) *forests*)))
+        (progn
+          (format t "~&error~%")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
