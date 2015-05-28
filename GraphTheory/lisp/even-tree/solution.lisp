@@ -89,7 +89,10 @@
 
 (defun all-matches ()
   (loop for x from 0 below (length (connection-points *forests*))
-       do (format t "~a~%~%" (my-matches x))))
+     do (format t "~a~%~%" (my-matches x))))
+
+(defun z ()
+  (loop for ))
 
 (defun a2b (a b)
   (let ((old-forests)
