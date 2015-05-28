@@ -82,8 +82,10 @@
 
 (defun my-matches (pos)
   (list
-   (find-matching-first (car (elt *forests* pos)) *forests*)
-   (find-matching-rest  (cadr (elt *forests* pos)) *forests*)))
+   (remove-if #'null
+              (find-matching-first (car (elt *forests* pos)) *forests*))
+   (remove-if #'null
+              (find-matching-rest  (cadr (elt *forests* pos)) *forests*))))
 
 (defun all-matches ()
   (loop for x from 0 below (length (connection-points *forests*))
