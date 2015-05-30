@@ -91,8 +91,11 @@
   (loop for x from 0 below (length (connection-points *forests*))
      do (format t "~a~%~%" (my-matches x))))
 
-(defun z ()
-  (loop for ))
+(defun z (pos)
+  (let ((m (my-matches pos)))
+    (cond ((>= (length (car m)) 2) (apply #'a2b (subseq (car m) 0 2)) T)
+          ((>= (length (cadr m)) 2) (apply #'a2b (subseq (cadr m) 0 2)) T)
+          (T nil))))
 
 (defun a2b (a b)
   (let ((old-forests)
@@ -103,7 +106,8 @@
         (progn
           (setq *forests* (move-connections a b *forests*))
           (setq cpts (connection-points *forests*))
-          (format t "~&~A ~A ~&~A~&~a~&~A~%"
+          (format t "~&~A - ~A : ~A ~A ~&~A~&~a~&~A~%"
+                  a b
                   *forests*
                   (equalp old-forests *forests*)
                   cpts
