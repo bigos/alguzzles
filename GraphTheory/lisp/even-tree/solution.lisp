@@ -9,7 +9,7 @@
 (defparameter *nodes* nil)
 
 (defun initialize (edges)
-  (format t "~%~A ~%" edges)
+  (format nil "~%~A ~%" edges)
   (setq *original-edges* edges)
   (setq *forests* (connections edges))
   (setq *nodes* (nodes edges)))
@@ -96,22 +96,34 @@
      do (format t "~a~%~%" x)))
 
 (defun zap (pos)
-  (let ((m (my-matches pos)))
-    (cond ((>= (length (car m)) 2) (apply #'a2b (subseq (car m) 0 2)) T)
-          ((>= (length (cadr m)) 2) (apply #'a2b (subseq (cadr m) 0 2)) T)
-          (T nil))))
+  (when pos
+    (let ((m (my-matches pos)))
+      (cond ((>= (length (car m)) 2) (apply #'a2b (subseq (car m) 0 2)) T)
+            ((>= (length (cadr m)) 2) (apply #'a2b (subseq (cadr m) 0 2)) T)
+            (T nil)))))
 
 (defun finishedp ()
-  (every (lambda (x) (not (null x)))
-         (map 'list
-              (lambda (x) (and (eq 1 (length (car x)))
-                               (eq 1 (length (cadr x)))))
-              (all-matches))))
+  (map 'list
+       (lambda (x) (and (eq 1 (length (car x)))
+                        (eq 1 (length (cadr x)))))
+       (all-matches)))
 
+(defun all-finishedp ()
+  (every (lambda (x) (not (null x)))
+         (finishedp)))
+
+(defun first-null (nlist)
+  (let ((ll (length nlist)))
+      (loop for x from 0 below ll
+         until (null (elt nlist x))
+         finally (return (if (< x ll) x nil)))))
+
+(defun doit ()
+  (loop
+     until (null (zap (first-null (finishedp))))))
 
 (defun a2b (a b)
-  (let ((old-forests)
-        (old-cpts (connection-points *forests*))
+  (let ((old-cpts (connection-points *forests*))
         (cpts))
     (if (and (position a old-cpts)
              (position b old-cpts))
@@ -151,12 +163,18 @@
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
 
+(defun arr1 ()
+  '((20 . 8) (19 . 1) (18 . 10) (17 . 6) (16 . 6) (15 . 12) (14 . 8)
+    (13 . 7) (12 . 3) (11 . 10) (10 . 7) (9 . 2) (8 . 1) (7 . 1) (6 . 5)
+    (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+
 (defun arr2 ()
   '((30 . 25) (29 . 4) (28 . 27) (27 . 5) (26 . 17) (25 . 21)
     (24 . 12) (23 . 2) (22 . 20) (21 . 15) (20 . 4) (19 . 18)
     (18 . 17) (17 . 1) (16 . 10) (15 . 8) (14 . 2) (13 . 2) (12 . 8)
     (11 . 4) (10 . 4) (9 . 5) (8 . 1) (7 . 4) (6 . 4) (5 . 2) (4 . 3)
     (3 . 2) (2 . 1)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -170,12 +188,15 @@
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
-    (format T "ar is: ~A~%" ar)
-    (format t "~%finished~%" )))
+    (format t "ar is: ~A~%" ar)
+    (initialize ar)
+    (doit)
+    (format T "~A~%"
+            (length (finishedp)))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
-
+;;; still need to add  removing vertices
 (defun repl-main ()
   (let ((path (if(search "chess" (machine-instance))
                  "Documents/hackerrank/"
@@ -184,7 +205,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input2.txt"))
+                                    "input1.txt"))
       (solution s))))
 
 ;; using profiler
