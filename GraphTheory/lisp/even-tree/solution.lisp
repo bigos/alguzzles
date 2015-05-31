@@ -3,6 +3,32 @@
 ;; (declaim (optimize (speed 3)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun comb (m list)
+  (let ((res))
+    (labels ((comb1 (l c m)
+               (when (>= (length l) m)
+                 (if (zerop m) (return-from comb1 (push c res)))
+                 (comb1 (cdr l) c m)
+                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
+      (comb1 list nil m))
+    res))
+
+(defun remove-pairs (n edges)
+  (loop for cc in (comb n edges)
+     with z = edges
+     do
+       (progn
+         (setq z edges)
+         (loop for c in cc
+            do (setq z (remove-if (lambda (x) (equalp x c)) z)))
+         (format t "~&~A~%" z)
+         (initialize z)
+         (doit)
+         (format t "~&~A  ~A~%"
+                 *forests*
+                 (loop for f in *forests*
+                    collect  (1+ (length (cadr f)))))
+         (format t "~D"(length (finishedp))))))
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
@@ -130,7 +156,7 @@
         (progn
           (setq *forests* (move-connections a b *forests*))
           (setq cpts (connection-points *forests*))
-          (format t "~&~A - ~A : ~A ~&~A~&~a~&~A~%"
+          (format nil "~&~A - ~A : ~A ~&~A~&~a~&~A~%"
                   a b
                   *forests*
                   cpts
@@ -191,7 +217,7 @@
     (format t "ar is: ~A~%" ar)
     (initialize ar)
     (doit)
-    (format T "~A~%"
+    (format T "~D~%"
             (length (finishedp)))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
