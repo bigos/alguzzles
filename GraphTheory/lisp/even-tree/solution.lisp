@@ -29,14 +29,27 @@
   *last-found-length*)
 
 ;; usage
-;; (comb 3 '(0 1 2 3 4 5) #'print)
-(defun comb (m list fn)
-  (labels ((comb1 (l c m)
-             (when (>= (length l) m)
-               (if (zerop m) (return-from comb1 (funcall fn c)))
-               (comb1 (cdr l) c m)
-               (comb1 (cdr l) (cons (first l) c) (1- m)))))
-    (comb1 list nil m)))
+;; (comb 3 '(0 1 2 3 4 5))
+(defun comb (m list)
+  (let ((res))
+    (labels ((comb1 (l c m)
+               (when (>= (length l) m)
+                 (if (zerop m) (return-from comb1 (push c res)))
+                 (comb1 (cdr l) c m)
+                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
+      (comb1 list nil m))
+    res))
+
+
+(defun remove-pairs (n pairs)
+  (loop for cc in (comb n pairs)
+     with z = pairs
+     do
+       (progn
+         (setq z pairs)
+         (loop for c in cc
+            do (setq z (remove-if (lambda (x) (equalp x c)) z)))
+         (format t "~A~%" z) )))
 
 (defparameter *last-found-length* 0)
 
