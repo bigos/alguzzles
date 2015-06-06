@@ -15,23 +15,30 @@
 
 (defun remove-pairs (n edges)
   (let ((done))
-      (loop for cc in (comb n edges)
-         with z = edges
-         until done
-         do
-           (progn
-             (setq z edges)
-             (loop for c in cc
-                do (setq z (remove-if (lambda (x) (equalp x c)) z)))
-             (format T "~&~A | ~a   " z cc)
-             (initialize z)
-             (doit)
-             (format t "~&~A -----  ~A~%"
+    (loop for cc in (comb n edges)
+       with z = edges
+       with results
+       with resdone
+       until done
+       do
+         (progn
+           (setq z edges)
+           (loop for c in cc
+              do (setq z (remove-if (lambda (x) (equalp x c)) z)))
+           (format T "~&~A | ~a   " z cc)
+           (initialize z)
+           (doit)
+           (setq results
+                 (map 'list #'evenp (loop for f in *forests*
+                                       collect (length (cadr f)))))
+           (setq resdone (notany #'null results))
+           (when resdone
+             (format t "~&~A -----  ~A ~A~%"
                      *forests*
-                     (map 'list #'evenp (loop for f in *forests*
-                                           collect (length (cadr f)))))
-             (princ "finish me")
-             (format t "~D <<<<<~%"(length cc))))))
+                     results
+                     resdone)
+             (format t "~&~afinish me" cc)
+             (format t "  ~D <<<<<~%"(length cc)))))))
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
