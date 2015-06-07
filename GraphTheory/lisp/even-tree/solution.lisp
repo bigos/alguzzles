@@ -25,12 +25,12 @@
            (setq z edges)
            (loop for c in cc
               do (setq z (remove-if (lambda (x) (equalp x c)) z)))
-           (format T "~&~A | ~a   " z cc)
            (initialize z)
            (doit)
            (setq results
                  (map 'list #'evenp (loop for f in *forests*
                                        collect (length (cadr f)))))
+           (format nil "~&~A | ~a~%" z cc)
            (setq resdone (notany #'null results))
            (when resdone
              (format t "~&~A -----  ~A ~A~%"
