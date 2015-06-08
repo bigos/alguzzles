@@ -19,6 +19,7 @@
        with z = edges
        with results
        with resdone
+       with rescnt = 0
        until done
        do
          (progn
@@ -30,15 +31,15 @@
            (setq results
                  (map 'list #'evenp (loop for f in *forests*
                                        collect (length (cadr f)))))
-           (format nil "~&~A | ~a~%" z cc)
            (setq resdone (notany #'null results))
            (when resdone
-             (format t "~&~A -----  ~A ~A~%"
+             (format T "~& ~a~%" cc)
+             (setq rescnt (max rescnt (length results)))
+             (format T "~&~A -----  ~A ~A~%"
                      *forests*
                      results
                      resdone)
-             (format t "~&~afinish me" cc)
-             (format t "  ~D <<<<<~%"(length cc)))))))
+             (format T "~a   finish me~%~%" rescnt))))))
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
