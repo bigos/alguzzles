@@ -33,9 +33,9 @@
                                        collect (length (cadr f)))))
            (setq resdone (notany #'null results))
            (when resdone
-             (format T "~& ~a~%" cc)
+             (format T "~& removing ~a~%" cc)
              (setq rescnt (max rescnt (length results)))
-             (format T "~&~A -----  ~A ~A~%"
+             (format T "~&got forests~A -----  ~A ~A~%"
                      *forests*
                      results
                      resdone)
@@ -242,7 +242,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input1.txt"))
+                                    "input2.txt"))
       (solution s))))
 
 ;; using profiler
