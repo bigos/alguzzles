@@ -74,6 +74,15 @@
              (push `(,(cdr edge) (,(car edge))) neighbours)))
     neighbours))
 
+;;; need to skip edges that include leaves
+(defun leaves (edges)
+  (remove-if #'null
+             (map 'list
+                  (lambda (x) (if (eq 1 (length (cadr x)))
+                                  (car x)
+                                  nil))
+                  edges)))
+
 (defun connections-for (node connections)
   (loop for c in connections
      until (eq node (car c))
