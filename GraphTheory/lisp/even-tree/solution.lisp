@@ -32,14 +32,19 @@
                  (map 'list #'evenp (loop for f in *forests*
                                        collect (length (cadr f)))))
            (setq resdone (notany #'null results))
-           (when resdone
-             (format T "~& removing ~a~%" cc)
+           (when (and resdone
+                      (> (length *forests*) 1))
+             (format t "~& removing ~a~%" cc)
              (setq rescnt (max rescnt (length results)))
-             (format T "~&got forests~A -----  ~A ~A~%"
+             (format T "~&got forests~A -- ~A ---  ~A ~A~%"
                      *forests*
+                     (length *forests*)
                      results
                      resdone)
-             (format T "~a   finish me~%~%" rescnt))))))
+             (format nil "~a   finish me~%~%" rescnt)))
+       until (and (> (length *forests*) 1)
+                  resdone)
+         )))
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
@@ -225,9 +230,8 @@
          (loop for row below m
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
-    (format t "ar is: ~A~%" ar)
-    (initialize ar)
-    (doit)
+    (format nil "ar is: ~A~%" ar)
+    (remove-pairs 2 ar)
     (format T "~D~%"
             (length (finishedp)))))
 
@@ -242,7 +246,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input2.txt"))
+                                    "input1.txt"))
       (solution s))))
 
 ;; using profiler
