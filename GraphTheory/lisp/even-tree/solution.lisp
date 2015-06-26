@@ -83,6 +83,12 @@
                                   nil))
                   edges)))
 
+(defun without-leaves (edges)
+  (let ((leaves (leaves (connections edges))))
+    (remove-if (lambda (x)  (or (position (car x) leaves)
+                                (position (cdr x) leaves)))
+               edges)))
+
 (defun connections-for (node connections)
   (loop for c in connections
      until (eq node (car c))
