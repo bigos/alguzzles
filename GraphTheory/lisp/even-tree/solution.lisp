@@ -105,8 +105,7 @@
                                                res))
                             (setq res (concatenate 'list
                                                    (list  nx)
-                                                   res))
-                            (format t "~&~A ~A~%" res nx)))
+                                                   res))))
                (setq res (remove-duplicates res))))
       (setq res (push node res))
       (setq res (concatenate 'list (connections-for node connections) res))
@@ -119,9 +118,22 @@
                    (length res))))
     res))
 
-(defun forrests (connections)
-  ;; collection of forrests will go here
-  )
+(defun forrests (edges)
+  (let* ((connections (connections edges))
+         (nodes (nodes edges))
+         (current-forest)
+         (nodes-without-the-forest)
+         (found-forests))
+    (loop do (progn
+               (format t "nodes before ~A --~%" nodes)
+               (setq current-forest (forrest-for (car nodes) connections))
+               (push current-forest found-forests)
+               (loop for a in current-forest do
+                    (setq nodes-without-the-forest (remove-if (lambda (x) (eq a x)) nodes)))
+               (setq nodes nodes-without-the-forest)
+               (format t "nodes after ~A~%" nodes)
+               (format t "forests ~A~%" found-forests))
+         until (null nodes))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
