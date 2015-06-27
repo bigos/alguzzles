@@ -95,107 +95,13 @@
      until (eq node (car c))
      finally (return (cadr c))))
 
-(defun remove-connections (node connections)
-  (remove-if (lambda (x) (eq (car x) node)) connections))
+(defun forrest-for (node connections)
+  ;; forrest for given node
+  )
 
-(defun append-connections (node appended-nodes connections)
-  (loop for c in connections
-     until (eq node (car c))
-     finally (progn
-               (setf (cadr c) (remove-duplicates
-                               (concatenate 'list (cadr c) appended-nodes)))
-               (return connections))))
-
-(defun move-connections (from to connections)
-  (let ((from-connections (connections-for from connections)))
-    (unless (eq from to)
-      (setf connections (append-connections to from-connections connections))
-      (setq connections (remove-connections from connections)))
-    ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
-    connections))
-
-(defun connection-points (connections)
-  (loop for cp in connections collecting (car cp)))
-
-;;; match for the first connection
-(defun find-matching-first (seek connections)
-  (map 'list (lambda (x) (if (or (equalp (car x) seek)
-                                 (not (not (position seek (cadr x)))))
-                             (car x)
-                             nil))
-       connections))
-
-(defun find-matching-rest (seeks connections) ;stuck again
-  (map 'list
-       (lambda (z) (if (common-els? (cadr z) seeks)
-                       (car z)
-                       nil))
-       connections))
-
-(defun common-els? (l1 l2)
-  (some  (lambda (x) (if x T nil))
-         (map 'list
-              (lambda (z) (not (null z)))
-              (map 'list (lambda (x) (position x l2)) l1))))
-
-(defun my-matches (pos)
-  (list
-   (remove-if #'null
-              (find-matching-first (car (elt *forests* pos)) *forests*))
-   (remove-if #'null
-              (find-matching-rest  (cadr (elt *forests* pos)) *forests*))))
-
-(defun all-matches ()
-  (loop for x from 0 below (length (connection-points *forests*))
-     collect (my-matches x)))
-
-(defun all-matches-print ()
-  (loop for x  in (all-matches)
-     do (format t "~a~%~%" x)))
-
-(defun zap (pos)
-  (when pos
-    (let ((m (my-matches pos)))
-      (cond ((>= (length (car m)) 2) (apply #'a2b (subseq (car m) 0 2)) T)
-            ((>= (length (cadr m)) 2) (apply #'a2b (subseq (cadr m) 0 2)) T)
-            (T nil)))))
-
-(defun finishedp ()
-  (map 'list
-       (lambda (x) (and (eq 1 (length (car x)))
-                        (eq 1 (length (cadr x)))))
-       (all-matches)))
-
-(defun all-finishedp ()
-  (every (lambda (x) (not (null x)))
-         (finishedp)))
-
-(defun first-null (nlist)
-  (let ((ll (length nlist)))
-      (loop for x from 0 below ll
-         until (null (elt nlist x))
-         finally (return (if (< x ll) x nil)))))
-
-(defun doit ()
-  (loop
-     until (null (zap (first-null (finishedp))))))
-
-(defun a2b (a b)
-  (let ((old-cpts (connection-points *forests*))
-        (cpts))
-    (if (and (position a old-cpts)
-             (position b old-cpts))
-        (progn
-          (setq *forests* (move-connections a b *forests*))
-          (setq cpts (connection-points *forests*))
-          (format nil "~&~A - ~A : ~A ~&~A~&~a~&~A~%"
-                  a b
-                  *forests*
-                  cpts
-                  (find-matching-first (car (elt *forests* 0)) *forests*)
-                  (find-matching-rest  (cadr (elt *forests* 0)) *forests*)))
-        (progn
-          (format t "~&error~%")))))
+(defun forrests (connections)
+  ;; collection of forrests will go here
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
