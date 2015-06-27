@@ -15,7 +15,7 @@
 
 (defun remove-pairs (n edges)
   (let ((done))
-    (loop for cc in (comb n edges)
+    (loop for cc in (comb n (without-leaves edges))
        with z = edges
        with results
        with resdone
@@ -41,10 +41,11 @@
                      (length *forests*)
                      results
                      resdone)
-             (format nil "~a   finish me~%~%" rescnt)))
+             (format nil "~a   finish me~%~%" rescnt)
+             ))
        until (and (> (length *forests*) 1)
                   resdone)
-         )))
+       finally (return resdone) )))
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
@@ -246,9 +247,12 @@
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
     (format nil "ar is: ~A~%" ar)
-    (remove-pairs 2 ar)
-    (format T "~D~%"
-            (length (finishedp)))))
+    (loop for x
+       from (length (without-leaves ar))
+       downto 1
+       until (remove-pairs x ar)
+       finally (princ x))
+    ))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -261,7 +265,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input1.txt"))
+                                    "input3.txt"))
       (solution s))))
 
 ;; using profiler
