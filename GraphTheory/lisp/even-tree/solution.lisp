@@ -96,8 +96,28 @@
      finally (return (cadr c))))
 
 (defun forrest-for (node connections)
-  ;; forrest for given node
-  )
+  (let ((res) (len-res))
+    (labels ((doit (n)
+               (loop for nx in (connections-for n connections)
+                  do (progn (setq res
+                                  (concatenate 'list
+                                               (connections-for nx connections)
+                                               res))
+                            (setq res (concatenate 'list
+                                                   (list  nx)
+                                                   res))
+                            (format t "~&~A ~A~%" res nx)))
+               (setq res (remove-duplicates res))))
+      (setq res (push node res))
+      (setq res (concatenate 'list (connections-for node connections) res))
+      (setq res (remove-duplicates res))
+      (setq len-res (length res))
+      (loop for na in res
+         do
+           (doit na)
+         until (eq len-res
+                   (length res))))
+    res))
 
 (defun forrests (connections)
   ;; collection of forrests will go here
