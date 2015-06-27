@@ -1,6 +1,203 @@
 ;; (require :sb-sprof)
 
-(declaim (optimize (speed 3)))
+;; (declaim (optimize (speed 3)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun comb (m list)
+  (let ((res))
+    (labels ((comb1 (l c m)
+               (when (>= (length l) m)
+                 (if (zerop m) (return-from comb1 (push c res)))
+                 (comb1 (cdr l) c m)
+                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
+      (comb1 list nil m))
+    res))
+
+(defun remove-pairs (n edges)
+  (let ((done))
+    (loop for cc in (comb n (without-leaves edges))
+       with z = edges
+       with results
+       with resdone
+       with rescnt = 0
+       until done
+       do
+         (progn
+           (setq z edges)
+           (loop for c in cc
+              do (setq z (remove-if (lambda (x) (equalp x c)) z)))
+           (initialize z)
+           (doit)
+           (setq results
+                 (map 'list #'evenp (loop for f in *forests*
+                                       collect (length (cadr f)))))
+           (setq resdone (notany #'null results))
+           (when (and resdone
+                      (> (length *forests*) 1))
+             (format t "~& removing ~a~%" cc)
+             (setq rescnt (max rescnt (length results)))
+             (format T "~&got forests~A -- ~A ---  ~A ~A~%"
+                     *forests*
+                     (length *forests*)
+                     results
+                     resdone)
+             (format nil "~a   finish me~%~%" rescnt)
+             ))
+       until (and (> (length *forests*) 1)
+                  resdone)
+       finally (return resdone) )))
+
+(defparameter *original-edges* nil)
+(defparameter *forests* nil)
+(defparameter *nodes* nil)
+
+(defun initialize (edges)
+  (format nil "~%~A ~%" edges)
+  (setq *original-edges* edges)
+  (setq *forests* (connections edges))
+  (setq *nodes* (nodes edges)))
+
+(defun nodes (edges)
+  (remove-duplicates
+   (loop for edge in edges
+      collect (car edge)
+      collect (cdr edge))))
+
+(defun connections (edges)
+  (let ((neighbours) (found))
+    (loop for edge in edges do
+         (unless (setq found (position (car edge) neighbours :key 'car))
+           (push `(,(car edge) (,(cdr edge))) neighbours)))
+    (loop for edge in edges do
+         (if (setq found (position (cdr edge) neighbours :key 'car))
+             (unless (position (car edge) (cadr (elt neighbours found)))
+               (push (car edge)  (cadr (elt neighbours found))))
+             (push `(,(cdr edge) (,(car edge))) neighbours)))
+    neighbours))
+
+;;; need to skip edges that include leaves
+(defun leaves (edges)
+  (remove-if #'null
+             (map 'list
+                  (lambda (x) (if (eq 1 (length (cadr x)))
+                                  (car x)
+                                  nil))
+                  edges)))
+
+(defun without-leaves (edges)
+  (let ((leaves (leaves (connections edges))))
+    (remove-if (lambda (x)  (or (position (car x) leaves)
+                                (position (cdr x) leaves)))
+               edges)))
+
+(defun connections-for (node connections)
+  (loop for c in connections
+     until (eq node (car c))
+     finally (return (cadr c))))
+
+(defun remove-connections (node connections)
+  (remove-if (lambda (x) (eq (car x) node)) connections))
+
+(defun append-connections (node appended-nodes connections)
+  (loop for c in connections
+     until (eq node (car c))
+     finally (progn
+               (setf (cadr c) (remove-duplicates
+                               (concatenate 'list (cadr c) appended-nodes)))
+               (return connections))))
+
+(defun move-connections (from to connections)
+  (let ((from-connections (connections-for from connections)))
+    (unless (eq from to)
+      (setf connections (append-connections to from-connections connections))
+      (setq connections (remove-connections from connections)))
+    ;; (format t "~&~A  ~A~%~A~%" from to from-connections )
+    connections))
+
+(defun connection-points (connections)
+  (loop for cp in connections collecting (car cp)))
+
+;;; match for the first connection
+(defun find-matching-first (seek connections)
+  (map 'list (lambda (x) (if (or (equalp (car x) seek)
+                                 (not (not (position seek (cadr x)))))
+                             (car x)
+                             nil))
+       connections))
+
+(defun find-matching-rest (seeks connections) ;stuck again
+  (map 'list
+       (lambda (z) (if (common-els? (cadr z) seeks)
+                       (car z)
+                       nil))
+       connections))
+
+(defun common-els? (l1 l2)
+  (some  (lambda (x) (if x T nil))
+         (map 'list
+              (lambda (z) (not (null z)))
+              (map 'list (lambda (x) (position x l2)) l1))))
+
+(defun my-matches (pos)
+  (list
+   (remove-if #'null
+              (find-matching-first (car (elt *forests* pos)) *forests*))
+   (remove-if #'null
+              (find-matching-rest  (cadr (elt *forests* pos)) *forests*))))
+
+(defun all-matches ()
+  (loop for x from 0 below (length (connection-points *forests*))
+     collect (my-matches x)))
+
+(defun all-matches-print ()
+  (loop for x  in (all-matches)
+     do (format t "~a~%~%" x)))
+
+(defun zap (pos)
+  (when pos
+    (let ((m (my-matches pos)))
+      (cond ((>= (length (car m)) 2) (apply #'a2b (subseq (car m) 0 2)) T)
+            ((>= (length (cadr m)) 2) (apply #'a2b (subseq (cadr m) 0 2)) T)
+            (T nil)))))
+
+(defun finishedp ()
+  (map 'list
+       (lambda (x) (and (eq 1 (length (car x)))
+                        (eq 1 (length (cadr x)))))
+       (all-matches)))
+
+(defun all-finishedp ()
+  (every (lambda (x) (not (null x)))
+         (finishedp)))
+
+(defun first-null (nlist)
+  (let ((ll (length nlist)))
+      (loop for x from 0 below ll
+         until (null (elt nlist x))
+         finally (return (if (< x ll) x nil)))))
+
+(defun doit ()
+  (loop
+     until (null (zap (first-null (finishedp))))))
+
+(defun a2b (a b)
+  (let ((old-cpts (connection-points *forests*))
+        (cpts))
+    (if (and (position a old-cpts)
+             (position b old-cpts))
+        (progn
+          (setq *forests* (move-connections a b *forests*))
+          (setq cpts (connection-points *forests*))
+          (format nil "~&~A - ~A : ~A ~&~A~&~a~&~A~%"
+                  a b
+                  *forests*
+                  cpts
+                  (find-matching-first (car (elt *forests* 0)) *forests*)
+                  (find-matching-rest  (cadr (elt *forests* 0)) *forests*)))
+        (progn
+          (format t "~&error~%")))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -12,120 +209,22 @@
   (map 'list
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun split-inner (gr e)
-  ;; (format nil "~A~%" e)
-  (let* ((new-forest (delete-pairs gr e))
-         (forests (forests new-forest)))
-    (when (and (all-even? forests)
-               (eq (length (vertices gr))
-                   (apply #'+  (map 'list #'length forests))))
-        ;; (format T "------ ~A ~a ~%~%" e new-forest)
-        (setq *last-found-length* (length  e)))))
+(defun arx ()
+  '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
 
-;; this is the way to go
-(defun split-to-forests (gr)
-  (subsequences gr (lambda (x) (split-inner gr x)))
-  *last-found-length*)
-
-;; usage
-;; (comb 3 '(0 1 2 3 4 5))
-(defun comb (m list)
-  (let ((res))
-    (labels ((comb1 (l c m)
-               (when (>= (length l) m)
-                 (if (zerop m) (return-from comb1 (push c res)))
-                 (comb1 (cdr l) c m)
-                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
-      (comb1 list nil m))
-    res))
-
-
-(defun remove-pairs (n pairs)
-  (loop for cc in (comb n pairs)
-     with z = pairs
-     do
-       (progn
-         (setq z pairs)
-         (loop for c in cc
-            do (setq z (remove-if (lambda (x) (equalp x c)) z)))
-         (format t "~A~%" z) )))
-
-(defparameter *last-found-length* 0)
-
-(defun subsequences (list fn)
-  (loop for l from 1 below (length list)
-     until (> l (+ *last-found-length* 1))
-     do
-       ;; (sb-ext:gc :full t)
-       (comb l list fn)))
-
-(defun eq-pair (pair1 pair2)
-  (or
-   (and (eq (car pair1) (car pair2))
-        (eq (cdr pair1) (cdr pair2)))
-   (and (eq (car pair1) (cdr pair2))
-        (eq (cdr pair1) (car pair2)))))
-
-(defun delete-pairs (lst pairs)
-  (loop for pair in pairs do
-       (setq lst (remove-if (lambda (x) (eq-pair x pair)) lst))
-       )
-  lst)
-
-(defun connections (gr)
-  (loop for v in (vertices gr)
-     collect (list v (neighbours v gr))))
-
-(defun remove-pair (lst pair)
-  (remove-if (lambda (x) (eq-pair x pair)) lst))
-
-(defun neighbours (node nodes)
-  (loop for n in nodes
-     when (eq node (car n)) collect (cdr n)
-     when (eq node (cdr n)) collect (car n)))
-
-(defun vertices (nodes)
-  (remove-duplicates
-   (loop for n in nodes
-      append (list (car n) (cdr n)))))
-
-(defparameter *found* nil)
-
-(defun find-forest-inner (node nodes)
-  (loop for n in (neighbours node nodes) do
-       (unless (position n *found*)     ; sloooooow!
-         (pushnew n *found*)
-         (find-forest-inner n nodes))))
-
-(defun find-forest (node1 nodes1)
-  (setq *found* nil)
-  (find-forest-inner node1 nodes1)
-  *found*)
-
-(defun in-forests? (node forests)
-  (let ((result))
-    (loop for f in forests do
-         (when (position node f)
-           (setq result T)))
-    result))
-
-(defun all-even? (forests)
-  (let ((res T))
-    (loop for f in forests do
-         (when (oddp (length f))
-           (setq res nil)))
-    res))
-
-(defun forests (nodes)
-  (let ((fs))
-    (loop for v in (vertices nodes) do
-         (unless (in-forests? v fs)
-           (push (find-forest v nodes) fs)))
-    fs))
+;;; two forests 6 8 9 10 & 1 2 3 4 5 7
+(defun ary ()
+  '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (1 . 3) (2 . 1)))
 
 (defun arr ()
   '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (6 . 1) (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
+
+(defun arr1 ()
+  '((20 . 8) (19 . 1) (18 . 10) (17 . 6) (16 . 6) (15 . 12) (14 . 8)
+    (13 . 7) (12 . 3) (11 . 10) (10 . 7) (9 . 2) (8 . 1) (7 . 1) (6 . 5)
+    (5 . 2) (4 . 3) (3 . 1) (2 . 1)))
 
 (defun arr2 ()
   '((30 . 25) (29 . 4) (28 . 27) (27 . 5) (26 . 17) (25 . 21)
@@ -134,9 +233,8 @@
     (11 . 4) (10 . 4) (9 . 5) (8 . 1) (7 . 4) (6 . 4) (5 . 2) (4 . 3)
     (3 . 2) (2 . 1)))
 
-;; (defun splitters () '((3 . 1) (6 . 1)))
-;; (defun split-arr () '((10 . 8) (9 . 8) (8 . 6) (7 . 2) (5 . 2) (4 . 3) (2 . 1)))
-;; (defun dynamic-split-arr () (delete-pairs (arr) (splitters)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
   (let* ((dd (split-and-parse (read-line stream)))
@@ -149,11 +247,16 @@
             collecting (split-and-parse (read-line stream)))
        do (push (cons (car x) (cadr x)) ar))
     (format nil "ar is: ~A~%" ar)
-    (format t "~A~%" (split-to-forests ar))))
+    (loop for x
+       from (length (without-leaves ar))
+       downto 1
+       until (remove-pairs x ar)
+       finally (princ x))
+    ))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
-
+;;; still need to add  removing vertices
 (defun repl-main ()
   (let ((path (if(search "chess" (machine-instance))
                  "Documents/hackerrank/"
@@ -162,7 +265,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input2.txt"))
+                                    "input3.txt"))
       (solution s))))
 
 ;; using profiler
