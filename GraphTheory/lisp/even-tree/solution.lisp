@@ -16,36 +16,21 @@
 (defun remove-pairs (n edges)
   (let ((done))
     (loop for cc in (comb n (without-leaves edges))
-       with z = edges
-       with results
-       with resdone
-       with rescnt = 0
+       with z
+       with forrests
+       do (progn
+            (setq z edges)
+            (loop for c in cc
+               do (setq z (remove-if (lambda (x) (equalp x c)) z))
+               finally (setq forrests (forrests z)))
+            (setq done (notany #'null
+                               (map 'list
+                                    (lambda (x) (evenp (length x)))
+                                    forrests))))
        until done
-       do
-         (progn
-           (setq z edges)
-           (loop for c in cc
-              do (setq z (remove-if (lambda (x) (equalp x c)) z)))
-           (initialize z)
-           (doit)
-           (setq results
-                 (map 'list #'evenp (loop for f in *forests*
-                                       collect (length (cadr f)))))
-           (setq resdone (notany #'null results))
-           (when (and resdone
-                      (> (length *forests*) 1))
-             (format t "~& removing ~a~%" cc)
-             (setq rescnt (max rescnt (length results)))
-             (format T "~&got forests~A -- ~A ---  ~A ~A~%"
-                     *forests*
-                     (length *forests*)
-                     results
-                     resdone)
-             (format nil "~a   finish me~%~%" rescnt)
-             ))
-       until (and (> (length *forests*) 1)
-                  resdone)
-       finally (return resdone) )))
+       finally (return (if done
+                           (list forrests "-" cc)
+                           nil)))))
 
 (defparameter *original-edges* nil)
 (defparameter *forests* nil)
@@ -200,7 +185,7 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/even-tree/"
-                                    "input3.txt"))
+                                    "input7.txt"))
       (solution s))))
 
 ;; using profiler
