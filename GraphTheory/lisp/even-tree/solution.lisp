@@ -13,23 +13,24 @@
       (comb1 list nil m))
     res))
 
+;;; this one causes time out problems, has exponential Big O
 (defun remove-pairs (n edges)
   (let ((done))
     (loop for cc in (comb n (without-leaves edges))
        with z
-       with forrests
+       with forests
        do (progn
             (setq z edges)
             (loop for c in cc
                do (setq z (remove-if (lambda (x) (equalp x c)) z))
-               finally (setq forrests (forrests z)))
+               finally (setq forests (forests z)))
             (setq done (notany #'null
                                (map 'list
                                     (lambda (x) (evenp (length x)))
-                                    forrests))))
+                                    forests))))
        until done
        finally (return (if done
-                           (list forrests "-" cc)
+                           (list forests "-" cc)
                            nil)))))
 
 (defparameter *original-edges* nil)
@@ -80,7 +81,7 @@
      until (eq node (car c))
      finally (return (cadr c))))
 
-(defun forrest-for (node edges)
+(defun forest-for (node edges)
   (let ((connections (connections edges))
         (visited))
     (labels ((find-forest (n)
@@ -90,12 +91,12 @@
       (find-forest node)
       visited)))
 
-(defun forrests (edges)
+(defun forests (edges)
   (let* ((nodes (nodes edges))
          (current-forest)
          (found-forests))
     (loop do (progn
-               (setq current-forest (forrest-for (car nodes) edges))
+               (setq current-forest (forest-for (car nodes) edges))
                (push current-forest found-forests)
                (loop for a in current-forest
                   do
