@@ -18,11 +18,16 @@
          (snakes))
     (format t "~A~%" test-cases)
     (dotimes (tc test-cases )
+      (format t " --------------- ~%")
       (setq ladders (parse-integer (read-line stream)))
+      (format t "~a ladders ~%" ladders)
       (dotimes (l ladders)
+        (format t "~A~%"  (split-and-parse (read-line stream)))
         )
       (setq snakes (parse-integer (read-line stream)))
-      (dotimes (s snakes)))))
+      (format t "~a snakes ~%" snakes)
+      (dotimes (s snakes)
+        (format t "~A~%"  (split-and-parse (read-line stream)))))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
