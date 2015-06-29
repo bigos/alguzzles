@@ -13,21 +13,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let* ((test-cases (parse-integer (read-line stream)))
-         (ladders)
-         (snakes))
+  (let* ((test-cases (parse-integer (read-line stream))) (zzz)
+         (ladders) (ll)
+         (snakes) (ss))
     (format t "~A~%" test-cases)
     (dotimes (tc test-cases )
       (format t " --------------- ~%")
       (setq ladders (parse-integer (read-line stream)))
       (format t "~a ladders ~%" ladders)
-      (dotimes (l ladders)
-        (format t "~A~%"  (split-and-parse (read-line stream)))
-        )
+      (setq ll (loop for l from 0 below ladders
+                  collecting (split-and-parse (read-line stream))))
       (setq snakes (parse-integer (read-line stream)))
       (format t "~a snakes ~%" snakes)
-      (dotimes (s snakes)
-        (format t "~A~%"  (split-and-parse (read-line stream)))))))
+      (setq ss (loop for s from 0 below snakes
+                  collecting (split-and-parse (read-line stream))))
+      (setq zzz   (nconc zzz (list (list  ll  ss)))))
+    (format t "qqqqqqqqqqqq ~A~%"  zzz)  ))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
