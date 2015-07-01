@@ -1,12 +1,15 @@
 import Control.Monad
 import Data.List
 
+getCaseData = do
+  count <- readLn :: IO Int
+  theData <- replicateM count getLine
+  return (count, theData)
+
 getCases = do
-  ladders <- readLn :: IO Int
-  ladderData <- replicateM ladders getLine
-  snakes <- readLn :: IO Int
-  snakeData <- replicateM snakes getline
-  return (ladders, ladderData, snakes, snakeData)
+  ladders <- getCaseData
+  snakes <- getCaseData
+  return (fst ladders, snd ladders, fst snakes, snd snakes)
 
 main :: IO ()
 main = do
