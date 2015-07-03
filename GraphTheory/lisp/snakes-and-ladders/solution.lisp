@@ -1,3 +1,15 @@
+(defun move-piece (edges start end moves)
+  (if (termination)
+      (princ done)
+      (loop for dice from 1 to 6
+         do (move-piece edges end (+ dice end) (1+ moves)))))
+
+(defun find-shortest (edges)
+  (loop for dice from 1 to 6
+     do (progn
+          (move-piece (edges 1 d 0)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun children-of (n edges)
   (loop for e in edges when (eq  (car e) n) collect (cadr e)))
 
@@ -14,8 +26,8 @@
                        ladders
                        snakes)))
     (format t "~&edges ~A~%" edges)
-    (format t "connections ~A~%" (connections edges)))
-  )
+    (format t "connections ~A~%" (connections edges))
+    (find-shortest edges)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
