@@ -1,3 +1,7 @@
+(defun remove-first (n numbers &optional nx )
+
+)
+
 (defun move-piece (edges start end moves)
   (if (termination)
       (princ done)
