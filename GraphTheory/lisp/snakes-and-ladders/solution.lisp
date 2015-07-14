@@ -1,18 +1,18 @@
-(defun remove-inner (n beginning ending)
-  (format t "~A ~A ~A ~A~%" beginning ending (car ending) ( append beginning (list (car ending))))
-  (block nil
-    (if (eq n (car ending))
-        (return (append beginning (cdr ending)))
-        (remove-inner n
-                      (if beginning
-                          (append beginning (list (car ending)))
-                          (list (car ending)))
-                      (cdr ending)))))
+;; (defun remove-inner (n beginning ending)
+;;   (format t "~A ~A ~A ~A~%" beginning ending (car ending) ( append beginning (list (car ending))))
+;;   (block nil
+;;     (if (eq n (car ending))
+;;         (return (append beginning (cdr ending)))
+;;         (remove-inner n
+;;                       (if beginning
+;;                           (append beginning (list (car ending)))
+;;                           (list (car ending)))
+;;                       (cdr ending)))))
 
-(defun remove-first (n ens)
-  (remove-inner n '() ens))
+;; (defun remove-first (n ens)
+;;   (remove-inner n '() ens))
 
-;;;
+
 
 (defun children-of (n edges)
   (loop for e in edges when (eq  (car e) n) collect (cadr e)))
