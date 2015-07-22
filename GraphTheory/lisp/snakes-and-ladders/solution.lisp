@@ -12,7 +12,7 @@
 ;; (defun remove-first (n ens)
 ;;   (remove-inner n '() ens))
 
-
+;; Please work correctly !!!
 
 (defun node-type (node)
   (if (> (length (cadr node)) 1)
@@ -26,11 +26,11 @@
   (> moves 3))
 
 (defun move-piece (edges start end moves)
-  (format T
-          "~&arguments - start: ~a, end: ~a, moves: ~a    ~a~%"
-          start end moves (- end start))
+  ;; (format T
+  ;; "~&arguments - start: ~a, end: ~a, moves: ~a    ~a~%"
+  ;; start end moves (- end start))
   (if (termination moves)
-      (princ "done")
+      (princ "")
       (loop for dice from 1 to 6
          do (move-piece edges end (+ dice end) (1+ moves)))))
 
@@ -52,6 +52,7 @@
   (loop for x from 1 below 100
        collecting (list x (1+ x))))
 
+;; (solve-me (ladders-1) (snakes-1))
 (defun solve-me (ladders snakes)
   (let ((edges (append (boustrophedon)
                        ladders
@@ -81,6 +82,12 @@
     (92 (93)) (93 (94)) (94 (95)) (95 (96)) (96 (97)) (97 (98))
     (98 (99)) (99 (100)) (100 NIL)))
 
+(defun ladders-1 ()
+  '((8 52) (6 80) (26 42) (2 72)))
+
+(defun snakes-1 ()
+  '((51 19) (39 11) (37 29) (81 3) (59 5) (79 23) (53 7) (43 33) (77 21)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -106,6 +113,7 @@
       (setq snakes (parse-integer (read-line stream)))
       (setq ss (loop for s from 0 below snakes
                   collecting (split-and-parse (read-line stream))))
+      (format t "ladders ~A~%snakes ~A~%" ll ss)
       (solve-me ll ss))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
