@@ -12,7 +12,6 @@
 ;; (defun remove-first (n ens)
 ;;   (remove-inner n '() ens))
 
-;; Please work correctly !!!
 
 (defun node-type (node)
   (if (> (length (cadr node)) 1)
