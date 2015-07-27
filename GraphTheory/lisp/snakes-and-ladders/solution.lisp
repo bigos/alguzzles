@@ -39,6 +39,8 @@
        (move-piece edges 1 dice 0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun sort-snakes ()
+  (sort (snakes-1) '< :key 'car))
 
 (defun children-of (n edges)
   (loop for e in edges when (eq  (car e) n) collect (cadr e)))
