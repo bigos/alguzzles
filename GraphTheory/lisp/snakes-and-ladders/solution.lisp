@@ -1,3 +1,6 @@
+;;; lisp search algirithms
+;;;http://aima.cs.berkeley.edu/lisp/search/algorithms/simple.lisp
+
 ;; (defun remove-inner (n beginning ending)
 ;;   (format t "~A ~A ~A ~A~%" beginning ending (car ending) ( append beginning (list (car ending))))
 ;;   (block nil
