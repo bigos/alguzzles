@@ -1,3 +1,6 @@
+;;; breadth first search
+;;; https://gist.github.com/plonk/9330299
+
 ;;; lisp search algirithms
 ;;;http://aima.cs.berkeley.edu/lisp/search/algorithms/simple.lisp
 
