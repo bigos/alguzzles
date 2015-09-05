@@ -12,6 +12,26 @@
 ;; (defun remove-first (n ens)
 ;;   (remove-inner n '() ens))
 
+;;; pseudocode
+; given I am at last step N
+;  I can come from from steps N-1 to N-6 and ladder tops pointing to N
+;    provided any of these steps is not a snake mouth
+
+;; given I am at first step S
+;; I can go to S+1 to S+6 or top of a ladder if S is bottom of a ladder
+;; provided
+;; z
+
+;;; pseudoworking
+(if (visitedp)
+    (terminate)
+    (if (ladder-bottom-p)
+        (go-to ladder-top)
+        (if (snake-top-p)
+            (go-to snake-bottom)
+            (go-to (steps 1+s to 6+s)))))
+
+
 
 (defun node-type (node)
   (if (> (length (cadr node)) 1)
