@@ -5,15 +5,25 @@
 ;; z
 
 ;;; pseudoworking
-(if (visitedp)
-    (terminate)
-    (if (ladder-bottom-p)
-        (go-to ladder-top)
-        (if (snake-top-p)
-            (go-to snake-bottom)
-            (go-to (steps 1+s to 6+s)))))
+(defun pseudo (n)
+  (if (visited-p n)
+      (terminate "nop")
+      (if (destination-p n)
+          (finish "done")
+          (if (ladder-bottom-p)
+              (go-to ladder-top)
+              (if (snake-top-p)
+                  (go-to snake-bottom)
+                  (go-to (steps 1+s to 6+s)))))))
 
 
+(defparameter *visited* nil)
+
+(defun visited-p (n)
+  (find n *visited*))
+
+(defun add-to-visited (n)
+  (push n *visited*))
 
 (defun node-type (node)
   (when (> (length (cadr node)) 1)
@@ -21,9 +31,6 @@
              (cadadr node))
           'snake
           'ladder)))
-
-(defun termination (moves)
-  (> moves 3))
 
 (defun move-piece (edges start end moves)
   ;; (format T
