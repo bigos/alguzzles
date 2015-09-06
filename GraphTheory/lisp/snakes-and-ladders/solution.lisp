@@ -1,31 +1,7 @@
-;;; breadth first search
-;;; https://gist.github.com/plonk/9330299
-
-;;; lisp search algirithms
-;;;http://aima.cs.berkeley.edu/lisp/search/algorithms/simple.lisp
-
-;; (defun remove-inner (n beginning ending)
-;;   (format t "~A ~A ~A ~A~%" beginning ending (car ending) ( append beginning (list (car ending))))
-;;   (block nil
-;;     (if (eq n (car ending))
-;;         (return (append beginning (cdr ending)))
-;;         (remove-inner n
-;;                       (if beginning
-;;                           (append beginning (list (car ending)))
-;;                           (list (car ending)))
-;;                       (cdr ending)))))
-
-;; (defun remove-first (n ens)
-;;   (remove-inner n '() ens))
-
 ;;; pseudocode
-; given I am at last step N
-;  I can come from from steps N-1 to N-6 and ladder tops pointing to N
-;    provided any of these steps is not a snake mouth
-
 ;; given I am at first step S
 ;; I can go to S+1 to S+6 or top of a ladder if S is bottom of a ladder
-;; provided
+;; provided S is not mouth of a snake
 ;; z
 
 ;;; pseudoworking
@@ -40,12 +16,11 @@
 
 
 (defun node-type (node)
-  (if (> (length (cadr node)) 1)
+  (when (> (length (cadr node)) 1)
       (if (> (caadr node)
              (cadadr node))
           'snake
-          'ladder)
-      'normal))
+          'ladder)))
 
 (defun termination (moves)
   (> moves 3))
