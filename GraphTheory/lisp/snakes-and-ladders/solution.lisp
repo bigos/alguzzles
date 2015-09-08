@@ -7,6 +7,7 @@
 ;;; pseudoworking
 (defun pseudo (n ladders snakes)
   (let ((l) (s))
+    (format t "~&n=~A  " n)
     (if (visited-p n)
         (format t " visited> ~A ~%" n)
         (progn
@@ -15,11 +16,11 @@
           (if (>= n 100)
               (format t "~&done ~A~%" n)
               (progn
-                (setq l (car (loop for x in ladders when (eq (car x) n) collect x)))
-                (setq s (car (loop for x in snakes when (eq (car x) n) collect x)))
+                (setq l (loop for x in ladders until (eq (car x) n) finally (return x)))
+                (setq s (loop for x in snakes  until (eq (car x) n) finally (return x)))
                 (if l
                     (progn
-                      (format t "~&jumping ladder from ~A to ~A~%" n (cadr l))
+                      (format t "~&jumping ladder from ~A to ~A debug ~A ~A~%" n (cadr l) l s)
                       (pseudo (cadr l) ladders snakes))
                     (if s
                         (progn
