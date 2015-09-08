@@ -5,16 +5,27 @@
 ;;
 
 ;;; pseudoworking
-(defun pseudo (n)
-  (if (visited-p n)
-      (terminate "nop")
-      (if (destination-p n)
-          (finish "done")
-          (if (ladder-bottom-p)
-              (go-to ladder-top)
-              (if (snake-top-p)
-                  (go-to snake-bottom)
-                  (go-to (steps 1+s to 6+s)))))))
+(defun pseudo (n ladders snakes)
+  (let ((l) (s))
+    (if (visited-p n)
+        (format t " > ~A ~%" n)
+        (progn
+          (add-to-visited n)
+          (format t " ~A " n)
+          (if (>= n 100)
+              (format t "done ~A~%" n)
+              (progn
+                (setq l (car (loop for x in ladders when (eq (car x) n) collect x)))
+                (setq s (car (loop for x in snakes when (eq (car x) n) collect x)))
+                (if l
+                    (progn
+                      (format t "~&jumping ladder from ~A to ~A~%" n (cadr l))
+                      (pseudo (cadr l) ladders snakes))
+                    (if s
+                        (progn
+                          (format t "~&boo! descending from ~a to ~A~%" n (cadr s))
+                          (pseudo (cadr s) ladders snakes))
+                        (loop for x from 1 to 6 do (pseudo (+ n x) ladders snakes))))))))))
 
 
 (defparameter *visited* nil)
