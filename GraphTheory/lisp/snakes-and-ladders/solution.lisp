@@ -2,7 +2,7 @@
 ;; given I am at first step S
 ;; I can go to S+1 to S+6 or top of a ladder if S is bottom of a ladder
 ;; provided S is not mouth of a snake
-;; z
+;;
 
 ;;; pseudoworking
 (defun pseudo (n)
@@ -32,30 +32,14 @@
           'snake
           'ladder)))
 
-(defun move-piece (edges start end moves)
-  ;; (format T
-  ;; "~&arguments - start: ~a, end: ~a, moves: ~a    ~a~%"
-  ;; start end moves (- end start))
-  (if (termination moves)
-      (princ "")
-      (loop for dice from 1 to 6
-         do (move-piece edges end (+ dice end) (1+ moves)))))
-
-(defun find-shortest (edges)
-  (loop for dice from 1 to 6
-     do
-       (move-piece edges 1 dice 0)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun sort-snakes ()
-  (sort (snakes-1) '< :key 'car))
-
-(defun children-of (n edges)
-  (loop for e in edges when (eq  (car e) n) collect (cadr e)))
-
 (defun connections (edges)
   (loop for x from 1 to 100
-     collecting (list x (children-of x edges))))
+     collecting
+       (list x
+             (loop for e in edges
+                when (eq (car e) x)
+                collect (cadr e)))))
 
 (defun boustrophedon ()
   (loop for x from 1 below 100
@@ -67,8 +51,7 @@
                        ladders
                        snakes)))
     (format t "~&edges ~A~%" edges)
-    (format t "connections ~A~%" (connections edges))
-    (find-shortest edges)))
+    (format t "connections ~A~%" (connections edges))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
