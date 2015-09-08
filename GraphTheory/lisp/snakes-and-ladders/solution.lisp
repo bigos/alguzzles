@@ -16,8 +16,8 @@
           (if (>= n 100)
               (format t "~&done ~A~%" n)
               (progn
-                (setq l (loop for x in ladders until (eq (car x) n) finally (return x)))
-                (setq s (loop for x in snakes  until (eq (car x) n) finally (return x)))
+                (setq l (car (loop for x in ladders when (eq (car x) n) collect x)))
+                (setq s (car (loop for x in snakes  when (eq (car x) n) collect x)))
                 (if l
                     (progn
                       (format t "~&jumping ladder from ~A to ~A debug ~A ~A~%" n (cadr l) l s)
