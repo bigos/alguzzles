@@ -8,12 +8,12 @@
 (defun pseudo (n ladders snakes)
   (let ((l) (s))
     (if (visited-p n)
-        (format t " > ~A ~%" n)
+        (format t " visited> ~A ~%" n)
         (progn
           (add-to-visited n)
-          (format t " ~A " n)
+          (format t " !~A! " n)
           (if (>= n 100)
-              (format t "done ~A~%" n)
+              (format t "~&done ~A~%" n)
               (progn
                 (setq l (car (loop for x in ladders when (eq (car x) n) collect x)))
                 (setq s (car (loop for x in snakes when (eq (car x) n) collect x)))
@@ -25,7 +25,9 @@
                         (progn
                           (format t "~&boo! descending from ~a to ~A~%" n (cadr s))
                           (pseudo (cadr s) ladders snakes))
-                        (loop for x from 1 to 6 do (pseudo (+ n x) ladders snakes))))))))))
+                        (loop for x from 6 downto 1 do
+                             (progn (format t " trying ~A to ~A " n (+ n x))
+                                    (pseudo (+ n x) ladders snakes)))))))))))
 
 
 (defparameter *visited* nil)
