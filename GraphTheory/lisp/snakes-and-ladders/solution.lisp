@@ -16,19 +16,29 @@
           (if (>= n 100)
               (format t "~&done ~A~%" n)
               (progn
-                (setq l (car (loop for x in ladders when (eq (car x) n) collect x)))
-                (setq s (car (loop for x in snakes  when (eq (car x) n) collect x)))
+                (format t "going to search ~A ~A " n snakes)
+                (setq l (find-if (lambda (x) (eq (car x) n)) ladders))
+                (format t " searched ladders ")
+                (setq s (find-if (lambda (x) (eq (car x) n)) snakes))
+                (format t " searched snakes ")
                 (if l
                     (progn
                       (format t "~&jumping ladder from ~A to ~A debug ~A ~A~%" n (cadr l) l s)
                       (pseudo (cadr l) ladders snakes))
-                    (if s
-                        (progn
-                          (format t "~&boo! descending from ~a to ~A~%" n (cadr s))
-                          (pseudo (cadr s) ladders snakes))
-                        (loop for x from 6 downto 1 do
-                             (progn (format t " trying ~A to ~A " n (+ n x))
-                                    (pseudo (+ n x) ladders snakes)))))))))))
+                    (progn
+                      (format t " not ladder l ~A s ~A " l s)
+                      (if s
+                          (progn
+                            (format t "~&boo! descending from ~a to ~A~%" n (cadr s))
+                            (pseudo (cadr s) ladders snakes))
+                          (progn
+                            (format t " not a snake ")
+                            (loop for x from 6 downto 1 do
+                                 (progn
+                                   (format t " trying ~A to ~A " n (+ n x))
+                                   (pseudo (+ n x) ladders snakes)))
+                            (format t "~%~A~%" "TRIED ALL"))
+                          )))))))))
 
 
 (defparameter *visited* nil)
