@@ -13,32 +13,29 @@
         (progn
           (add-to-visited n)
           (format t " !~A! " n)
-          (if (>= n 100)
-              (format t "~&done ~A~%" n)
-              (progn
-                (format t "going to search ~A ~A " n snakes)
-                (setq l (find-if (lambda (x) (eq (car x) n)) ladders))
-                (format t " searched ladders ")
-                (setq s (find-if (lambda (x) (eq (car x) n)) snakes))
-                (format t " searched snakes ")
-                (if l
-                    (progn
-                      (format t "~&jumping ladder from ~A to ~A debug ~A ~A~%" n (cadr l) l s)
-                      (pseudo (cadr l) ladders snakes))
-                    (progn
-                      (format t " not ladder l ~A s ~A " l s)
-                      (if s
-                          (progn
-                            (format t "~&boo! descending from ~a to ~A~%" n (cadr s))
-                            (pseudo (cadr s) ladders snakes))
-                          (progn
-                            (format t " not a snake ")
-                            (loop for x from 6 downto 1 do
-                                 (progn
-                                   (format t " trying ~A to ~A " n (+ n x))
-                                   (pseudo (+ n x) ladders snakes)))
-                            (format t "~%~A~%" "TRIED ALL"))
-                          )))))))))
+          (if (= n 100)
+              (format t "~&!!!!!!!!!!!!! done ~A~%" n)
+              (if (> n 100)
+                  (format t "~&****** too far ~A~%" n)
+                  (progn
+                    (format t " still to do ")
+                    (setq l (find-if (lambda (x) (eq (car x) n)) ladders))
+                    (setq s (find-if (lambda (x) (eq (car x) n)) snakes))
+                    (if l
+                        (progn
+                          (format t "~&jumping ladder from ~A to ~A debug ~A ~A~%" n (cadr l) l s)
+                          (pseudo (cadr l) ladders snakes))
+                        (progn
+                          (if s
+                              (progn
+                                (format t "~&boo! descending from ~a to ~A~%" n (cadr s))
+                                (pseudo (cadr s) ladders snakes))
+                              (progn
+                                (loop for x from 6 downto 1 do
+                                     (progn
+                                       (format t " trying ~A to ~A " n (+ n x))
+                                       (pseudo (+ n x) ladders snakes)))
+                                (format t "~%~A~%" "TRIED ALL"))))))))))))
 
 
 (defparameter *visited* nil)
