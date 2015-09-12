@@ -1,10 +1,6 @@
-;;; guess
-;; generate graph
-;; breadhth first search
-;; starting from 1
-;; ending if reached 100
-;; or reeached visited in same thread
-;;; ^^^ rubbish, there must be better way
+;;; example 1..10
+
+ 1-2-3 4 5 6 7 8 9 10
 
 
 (defparameter *visited* nil)
