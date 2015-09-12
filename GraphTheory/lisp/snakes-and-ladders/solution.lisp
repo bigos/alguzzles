@@ -1,3 +1,12 @@
+;;; guess
+;; generate graph
+;; breadhth first search
+;; starting from 1
+;; ending if reached 100
+;; or reeached visited in same thread
+;;; ^^^ rubbish, there must be better way
+
+
 (defparameter *visited* nil)
 
 (defun visited-p (n)
