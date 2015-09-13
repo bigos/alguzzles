@@ -17,6 +17,60 @@
 ;; (7 8) (7 9 =)
 ;; (8 9 =)
 
+;; a..p steps 1,2
+;;           ------------------- f->o, g->o
+;;           | |               |
+;;     ------+-+--  c->h, d->h |
+;;     | |   | | |             |
+;; a-b-c-d e-f-g h-i-j-k-l m-n-o-p =
+;;         |           | |
+;;         --------------- k->e, l->e
+
+;; StartEndLength
+;; ab1 ac2
+;; bc1 bd2
+;; ch0
+;; dh0
+;; ef1 eg2
+;; fo0
+;; go0
+;; hi1 hj2
+;; ij1 ik2
+;; jk1 jl2
+;; ke0
+;; le0
+;; mn1 mo2
+;; no1 np2=
+;; op1= =
+
+;; example path of 9 steps / 5 dice throws
+;; ac2 ch0 hj2 jl2 le0 eg2 go0 op1=
+
+
+;; loop steps 1,2
+;;           ------- f->i, g->i
+;;           | |   |
+;;     ------+-+-- | c->h, d->h
+;;     | |   | | | |
+;; a-b-c-d e-f-g h-i-j-k-l m-n-o-p =  LOOP! m..p never reached
+;;         |           | |
+;;         --------------- k->e, l->e
+
+;; ab1 ac2
+;; bc1 bd2
+;; ch0
+;; dh0
+;; ef1 eg2
+;; fi0
+;; gi0
+;; hi1 hj2
+;; ij1 ik2 LOOP
+;; jk1 jl2 LOOP
+;; ke0
+;; le0
+;; mn1 mo2
+;; no1 np2=
+;; op1= =
 
 (defparameter *visited* nil)
 
