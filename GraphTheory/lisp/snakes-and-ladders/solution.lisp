@@ -68,9 +68,9 @@
 ;; jk1 jl2 LOOP
 ;; ke0
 ;; le0
-;; mn1 mo2
-;; no1 np2=
-;; op1= =
+;; mn1 mo2  NEVER REACHED
+;; no1 np2= NEVER REACHED
+;; op1= =   NEVER REACHED
 
 (defparameter *visited* nil)
 
