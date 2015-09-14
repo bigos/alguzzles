@@ -1,7 +1,7 @@
 ;;; test
 
 ;; 1..9 possible steps 1, 2
-
+;; (arr-connections '((4 7)) '((6 3)) 10 2)
 ;;       -------  4 -> 7
 ;;       |     |
 ;; 1-2-3-4 5-6 7-8-9
@@ -56,6 +56,7 @@
 ;;         |           | |
 ;;         --------------- k->e, l->e
 
+;; (arr-connections '((3 8) (4 8) (6 9) (7 9)) '((11 5) (12 5)) 16 2)
 ;; ab1 ac2
 ;; bc1 bd2
 ;; ch0
@@ -82,10 +83,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; usage: (arr-connections (ladders-1) (snakes-1)
-(defun arr-connections (ladders snakes)
-  (let* ((max-val 100)
-         (max-step 6)
-         (my-arr (make-array max-val :initial-element nil)))
+(defun arr-connections (ladders snakes &optional (max-val 100) (max-step 6))
+  (let* ((my-arr (make-array max-val :initial-element nil)))
     (loop for x from 1 below max-val do
          (setf (elt my-arr x)
                (loop for d from 1 to max-step
@@ -99,13 +98,14 @@
                (cdr l)))
     my-arr))
 
-;; (solve-me (ladders-1) (snakes-1))
-(defun solve-me (ladders snakes)
-  (let ((edges (append (boustrophedon)
-                       ladders
-                       snakes)))
-    (format t "~&edges ~A~%" edges)
-    (format t "connections ~A~%" (connections edges))))
+;; obsolete
+;; ;; (solve-me (ladders-1) (snakes-1))
+;; (defun solve-me (ladders snakes)
+;;   (let ((edges (append (boustrophedon)
+;;                        ladders
+;;                        snakes)))
+;;     (format t "~&edges ~A~%" edges)
+;;     (format t "connections ~A~%" (connections edges))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
