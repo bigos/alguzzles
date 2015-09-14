@@ -82,7 +82,9 @@
   (push n *visited*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; usage: (arr-connections (ladders-1) (snakes-1)
+;; (subseq (arr-connections (ladders-1) (snakes-1) 100 6)
+;;         95)
+;;
 (defun arr-connections (ladders snakes &optional (max-val 100) (max-step 6))
   (let* ((my-arr (make-array max-val :initial-element nil)))
     (loop for x from 1 below max-val do
@@ -98,12 +100,9 @@
                (cdr l)))
     my-arr))
 
-<<<<<<< HEAD
-;; (solve-me (ladders-1) (snakes-1))
-=======
+
 ;; obsolete
 ;; ;; (solve-me (ladders-1) (snakes-1))
->>>>>>> d0cf7813c1e9a1038fb193764d8c6f8a8519aaa7
 ;; (defun solve-me (ladders snakes)
 ;;   (let ((edges (append (boustrophedon)
 ;;                        ladders
