@@ -82,10 +82,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; usage: (arr-connections (ladders-1) (snakes-1)
-(defun arr-connections (ladders snakes)
-  (let* ((max-val 100)
-         (max-step 6)
-         (my-arr (make-array max-val :initial-element nil)))
+(defun arr-connections (ladders snakes &optional (max-val 100) (max-step 6))
+  (let* ((my-arr (make-array max-val :initial-element nil)))
     (loop for x from 1 below max-val do
          (setf (elt my-arr x)
                (loop for d from 1 to max-step
@@ -100,12 +98,12 @@
     my-arr))
 
 ;; (solve-me (ladders-1) (snakes-1))
-(defun solve-me (ladders snakes)
-  (let ((edges (append (boustrophedon)
-                       ladders
-                       snakes)))
-    (format t "~&edges ~A~%" edges)
-    (format t "connections ~A~%" (connections edges))))
+;; (defun solve-me (ladders snakes)
+;;   (let ((edges (append (boustrophedon)
+;;                        ladders
+;;                        snakes)))
+;;     (format t "~&edges ~A~%" edges)
+;;     (format t "connections ~A~%" (connections edges))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
