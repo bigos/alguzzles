@@ -1,7 +1,7 @@
 ;;; test
 
 ;; 1..9 possible steps 1, 2
-
+;; (arr-connections '((4 7)) '((6 3)) 10 2)
 ;;       -------  4 -> 7
 ;;       |     |
 ;; 1-2-3-4 5-6 7-8-9
@@ -56,6 +56,7 @@
 ;;         |           | |
 ;;         --------------- k->e, l->e
 
+;; (arr-connections '((3 8) (4 8) (6 9) (7 9)) '((11 5) (12 5)) 16 2)
 ;; ab1 ac2
 ;; bc1 bd2
 ;; ch0
@@ -97,7 +98,12 @@
                (cdr l)))
     my-arr))
 
+<<<<<<< HEAD
 ;; (solve-me (ladders-1) (snakes-1))
+=======
+;; obsolete
+;; ;; (solve-me (ladders-1) (snakes-1))
+>>>>>>> d0cf7813c1e9a1038fb193764d8c6f8a8519aaa7
 ;; (defun solve-me (ladders snakes)
 ;;   (let ((edges (append (boustrophedon)
 ;;                        ladders
