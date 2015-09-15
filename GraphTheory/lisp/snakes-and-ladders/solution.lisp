@@ -103,12 +103,13 @@
 
 ;; obsolete
 ;; ;; (solve-me (ladders-1) (snakes-1))
-;; (defun solve-me (ladders snakes)
-;;   (let ((edges (append (boustrophedon)
-;;                        ladders
-;;                        snakes)))
-;;     (format t "~&edges ~A~%" edges)
-;;     (format t "connections ~A~%" (connections edges))))
+(defun solve-me (ladders snakes)
+  ;; (let ((edges (append (boustrophedon)
+  ;; ladders
+  ;; snakes)))
+  ;; (format t "~&edges ~A~%" edges)
+  ;; (format t "connections ~A~%" (connections edges)))
+  (format t "~A~A~%" ladders snakes))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
