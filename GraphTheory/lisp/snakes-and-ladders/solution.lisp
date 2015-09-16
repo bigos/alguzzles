@@ -1,4 +1,11 @@
-;;; test
+;;; notes
+
+;;; not reachable if sequence of snake mouths larger than max step and no
+;;; ladders over it originating from reachable code in previous nodes
+
+;; instead of trying ~ 100 ^ 6 combinations trying every dice possibility
+;; why don't I figure out a graph merging series of small dice throws int one longer
+;; and then (truncate long 6)
 
 ;; 1..9 possible steps 1, 2
 ;; (arr-connections '((4 7)) '((6 3)) 10 2)
