@@ -5,7 +5,7 @@
 
 ;; instead of trying ~ 100 ^ 6 combinations trying every dice possibility
 ;; why don't I figure out a graph merging series of small dice throws int one longer
-;; and then (truncate long 6)
+;; find the shortest path and then (truncate long 6)
 
 ;; 1..9 possible steps 1, 2
 ;; (arr-connections '((4 7)) '((6 3)) 10 2)
@@ -15,13 +15,13 @@
 ;;     |     |
 ;;     -------  6 -> 3
 
-;; (1 2) (1 3)
+;; (1 2) (1 3) -> (1 4)
 ;; (2 3) (2 4)
-;; (3 4) (3 5)
-;; (4 7)
+;; (3 4) (3 5) -> (3 5) is within reach
+;; (4 7)       -> (4 7)
 ;; (5 6) (5 7)
 ;; (6 3)
-;; (7 8) (7 9 =)
+;; (7 8) (7 9 =) -> (7 9 =)
 ;; (8 9 =)
 
 ;; a..p steps 1,2
