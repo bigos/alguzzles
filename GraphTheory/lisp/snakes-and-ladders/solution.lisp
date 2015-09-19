@@ -63,6 +63,7 @@
 ;;         |           | |
 ;;         --------------- k->e, l->e
 
+;;; too many combinations
 ;; (arr-connections '((3 8) (4 8) (6 9) (7 9)) '((11 5) (12 5)) 16 2)
 ;; ab1 ac2
 ;; bc1 bd2
@@ -79,6 +80,10 @@
 ;; mn1 mo2  NEVER REACHED
 ;; no1 np2= NEVER REACHED
 ;; op1= =   NEVER REACHED
+
+(defun sorted-list-of-nodes (ladders snakes)
+  (sort (loop for n in (concatenate 'list ladders snakes)
+           collect (car n) collect (cadr n)) '<))
 
 (defparameter *visited* nil)
 
