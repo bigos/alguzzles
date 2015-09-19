@@ -9,15 +9,15 @@
 
 (defun node-type (n ladders snakes)
   (cond
-    ((find-if (lambda (x) (eq n (car x))) ladders) 'lb)
-    ((find-if (lambda (x) (eq n (cadr x))) ladders) 'lt)
-    ((find-if (lambda (x) (eq n (car x))) snakes) 'sm)
-    ((find-if (lambda (x) (eq n (cadr x))) snakes) 'st)
+    ((find-if (lambda (x) (eq n (car x))) ladders) (list 'lb))
+    ((find-if (lambda (x) (eq n (cadr x))) ladders) (list 'lt))
+    ((find-if (lambda (x) (eq n (car x))) snakes) (list 'sm))
+    ((find-if (lambda (x) (eq n (cadr x))) snakes) (list 'st))
     (T 'hmm)))
 
 (defun node-types (ladders snakes)
   (loop for n in (sorted-list-of-nodes ladders snakes)
-     collect (cons n (node-type n (ladders-1) (snakes-1)))))
+     collect (cons n (node-type n ladders snakes))))
 
 (defun sorted-list-of-nodes (ladders snakes)
   (concatenate 'list
@@ -25,6 +25,11 @@
                (sort (loop for n in (concatenate 'list ladders snakes)
                         collect (car n) collect (cadr n)) '<)
                '(100)))
+
+(defun sorted-special-nodes (ladders snakes)
+  (sort (loop for n in (concatenate 'list ladders snakes)
+           collect n)
+        (lambda (x y) (< (car x) (car y)))))
 
 (defparameter *visited* nil)
 
