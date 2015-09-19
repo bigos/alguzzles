@@ -27,9 +27,13 @@
                '(100)))
 
 (defun sorted-special-nodes (ladders snakes)
-  (sort (loop for n in (concatenate 'list ladders snakes)
-           collect n)
-        (lambda (x y) (< (car x) (car y)))))
+  (let ((sn (sort (loop for n in (concatenate 'list ladders snakes)
+                     collect n)
+                  (lambda (x y) (< (car x) (car y))))))
+    (concatenate 'list
+                 (list (list 1 (caar sn)))
+                 sn
+                 (list (list (caar (last sn)) 100)))))
 
 (defparameter *visited* nil)
 
