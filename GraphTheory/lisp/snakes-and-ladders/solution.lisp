@@ -7,83 +7,24 @@
 ;; why don't I figure out a graph merging series of small dice throws int one longer
 ;; find the shortest path and then (truncate long 6)
 
-;; 1..9 possible steps 1, 2
-;; (arr-connections '((4 7)) '((6 3)) 10 2)
-;;       -------  4 -> 7
-;;       |     |
-;; 1-2-3-4 5-6 7-8-9
-;;     |     |
-;;     -------  6 -> 3
+(defun node-type (n ladders snakes)
+  (cond
+    ((find-if (lambda (x) (eq n (car x))) ladders) 'lb)
+    ((find-if (lambda (x) (eq n (cadr x))) ladders) 'lt)
+    ((find-if (lambda (x) (eq n (car x))) snakes) 'sm)
+    ((find-if (lambda (x) (eq n (cadr x))) snakes) 'st)
+    (T 'hmm)))
 
-;; (1 2) (1 3) -> (1 4)
-;; (2 3) (2 4)
-;; (3 4) (3 5) -> (3 5) is within reach
-;; (4 7)       -> (4 7)
-;; (5 6) (5 7)
-;; (6 3)
-;; (7 8) (7 9 =) -> (7 9 =)
-;; (8 9 =)
-
-;; a..p steps 1,2
-;;           ------------------- f->o, g->o
-;;           | |               |
-;;     ------+-+--  c->h, d->h |
-;;     | |   | | |             |
-;; a-b-c-d e-f-g h-i-j-k-l m-n-o-p =
-;;         |           | |
-;;         --------------- k->e, l->e
-
-;; StartEndLength
-;; ab1 ac2
-;; bc1 bd2
-;; ch0
-;; dh0
-;; ef1 eg2
-;; fo0
-;; go0
-;; hi1 hj2
-;; ij1 ik2
-;; jk1 jl2
-;; ke0
-;; le0
-;; mn1 mo2
-;; no1 np2=
-;; op1= =
-
-;; example path of 9 steps / 5 dice throws
-;; ac2 ch0 hj2 jl2 le0 eg2 go0 op1=
-
-
-;; loop steps 1,2
-;;           ------- f->i, g->i
-;;           | |   |
-;;     ------+-+-- | c->h, d->h
-;;     | |   | | | |
-;; a-b-c-d e-f-g h-i-j-k-l m-n-o-p =  LOOP! m..p never reached
-;;         |           | |
-;;         --------------- k->e, l->e
-
-;;; too many combinations
-;; (arr-connections '((3 8) (4 8) (6 9) (7 9)) '((11 5) (12 5)) 16 2)
-;; ab1 ac2
-;; bc1 bd2
-;; ch0
-;; dh0
-;; ef1 eg2
-;; fi0
-;; gi0
-;; hi1 hj2
-;; ij1 ik2 LOOP
-;; jk1 jl2 LOOP
-;; ke0
-;; le0
-;; mn1 mo2  NEVER REACHED
-;; no1 np2= NEVER REACHED
-;; op1= =   NEVER REACHED
+(defun node-types (ladders snakes)
+  (loop for n in (sorted-list-of-nodes ladders snakes)
+     collect (cons n (node-type n (ladders-1) (snakes-1)))))
 
 (defun sorted-list-of-nodes (ladders snakes)
-  (sort (loop for n in (concatenate 'list ladders snakes)
-           collect (car n) collect (cadr n)) '<))
+  (concatenate 'list
+               '(1)
+               (sort (loop for n in (concatenate 'list ladders snakes)
+                        collect (car n) collect (cadr n)) '<)
+               '(100)))
 
 (defparameter *visited* nil)
 
