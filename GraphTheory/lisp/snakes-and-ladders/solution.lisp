@@ -7,33 +7,21 @@
 ;; why don't I figure out a graph merging series of small dice throws int one longer
 ;; find the shortest path and then (truncate long 6)
 
-(defun node-type (n ladders snakes)
-  (cond
-    ((find-if (lambda (x) (eq n (car x))) ladders) (list 'lb))
-    ((find-if (lambda (x) (eq n (cadr x))) ladders) (list 'lt))
-    ((find-if (lambda (x) (eq n (car x))) snakes) (list 'sm))
-    ((find-if (lambda (x) (eq n (cadr x))) snakes) (list 'st))
-    (T 'hmm)))
+(defun ladder-nodes (nodes)
+  (loop for n in nodes
+     collect  (list n 'lb)
+     collect (list (list (cadr n) (car n)) 'lt)))
 
-(defun node-types (ladders snakes)
-  (loop for n in (sorted-list-of-nodes ladders snakes)
-     collect (cons n (node-type n ladders snakes))))
-
-(defun sorted-list-of-nodes (ladders snakes)
-  (concatenate 'list
-               '(1)
-               (sort (loop for n in (concatenate 'list ladders snakes)
-                        collect (car n) collect (cadr n)) '<)
-               '(100)))
+(defun snake-nodes (nodes)
+  (loop for n in nodes
+     collect  (list n 'sm)
+     collect (list (list (cadr n) (car n)) 'st)))
 
 (defun sorted-special-nodes (ladders snakes)
-  (let ((sn (sort (loop for n in (concatenate 'list ladders snakes)
-                     collect n)
-                  (lambda (x y) (< (car x) (car y))))))
-    (concatenate 'list
-                 (list (list 1 (caar sn)))
-                 sn
-                 (list (list (caar (last sn)) 100)))))
+  (sort (concatenate 'list
+                     (ladder-nodes ladders)
+                     (snake-nodes snakes))
+        (lambda ( x y) (< (caar x) (caar y)))))
 
 (defparameter *visited* nil)
 
