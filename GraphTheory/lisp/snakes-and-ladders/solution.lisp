@@ -7,6 +7,11 @@
 ;; why don't I figure out a graph merging series of small dice throws int one longer
 ;; find the shortest path and then (truncate long 6)
 
+(defun arr-markovs (ladders snakes &optional (max-val 100) (max-step 6))
+  (let* ((my-arr (make-array max-val :initial-element nil)))
+    ;; new attempt will go  here
+    ))
+
 (defun ladder-nodes (nodes)
   (loop for n in nodes
      collect  (list n 'lb)
@@ -21,7 +26,7 @@
   (sort (concatenate 'list
                      (ladder-nodes ladders)
                      (snake-nodes snakes))
-        (lambda ( x y) (< (caar x) (caar y)))))
+        (lambda (x y) (< (caar x) (caar y)))))
 
 (defparameter *visited* nil)
 
