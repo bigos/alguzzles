@@ -7,10 +7,15 @@
 ;; why don't I figure out a graph merging series of small dice throws int one longer
 ;; find the shortest path and then (truncate long 6)
 
-(defun arr-markovs (ladders snakes &optional (max-val 100) (max-step 6))
+;;; 101 - because the array starts at 1
+(defun arr-markovs (ladders snakes &optional (max-val 101) (max-step 6))
   (let* ((my-arr (make-array max-val :initial-element nil)))
     ;; new attempt will go  here
-    ))
+    (loop for n from 1 below max-val do
+         (princ n)
+         (princ #\Space)
+         (setf (elt my-arr n) n))
+    my-arr))
 
 (defun ladder-nodes (nodes)
   (loop for n in nodes
