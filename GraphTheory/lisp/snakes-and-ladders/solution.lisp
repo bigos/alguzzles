@@ -7,28 +7,32 @@
 ;; why don't I figure out a graph merging series of small dice throws int one longer
 ;; find the shortest path and then (truncate long 6)
 
-(defun special-bit (n special)
-  (list n (case (cadr special)
-            (lb "lb up")
-            (lt "top of the ladder")
-            (sm "progressssss eater")
-            (st "ogon"))))
+(defun prev-pos (n)
+  (loop for f from 6 downto 1
+     when (>= (- n f) 1)
+     collect (- n f)))
 
-;;; need to think about snakes
-(defun arr-markovs-from (n special-nodes &optional (max-step 6))
-  (let ((special (find-if (lambda (x) (eq n (caar x)))
-                          special-nodes )))
-    (if special
-        (special-bit n special)
-        (loop for f from max-step downto 1
-           when (>= (- n f) 1)
-           collect (- n f)))))
-
-;;; need to think about ladders
-(defun arr-markovs-to (n special-nodes &optional (max-val 100) (max-step 6))
-  (loop for f from 1 to max-step
+(defun next-pos (n &optional (max-val 100))
+  (loop for f from 1 to 6
      when (<= (+ n f) max-val)
      collect (+ n f)))
+
+(defun arr-markovs-from (n special-nodes)
+  (let ((special (find-if (lambda (x) (eq n (caar x))) special-nodes )))
+    (concatenate 'list
+                 (when (eq 'lt (cadr special))
+                   (prev-pos (cadar special)))
+                 (when (eq 'st (cadr special))
+                   (prev-pos (cadar special)))
+                 (prev-pos n))))
+
+(defun arr-markovs-to (n special-nodes)
+  (let ((special (find-if (lambda (x) (eq n (caar x))) special-nodes)))
+    (if special
+        (cond ((eq 'lb (cadr special)) (next-pos (cadar special)))
+              ((eq 'sm (cadr special)) (next-pos (cadar special)))
+              (t (next-pos n)))
+        (next-pos n))))
 
 ;;; not finished yet
 ;;; still have to take into consideration snakes and ladders
