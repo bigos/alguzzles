@@ -9,28 +9,40 @@
 
 
 ;;; need to think about snakes
-(defun arr-markovs-from (n &optional (max-step 6))
-  (loop for f from max-step downto 1
-     when (>= (- n f) 1)
-     collect (- n f)))
+(defun arr-markovs-from (n special-nodes &optional (max-step 6))
+  (let ((special (find-if (lambda (x) (eq n (caar x)))
+                          special-nodes ))
+        (kind))
+    (if special
+        (progn
+          (setf kind (cadr special))
+          (case kind
+            (lb "lb up")
+            (lt "top of the ladder")
+            (sm "progressssss eater")
+            (st "ogon")))
+        (loop for f from max-step downto 1
+           when (>= (- n f) 1)
+           collect (- n f))
+        )))
 
 ;;; need to think about ladders
-(defun arr-markovs-to (n &optional (max-val 100) (max-step 6))
+(defun arr-markovs-to (n special-nodes &optional (max-val 100) (max-step 6))
   (loop for f from 1 to max-step
      when (<= (+ n f) max-val)
      collect (+ n f)))
 
 ;;; not finished yet
 ;;; still have to take into consideration snakes and ladders
-(defun arr-markovs (ladders snakes &optional
-                                     (min-val 1) (max-val 100) (max-step 6))
-  (let* ((my-arr (make-array (+ 1 max-val) :initial-element nil)))
+(defun arr-markovs (ladders snakes &optional (min-val 1) (max-val 100))
+  (let ((my-arr (make-array (+ 1 max-val) :initial-element nil))
+        (special-nodes (sorted-special-nodes ladders snakes)))
     ;; new attempt will go  here
-    (loop for n from 1 to max-val do
+    (loop for n from min-val to max-val do
          (setf (elt my-arr n)
                (list n
-                     (arr-markovs-from n)
-                     (arr-markovs-to n))))
+                     (arr-markovs-from n special-nodes)
+                     (arr-markovs-to n special-nodes))))
     my-arr))
 
 (defun ladder-nodes (nodes)
