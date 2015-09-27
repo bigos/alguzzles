@@ -20,7 +20,7 @@
 (defun special-node (n special-nodes)
   (find-if (lambda (x) (eq n (caar x)) ) special-nodes ))
 
-; can't arrive from sm or lb
+;; can't arrive from sm or lb
 (defun arr-markovs-from (n special-nodes)
   (let ((special (special-node n special-nodes)))
     (concatenate 'list
@@ -40,6 +40,9 @@
 
 ;;; not finished yet
 ;;; still have to take into consideration snakes and ladders
+
+;;; got through list of snake mouths and ladder bottoms
+;;; and remove them from incoming positions (caddr) of lists in my-arr
 (defun arr-markovs (ladders snakes &optional (min-val 1) (max-val 100))
   (let ((my-arr (make-array (+ 1 max-val) :initial-element nil))
         (special-nodes (sorted-special-nodes ladders snakes)))
