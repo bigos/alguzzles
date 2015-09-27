@@ -7,24 +7,22 @@
 ;; why don't I figure out a graph merging series of small dice throws int one longer
 ;; find the shortest path and then (truncate long 6)
 
+(defun special-bit (n special)
+  (list n (case (cadr special)
+            (lb "lb up")
+            (lt "top of the ladder")
+            (sm "progressssss eater")
+            (st "ogon"))))
 
 ;;; need to think about snakes
 (defun arr-markovs-from (n special-nodes &optional (max-step 6))
   (let ((special (find-if (lambda (x) (eq n (caar x)))
-                          special-nodes ))
-        (kind))
+                          special-nodes )))
     (if special
-        (progn
-          (setf kind (cadr special))
-          (case kind
-            (lb "lb up")
-            (lt "top of the ladder")
-            (sm "progressssss eater")
-            (st "ogon")))
+        (special-bit n special)
         (loop for f from max-step downto 1
            when (>= (- n f) 1)
-           collect (- n f))
-        )))
+           collect (- n f)))))
 
 ;;; need to think about ladders
 (defun arr-markovs-to (n special-nodes &optional (max-val 100) (max-step 6))
