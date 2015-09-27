@@ -17,17 +17,21 @@
      when (<= (+ n f) max-val)
      collect (+ n f)))
 
+(defun special-node (n special-nodes)
+  (find-if (lambda (x) (eq n (caar x)) ) special-nodes ))
+
+; can't arrive from sm or lb
 (defun arr-markovs-from (n special-nodes)
-  (let ((special (find-if (lambda (x) (eq n (caar x))) special-nodes )))
+  (let ((special (special-node n special-nodes)))
     (concatenate 'list
                  (when (eq 'lt (cadr special))
-                   (prev-pos (cadar special)))
+                   (prev-pos (cadar special))) ;except sm and lb
                  (when (eq 'st (cadr special))
-                   (prev-pos (cadar special)))
-                 (prev-pos n))))
+                   (prev-pos (cadar special))) ;except sm and lb
+                 (prev-pos n)))) ;except sm and lb
 
 (defun arr-markovs-to (n special-nodes)
-  (let ((special (find-if (lambda (x) (eq n (caar x))) special-nodes)))
+  (let ((special (special-node n special-nodes)))
     (if special
         (cond ((eq 'lb (cadr special)) (next-pos (cadar special)))
               ((eq 'sm (cadr special)) (next-pos (cadar special)))
@@ -43,8 +47,10 @@
     (loop for n from min-val to max-val do
          (setf (elt my-arr n)
                (list n
+                     (cadr (special-node n special-nodes))
                      (arr-markovs-from n special-nodes)
-                     (arr-markovs-to n special-nodes))))
+                     (arr-markovs-to n special-nodes)
+                     )))
     my-arr))
 
 (defun ladder-nodes (nodes)
