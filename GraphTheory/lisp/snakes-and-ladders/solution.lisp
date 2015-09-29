@@ -46,14 +46,13 @@
 (defun arr-markovs (ladders snakes &optional (min-val 1) (max-val 100))
   (let ((my-arr (make-array (+ 1 max-val) :initial-element nil))
         (special-nodes (sorted-special-nodes ladders snakes)))
-    ;; new attempt will go  here
     (loop for n from min-val to max-val do
          (setf (elt my-arr n)
                (list n
                      (cadr (special-node n special-nodes))
                      (arr-markovs-from n special-nodes)
-                     (arr-markovs-to n special-nodes)
-                     )))
+                     (arr-markovs-to n special-nodes))))
+    ;; new attempt will go  here
     my-arr))
 
 (defun ladder-nodes (nodes)
