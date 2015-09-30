@@ -20,15 +20,24 @@
 (defun special-node (n special-nodes)
   (find-if (lambda (x) (eq n (caar x)) ) special-nodes ))
 
+(defun special-node-type (n special-nodes)
+  (cadr (special-node n special-nodes)))
+
 ;; can't arrive from sm or lb
 (defun arr-markovs-from (n special-nodes)
   (let ((special (special-node n special-nodes)))
-    (concatenate 'list
-                 (when (eq 'lt (cadr special))
-                   (prev-pos (cadar special))) ;except sm and lb
-                 (when (eq 'st (cadr special))
-                   (prev-pos (cadar special))) ;except sm and lb
-                 (prev-pos n)))) ;except sm and lb
+    (map 'list
+         (lambda (x)
+           (if (or (eq 'lb (special-node-type x special-nodes))
+                   (eq 'sm (special-node-type x special-nodes)))
+               nil
+               x))
+         (concatenate 'list
+                      (when (eq 'lt (cadr special))
+                        (prev-pos (cadar special))) ;except sm and lb
+                      (when (eq 'st (cadr special))
+                        (prev-pos (cadar special))) ;except sm and lb
+                      (prev-pos n))))) ;except sm and lb
 
 (defun arr-markovs-to (n special-nodes)
   (let ((special (special-node n special-nodes)))
