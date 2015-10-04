@@ -41,6 +41,7 @@
                                  (prev-pos n)))))) ;except sm and lb
 
 (defun arr-markovs-to (n special-nodes)
+  ;; do not include snake mouths, but raplace them with tails
   (let ((special (special-node n special-nodes)))
     (if special
         (cond ((eq 'lb (cadr special)) (next-pos (cadar special)))
