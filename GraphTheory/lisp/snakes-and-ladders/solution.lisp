@@ -96,21 +96,37 @@
   (push n *visited*))
 
 (defun neighbours (n) (caddr (aref *nodes* n)))
-
-(defun breadth-first (start end tosses)
-  (let ((neighbours (neighbours start)))
-    (add-to-visited start)
-     (format t "~&examining ~A tosses ~A~%" start tosses)
-    (if (find end neighbours)
-        (progn
-          (push tosses *tosses*)
-          ; (format t "~&found in ~a tosses" tosses)
-          (setf *found* T))
-        (loop for n in neighbours do
-             (unless (visited-p n)
-               (breadth-first n end (1+ tosses)))))))
-
 (defun shortest-path () (car (sort *tosses* '<)))
+
+(defun flatten (structure)
+  (cond ((null structure) nil)
+        ((atom structure) (list structure))
+        (t (mapcan #'flatten structure))))
+
+(defun breadth-first (nodes end tosses)
+  (when (find end nodes)
+    (setf *found* T))
+  (format t "~A~%" nodes)
+  (unless *found*
+    (breadth-first
+            (flatten
+             (loop for n in nodes collect (neighbours n)))
+            end (1+ tosses))))
+
+;; (defparameter *nodes* (arr-markovs ladders snakes))
+;; (defun breadth-first (start end tosses)
+;;   (let ((neighbours (neighbours start)))
+;;     (add-to-visited start)
+;;      (format t "~&examining ~A tosses ~A~%" start tosses)
+;;     (if (find end neighbours)
+;;         (progn
+;;           (push tosses *tosses*)
+;;           ; (format t "~&found in ~a tosses" tosses)
+;;           (setf *found* T))
+;;         (loop for n in neighbours do
+;;              (unless (visited-p n)
+;;                (breadth-first n end (1+ tosses)))))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
