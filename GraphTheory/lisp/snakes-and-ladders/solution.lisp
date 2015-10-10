@@ -84,6 +84,9 @@
                      (snake-nodes snakes))
         (lambda (x y) (< (caar x) (caar y)))))
 
+;;;:::::::::::::::::::::::::::::::::::::::::::::::::::
+(defparameter *nodes* (arr-markovs (ladders-1) (snakes-1)))
+(defparameter *found* nil)
 (defparameter *visited* nil)
 
 (defun visited-p (n)
@@ -91,6 +94,19 @@
 
 (defun add-to-visited (n)
   (push n *visited*))
+
+(defun neighbours (n) (caddr (aref *nodes* n)))
+
+(defun breadth-first (start end tosses)
+  (let ((neighbours (neighbours start)))
+    (add-to-visited start)
+    (if (find end neighbours)
+        (progn
+          (format t "found in ~a tosses" tosses)
+          (setf *found* T))
+        (loop for n in neighbours do
+             (unless (visited-p n)
+               (breadth-first n end (1+ tosses)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
