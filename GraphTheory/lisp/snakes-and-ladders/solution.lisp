@@ -105,16 +105,18 @@
 
 
 ;; usage
-;; CL-USER> (setf *found* nil *visited* nil *tosses* nil)
-;; CL-USER> (defparameter *nodes* (arr-markovs (ladders-1) (snakes-1)))
-;; CL-USER> (time (breadth-first '(100) 1 1))
+;; (setf *found* nil *visited* nil *tosses* 0)
+;; (defparameter *nodes* (arr-markovs (ladders-1) (snakes-1)))
+;; (time (breadth-first '(100) 1 1))
+;; (princ *tosses*)
 
-(defun breadth-first (nodes end tosses)
+(defun breadth-first (nodes end)
   (when (find end nodes)
     (setf *found* T))
   (loop for n in nodes do (add-to-visited n))
   (format t "~A~%" nodes)
   (unless *found*
+    (incf *tosses*)
     (breadth-first
      (remove-duplicates
       (flatten
@@ -122,7 +124,7 @@
           collect
             (remove-if (lambda (x) (find x *visited*))
                        (neighbours n)))))
-            end (1+ tosses))))
+     end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
