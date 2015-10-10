@@ -93,24 +93,6 @@
   (push n *visited*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (subseq (arr-connections (ladders-1) (snakes-1) 100 6)
-;;         95)
-;;
-(defun arr-connections (ladders snakes &optional (max-val 100) (max-step 6))
-  (let* ((my-arr (make-array max-val :initial-element nil)))
-    (loop for x from 1 below max-val do
-         (setf (elt my-arr x)
-               (loop for d from 1 to max-step
-                  when (<= (+ x d) max-val)
-                  collect (+ x d))))
-    (loop for l in ladders do
-         (setf (elt my-arr (car l))
-               (cdr l)))
-    (loop for l in snakes do
-         (setf (elt my-arr (car l))
-               (cdr l)))
-    my-arr))
-
 
 ;; obsolete
 ;; ;; (solve-me (ladders-1) (snakes-1))
