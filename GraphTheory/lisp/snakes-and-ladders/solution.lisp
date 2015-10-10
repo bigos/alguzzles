@@ -121,7 +121,7 @@
   (setf *found* nil *visited* nil *tosses* nil)
   (defparameter *nodes* (arr-markovs ladders snakes))
   (breadth-first 100 1 1)
-  (format t "~A" (1+ (shortest-path))))
+  (format t "~A~%" (shortest-path)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -156,7 +156,7 @@
       (setq snakes (parse-integer (read-line stream)))
       (setq ss (loop for s from 0 below snakes
                   collecting (split-and-parse (read-line stream))))
-      (format t "ladders ~A~%snakes ~A~%" ll ss)
+       (format t "ladders ~A~%snakes ~A~%" ll ss)
       (solve-me ll ss))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
