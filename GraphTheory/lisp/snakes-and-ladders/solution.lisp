@@ -85,7 +85,6 @@
         (lambda (x y) (< (caar x) (caar y)))))
 
 ;;;:::::::::::::::::::::::::::::::::::::::::::::::::::
-(defparameter *nodes* (arr-markovs (ladders-1) (snakes-1)))
 (defparameter *found* nil)
 (defparameter *visited* nil)
 (defparameter *tosses* nil)
