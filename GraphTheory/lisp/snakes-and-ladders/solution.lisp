@@ -103,30 +103,26 @@
         ((atom structure) (list structure))
         (t (mapcan #'flatten structure))))
 
+
+;; usage
+;; CL-USER> (setf *found* nil *visited* nil *tosses* nil)
+;; CL-USER> (defparameter *nodes* (arr-markovs (ladders-1) (snakes-1)))
+;; CL-USER> (time (breadth-first '(100) 1 1))
+
 (defun breadth-first (nodes end tosses)
   (when (find end nodes)
     (setf *found* T))
+  (loop for n in nodes do (add-to-visited n))
   (format t "~A~%" nodes)
   (unless *found*
     (breadth-first
-            (flatten
-             (loop for n in nodes collect (neighbours n)))
+     (remove-duplicates
+      (flatten
+       (loop for n in nodes
+          collect
+            (remove-if (lambda (x) (find x *visited*))
+                       (neighbours n)))))
             end (1+ tosses))))
-
-;; (defparameter *nodes* (arr-markovs ladders snakes))
-;; (defun breadth-first (start end tosses)
-;;   (let ((neighbours (neighbours start)))
-;;     (add-to-visited start)
-;;      (format t "~&examining ~A tosses ~A~%" start tosses)
-;;     (if (find end neighbours)
-;;         (progn
-;;           (push tosses *tosses*)
-;;           ; (format t "~&found in ~a tosses" tosses)
-;;           (setf *found* T))
-;;         (loop for n in neighbours do
-;;              (unless (visited-p n)
-;;                (breadth-first n end (1+ tosses)))))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
