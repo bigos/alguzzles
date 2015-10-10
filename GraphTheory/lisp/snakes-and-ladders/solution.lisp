@@ -101,7 +101,7 @@
 (defun breadth-first (start end tosses)
   (let ((neighbours (neighbours start)))
     (add-to-visited start)
-    ; (format t "~&examining ~A tosses ~A~%" start tosses)
+     (format t "~&examining ~A tosses ~A~%" start tosses)
     (if (find end neighbours)
         (progn
           (push tosses *tosses*)
@@ -121,13 +121,16 @@
   (setf *found* nil *visited* nil *tosses* nil)
   (defparameter *nodes* (arr-markovs ladders snakes))
   (breadth-first 100 1 1)
+  (format t "~&tosses ~A~%" *tosses*)
   (format t "~A~%" (shortest-path)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun ladders-0 () '((32 62) (42 68) (12 98)))
+(defun snakes-0 () '((95 13) (97 25) (93 37) (79 27) (75 19) (49 47) (67 17)))
+
 (defun ladders-1 ()
   '((8 52) (6 80) (26 42) (2 72)))
-
 (defun snakes-1 ()
   '((51 19) (39 11) (37 29) (81 3) (59 5) (79 23) (53 7) (43 33) (77 21)))
 
