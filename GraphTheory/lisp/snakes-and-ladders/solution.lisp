@@ -1,4 +1,4 @@
-;;; notes
+;;; Notes
 
 ;;; not reachable if sequence of snake mouths larger than max step and no
 ;;; ladders over it originating from reachable code in previous nodes
@@ -111,20 +111,21 @@
 ;; (princ *tosses*)
 
 (defun breadth-first (nodes end)
-  (when (find end nodes)
-    (setf *found* T))
-  (loop for n in nodes do (add-to-visited n))
-  ;; (format t "~A~%" nodes)
-  (unless *found*
-    (incf *tosses*)
-    (breadth-first
-     (remove-duplicates
-      (flatten
-       (loop for n in nodes
-          collect
-            (remove-if (lambda (x) (find x *visited*))
-                       (neighbours n)))))
-     end)))
+  (let ((my-neighbours))
+    (when (find end nodes)
+      (setf *found* T))
+    (loop for n in nodes do (add-to-visited n))
+    ;; (format t "~A~%" nodes)
+    (unless *found*
+      (incf *tosses*)
+      (setf my-neighbours (remove-duplicates
+                           (flatten
+                            (loop for n in nodes
+                               collect
+                                 (remove-if (lambda (x) (find x *visited*))
+                                            (neighbours n))))))
+      (if my-neighbours
+        (breadth-first my-neighbours end)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -133,8 +134,11 @@
 (defun solve-me (ladders snakes)
   (setf *found* nil *visited* nil *tosses* 0)
   (defparameter *nodes* (arr-markovs ladders snakes))
+  ;; (format t "~A~%" *nodes*)
   (breadth-first '(100) 1 )
-  (princ *tosses*)
+  (if *found*
+      (princ *tosses*)
+      (princ -1))
   (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -186,5 +190,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/snakes-and-ladders/"
-                                    "input0.txt"))
+                                    "input3.txt"))
       (solution s))))
