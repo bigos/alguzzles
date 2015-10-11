@@ -114,7 +114,7 @@
   (when (find end nodes)
     (setf *found* T))
   (loop for n in nodes do (add-to-visited n))
-  (format t "~A~%" nodes)
+  ;; (format t "~A~%" nodes)
   (unless *found*
     (incf *tosses*)
     (breadth-first
@@ -131,11 +131,11 @@
 ;; obsolete
 ;; ;; (solve-me (ladders-1) (snakes-1))
 (defun solve-me (ladders snakes)
-  (setf *found* nil *visited* nil *tosses* nil)
+  (setf *found* nil *visited* nil *tosses* 0)
   (defparameter *nodes* (arr-markovs ladders snakes))
-  (breadth-first 100 1 1)
-  (format t "~&tosses ~A~%" *tosses*)
-  (format t "~A~%" (shortest-path)))
+  (breadth-first '(100) 1 )
+  (princ *tosses*)
+  (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -172,7 +172,7 @@
       (setq snakes (parse-integer (read-line stream)))
       (setq ss (loop for s from 0 below snakes
                   collecting (split-and-parse (read-line stream))))
-       (format t "ladders ~A~%snakes ~A~%" ll ss)
+       ;;; (format t "ladders ~A~%snakes ~A~%" ll ss)
       (solve-me ll ss))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
