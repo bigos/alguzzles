@@ -1,4 +1,4 @@
-;;; notes
+;;; Notes
 
 ;;; not reachable if sequence of snake mouths larger than max step and no
 ;;; ladders over it originating from reachable code in previous nodes
@@ -96,32 +96,50 @@
   (push n *visited*))
 
 (defun neighbours (n) (caddr (aref *nodes* n)))
-
-(defun breadth-first (start end tosses)
-  (let ((neighbours (neighbours start)))
-    (add-to-visited start)
-     (format t "~&examining ~A tosses ~A~%" start tosses)
-    (if (find end neighbours)
-        (progn
-          (push tosses *tosses*)
-          ; (format t "~&found in ~a tosses" tosses)
-          (setf *found* T))
-        (loop for n in neighbours do
-             (unless (visited-p n)
-               (breadth-first n end (1+ tosses)))))))
-
 (defun shortest-path () (car (sort *tosses* '<)))
+
+(defun flatten (structure)
+  (cond ((null structure) nil)
+        ((atom structure) (list structure))
+        (t (mapcan #'flatten structure))))
+
+
+;; usage
+;; (setf *found* nil *visited* nil *tosses* 0)
+;; (defparameter *nodes* (arr-markovs (ladders-1) (snakes-1)))
+;; (time (breadth-first '(100) 1 1))
+;; (princ *tosses*)
+
+(defun breadth-first (nodes end)
+  (let ((my-neighbours))
+    (when (find end nodes)
+      (setf *found* T))
+    (loop for n in nodes do (add-to-visited n))
+    ;; (format t "~A~%" nodes)
+    (unless *found*
+      (incf *tosses*)
+      (setf my-neighbours (remove-duplicates
+                           (flatten
+                            (loop for n in nodes
+                               collect
+                                 (remove-if (lambda (x) (find x *visited*))
+                                            (neighbours n))))))
+      (if my-neighbours
+        (breadth-first my-neighbours end)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; obsolete
 ;; ;; (solve-me (ladders-1) (snakes-1))
 (defun solve-me (ladders snakes)
-  (setf *found* nil *visited* nil *tosses* nil)
+  (setf *found* nil *visited* nil *tosses* 0)
   (defparameter *nodes* (arr-markovs ladders snakes))
-  (breadth-first 100 1 1)
-  (format t "~&tosses ~A~%" *tosses*)
-  (format t "~A~%" (shortest-path)))
+  ;; (format t "~A~%" *nodes*)
+  (breadth-first '(100) 1 )
+  (if *found*
+      (princ *tosses*)
+      (princ -1))
+  (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -158,7 +176,7 @@
       (setq snakes (parse-integer (read-line stream)))
       (setq ss (loop for s from 0 below snakes
                   collecting (split-and-parse (read-line stream))))
-       (format t "ladders ~A~%snakes ~A~%" ll ss)
+       ;;; (format t "ladders ~A~%snakes ~A~%" ll ss)
       (solve-me ll ss))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
@@ -172,5 +190,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "GraphTheory/lisp/snakes-and-ladders/"
-                                    "input0.txt"))
+                                    "input3.txt"))
       (solution s))))
