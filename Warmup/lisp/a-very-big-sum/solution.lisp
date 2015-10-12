@@ -13,11 +13,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let* ((n (parse-integer (read-line stream)))
-         (arr (make-array n :initial-element 0))
-         (cont))
-    (setf cont (split-and-parse (read-line stream)))
-    (format t "~a ~A~%" n cont)))
+  (let ((n (parse-integer (read-line stream)))
+        (cont (split-and-parse (read-line stream))))
+    (princ (loop for x in cont sum x))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
