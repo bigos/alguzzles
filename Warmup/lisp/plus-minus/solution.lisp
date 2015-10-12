@@ -1,3 +1,6 @@
+(defun fract (x n)
+  (format nil "~,6f" (/ x n)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -14,10 +17,20 @@
 
 (defun solution (&optional stream)
   (let ((n (parse-integer (read-line stream)))
-        (ints (split-and-parse (read-line stream))))
-    (princ n)
-    (terpri)
-    (princ ints)))
+        (ints (split-and-parse (read-line stream)))
+        (pos 0)
+        (neg 0)
+        (zer 0))
+    (loop for x in ints do
+         (if (= x 0)
+             (incf zer)
+             (if (< x 0)
+                 (incf neg)
+                 (incf pos)) ))
+    (format t "~A~%~A~&~A~%"
+            (fract pos n)
+            (fract neg n)
+            (fract zer n))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
