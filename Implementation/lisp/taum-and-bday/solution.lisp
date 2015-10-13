@@ -6,7 +6,8 @@
          (cc (caddr bwc-costs))
          (bcc (* bn (+ wc cc)))
          (wcc (* wn (+ bc cc))))
-    (apply #'+ (subseq (sort (list (* bn bc) (* wn wc) bcc wcc) #'<) 0 2))))
+    (+  (min (* bn bc) bcc)
+        (min (* wn wc) wcc))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -40,5 +41,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Implementation/lisp/taum-and-bday/"
-                                    "input0.txt"))
+                                    "input1.txt"))
       (solution s))))
