@@ -1,3 +1,12 @@
+(defun solve-me (m n)
+  (format t "~A~%"
+   (- (loop for r from (1- n) downto 0
+         for c from 0 below n
+         summing (aref m r c))
+      (loop for r from 0 below n
+         for c from 0 below n
+         summing (aref m r c)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -13,11 +22,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((rows (parse-integer (read-line stream))))
-    (format t "~A~%" rows)
-    (princ
-     (loop for r from 0 below rows
-        collecting (split-and-parse (read-line stream))))))
+  (let* ((n (parse-integer (read-line stream)))
+         (m (make-array (list n n) :initial-element 0)))
+    (loop for r from 0 below n do
+         (loop for cc in (split-and-parse (read-line stream))
+            for s = 0 then (1+ s) do
+              (setf (aref m r s) cc)))
+    (solve-me  m n)))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
