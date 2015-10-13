@@ -1,11 +1,11 @@
 (defun solve-me (m n)
-  (format t "~A~%"
-   (- (loop for r from (1- n) downto 0
-         for c from 0 below n
-         summing (aref m r c))
-      (loop for r from 0 below n
-         for c from 0 below n
-         summing (aref m r c)))))
+  (princ (abs
+          (- (loop for r from (1- n) downto 0
+                for c from 0 below n
+                summing (aref m r c))
+             (loop for r from 0 below n
+                for c from 0 below n
+                summing (aref m r c))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -41,5 +41,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Warmup/lisp/diagonal-difference/"
-                                    "input0.txt"))
+                                    "input2.txt"))
       (solution s))))
