@@ -1,5 +1,9 @@
-(defun solve-me (l1 l2)
-  (format t "~A ~A" l1 l2))
+(defun solve-me (n k set)
+  (format t "~A ~A ~A" n k set)
+  (loop for x in set do
+       (loop for y in set do
+            (format t "~&~A ~A~%" x y)
+             )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -18,7 +22,7 @@
 (defun solution (&optional stream)
   (let ((l1 (split-and-parse (read-line stream)))
         (l2 (split-and-parse (read-line stream))))
-    (solve-me l1 l2)))
+    (solve-me (car l1) (cadr l1) l2)))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
