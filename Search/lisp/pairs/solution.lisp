@@ -1,7 +1,8 @@
 (defun solve-me (n k set)
-  (let ((diffs 0))
+  (let ((diffs 0)
+        (set2 set))
     (loop for x in set do
-         (loop for y in set do
+         (loop for y in set2 do
               (when (eq k (abs (- x y)))
                 (incf diffs))))
     (/ diffs 2)))
@@ -36,5 +37,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Search/lisp/pairs/"
-                                    "input0.txt"))
+                                    "input5.txt"))
       (solution s))))
