@@ -1,9 +1,10 @@
 (defun solve-me (n k set)
-  (format t "~A ~A ~A" n k set)
-  (loop for x in set do
-       (loop for y in set do
-            (format t "~&~A ~A~%" x y)
-             )))
+  (let ((diffs 0))
+    (loop for x in set do
+         (loop for y in set do
+              (when (eq k (abs (- x y)))
+                (incf diffs))))
+    (/ diffs 2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -22,7 +23,7 @@
 (defun solution (&optional stream)
   (let ((l1 (split-and-parse (read-line stream)))
         (l2 (split-and-parse (read-line stream))))
-    (solve-me (car l1) (cadr l1) l2)))
+    (princ (solve-me (car l1) (cadr l1) l2))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
