@@ -1,5 +1,10 @@
 (defun solve-me (m n prices)
-  (format t "~A ~A ~A~%" m n prices))
+  (declare (ignore n))
+  (let ((prices2 prices))
+    (loop for x in prices do
+         (loop for y in prices2)
+         )
+    (format t "~A ~A ~A~%" m n prices)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
