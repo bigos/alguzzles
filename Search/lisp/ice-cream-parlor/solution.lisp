@@ -11,13 +11,19 @@
 
 (defun solve-me (m n prices)
   (let* ((found1) (found2) (wanted))
+    (format t "~& ------->> ~A ~A~%" m n )
     (loop for x in prices do
          (setf wanted (- m x))
-         ;; (format t "wanted ~A~%" wanted)
-         (when  (position wanted prices)
-           (setf found1 (position x prices))
-           (setf found2 (position wanted prices :start (1+ found1)))
-           (format t "~A ~A~%" (1+ found1) (1+ found2)))
+         (when (> wanted 0)
+             (when  (position wanted prices)
+               (format t "wanted ~A~%" wanted)
+               (setf found1 (position x prices))
+               (setf found2 (position wanted prices :start (1+ found1)))
+               (if (and found1 found2)
+                   (format t "~A ~A~%" (1+ found1) (1+ found2))
+                   (format t "~&problems here~A ~A~%"  found1  found2)
+                   )
+               ))
        until found1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,5 +61,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Search/lisp/ice-cream-parlor/"
-                                    "input01.txt"))
+                                    "input02.txt"))
       (solution s))))
