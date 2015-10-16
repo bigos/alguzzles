@@ -1,3 +1,6 @@
+(defun solve-me (n k ints)
+  (format t "~A ~A ~A" n k ints))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -12,9 +15,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((n-and-k (split-and-parse (read-line stream)))
+  (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (format t "~A ~A~%" n-and-k ints)))
+    (solve-me (car nk) (cadr nk) ints)))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
