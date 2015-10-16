@@ -12,7 +12,8 @@
 (defun solve-me (m n prices)
   (let* ((found1) (found2) (wanted))
     (loop for x in prices do
-         (setf wanted (apply '- (sort (list m x) '>)))
+         (setf wanted (- m x))
+         ;; (format t "wanted ~A~%" wanted)
          (when  (position wanted prices)
            (setf found1 (position x prices))
            (setf found2 (position wanted prices :start (1+ found1)))
@@ -54,5 +55,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Search/lisp/ice-cream-parlor/"
-                                    "input0.txt"))
+                                    "input01.txt"))
       (solution s))))
