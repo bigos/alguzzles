@@ -1,3 +1,12 @@
+(defun partitions (n &aux parts)
+  (labels ((f (n part)
+             (cond
+               ((zerop n) (push part parts))
+               (t (loop for i from (if part (car part) 1) to n
+                     do (f (- n i) (cons i part)))))))
+    (f n nil))
+  (nreverse parts))
+
 ;; https://en.wikipedia.org/wiki/Partition_%28number_theory%29
 (defun adds-to (n sums nums)
   (let ((collection))
