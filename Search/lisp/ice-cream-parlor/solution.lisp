@@ -1,10 +1,23 @@
+(defun binary-search (value array)
+  (let ((low 0)
+        (high (1- (length array))))
+    (do () ((< high low) nil)
+      (let ((middle (floor (/ (+ low high) 2))))
+        (cond ((> (aref array middle) value)
+               (setf high (1- middle)))
+              ((< (aref array middle) value)
+               (setf low (1+ middle)))
+              (t (return middle)))))))
+
 (defun solve-me (m n prices)
-  (declare (ignore n))
-  (let ((prices2 prices))
+  (let* ((found1) (found2) (wanted))
     (loop for x in prices do
-         (loop for y in prices2)
-         )
-    (format t "~A ~A ~A~%" m n prices)))
+         (setf wanted (apply '- (sort (list m x) '>)))
+         (when  (position wanted prices)
+           (setf found1 (position x prices))
+           (setf found2 (position wanted prices :start (1+ found1)))
+           (format t "~A ~A~%" (1+ found1) (1+ found2)))
+       until found1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
