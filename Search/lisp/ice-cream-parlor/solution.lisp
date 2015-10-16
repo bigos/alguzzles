@@ -1,35 +1,13 @@
-(defun binary-search (value array)
-  (let ((low 0)
-        (high (1- (length array))))
-    (do () ((< high low) nil)
-      (let ((middle (floor (/ (+ low high) 2))))
-        (cond ((> (aref array middle) value)
-               (setf high (1- middle)))
-              ((< (aref array middle) value)
-               (setf low (1+ middle)))
-              (t (return middle)))))))
-
 (defun solve-me (m n prices)
   (let* ((found1) (found2) (wanted))
-    (format t "~& ------->> ~A ~A~%" m n )
+    ;; (format t "~& ------->> ~A ~A ~A~%" m n prices)
     (loop for x in prices do
          (setf wanted (- m x))
-         (when (> wanted 0)
-           (when  (position wanted prices)
-             (format t "wanted ~A~%" wanted)
-
-             (setf found1 (position x prices))
-             (setf found2 (position wanted prices))
-             (when (eq found1 found2)
-               (setf found2 (position wanted prices :start (1+ found1))))
-             (when (null found2)
-               (format t "~&big problem ~A ~A ~A ~A ~A ~A should be 240 908~% " m n x wanted found1 found2))
-             (if (and found1 found2)
-                 (format t "~A ~A~%" (1+ found1) (1+ found2))
-                 (format t "~&problems here ~A ~A~%"  found1  found2)
-                 )
-             ))
-       until found1)))
+         (when  (position wanted prices)
+           (setf found1 (position x prices))
+           (setf found2 (position wanted prices :start (1+ found1))))
+       until found2)
+    (format t "~A ~A~%" (1+ found1) (1+ found2))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -66,5 +44,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Search/lisp/ice-cream-parlor/"
-                                    "input03.txt"))
+                                    "input02.txt"))
       (solution s))))
