@@ -35,7 +35,8 @@
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
 
 (defun solve-me (n k ints)
-  (format t "~A ~A ~A" n k ints))
+  (format t "~A ~A ~A" n k ints)
+  (permute (car (loop for f in (partitions n) when (= k (length f)) collect f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -66,5 +67,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Greedy/lisp/flowers/"
-                                    "input0.txt"))
+                                    "input1.txt"))
       (solution s))))
