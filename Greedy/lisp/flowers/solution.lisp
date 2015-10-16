@@ -1,3 +1,29 @@
+(defun adds-to (n sums nums)
+  (let ((collection))
+    (comb n nums (lambda (x) (when (eq sums (apply '+ x))
+                               (push x collection))))
+    collection))
+
+(defun permute (list)
+  (if list
+      (mapcan #'(lambda (x)
+                  (mapcar #'(lambda (y) (cons x y))
+                          (permute (remove x list))))
+              list)
+      '(()))) ; else
+
+;; (print (permute '(A B Z)))
+
+(defun comb (m list fn)
+  (labels ((comb1 (l c m)
+             (when (>= (length l) m)
+               (if (zerop m) (return-from comb1 (funcall fn c)))
+               (comb1 (cdr l) c m)
+               (comb1 (cdr l) (cons (first l) c) (1- m)))))
+    (comb1 list nil m)))
+
+;; (comb 3 '(0 1 2 3 4 5) #'print)
+
 (defun solve-me (n k ints)
   (format t "~A ~A ~A" n k ints))
 
