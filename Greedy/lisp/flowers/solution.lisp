@@ -44,24 +44,9 @@
                           (subseq l (car s))
                           (concatenate 'list res (list (subseq l 0 (car s)))))))
 
-
-(defun permutations (l)
-  (let ((index-list (loop for x from 0 below (length l) collect x)))
-    (princ index-list)
-    (loop for i in (permute index-list)
-       collect (loop for ix in i
-                  collect (elt l ix)))))
-
 (defun solve-me (n k ints)
-  (let ((index-list (loop for x from 0 to (- k 1) collect x))
-        (klen-partitions
+  (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f)) collect f)))
-    (format t "~A ~A************ ~%" ints (length ints))
-    ;; why sort cuts off the rest of the list?
-    (setf ints (sort ints #'<))
-    (format t "~A ~A************ ~%" ints (length ints))
-    (format t "~A ~A ~A~%" n k ints)
-    (format t ">>>>>> ~A  ~A~%" klen-partitions index-list)
     (format t "~A~%"
             (loop for ps in klen-partitions
                minimize
@@ -71,7 +56,6 @@
                     summing
                       (loop for c in costs
                          for i = 0 then (1+ i)
-                         do (format t "~&==== ~A i ~A c ~A  ~A~%" ps i c (nth-cost i c))
                          summing (nth-cost i c)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -90,7 +74,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) ints)))
+    (solve-me (car nk) (cadr nk) (sort ints '<))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
