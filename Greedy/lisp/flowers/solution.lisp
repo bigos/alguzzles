@@ -39,7 +39,7 @@
 
 (defun split-list-by-list (s l &optional res)
   (if (null s)
-      (format t "~A" res)
+      (return-from split-list-by-list res)
       (split-list-by-list (cdr s)
                           (subseq l (car s))
                           (concatenate 'list res (list (subseq l 0 (car s)))))))
@@ -47,15 +47,21 @@
 (defun solve-me (n k ints)
   (format t "~A ~A ~A~%" n k ints)
   (let ((klen-partitions
-         (loop for f in (partitions n) when (= k (length f)) collect f))
-        (lot))
+         (loop for f in (partitions n) when (= k (length f)) collect f)))
     (format t "partitions ~A~%" klen-partitions)
     (loop for ps in klen-partitions do
          (format t "~A~%" ps)
-         (setf lot ints)
-         (loop for p in ps do
-              (dotimes (x p) )
-              (format t "-- ~A ~A~%" p)))))
+
+         (loop for costs in
+              (loop for s in (split-list-by-list ps ints)
+                 collect (sort s '>))
+            do (format t "ccc ~A~%" costs)
+              (loop for c in costs
+                 for i = 0 then (1+ i)
+                 do
+                   (format t "=== ~A ~A~%" c i))
+              )
+         )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
