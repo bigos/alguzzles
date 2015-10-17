@@ -64,9 +64,6 @@
     (format t ">>>>>> ~A  ~A~%" klen-partitions index-list)
     (format t "~A~%"
             (loop for ps in klen-partitions
-                 ;; (loop for pp in (permute index-list)
-                 ;;    for ps = (loop for pq in pp collecting (elt pss pq)))
-
                minimize
                  (loop for costs in
                       (loop for s in (split-list-by-list ps ints)
