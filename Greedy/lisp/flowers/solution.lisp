@@ -48,20 +48,20 @@
   (format t "~A ~A ~A~%" n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f)) collect f)))
-    (format t "partitions ~A~%" klen-partitions)
-    (loop for ps in klen-partitions do
-         (format t "~A~%" ps)
-
-         (loop for costs in
-              (loop for s in (split-list-by-list ps ints)
-                 collect (sort s '>))
-            do (format t "ccc ~A~%" costs)
-              (loop for c in costs
-                 for i = 0 then (1+ i)
-                 do
-                   (format t "=== ~A ~A~%" c i))
-              )
-         )))
+    (format t "partitions ~A ~A~%" klen-partitions
+            (loop for ps in klen-partitions do
+                 (format t "****************** ~A~%" ps)
+                 minimize
+                 (loop for costs in
+                      (loop for s in (split-list-by-list ps ints)
+                         collect (sort s '>))
+                    ;; do (format t "ccc ~A~%" costs)
+                    summing
+                      (loop for c in costs
+                         for i = 0 then (1+ i)
+                         do
+                           (format t "=== ~A ~A >> ~A~%" c i (nth-cost i c))
+                         summing (nth-cost i c)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
