@@ -44,6 +44,10 @@
                           (subseq l (car s))
                           (concatenate 'list res (list (subseq l 0 (car s)))))))
 
+;;; why it fails
+;;; (2 2) + (1 1) = 6+2
+;;; (2 1) + (2 1) = 4+2 !!!!!
+;;; need to think of better way of sorting arguments
 (defun solve-me (n k ints)
   (format t "==== ~A ~A ~A =====~%" n k ints)
   (let ((klen-partitions
