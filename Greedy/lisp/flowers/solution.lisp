@@ -14,6 +14,7 @@
                                (push x collection))))
     collection))
 
+;;; w/o repetition
 (defun permute (list)
   (if list
       (mapcan #'(lambda (x)
@@ -34,9 +35,27 @@
 
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
 
+(defun nth-cost (n price) (* (+ n 1) price))
+
+(defun split-list-by-list (s l &optional res)
+  (if (null s)
+      (format t "~A" res)
+      (split-list-by-list (cdr s)
+                          (subseq l (car s))
+                          (concatenate 'list res (list (subseq l 0 (car s)))))))
+
 (defun solve-me (n k ints)
-  (format t "~A ~A ~A" n k ints)
-  (permute (car (loop for f in (partitions n) when (= k (length f)) collect f))))
+  (format t "~A ~A ~A~%" n k ints)
+  (let ((klen-partitions
+         (loop for f in (partitions n) when (= k (length f)) collect f))
+        (lot))
+    (format t "partitions ~A~%" klen-partitions)
+    (loop for ps in klen-partitions do
+         (format t "~A~%" ps)
+         (setf lot ints)
+         (loop for p in ps do
+              (dotimes (x p) )
+              (format t "-- ~A ~A~%" p)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -54,7 +73,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) ints)))
+    (solve-me (car nk) (cadr nk) (sort ints '<))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
