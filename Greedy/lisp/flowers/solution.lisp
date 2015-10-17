@@ -47,6 +47,14 @@
      for i = 0 then (1+ i)
      collect (nth-cost i c)))
 
+
+;; CL-USER> (mapped-costs '(1 3) '(2 2 1 1))
+;; ((2) (2 1 1))
+;; CL-USER> (mapped-costs '(2 2) '(2 2 1 1))
+;; ((2 2) (1 1))
+(defun mapped-costs (ps ints)
+  (loop for s in (split-list-by-list ps ints) collect s))
+
 (defun split-list-by-list (s l &optional res)
   (if (null s)
       (return-from split-list-by-list res)
@@ -62,15 +70,13 @@
   (format t "==== ~A ~A ~A =====~%" n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f)) collect (reverse  f))))
+    (format t "partitions ~A~%" klen-partitions)
     (format t "~A~%"
             (loop for ps in klen-partitions
                do (format t "~&===== ~A~%" ps)
                collect
-                 (loop for costs in
-                      (loop for s in (split-list-by-list ps ints)
-                         collect s)
-                    collect
-                      (costs costs))))))
+                 (loop for costs in (mapped-costs ps ints)
+                    collect (costs costs))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
