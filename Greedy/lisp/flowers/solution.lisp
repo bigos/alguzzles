@@ -44,7 +44,7 @@
                           (subseq l (car s))
                           (concatenate 'list res (list (subseq l 0 (car s)))))))
 
-;;; why it fails
+;;; why it fails ints = (2 2 1 1) or (2 1 2 1)
 ;;; (2 2) + (1 1) = (2*1+2*2 + 1*1+1*2) = 6+3
 ;;; (2 1) + (2 1) = (2*1+1*2 + 2*1+1*2) = 4+4 !!!!!
 ;;; need to think of better way of sorting arguments
