@@ -37,6 +37,16 @@
 
 (defun nth-cost (n price) (* (+ n 1) price))
 
+(defun subseqent-costs (costs)
+  (loop for g in costs
+       collect
+       (costs g)))
+
+(defun costs (costs)
+  (loop for c in costs
+     for i = 0 then (1+ i)
+     collect (nth-cost i c)))
+
 (defun split-list-by-list (s l &optional res)
   (if (null s)
       (return-from split-list-by-list res)
@@ -54,15 +64,13 @@
          (loop for f in (partitions n) when (= k (length f)) collect (reverse  f))))
     (format t "~A~%"
             (loop for ps in klen-partitions
-                 do (format t "~&===== ~A~%" ps)
+               do (format t "~&===== ~A~%" ps)
                collect
                  (loop for costs in
                       (loop for s in (split-list-by-list ps ints)
                          collect s)
                     collect
-                      (loop for c in costs
-                         for i = 0 then (1+ i)
-                         collect (nth-cost i c)))))))
+                      (costs costs))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
