@@ -45,18 +45,20 @@
                           (concatenate 'list res (list (subseq l 0 (car s)))))))
 
 (defun solve-me (n k ints)
+  (format t "==== ~A ~A ~A =====~%" n k ints)
   (let ((klen-partitions
-         (loop for f in (partitions n) when (= k (length f)) collect f)))
+         (loop for f in (partitions n) when (= k (length f)) collect (reverse  f))))
     (format t "~A~%"
             (loop for ps in klen-partitions
-               minimize
+                 do (format t "~&===== ~A~%" ps)
+               collect
                  (loop for costs in
                       (loop for s in (split-list-by-list ps ints)
                          collect (sort s '>))
-                    summing
+                    collect
                       (loop for c in costs
                          for i = 0 then (1+ i)
-                         summing (nth-cost i c)))))))
+                         collect (nth-cost i c)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -74,7 +76,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) (sort ints '<))))
+    (solve-me (car nk) (cadr nk) (sort ints '>))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -87,5 +89,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Greedy/lisp/flowers/"
-                                    "input1.txt"))
+                                    "input1A.txt"))
       (solution s))))
