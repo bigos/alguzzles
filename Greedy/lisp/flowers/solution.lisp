@@ -47,6 +47,12 @@
 (defun solve-me (n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f)) collect f)))
+    (format t "~A ~A************ ~%" ints (length ints))
+    ;; why sort cuts off the rest of the list?
+    (setf ints (sort ints #'<))
+    (format t "~A ~A************ ~%" ints (length ints))
+    (format t "~A ~A ~A~%" n k ints)
+    (format t "~A~%" klen-partitions)
     (format t "~A~%"
             (loop for ps in klen-partitions
                minimize
@@ -56,6 +62,7 @@
                     summing
                       (loop for c in costs
                          for i = 0 then (1+ i)
+                         do (format t "~&==== ~A i ~A c ~A  ~A~%" ps i c (nth-cost i c))
                          summing (nth-cost i c)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,7 +81,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) (sort ints '<))))
+    (solve-me (car nk) (cadr nk) ints)))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -87,5 +94,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Greedy/lisp/flowers/"
-                                    "input1.txt"))
+                                    "input01.txt"))
       (solution s))))
