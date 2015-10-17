@@ -45,8 +45,8 @@
                           (concatenate 'list res (list (subseq l 0 (car s)))))))
 
 ;;; why it fails
-;;; (2 2) + (1 1) = 6+2
-;;; (2 1) + (2 1) = 4+2 !!!!!
+;;; (2 2) + (1 1) = (2*1+2*2 + 1*1+1*2) = 6+3
+;;; (2 1) + (2 1) = (2*1+1*2 + 2*1+1*2) = 4+4 !!!!!
 ;;; need to think of better way of sorting arguments
 (defun solve-me (n k ints)
   (format t "==== ~A ~A ~A =====~%" n k ints)
@@ -58,7 +58,7 @@
                collect
                  (loop for costs in
                       (loop for s in (split-list-by-list ps ints)
-                         collect (sort s '>))
+                         collect s)
                     collect
                       (loop for c in costs
                          for i = 0 then (1+ i)
