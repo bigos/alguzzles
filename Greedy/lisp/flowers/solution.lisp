@@ -7,6 +7,29 @@
     (f n nil))
   (nreverse parts))
 
+;;; (variations 2 3) => 000 .. 111
+(defun variations (n l)
+  (let ((buckets
+         (make-array l :initial-element 0))
+        (limit n)
+        (count 0))
+    (labels ((reset-bucket (level)
+               (loop for x from 0 below level do
+                    (setf (elt buckets x) 0)))
+             (varme (level)
+               (when (< level 1)
+                 (format t "~A  ~A~%" buckets level))
+               (incf (elt buckets level))
+               (when (>= (elt buckets level) limit)
+                 (when (< level (1- l))
+                   (varme (1+ level)))
+                 )
+               (reset-bucket level)
+               (setf level 0)))
+      (loop  while (not (>= count 23)) do
+           (incf count)
+           (varme 0)))))
+
 ;; https://en.wikipedia.org/wiki/Partition_%28number_theory%29
 (defun adds-to (n sums nums)
   (let ((collection))
@@ -25,15 +48,17 @@
 
 ;; (print (permute '(A B Z)))
 
-(defun comb (m list fn)
-  (labels ((comb1 (l c m)
-             (when (>= (length l) m)
-               (if (zerop m) (return-from comb1 (funcall fn c)))
-               (comb1 (cdr l) c m)
-               (comb1 (cdr l) (cons (first l) c) (1- m)))))
-    (comb1 list nil m)))
+(defun comb (m list)
+  (let ((result))
+    (labels ((comb1 (l c m)
+               (when (>= (length l) m)
+                 (if (zerop m) (return-from comb1 (push c result)))
+                 (comb1 (cdr l) c m)
+                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
+      (comb1 list nil m))
+    result))
 
-;; (comb 3 '(0 1 2 3 4 5) #'print)
+;; (comb 3 '(0 1 2 3 4 5))
 
 (defun nth-cost (n price)
   (let ((result (* (+ n 1) price)))
