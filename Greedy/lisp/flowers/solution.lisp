@@ -35,18 +35,17 @@
 
 ;; (comb 3 '(0 1 2 3 4 5) #'print)
 
-(defun nth-cost (n price) (* (+ n 1) price))
+(defun nth-cost (n price)
+  (let ((result (* (+ n 1) price)))
+    (format t "~&<<<< ~A ~A === ~A~%" n price result)
+    result))
 
-(defun subseqent-costs (costs)
-  (loop for g in costs
-       collect
-       (costs g)))
-
-(defun costs (costs)
+(defun costs1 (costs)
+  (format t "entering costs1 ~A~%" costs)
   (loop for c in costs
      for i = 0 then (1+ i)
-     collect (nth-cost i c)))
-
+     for r = (nth-cost i c)
+     sum r))
 
 ;; CL-USER> (mapped-costs '(1 3) '(2 2 1 1))
 ;; ((2) (2 1 1))
@@ -60,23 +59,26 @@
       (return-from split-list-by-list res)
       (split-list-by-list (cdr s)
                           (subseq l (car s))
-                          (concatenate 'list res (list (subseq l 0 (car s)))))))
+                          (concatenate 'list
+                                       res
+                                       (list (subseq l 0 (car s)))))))
 
 ;;; why it fails ints = (2 2 1 1) or (2 1 2 1)
 ;;; (2 2) + (1 1) = (2*1+2*2 + 1*1+1*2) = 6+3
 ;;; (2 1) + (2 1) = (2*1+1*2 + 2*1+1*2) = 4+4 !!!!!
 ;;; need to think of better way of sorting arguments
+
+;;; (solve-me 4 2 '(1000 100 10 1 ))
 (defun solve-me (n k ints)
   (format t "==== ~A ~A ~A =====~%" n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f)) collect (reverse  f))))
-    (format t "partitions ~A~%" klen-partitions)
-    (format t "~A~%"
+    (format t "~%partitions ~A~%" klen-partitions)
+    (format t ">results of permutations>>> ~A~%"
             (loop for ps in klen-partitions
-               do (format t "~&===== ~A~%" ps)
-               collect
+                 collect ; results of different partitions
                  (loop for costs in (mapped-costs ps ints)
-                    collect (costs costs))))))
+                    sum (costs1 costs))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
