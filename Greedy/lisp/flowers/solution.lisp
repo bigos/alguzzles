@@ -37,11 +37,11 @@
     results))
 
 ;; https://en.wikipedia.org/wiki/Partition_%28number_theory%29
+;; (adds-to 2 9 '(1 2 3 4 5 6 7 8)) => ((8 1) (7 2) (6 3) (5 4))
 (defun adds-to (n sums nums)
   (let ((collection))
-    (comb n nums (lambda (x) (when (eq sums (apply '+ x))
-                               (push x collection))))
-    collection))
+    (loop for x in (comb n nums)
+         when (eq sums (apply '+ x)) collect x)))
 
 ;;; w/o repetition
 (defun permute (list)
