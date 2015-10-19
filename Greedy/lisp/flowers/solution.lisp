@@ -14,11 +14,9 @@
         (limit n)
         (results))
     (labels ((reset-bucket (level)
-               (loop for x from 0 below level do
-                    (setf (elt buckets x) 0))
-               (setf level 0))
-             (varme (level)
-               ;; get values
+               (loop for x from 0 below level do (setf (elt buckets x) 0)))
+             (variation (level)
+               ;; get value and append it to results
                (when (zerop level )
                  (setf results
                        (append results
@@ -29,11 +27,12 @@
                ;; go to next level if necessary
                (when (>= (elt buckets level) limit)
                  (when (< level (1- l))
-                   (varme (1+ level))))
+                   (variation (1+ level))))
                ;; zero lower levels
-               (reset-bucket level)))
+               (reset-bucket level)
+               (setf level 0)))
       (loop  while  (every (lambda (x) (< x  n)) buckets) do
-           (varme 0)))
+           (variation 0)))
     results))
 
 ;; https://en.wikipedia.org/wiki/Partition_%28number_theory%29
