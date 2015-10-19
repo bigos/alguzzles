@@ -71,7 +71,6 @@
     result))
 
 (defun costs1 (costs)
-  (format t "~&entering costs1 ~A " costs)
   (loop for c in costs
      for i = 0 then (1+ i)
      for r = (nth-cost i c)
@@ -100,20 +99,20 @@
 
 ;;; (solve-me 4 2 '(1000 100 10 1 ))
 (defun solve-me (n k ints)
-  (format t "==== ~A ~A ~A =====~%" n k ints)
+  (format t "~%==== ~A ~A ~A =====" n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f)) collect (reverse  f)))
         (res))
     (format t "~%partitions ~A~%" klen-partitions)
     (setf res
           (loop for ps in klen-partitions
-             do (format t "~&----------~%")
-             minimize                 ; results of different partitions
-               (loop for costs in (mapped-costs ps ints)
+             for mapped-costs = (mapped-costs ps ints)
+             minimize                ; results of different partitions
+               (loop for costs in mapped-costs
                   for ccc = (costs1 costs)
                   do (format t " accumulated costs ~A~%" ccc)
                   sum ccc)
-             do (format t "~&^^^^^^^^^^^^^^^~&"))
+             do (format t "~&^^^^^^^^^^^^^^^~A ~&" mapped-costs))
           )
     (format t  "the result is ~A~%" res)
     res))
