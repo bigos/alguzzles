@@ -15,19 +15,23 @@
         (results))
     (labels ((reset-bucket (level)
                (loop for x from 0 below level do
-                    (setf (elt buckets x) 0)))
+                    (setf (elt buckets x) 0))
+               (setf level 0))
              (varme (level)
+               ;; get values
                (when (zerop level )
                  (setf results
                        (append results
                                (list (loop for x from 0 below l
                                         collect (elt buckets x))))))
+               ;; increase value
                (incf (elt buckets level))
+               ;; go to next level if necessary
                (when (>= (elt buckets level) limit)
                  (when (< level (1- l))
                    (varme (1+ level))))
-               (reset-bucket level)
-               (setf level 0)))
+               ;; zero lower levels
+               (reset-bucket level)))
       (loop  while  (every (lambda (x) (< x  n)) buckets) do
            (varme 0)))
     results))
