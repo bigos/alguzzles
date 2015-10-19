@@ -136,12 +136,11 @@
  ;; (solution) ; uncomment this when running on hacker-rank
 
 (defun repl-main ()
-  (let ((path (if(search "chess" (machine-instance))
-                 "Documents/hackerrank/"
-                 "Programming/hackerrank/")))
-    (with-open-file (s (concatenate 'string
-                                    (directory-namestring (user-homedir-pathname))
-                                    path
-                                    "Greedy/lisp/flowers/"
-                                    "input0.txt"))
+  (let ((path *load-pathname*))
+    (with-open-file (s (make-pathname
+                        :directory
+                        (pathname-directory
+                         (parse-namestring *load-pathname*))
+                        :name "input0" :type "txt"))
       (solution s))))
+(repl-main)
