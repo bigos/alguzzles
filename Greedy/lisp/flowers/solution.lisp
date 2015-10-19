@@ -12,23 +12,25 @@
   (let ((buckets
          (make-array l :initial-element 0))
         (limit n)
-        (count 0))
+        (results))
     (labels ((reset-bucket (level)
                (loop for x from 0 below level do
                     (setf (elt buckets x) 0)))
              (varme (level)
-               (when (< level 1)
-                 (format t "~A  ~A~%" buckets level))
+               (when (zerop level )
+                 (setf results
+                       (append results
+                               (list (loop for x from 0 below l
+                                        collect (elt buckets x))))))
                (incf (elt buckets level))
                (when (>= (elt buckets level) limit)
                  (when (< level (1- l))
-                   (varme (1+ level)))
-                 )
+                   (varme (1+ level))))
                (reset-bucket level)
                (setf level 0)))
-      (loop  while (not (>= count 23)) do
-           (incf count)
-           (varme 0)))))
+      (loop  while  (every (lambda (x) (< x  n)) buckets) do
+           (varme 0)))
+    results))
 
 ;; https://en.wikipedia.org/wiki/Partition_%28number_theory%29
 (defun adds-to (n sums nums)
