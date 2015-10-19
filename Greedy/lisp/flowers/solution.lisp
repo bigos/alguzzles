@@ -97,24 +97,22 @@
 ;;; (2 1) + (2 1) = (2*1+1*2 + 2*1+1*2) = 4+4 !!!!!
 ;;; need to think of better way of sorting arguments
 
-;;; (solve-me 4 2 '(1000 100 10 1 ))
-(defun solve-me (n k ints)
-  (format t "~%==== ~A ~A ~A =====" n k ints)
+(defun find-solution (n k ints)
   (let ((klen-partitions
-         (loop for f in (partitions n) when (= k (length f)) collect (reverse  f)))
-        (res))
-    (format t "~%partitions ~A~%" klen-partitions)
+         (loop for f in (partitions n) when (= k (length f))
+            collect (reverse  f))))
+    (loop for p in (permute ints) minimize (solve-me n k p klen-partitions))))
+
+;;; (solve-me 4 2 '(1000 100 10 1 ))
+(defun solve-me (n k ints klen-partitions)
+  (let ((res))
     (setf res
           (loop for ps in klen-partitions
              for mapped-costs = (mapped-costs ps ints)
              minimize                ; results of different partitions
                (loop for costs in mapped-costs
                   for ccc = (costs1 costs)
-                  do (format t " accumulated costs ~A~%" ccc)
-                  sum ccc)
-             do (format t "~&^^^^^^^^^^^^^^^~A ~&" mapped-costs))
-          )
-    (format t  "the result is ~A~%" res)
+                  sum ccc)))
     res))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,7 +131,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) (sort ints '>))))
+    (princ (find-solution (car nk) (cadr nk) ints))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -145,5 +143,5 @@
                                     (directory-namestring (user-homedir-pathname))
                                     path
                                     "Greedy/lisp/flowers/"
-                                    "input1A.txt"))
+                                    "input0.txt"))
       (solution s))))
