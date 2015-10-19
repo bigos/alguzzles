@@ -71,7 +71,7 @@
     result))
 
 (defun costs1 (costs)
-  (format t "entering costs1 ~A~%" costs)
+  (format t "~%entering costs1 ~A~%" costs)
   (loop for c in costs
      for i = 0 then (1+ i)
      for r = (nth-cost i c)
@@ -106,9 +106,11 @@
     (format t "~%partitions ~A~%" klen-partitions)
     (format t ">results of permutations>>> ~A~%"
             (loop for ps in klen-partitions
-                 collect ; results of different partitions
+               do (format t "~&----------~%")
+               collect               ; results of different partitions
                  (loop for costs in (mapped-costs ps ints)
-                    sum (costs1 costs))))))
+                    sum (costs1 costs)))
+            )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -130,7 +132,6 @@
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
-;;; still need to add  removing vertices
 (defun repl-main ()
   (let ((path (if(search "chess" (machine-instance))
                  "Documents/hackerrank/"
