@@ -67,11 +67,11 @@
 
 (defun nth-cost (n price)
   (let ((result (* (+ n 1) price)))
-    (format t "~&<<<< ~A ~A === ~A~%" n price result)
+    ;; (format t " << (~A+1) * ~A = ~A << " n price result)
     result))
 
 (defun costs1 (costs)
-  (format t "~%entering costs1 ~A~%" costs)
+  (format t "~&entering costs1 ~A " costs)
   (loop for c in costs
      for i = 0 then (1+ i)
      for r = (nth-cost i c)
@@ -102,15 +102,21 @@
 (defun solve-me (n k ints)
   (format t "==== ~A ~A ~A =====~%" n k ints)
   (let ((klen-partitions
-         (loop for f in (partitions n) when (= k (length f)) collect (reverse  f))))
+         (loop for f in (partitions n) when (= k (length f)) collect (reverse  f)))
+        (res))
     (format t "~%partitions ~A~%" klen-partitions)
-    (format t ">results of permutations>>> ~A~%"
-            (loop for ps in klen-partitions
-               do (format t "~&----------~%")
-               collect               ; results of different partitions
-                 (loop for costs in (mapped-costs ps ints)
-                    sum (costs1 costs)))
-            )))
+    (setf res
+          (loop for ps in klen-partitions
+             do (format t "~&----------~%")
+             minimize                 ; results of different partitions
+               (loop for costs in (mapped-costs ps ints)
+                  for ccc = (costs1 costs)
+                  do (format t " accumulated costs ~A~%" ccc)
+                  sum ccc)
+             do (format t "~&^^^^^^^^^^^^^^^~&"))
+          )
+    (format t  "the result is ~A~%" res)
+    res))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
