@@ -69,6 +69,13 @@
     ;; (format t " << (~A+1) * ~A = ~A << " n price result)
     result))
 
+;;; big surprise
+;;; both pairs of inputs are equal
+;; CL-USER> (costs1 '( 100000000 1))
+;; CL-USER> (costs1 '( 10000 100))
+;; ----------------------------------
+;; CL-USER> (costs1 '( 100000000 100))
+;; CL-USER> (costs1 '( 10000 1))
 (defun costs1 (costs)
   (loop for c in costs
      for i = 0 then (1+ i)
