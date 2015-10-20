@@ -38,9 +38,8 @@
 ;; https://en.wikipedia.org/wiki/Partition_%28number_theory%29
 ;; (adds-to 2 9 '(1 2 3 4 5 6 7 8)) => ((8 1) (7 2) (6 3) (5 4))
 (defun adds-to (n sums nums)
-  (let ((collection))
-    (loop for x in (comb n nums)
-         when (eq sums (apply '+ x)) collect x)))
+  (loop for x in (comb n nums)
+     when (eq sums (apply '+ x)) collect x))
 
 ;;; w/o repetition
 (defun permute (list)
@@ -76,6 +75,7 @@
      for r = (nth-cost i c)
      sum r))
 
+;;; we don't need mapped costs, we will do something like nn nn n of sorted values
 ;; CL-USER> (mapped-costs '(1 3) '(2 2 1 1))
 ;; ((2) (2 1 1))
 ;; CL-USER> (mapped-costs '(2 2) '(2 2 1 1))
@@ -98,6 +98,7 @@
 ;;; need to think of better way of sorting arguments
 
 (defun find-solution (n k ints)
+  (format T "~A ~A ~A~%" n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f))
             collect (reverse  f))))
@@ -105,13 +106,16 @@
 
 ;;; (solve-me 4 2 '(1000 100 10 1 ))
 (defun solve-me (n k ints klen-partitions)
+  (declare (ignore n k))
   (let ((res))
     (setf res
           (loop for ps in klen-partitions
              for mapped-costs = (mapped-costs ps ints)
+             do (format t "------ ~A~%" ps)
              minimize                ; results of different partitions
                (loop for costs in mapped-costs
                   for ccc = (costs1 costs)
+                  do (format t "~&~A ~A~%" costs ccc)
                   sum ccc)))
     res))
 
@@ -135,12 +139,12 @@
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
-(defun repl-main ()
-  (let ((path *load-pathname*))
-    (with-open-file (s (make-pathname
-                        :directory
-                        (pathname-directory
-                         (parse-namestring *load-pathname*))
-                        :name "input0" :type "txt"))
-      (solution s))))
-(repl-main)
+(defun main ()
+  (with-open-file (s (make-pathname
+                      :directory
+                      (pathname-directory
+                       (parse-namestring *load-pathname*))
+                      :name "input1A" :type "txt"))
+    (solution s)))
+;;; main runs upon (load the-file)
+(main)
