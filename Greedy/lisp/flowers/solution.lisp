@@ -100,16 +100,18 @@
                                        (list (subseq l 0 (car s)))))))
 
 
-(defun my-sort-values (n k ints)        ; almost there, but still no good
+(defun my-sort-values (n k ints)     ; almost there, but still no good
   (declare (ignore n))
   (let ((karr (make-array k :initial-element '()))
         (sorted-ints (sort ints '<)))
     (loop for i in sorted-ints
-       for x = (mod i k) do
+       for n = 0 then (1+ n)
+       for x = (mod n k) do
+       ;; (format t  "~&going to push ~A ~A to ~A = ~A~%" i n x (elt karr x))
          (push i (elt karr x)))
-    (princ karr)
+    ;;(princ karr)
     (loop for z from 0 below k
-         sum (costs1 (elt karr z)))))
+       sum (costs1 (elt karr z)))))
 
 ;;; why it fails ints = (2 2 1 1) or (2 1 2 1)
 ;;; (2 2) + (1 1) = (2*1+2*2 + 1*1+1*2) = 6+3
@@ -117,7 +119,7 @@
 ;;; need to think of better way of sorting arguments
 
 (defun find-solution (n k ints)
-  (format T "~A ~A ~A~%" n k ints)
+  ;; (format T "~A ~A ~A~%" n k ints)
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f))
             collect (reverse  f))))
