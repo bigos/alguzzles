@@ -1,3 +1,12 @@
+(defun solve-me (n ints)
+  (format t "~A" ints)
+  (let ((m (make-array (list n n))))
+    (loop for r from 0 below n do
+         (loop for c from 0 below n ;do
+              ;(setf (aref r c) (elt  (elt ints r) c))
+              ))
+    (princ m)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -9,14 +18,19 @@
   (map 'list
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
+
+(defun parsed-digits (string)
+  (loop for c across string
+     collect (parse-integer (format nil "~c" c))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
   (let ((n (parse-integer (read-line stream)))
         (ints))
     (dotimes (x n)
-      (push (split-and-parse (read-line stream)) ints))
-    (princ ints)))
+      (setf ints (concatenate 'list ints (parsed-digits (read-line stream)))))
+    (solve-me n ints)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
