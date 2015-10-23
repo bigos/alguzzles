@@ -99,6 +99,18 @@
                                        res
                                        (list (subseq l 0 (car s)))))))
 
+
+(defun my-sort-values (n k ints)        ; almost there, but still no good
+  (declare (ignore n))
+  (let ((karr (make-array k :initial-element '()))
+        (sorted-ints (sort ints '<)))
+    (loop for i in sorted-ints
+       for x = (mod i k) do
+         (push i (elt karr x)))
+    (princ karr)
+    (loop for z from 0 below k
+         sum (costs1 (elt karr z)))))
+
 ;;; why it fails ints = (2 2 1 1) or (2 1 2 1)
 ;;; (2 2) + (1 1) = (2*1+2*2 + 1*1+1*2) = 6+3
 ;;; (2 1) + (2 1) = (2*1+1*2 + 2*1+1*2) = 4+4 !!!!!
@@ -109,7 +121,9 @@
   (let ((klen-partitions
          (loop for f in (partitions n) when (= k (length f))
             collect (reverse  f))))
-    (loop for p in (permute ints) minimize (solve-me n k p klen-partitions))))
+    (loop for p in (permute ints)
+       minimize
+         (solve-me n k p klen-partitions))))
 
 ;;; (solve-me 4 2 '(1000 100 10 1 ))
 (defun solve-me (n k ints klen-partitions)
@@ -118,11 +132,11 @@
     (setf res
           (loop for ps in klen-partitions
              for mapped-costs = (mapped-costs ps ints)
-             do (format t "------ ~A~%" ps)
+             do (format nil "------ ~A~%" ps)
              minimize                ; results of different partitions
                (loop for costs in mapped-costs
                   for ccc = (costs1 costs)
-                  do (format t "~&~A ~A~%" costs ccc)
+                  do (format nil "~&~A ~A~%" costs ccc)
                   sum ccc)))
     res))
 
@@ -142,7 +156,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (ints (split-and-parse (read-line stream))))
-    (princ (find-solution (car nk) (cadr nk) ints))))
+    (princ (my-sort-values (car nk) (cadr nk) ints))))
 
  ;; (solution) ; uncomment this when running on hacker-rank
 
