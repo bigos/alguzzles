@@ -1,10 +1,34 @@
+(defun checkaround (m r c)
+  ;; (format t "~&called with ~A ~A ~A~%" m r c)
+  (let ((res)
+        (cell (aref m r c)))
+    (loop for coord in (list (cons (1- r) c)
+                             (cons r (1- c)) (cons r (1+ c))
+                             (cons (1+ r) c))
+       for r = (car coord)
+       for c = (cdr coord) do
+         (setf res (concatenate 'list res (list (aref m r c))) )
+         ;; (format t "~&using ~A ~A    ~A | ~A   ~A~%" r c coord res cell)
+         )
+    (every (lambda (x) (< x cell)) res)))
+
 (defun solve-me (n ints)
   ;; (format t "~A" ints)
   (let ((m (make-array (list n n))))
     (loop for r from 0 below n do
          (loop for c from 0 below n do
               (setf (aref m r c) (elt ints (+ (* n r) c)))))
-    (princ m)))
+    ;; (princ m)
+    ;; (terpri)
+    (loop for r from 0 below n do
+         (loop for c from 0 below n do
+              (if (and (and (> r 0) (< r (1- n)))
+                       (and (> c 0) (< c (1- n))))
+                  (format t "~A" (if (checkaround m r c)
+                                    "X"
+                                    (aref m r c)))
+                  (format t "~a" (aref m r c))))
+         (format t "~%"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
