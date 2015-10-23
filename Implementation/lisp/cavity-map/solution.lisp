@@ -1,10 +1,9 @@
 (defun solve-me (n ints)
-  (format t "~A" ints)
+  ;; (format t "~A" ints)
   (let ((m (make-array (list n n))))
     (loop for r from 0 below n do
-         (loop for c from 0 below n ;do
-              ;(setf (aref r c) (elt  (elt ints r) c))
-              ))
+         (loop for c from 0 below n do
+              (setf (aref m r c) (elt ints (+ (* n r) c)))))
     (princ m)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
