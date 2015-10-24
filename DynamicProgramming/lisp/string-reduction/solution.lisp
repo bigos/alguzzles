@@ -1,5 +1,15 @@
+(defun list-different (str)
+  (let ((prev (car str)))
+    (loop for x in (cdr str)
+       for y = 1 then (1+ y)
+       when (not (eq x prev))
+       collect (list x y)
+       do (setf prev x))))
+
 (defun solve-me (str)
-  (format t " ~s~%" str))
+  (format t "~&arguments ~A~%" str)
+  (princ (list-different str))
+  (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
