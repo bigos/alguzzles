@@ -1,5 +1,5 @@
-(defun solve-me (n cases)
-  (format t "~A ~A~%" n cases))
+(defun solve-me (str)
+  (format t " ~s~%" str))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -20,13 +20,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((n (parse-integer (read-line stream)))
-        (cases))
+  (let ((n (parse-integer (read-line stream))))
     (dotimes (x n)
-      (setf cases (concatenate 'list
-                               cases
-                               (list (string-to-characters (read-line stream))))))
-    (solve-me n cases)))
+      (solve-me (string-to-characters (read-line stream))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
