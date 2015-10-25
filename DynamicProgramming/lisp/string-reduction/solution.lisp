@@ -1,3 +1,18 @@
+(defun reduction (str)
+  (let ((as 0) (bs 0) (cs 0)
+        (counts))
+    (loop for c in str do
+         (cond ((eq c #\a) (incf as))
+               ((eq c #\b) (incf bs))
+               ((eq c #\c) (incf cs))))
+    (setf counts (list as bs cs))
+    (cond ((eq 2 (length (loop for c in counts
+                            when (zerop c) collect c)))
+           (length str))
+          ((or (every 'evenp counts)
+               (every 'oddp counts)) 2)
+          (T 1))))
+
 (defun possible-value (prev current)
   (cond ((eq prev #\a) (cond ((eq current #\b) #\c)
                              ((eq current #\c) #\b)
@@ -18,9 +33,10 @@
        do (setf prev x))))
 
 (defun solve-me (str)
-  (format t "~&arguments ~A~%" str)
-  (princ (list-different str))
-  (terpri))
+  ;; (format t "~&arguments ~A~%" str)
+  ;; (princ (list-different str))
+  ;; (terpri)
+  (format t "~&~s~%" (reduction str)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
