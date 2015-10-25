@@ -1,5 +1,18 @@
+(defun find-solution ( k a b)
+  ;; (format t " ~A ~A ~A~%"  k a b)
+  (let ((res
+         (loop for ax in a
+            for bx in b
+            collect (+ ax bx))))
+    (princ (if (every (lambda (x) (>= x k)) res)
+                         "YES"
+                         "NO"))
+    (terpri)))
+
 (defun solve-me (n k a b)
-  (format t "~A ~A ~A ~A~%" n k a b))
+  (declare (ignore n))
+  ;; (format t "~A ~A ~A ~A~%" n k a b)
+  (find-solution k (sort a '>) (sort b '<)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
