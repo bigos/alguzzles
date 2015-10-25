@@ -14,7 +14,7 @@
     (loop for x in (cdr str)
        for y = 1 then (1+ y)
        when (not (eq x prev))
-       collect (list x y (possible-value prev x))
+       collect (list y (list prev x) (possible-value prev x))
        do (setf prev x))))
 
 (defun solve-me (str)
