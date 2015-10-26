@@ -1,3 +1,22 @@
+(defun charpos (char)
+  (- (char-code char)
+     (char-code #\a)))
+
+(defun solve-me (s1 s2)
+  (format t "~&~s ~s~%" s1 s2)
+  ;; strings are anagrams if they have the same characters
+  ;; find and count characters in each string that does not belong to
+  ;; common character list
+  (let ((s1c (make-array 26 :initial-element 0))
+        (s2c (make-array 26 :initial-element 0))
+        )
+    (loop for c1 in s1 do (incf (aref s1c (charpos c1))))
+    (loop for c2 in s2 do (incf (aref s2c (charpos c2))))
+
+    (format t "~&~s~%" s1c)
+    (format t "~&~s~%" s2c)
+    ))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -9,16 +28,16 @@
   (map 'list
        (lambda (x) (parse-integer x))
        (split-by-one-space string)))
+
+(defun string-to-characters (string)
+  (loop for c across string
+     collect c))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((n (parse-integer (read-line stream)))
-        (nk) (nints-a) (nints-b))
-    (dotimes (x n)
-      (setf nk (split-and-parse (read-line stream)))
-      (setf nints-a (split-and-parse (read-line stream)))
-      (setf nints-b (split-and-parse (read-line stream)))
-      (solve-me (car nk) (cadr nk) nints-a nints-b))))
+  (let ((s1 (string-to-characters (read-line stream)))
+        (s2 (string-to-characters (read-line stream))))
+    (solve-me s1 s2)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
