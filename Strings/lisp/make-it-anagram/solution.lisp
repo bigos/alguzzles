@@ -3,19 +3,21 @@
      (char-code #\a)))
 
 (defun solve-me (s1 s2)
-  (format t "~&~s ~s~%" s1 s2)
+  ;; (format t "~&~s ~s~%" s1 s2)
   ;; strings are anagrams if they have the same characters
   ;; find and count characters in each string that does not belong to
   ;; common character list
   (let ((s1c (make-array 26 :initial-element 0))
-        (s2c (make-array 26 :initial-element 0))
-        )
-    (loop for c1 in s1 do (incf (aref s1c (charpos c1))))
-    (loop for c2 in s2 do (incf (aref s2c (charpos c2))))
-
-    (format t "~&~s~%" s1c)
-    (format t "~&~s~%" s2c)
-    ))
+        (s2c (make-array 26 :initial-element 0)))
+    (loop for c in s1 do (incf (aref s1c (charpos c))))
+    (loop for c in s2 do (incf (aref s2c (charpos c))))
+    ;; (format t "~&~s~%" s1c)
+    ;; (format t "~&~s~%" s2c)
+    (format t "~&~A~%"
+            (loop for y in (loop for x from 0 below 26
+                                  collecting (abs (- (aref s1c x)
+                                                     (aref s2c x))))
+                summing y ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
