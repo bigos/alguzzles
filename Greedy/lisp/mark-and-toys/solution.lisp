@@ -1,13 +1,14 @@
 (defun solve-me (n k prices)
   (declare (ignore n))
-  (format t "~A ~A ~A" n k prices)
-  (loop for p in prices
-     for tc = (car prices) then (+ tc p)
-       for c = 0 then (1+ c)
-     do (format t "~A ~A~%" p tc)
-       until (> tc k)
-       )
-  )
+  ;; (format t "~A ~A ~A" n k prices)
+  (princ
+   (loop
+      for p in prices
+      for tc = (car prices) then (+ tc p)
+      for c = 0 then (1+ c)
+      ;; do (format t "~&~A ~A ~A~%" p tc c)
+      until (> tc k)
+      finally (return c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
