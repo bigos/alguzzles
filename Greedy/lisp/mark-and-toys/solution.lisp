@@ -1,5 +1,13 @@
 (defun solve-me (n k prices)
-  (format t "~A ~A ~A" n k prices))
+  (declare (ignore n))
+  (format t "~A ~A ~A" n k prices)
+  (loop for p in prices
+     for tc = (car prices) then (+ tc p)
+       for c = 0 then (1+ c)
+     do (format t "~A ~A~%" p tc)
+       until (> tc k)
+       )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -21,7 +29,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (prices (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) prices)))
+    (solve-me (car nk) (cadr nk) (sort prices '<))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
