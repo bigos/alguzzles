@@ -2,8 +2,9 @@
   (let* ((ar (make-array n :initial-contents (sort a '<)))
          (smallest-gap (- (aref ar (1- n))
                           (aref ar 0))))
+    (format t "~A ~A ~A" n ar smallest-gap)
+    (loop for x from 1 below n)))
 
-      (format t "~A ~A ~A" n ar smallest-gap)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
