@@ -9,7 +9,7 @@
          (current-gap)
          (prev-num (* 1 smallest-gap))
          (current-num))
-    (format t "~A ~A ~A" n ar smallest-gap)
+    ;; (format t "~A ~A ~A" n ar smallest-gap)
     (loop for x from 1 below n do
          (setf current-num (aref ar x))
          (setf current-gap (current-gap prev-num current-num))
@@ -18,14 +18,14 @@
                  smallest-gap-pairs nil))
          (when (eq smallest-gap current-gap)
            (push (list prev-num current-num) smallest-gap-pairs))
-         (format t "~&~A ~A ~A ~A ~A~%"
-                 current-num
-                 prev-num
-                 smallest-gap
-                 current-gap
-                 smallest-gap-pairs)
+         ;; (format t "~&~A ~A ~A ~A ~A~%"
+         ;;         current-num
+         ;;         prev-num
+         ;;         smallest-gap
+         ;;         current-gap
+         ;;         smallest-gap-pairs)
          (setf prev-num current-num))
-    (format t "~&===========================~%")
+    ;;(format t "~&===========================~%")
     (loop for p in smallest-gap-pairs
        for leading-spaces = "" then " "
        do
