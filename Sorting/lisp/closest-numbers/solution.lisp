@@ -26,11 +26,11 @@
          ;;         smallest-gap-pairs)
          (setf prev-num current-num))
     ;;(format t "~&===========================~%")
-    (loop for p in smallest-gap-pairs
+    (loop for p in (sort smallest-gap-pairs
+                         (lambda (x y) (< (car x) (car y))))
        for leading-spaces = "" then " "
        do
-         (format T "~A~A ~A" leading-spaces (car  p) (cadr p)))
-    ))
+         (format T "~A~A ~A" leading-spaces (car  p) (cadr p)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,7 +58,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
