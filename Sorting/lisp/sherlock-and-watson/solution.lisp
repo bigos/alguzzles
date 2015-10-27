@@ -16,11 +16,11 @@
 
 (defun solution (&optional stream)
   (let* ((nkq (split-and-parse (read-line stream)))
-         (n (car nkq))
-         (k (cadr nkq))
-         (q (caddr nkq))
-         (a (make-array n :initial-contents (split-and-parse (read-line stream))))
-         (qs (loop for x from 1 to q collect (parse-integer (read-line stream)))))
+         (n (car nkq))                  ; array length
+         (k (cadr nkq))                 ; number of rotations
+         (q (caddr nkq))                ; queries
+         (a (split-and-parse (read-line stream)))
+         (queries (loop for x from 1 to q collect (parse-integer (read-line stream)))))
     (solve-me n k q a qs)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
