@@ -1,5 +1,10 @@
 (defun solve-me (n k q a qs)
-  (format t "~A ~A ~A ~A ~A" n k q a qs))
+  (declare (ignore q))
+  ;; k - number of rotations
+  ;;(format t "~A ~A ~A ~A ~A~%" n k q a qs)
+  (loop for qx in qs do
+       (format t "~&~A~%"
+               (aref a  (mod (- qx k) n)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -19,9 +24,11 @@
          (n (car nkq))                  ; array length
          (k (cadr nkq))                 ; number of rotations
          (q (caddr nkq))                ; queries
-         (a (split-and-parse (read-line stream)))
-         (queries (loop for x from 1 to q collect (parse-integer (read-line stream)))))
-    (solve-me n k q a qs)))
+         (a (make-array n :initial-contents
+                        (split-and-parse (read-line stream))))
+         (queries (loop for x from 1 to q collect
+                       (parse-integer (read-line stream)))))
+    (solve-me n k q a queries)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
