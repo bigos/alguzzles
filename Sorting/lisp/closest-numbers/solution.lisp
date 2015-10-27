@@ -1,9 +1,36 @@
+(defun current-gap (n1 n2)
+  (abs (- n1 n2)))
+
 (defun solve-me (n a)
   (let* ((ar (make-array n :initial-contents (sort a '<)))
-         (smallest-gap (- (aref ar (1- n))
-                          (aref ar 0))))
+         (smallest-gap (abs (- (aref ar (1- n))
+                               (aref ar 0))))
+         (smallest-gap-pairs)
+         (current-gap)
+         (prev-num (* 1 smallest-gap))
+         (current-num))
     (format t "~A ~A ~A" n ar smallest-gap)
-    (loop for x from 1 below n)))
+    (loop for x from 1 below n do
+         (setf current-num (aref ar x))
+         (setf current-gap (current-gap prev-num current-num))
+         (when (< current-gap smallest-gap)
+           (setf smallest-gap current-gap
+                 smallest-gap-pairs nil))
+         (when (eq smallest-gap current-gap)
+           (push (list prev-num current-num) smallest-gap-pairs))
+         (format t "~&~A ~A ~A ~A ~A~%"
+                 current-num
+                 prev-num
+                 smallest-gap
+                 current-gap
+                 smallest-gap-pairs)
+         (setf prev-num current-num))
+    (format t "~&===========================~%")
+    (loop for p in smallest-gap-pairs
+       for leading-spaces = "" then " "
+       do
+         (format T "~A~A ~A" leading-spaces (car  p) (cadr p)))
+    ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
