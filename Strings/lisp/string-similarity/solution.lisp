@@ -1,5 +1,24 @@
+(defun prefcnt (s1 s2)
+  (loop
+     for cx = 0 then (1+ cx)
+     for c1 in s1
+     for c2 in s2
+     while (eql c1 c2)
+     finally (return cx)))
+
+(defun find-solution (str)
+  (let ((c (loop for suffixes = str then (cdr suffixes)
+              until (null suffixes)
+              sum (prefcnt suffixes str))))
+    (format t "~&~A~%" c)))
+
+;; Explanation:
+;; For the first case, the suffixes of the string are "ababaa", "babaa", "abaa", "baa", "aa" and "a". The similarities of these strings with the string "ababaa" are 6,0,3,0,1, & 1 respectively. Thus, the answer is 6 + 0 + 3 + 0 + 1 + 1 = 11.
+
 (defun solve-me (tc strings)
-  (format t "~A ~A" tc strings))
+  (declare (ignore tc))
+  (loop for string in strings do
+       (find-solution (loop for c across string collecting c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
