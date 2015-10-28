@@ -3,7 +3,7 @@
      for cx = 0 then (1+ cx)
      for c1 in s1
      for c2 in s2
-     while (eql c1 c2)
+     while (eq c1 c2)
      finally (return cx)))
 
 (defun find-solution (str)
