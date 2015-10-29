@@ -1,26 +1,21 @@
-(defun find-solution (str)
-  (loop for suffixes = str then (cdr suffixes)
-     until (null suffixes)
-     sum (loop
-            for cx = 0 then (1+ cx)
-            for c1 in suffixes
-            for c2 in str
-            while (eq c1 c2)
-            finally (return cx)
-              )))
-
 (defun find-ar-solution (ar)
   (let ((l (length ar)))
     (loop for x from 0 below l
-       for suffixes = (subseq ar x) ;;;;;;;; optimise me
        sum (loop
               for cx = 0 then (1+ cx)
-              for c1 across suffixes
-              for c2 across ar
-              while (eq c1 c2)
+              for c1 from x below l
+              for c2 from 0 below l
+              while (eq (aref ar c1) (aref ar c2))
               finally (return cx)
                 ))))
 
+;; ababaa 6
+;;  babaa 0
+;;   abaa 3
+;;    baa 0
+;;     aa 1
+;;      a 1
+;;
 ;; Explanation:
 ;; For the first case, the suffixes of the string are "ababaa", "babaa", "abaa", "baa", "aa" and "a". The similarities of these strings with the string "ababaa" are 6,0,3,0,1, & 1 respectively. Thus, the answer is 6 + 0 + 3 + 0 + 1 + 1 = 11.
 
