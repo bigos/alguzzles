@@ -1,4 +1,4 @@
-;; hmm
+;; hmm think of Knuth-Morris-Pratt substring search
 
 (defun prefcnt (s1 s2)
   (loop
