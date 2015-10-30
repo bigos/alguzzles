@@ -1,33 +1,26 @@
-;;; brute force substring search
-(defun find-ar-solution (ar)
-  (let ((l (length ar)))
-    (format t "~A~%"
-            (loop for x from 0 below l
-               sum (loop
-                      for cx = 0 then (1+ cx)
-                      for c1 from x below l
-                      for c2 from 0 below l
-                      while (eq (aref ar c1) (aref ar c2))
-                      finally (return cx))))))
+;; hmm
 
-;; ababaa 6
-;;  babaa 0
-;;   abaa 3
-;;    baa 0
-;;     aa 1
-;;      a 1
-;;
+(defun prefcnt (s1 s2)
+  (loop
+     for cx = 0 then (1+ cx)
+     for c1 in s1
+     for c2 in s2
+     while (eq c1 c2)
+     finally (return cx)))
+
+(defun find-solution (str)
+  (let ((c (loop for suffixes = str then (cdr suffixes)
+              until (null suffixes)
+              sum (prefcnt suffixes str))))
+    (format t "~&~A~%" c)))
 
 ;; Explanation:
-;; For the first case, the suffixes of the string are "ababaa", "babaa", "abaa",
-;; "baa", "aa" and "a". The similarities of these strings with the string
-;; "ababaa" are 6,0,3,0,1, & 1 respectively. Thus,
-;; the answer is 6 + 0 + 3 + 0 + 1 + 1 = 11.
+;; For the first case, the suffixes of the string are "ababaa", "babaa", "abaa", "baa", "aa" and "a". The similarities of these strings with the string "ababaa" are 6,0,3,0,1, & 1 respectively. Thus, the answer is 6 + 0 + 3 + 0 + 1 + 1 = 11.
 
 (defun solve-me (tc strings)
   (declare (ignore tc))
   (loop for string in strings do
-       (find-ar-solution (make-array (length string) :initial-contents (loop for c across string collecting c)))))
+       (find-solution (loop for c across string collecting c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
