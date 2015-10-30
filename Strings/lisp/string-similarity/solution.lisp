@@ -1,3 +1,4 @@
+;;; brute force substring search
 (defun find-ar-solution (ar)
   (let ((l (length ar)))
     (format t "~A~%"
@@ -18,7 +19,10 @@
 ;;
 
 ;; Explanation:
-;; For the first case, the suffixes of the string are "ababaa", "babaa", "abaa", "baa", "aa" and "a". The similarities of these strings with the string "ababaa" are 6,0,3,0,1, & 1 respectively. Thus, the answer is 6 + 0 + 3 + 0 + 1 + 1 = 11.
+;; For the first case, the suffixes of the string are "ababaa", "babaa", "abaa",
+;; "baa", "aa" and "a". The similarities of these strings with the string
+;; "ababaa" are 6,0,3,0,1, & 1 respectively. Thus,
+;; the answer is 6 + 0 + 3 + 0 + 1 + 1 = 11.
 
 (defun solve-me (tc strings)
   (declare (ignore tc))
