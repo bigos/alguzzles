@@ -1,5 +1,20 @@
+(defun find-different-count (s1 s2)
+  ;; TODO: finish me
+  (format nil "~A ~A" (length s1) (intersection s1 s2))
+  )
+
+(defun find-solution (l a)
+  (let* ((half-l (/ l 2))
+         (s1 (subseq a 0 (1- half-l)))
+         (s2 (subseq a half-l)))
+    (find-different-count s1 s2)))
+
 (defun solve-me (a)
-  (format t " ~A~%"  a))
+  (let ((l (length a)))
+    (format t "~&~A~%"
+            (if (evenp l)
+                (find-solution l a)
+                -1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
