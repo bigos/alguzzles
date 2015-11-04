@@ -1,11 +1,15 @@
 (defun find-different-count (s1 s2)
-  ;; TODO: finish me
-  (format nil "~A ~A" (length s1) (intersection s1 s2))
-  )
+  (let ((ss1 (sort s1 'char<))
+        (ss2 (sort s2 'char<)))
+    (length
+     (set-difference
+      ss1
+      ss2
+      :test 'equal))))
 
 (defun find-solution (l a)
   (let* ((half-l (/ l 2))
-         (s1 (subseq a 0 (1- half-l)))
+         (s1 (subseq a 0 (- half-l 0)))
          (s2 (subseq a half-l)))
     (find-different-count s1 s2)))
 
