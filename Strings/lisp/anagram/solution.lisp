@@ -1,11 +1,25 @@
 (defun find-different-count (s1 s2)
-  (let ((ss1 (sort s1 'char<))
-        (ss2 (sort s2 'char<)))
-    (length
-     (set-difference
-      ss1
-      ss2
-      :test 'equal))))
+  (let ((ht1 (make-hash-table))
+        (ht2 (make-hash-table))
+        )
+    (loop for c1 in s1 do
+         (incf (gethash c1 ht1 0)))
+    (loop for c2 in s2 do
+         (incf (gethash c2 ht2 0)))
+    (format t "~&----------------------~%")
+    (maphash (lambda (k v)
+               (format t "~@C: ~D~%" k v))
+             ht1)
+    (format t "~&=====~%")
+    (maphash (lambda (k v)
+               (format t "~@C: ~D~%" k v))
+             ht2)
+    (format t "~&++++++++++ ")
+    (loop for c in s1 do
+         (format t "~A ~A     " c (abs (- (gethash c ht1 0)
+                                          (gethash c ht2 0)))))
+    (format t "" ht1)
+    (terpri)))
 
 (defun find-solution (l a)
   (let* ((half-l (/ l 2))
