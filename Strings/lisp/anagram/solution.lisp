@@ -1,46 +1,25 @@
-(defmacro mem-defun (name args body)
-  (let ((hash-name (gensym)))
-    `(let ((,hash-name (make-hash-table :test 'equal)))
-       (defun ,name ,args
-         (or (gethash (list ,@args) ,hash-name)
-             (setf (gethash (list ,@args) ,hash-name)
-                   ,body))))))
-
-(mem-defun lcs (xs ys)
-           (labels ((longer (a b) (if (> (length a) (length b)) a b)))
-             (cond ((or (null xs) (null ys)) nil)
-                   ((equal (car xs) (car ys)) (cons (car xs) (lcs (cdr xs) (cdr ys))))
-                   (t (longer (lcs (cdr xs) ys)
-                              (lcs xs (cdr ys)))))))
-
-(defun find-different-count (s1 s2)
-  (let ((ht1 (make-hash-table))
-        (ht2 (make-hash-table))
-        )
-    (loop for c1 in s1 do
-         (incf (gethash c1 ht1 0)))
-    (loop for c2 in s2 do
-         (incf (gethash c2 ht2 0)))
-    (format t "~&----------------------~%")
-    (maphash (lambda (k v)
-               (format t "~@C: ~D~%" k v))
-             ht1)
-    (format t "~&=====~%")
-    (maphash (lambda (k v)
-               (format t "~@C: ~D~%" k v))
-             ht2)
-    (format t "~&++++++++++ ")
-    (loop for c in s1 do
-         (format t "~A ~A     " c (abs (- (gethash c ht1 0)
-                                          (gethash c ht2 0)))))
-    (format t "~&~A  ~A~%"  (length s1) (length (lcs s1 s2)))
-    (terpri)))
+(defun levenshtein (a b)
+  (let* ((la  (length a))
+         (lb  (length b))
+         (rec (make-array (list (1+ la) (1+ lb)) :initial-element nil)))
+    (labels ((leven (x y)
+               (cond
+                 ((zerop x) y)
+                 ((zerop y) x)
+                 ((aref rec x y) (aref rec x y))
+                 (t (setf (aref rec x y)
+                          (+ (if (char= (char a (- la x)) (char b (- lb y))) 0 1)
+                             (min (leven (1- x) y)
+                                  (leven x (1- y))
+                                  (leven (1- x) (1- y)))))))))
+      (leven la lb))))
 
 (defun find-solution (l a)
   (let* ((half-l (/ l 2))
-         (s1 (subseq a 0 (- half-l 0)))
-         (s2 (subseq a half-l)))
-    (find-different-count s1 s2)))
+         (s1 (sort (subseq a 0 (- half-l 0)) 'char<))
+         (s2 (sort (subseq a half-l) 'char<)))
+    ;; (format t "~&~A ~A~%" s1 s2)
+    (levenshtein s1 s2)))
 
 (defun solve-me (a)
   (let ((l (length a)))
@@ -65,8 +44,7 @@
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream))))
     (dotimes (x tc)
-      (solve-me
-       (loop for c across (read-line stream) collect c)))))
+      (solve-me (read-line stream)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
