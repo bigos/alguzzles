@@ -18,7 +18,7 @@
   (let* ((half-l (/ l 2))
          (s1 (sort (subseq a 0 (- half-l 0)) 'char<))
          (s2 (sort (subseq a half-l) 'char<)))
-    ;; (format t "~&~A ~A~%" s1 s2)
+    (format t "~&~A ~A~%" s1 s2)
     (levenshtein s1 s2)))
 
 (defun solve-me (a)
