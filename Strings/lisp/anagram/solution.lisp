@@ -30,12 +30,7 @@
   (let* ((half-l (/ l 2))
          (s1 (sort (subseq a 0 (- half-l 0)) 'char<))
          (s2 (sort (subseq a half-l) 'char<)))
-    ;; (format t "~s ~S ~%" s1 s2)
-    (find-different-count s1 s2)
-    ;; (count nil
-    ;;        (map 'list (lambda (x)  (eq (car x) (cadr x)))
-    ;;             (mapcar #'list s1 s2 )))
-    ))
+    (find-different-count s1 s2)))
 
 (defun solve-me (str)
   (let ((l (length str))
