@@ -16,20 +16,14 @@
                 (setf hc1 (gethash k ht1 0))
                 (setf hc2 (gethash k ht2 0))
                 (setf hcdiff (abs (- hc1 hc2)))
-                (incf hcdiffsum hcdiff)
-                ;; (format t "~@C: ~D (~S ~S) ~A| ~A~%" k v
-                ;;         hc1
-                ;;         hc2
-                ;;         hcdiff
-                ;;         hcdiffsum)
-                )
+                (incf hcdiffsum hcdiff))
               htr)
       (/ hcdiffsum 2)))
 
 (defun find-solution (l a)
   (let* ((half-l (/ l 2))
-         (s1 (sort (subseq a 0 (- half-l 0)) 'char<))
-         (s2 (sort (subseq a half-l) 'char<)))
+         (s1 (subseq a 0 (- half-l 0)))
+         (s2 (subseq a half-l)))
     (find-different-count s1 s2)))
 
 (defun solve-me (str)
