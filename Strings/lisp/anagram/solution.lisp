@@ -1,9 +1,35 @@
+(defun find-different-count (s1 s2)
+  (let ((ht1 (make-hash-table))
+        (ht2 (make-hash-table))
+        (htr (make-hash-table))
+        (odds 0))
+    (loop for c1 in s1 do
+         (incf (gethash c1 ht1 0))
+         (incf (gethash c1 htr 0)))
+    (loop for c2 in s2 do
+         (incf (gethash c2 ht2 0))
+         (incf (gethash c2 htr 0)))
+    (format t "~&----------------------~%")
+    ;; (maphash (lambda (k v)
+    ;;            (format t "~@C: ~D~%" k v))
+    ;;          ht1)
+    ;; (format t "~&=====~%")
+    ;; (maphash (lambda (k v)
+    ;;            (format t "~@C: ~D~%" k v))
+    ;;          ht2)
+    (format t "~&=====~%")
+    (maphash (lambda (k v)
+               (format t "~@C: ~D ~a~%" k v (if (oddp v) '! '-)))
+             htr)
+    (format t "~&++++++++++ ")
+    (maphash (lambda (k v)  (when (oddp v) (incf odds))) htr)
+    (format t "~%=== ~A~%" (/ odds 2))))
+
 (defun find-solution (l a)
   (let* ((half-l (/ l 2))
-         (s1 (sort (subseq a 0 (- half-l 0)) 'char<))
-         (s2 (sort (subseq a half-l) 'char<)))
-    (format t "~&~A ~A~%" s1 s2)
-    (hmm s1 s2)))
+         (s1 (subseq a 0 (- half-l 0)))
+         (s2 (subseq a half-l)))
+    (find-different-count s1 s2)))
 
 (defun solve-me (a)
   (let ((l (length a)))
@@ -28,7 +54,7 @@
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream))))
     (dotimes (x tc)
-      (solve-me (read-line stream)))))
+      (solve-me (loop for c across (read-line stream) collect c)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -37,7 +63,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input02" :type "txt"))
     (solution s)))
 
 (main)
