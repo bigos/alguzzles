@@ -2,13 +2,14 @@
   (let* ((half-l (/ l 2))
          (s1 (sort (subseq a 0 (- half-l 0)) 'char<))
          (s2 (sort (subseq a half-l) 'char<)))
-    ;; (format t "~s ~S ~%" s1 s2)
+     (format t "~s ~S ~%" s1 s2)
     (count nil
            (map 'list (lambda (x)  (eq (car x) (cadr x)))
                 (mapcar #'list s1 s2 )))))
 
-(defun solve-me (a)
-  (let ((l (length a)))
+(defun solve-me (str)
+  (let ((l (length str))
+        (a (loop for x across str collect x)))
     (format t "~&~A~%"
             (if (evenp l)
                 (find-solution l a)
@@ -30,7 +31,7 @@
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream))))
     (dotimes (x tc)
-      (solve-me (loop for c across (read-line stream) collect c)))))
+      (solve-me (read-line stream)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
