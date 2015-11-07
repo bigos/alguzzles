@@ -1,5 +1,21 @@
 (defun solve-me (n a)
-  (format t "~A ~A~%" n a))
+  (let ((ar (make-array (list n 3)))
+        (lt 1)
+        (rt 2))
+    (setf (aref ar 0 lt)      0)
+    (setf (aref ar (1- n) rt) 0)
+    (loop for d in a
+       for li from 0 below n do
+         (setf (aref ar li 0) d))
+    (loop for i from 1 below n do
+         (setf (aref ar i lt) (+ (aref ar (1- i) lt)
+                                 (aref ar (1- i) 0))))
+    (loop for i from (- n 2) downto 0 do
+         (setf (aref ar i rt) (+ (aref ar (1+ i) rt)
+                                 (aref ar (1+ i) 0))))
+
+
+    (format t "~A ~A~%" n ar)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
