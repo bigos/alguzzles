@@ -1,3 +1,25 @@
+;; (defun binary-search (value
+;;                       array
+;;                       &optional (low 0) (high (1- (length array))))
+;;   (if (< high low)
+;;       nil
+;;       (let ((middle (floor (/ (+ low high) 2))))
+;;         (cond ((> (aref array middle) value)
+;;                (binary-search value array low (1- middle)))
+;;               ((< (aref array middle) value)
+;;                (binary-search value array (1+ middle) high))
+;;               (t middle)))))
+
+
+;;; my pseudocode
+;; go to the middle
+;; index 1 has sums 1 ltr and 6 rtl
+;; they are not equal
+;; and because ltr < rtl
+;; we expect to search for the next point to the right
+;; we go to middle between indexes 1 and 3 that is 2
+;; and can start the loop again
+
 (defun solve-me (n a)
   (let ((ar (make-array (list n 3)))
         (lt 1)
@@ -14,7 +36,7 @@
          (setf (aref ar i rt) (+ (aref ar (1+ i) rt)
                                  (aref ar (1+ i) 0))))
 
-
+    ;; add some kind of binary search
     (format t "~A ~A~%" n ar)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
