@@ -12,8 +12,10 @@
                   (date-part 'm expected)))
           (* 500 (- (date-part 'm actual)
                     (date-part 'm expected)))
-          (if (eq (date-part 'm actual)
-                  (date-part 'm expected))
+          (if (and (eq (date-part 'm actual)
+                       (date-part 'm expected))
+                   (> (date-part 'd actual)
+                      (date-part 'd expected)))
               (* 15 (- (date-part 'd actual)
                        (date-part 'd expected)))
               0))))
@@ -43,7 +45,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input00" :type "txt"))
     (solution s)))
 
 (main)
