@@ -1,5 +1,23 @@
+(defun freq-hash (s)
+  (let ((h (make-hash-table)))
+    (loop for c across s do
+         (setf (gethash c h) T))
+    h))
+
+;; loop though the string s1 until all lower case Latin letters or end of string are found
+;; do the same with s2
+;; compare hashes of letters of both strings and see if there is at least one key with values above 0
 (defun solve-me (s1 s2)
-  (format t "~s   ~s~%" s1 s2))
+  (let ((s1h (freq-hash s1))
+        (s2h (freq-hash s2))
+        (res))
+    (loop for c from (char-code #\a) to (char-code #\z)
+       do
+         (if (and (gethash (code-char c) s1h)
+                  (eq (gethash (code-char c) s1h)
+                      (gethash (code-char c) s2h)))
+             (setf res T)))
+    (format t "~&~A~%" (if res "YES" "NO"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
