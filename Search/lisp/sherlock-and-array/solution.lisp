@@ -20,10 +20,12 @@
 ;; we go to middle between indexes 1 and 3 that is 2
 ;; and can start the loop again
 
+
 (defun solve-me (n a)
   (let ((ar (make-array (list n 3)))
         (lt 1)
-        (rt 2))
+        (rt 2)
+        (middle))
     (setf (aref ar 0 lt)      0)
     (setf (aref ar (1- n) rt) 0)
     (loop for d in a
@@ -35,9 +37,19 @@
     (loop for i from (- n 2) downto 0 do
          (setf (aref ar i rt) (+ (aref ar (1+ i) rt)
                                  (aref ar (1+ i) 0))))
-
-    ;; add some kind of binary search
-    (format t "~A ~A~%" n ar)))
+    (labels ((binary-serch (low high count)
+               ;; (format t "~&--- ~A ~A~%" low high)
+               (setf middle (floor (+ low high) 2))
+               (if (eq (aref ar middle lt)
+                       (aref ar middle rt))
+                   "YES"
+                   (if (eq (- high low) 1)
+                       "NO"
+                       (if (> (aref ar middle lt)
+                              (aref ar middle rt))
+                           (binary-serch low middle (1+ count))
+                           (binary-serch middle high (1+ count)))))))
+      (binary-serch 0 (1- n) 0))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -55,8 +67,9 @@
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream))))
     (dotimes (x tc)
-      (solve-me (parse-integer (read-line stream))
-                (split-and-parse (read-line stream))))))
+      (format t "~&~A~%"
+              (solve-me (parse-integer (read-line stream))
+                        (split-and-parse (read-line stream)))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
