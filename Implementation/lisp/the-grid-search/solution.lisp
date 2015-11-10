@@ -1,5 +1,27 @@
-(defun solve-me (rcg  rcp ar ap)
-  (format t "~&~a~%~a~%~A~%~A~%" rcg  rcp ar ap))
+;; find matching topleft
+;; if rect matches wanted stop
+;; otherwise repeat until running out of valid indexes
+
+(defun solve-me (rcg rcp ar ap)
+  ; (format t "~&~a~%~a~%~A~%~A~%~%" rcg  rcp ar ap)
+  (let ((oho)
+        (found)
+        (tl (aref ap 0 0)))
+    (loop for row from 0 to (- (car rcg) (car rcp))
+       do (loop for col from 0 to (- (cadr rcg) (cadr rcp))
+             do (when (eq tl (aref ar row col))
+                  (setf oho T)
+                  (loop for r from 0 below (car rcp)
+                     do (loop for c from 0 below (cadr rcp)
+                           do (when (not (eq (aref ap r c)
+                                             (aref ar (+ row r) (+ col c))))
+                                (setf oho nil))
+                           while oho)
+                     while oho)
+                  (when oho (setf found T)))
+             until found)
+       until found)
+    (format t "~&~A~%" (if found "found" "not found"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
