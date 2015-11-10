@@ -1,8 +1,5 @@
-(defun solve-me (rcg r rcp p)
-  (let ((ar) (ap))
-    ;; (setf ar (make-array rcg :initial-contents r))
-    ;; (setf ap (make-array rcp :initial-contents p))
-    (format t "~&~a~%~a~%~A~%~A~%~%~a~%~a" rcg r rcp p ar ap)))
+(defun solve-me (rcg  rcp ar ap)
+  (format t "~&~a~%~a~%~A~%~A~%" rcg  rcp ar ap))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -25,11 +22,13 @@
     (dotimes (x tc)
       (setf rcg (split-and-parse (read-line stream)))
       (setf r (loop for r below (car rcg)
-                 collecting (split-and-parse (read-line stream))))
+                 collecting (loop for c across (read-line stream) collect c)))
+      (setf ar (make-array rcg :initial-contents r))
       (setf rcp (split-and-parse (read-line stream)))
       (setf p (loop for r below (car rcp)
-                 collecting (split-and-parse (read-line stream))))
-      (solve-me rcg r rcp p))))
+                 collecting (loop for c across (read-line stream) collect c)))
+      (setf ap (make-array rcp :initial-contents p))
+      (solve-me rcg rcp  ar ap))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
