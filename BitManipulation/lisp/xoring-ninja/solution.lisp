@@ -1,5 +1,18 @@
+(defun comb (m list)
+  (let ((result))
+    (labels ((comb1 (l c m)
+               (when (>= (length l) m)
+                 ;; added reversing in the push function
+                 (if (zerop m) (return-from comb1 (push (reverse c) result)))
+                 (comb1 (cdr l) c m)
+                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
+      (comb1 list nil m))
+    result))
+
 (defun solve-me (n l)
-  (format t "~A ~A~%" n l))
+  (format t "~A ~A~%" n l)
+  (princ
+   (loop for x from 1 to n collect (comb x l))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
