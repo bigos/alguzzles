@@ -1,7 +1,3 @@
-;; find matching topleft
-;; if rect matches wanted stop
-;; otherwise repeat until running out of valid indexes
-
 (defun solve-me (rcg rcp ar ap)
   ; (format t "~&~a~%~a~%~A~%~A~%~%" rcg  rcp ar ap)
   (let ((oho)
@@ -21,7 +17,7 @@
                   (when oho (setf found T)))
              until found)
        until found)
-    (format t "~&~A~%" (if found "found" "not found"))))
+    (format t "~&~A~%" (if found "YES" "NO"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
