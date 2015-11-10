@@ -21,7 +21,7 @@
     (dotimes (x tc)
       (setf rcg (split-and-parse (read-line stream)))
       (setf r (loop for r below (car rcg)
-                    collecting (split-and-parse (read-line stream))))
+                 collecting (split-and-parse (read-line stream))))
       (setf rcp (split-and-parse (read-line stream)))
       (setf p (loop for r below (car rcp)
                  collecting (split-and-parse (read-line stream))))
