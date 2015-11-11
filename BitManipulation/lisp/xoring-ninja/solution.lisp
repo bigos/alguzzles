@@ -13,11 +13,20 @@
 ;; (logxor 1 2 3)
 
 (defun solve-me (n l)
-  (format t "~A ~A~%" n l)
-  (princ
-   (loop for x from 1 to n collect (comb x l))))
+  ;; (format t "~A ~A~%" n l)
+  (let ((combinations
+         (loop for x from 1 to n
+            collect (comb x l)))
+        (res 0))
+    (loop for cx in combinations do
+         (loop for cy in cx do
+              (incf res (apply 'logxor cy))
+            ;; (format t "~a ~A ~a~%" cy (apply 'logxor cy) res)
+              ))
+    (princ (mod res  (+ 7 (expt 10 9))))
+    (terpri)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
      as j = (position #\Space string :start i)
