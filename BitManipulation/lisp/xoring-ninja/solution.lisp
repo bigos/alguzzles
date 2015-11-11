@@ -9,11 +9,11 @@
                 (setf (aref a (- k j)) m))
            (return t)))))
 
-(defun all-combinations (n k)
-  (if (or (< k 0) (< n k)) '()
-      (let ((a (make-array k)))
-        (loop for i below k do (setf (aref a i) i))
-        (loop collect (coerce a 'list) while (next-combination n a)))))
+;; (defun all-combinations (n k)
+;;   (if (or (< k 0) (< n k)) '()
+;;       (let ((a (make-array k)))
+;;         (loop for i below k do (setf (aref a i) i))
+;;         (loop collect (coerce a 'list) while (next-combination n a)))))
 
 (defun map-combinations (n k fun)
   (if (and (>= k 0) (>= n k))
@@ -23,23 +23,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun comb (m list)
-  (let ((result))
-    (labels ((comb1 (l c m)
-               (when (>= (length l) m)
-                 ;; added reversing in the push function
-                 (if (zerop m) (return-from comb1 (push (reverse c) result)))
-                 (comb1 (cdr l) c m)
-                 (comb1 (cdr l) (cons (car l) c) (1- m)))))
-      (comb1 list nil m))
-    result))
-
 (defun solve-me (n a)
   (let ((res 0))
     (loop for x from 1 to n do
-         (map-combinations n x
-                           (lambda (y)
-                             (loop for i in y do (incf res (logxor res  (elt a i)))))))
+         (map-combinations n x 'null
+                           ;; (lambda (y)
+                           ;;   (let ((tr 0))
+                           ;;     (loop for i in y do
+                           ;;          (setf tr (logxor tr (elt a i))))
+                           ;;     (incf res tr)))
+                           )
+         )
     (princ (mod res  (+ 7 (expt 10 9))))
     (terpri)))
 
@@ -72,7 +66,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input06" :type "txt"))
     (solution s)))
 
 (main)
