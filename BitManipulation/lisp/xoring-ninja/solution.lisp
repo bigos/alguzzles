@@ -34,14 +34,12 @@
       (comb1 list nil m))
     result))
 
-(defun solve-me (n l)
-  ;; (format t "~A ~A~%" n l)
+(defun solve-me (n a)
   (let ((res 0))
     (loop for x from 1 to n do
-         (loop for cy in (comb x l) do
-              (incf res (apply 'logxor cy))
-            ;; (format t "~a ~A ~a~%" cy (apply 'logxor cy) res)
-              ))
+         (map-combinations n x
+                           (lambda (y)
+                             (incf res (apply 'logxor (loop for i in y collect (elt a i)))))))
     (princ (mod res  (+ 7 (expt 10 9))))
     (terpri)))
 
@@ -59,11 +57,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((tc (parse-integer (read-line stream))))
+  (let ((tc (parse-integer (read-line stream)))
+        (n))
     (dotimes (x tc)
+      (setf n (parse-integer (read-line stream)))
       (solve-me
-       (parse-integer (read-line stream))
-       (split-and-parse (read-line stream))))))
+       n (make-array n :initial-contents (split-and-parse (read-line stream)))))))
 
 
 ;; (solution) ; uncomment this when running on hacker-rank
