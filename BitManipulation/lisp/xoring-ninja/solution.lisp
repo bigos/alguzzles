@@ -9,12 +9,8 @@
       (comb1 list nil m))
     result))
 
-;; xoring single value 1 must me paded with 0
-;; (boole boole-xor 1 0)
-;; 2 arg form
-;; (boole boole-xor 1 2)
-;; three digit form
-;; (boole boole-xor (boole boole-xor 1 2) 3)
+;;; xoring values
+;; (logxor 1 2 3)
 
 (defun solve-me (n l)
   (format t "~A ~A~%" n l)
