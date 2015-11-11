@@ -39,7 +39,7 @@
     (loop for x from 1 to n do
          (map-combinations n x
                            (lambda (y)
-                             (incf res (apply 'logxor (loop for i in y collect (elt a i)))))))
+                             (loop for i in y do (incf res (logxor res  (elt a i)))))))
     (princ (mod res  (+ 7 (expt 10 9))))
     (terpri)))
 
@@ -72,7 +72,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input06" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
