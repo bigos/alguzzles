@@ -1,9 +1,11 @@
-(defun dimentions (str)
-  (let* ((l (length str))
-         (s (sqrt l))
+(defun dimentions (l)
+  (let* ((s (sqrt l))
          (r (floor s))
          (c (ceiling s)))
-    (list c r)))
+    ;; (format t "~A ~A <======~%" (* r c) l)
+    (if (>= (* r c) l)
+        (list c r)
+        (list c (1+ r)))))
 
 (defun strip-chars (str chars)
   (remove-if (lambda (ch) (find ch chars)) str))
@@ -11,8 +13,7 @@
 (defun i2co (x cs)
   (cons
    (mod x cs)
-   (/ (- x (mod x cs)) cs)
-   ))
+   (/ (- x (mod x cs)) cs)))
 
 (defun solve-me (enc)
   (let ((ar)
@@ -20,21 +21,24 @@
         (rs)
         (cs))
     (setf enc (strip-chars enc '(#\Space)))
-    (setf dimentions  (dimentions enc))
-    (format t "dimentions  ~A~%" dimentions)
-    (setf ar (make-array dimentions)
+    ;; (format t "~A ~A~%" enc (length enc))
+    (setf dimentions  (dimentions (length enc)))
+    ;; (format t "~A dimentions  ~a length ~%" dimentions (length enc))
+    (setf ar (make-array dimentions :initial-element #\+)
           rs (car dimentions)
           cs (cadr dimentions))
+    ;; (format t "empty array ~A~%" ar)
     (loop for c across enc
        for x from 0 below (length enc)
        for cc = (i2co x rs)
-       do
-         (setf rx (floor x rs)
-               cx (mod x cs))
-         (format t "~A ~A~%" (car cc) (cdr cc))
-          (setf (aref ar (car cc) (cdr cc)) c)
-         )
-    (princ ar)))
+       do (setf (aref ar (car cc) (cdr cc)) c))
+    ;; (format t "fille the array ~A~%" ar)
+    (loop for r from 0 below rs do
+         (loop for c from 0 below cs
+            for zn = (aref ar r c) do
+              (unless (eql zn #\+)
+                (princ zn)))
+         (when (< r rs) (princ #\space)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -60,7 +64,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input1" :type "txt"))
     (solution s)))
 
 (main)
