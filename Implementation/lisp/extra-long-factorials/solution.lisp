@@ -1,5 +1,12 @@
+(defun ! (n)
+  (labels ((fact (n total)
+              (if (zerop n)
+                  total
+                  (fact (1- n) (* n total)))))
+    (fact n 1)))
+
 (defun solve-me (n)
-  (princ n))
+  (princ (! n)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
