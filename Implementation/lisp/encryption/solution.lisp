@@ -3,10 +3,16 @@
          (s (sqrt l))
          (r (floor s))
          (c (ceiling s)))
-    (list r c)))
+    (list c r)))
 
 (defun strip-chars (str chars)
   (remove-if (lambda (ch) (find ch chars)) str))
+
+(defun i2co (x cs)
+  (cons
+   (mod x cs)
+   (/ (- x (mod x cs)) cs)
+   ))
 
 (defun solve-me (enc)
   (let ((ar)
@@ -14,19 +20,21 @@
         (rs)
         (cs))
     (setf enc (strip-chars enc '(#\Space)))
-    (setf dimentions (dimentions enc))
+    (setf dimentions  (dimentions enc))
+    (format t "dimentions  ~A~%" dimentions)
     (setf ar (make-array dimentions)
           rs (car dimentions)
           cs (cadr dimentions))
     (loop for c across enc
        for x from 0 below (length enc)
+       for cc = (i2co x rs)
        do
-         (setf (aref ar
-                     (mod x rs) (floor x cs)) ;wrong
-               c)
+         (setf rx (floor x rs)
+               cx (mod x cs))
+         (format t "~A ~A~%" (car cc) (cdr cc))
+          (setf (aref ar (car cc) (cdr cc)) c)
          )
-    (princ ar)
-    ))
+    (princ ar)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
