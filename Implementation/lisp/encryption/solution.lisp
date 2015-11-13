@@ -1,9 +1,32 @@
+(defun dimentions (str)
+  (let* ((l (length str))
+         (s (sqrt l))
+         (r (floor s))
+         (c (ceiling s)))
+    (list r c)))
+
 (defun strip-chars (str chars)
   (remove-if (lambda (ch) (find ch chars)) str))
 
 (defun solve-me (enc)
-  (setf enc (strip-chars enc '(#\Space)))
-  (princ enc))
+  (let ((ar)
+        (dimentions)
+        (rs)
+        (cs))
+    (setf enc (strip-chars enc '(#\Space)))
+    (setf dimentions (dimentions enc))
+    (setf ar (make-array dimentions)
+          rs (car dimentions)
+          cs (cadr dimentions))
+    (loop for c across enc
+       for x from 0 below (length enc)
+       do
+         (setf (aref ar
+                     (mod x rs) (floor x cs)) ;wrong
+               c)
+         )
+    (princ ar)
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
