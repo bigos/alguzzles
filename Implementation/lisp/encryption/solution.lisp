@@ -1,4 +1,8 @@
+(defun strip-chars (str chars)
+  (remove-if (lambda (ch) (find ch chars)) str))
+
 (defun solve-me (enc)
+  (setf enc (strip-chars enc '(#\Space)))
   (princ enc))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
