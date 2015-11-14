@@ -1,21 +1,24 @@
 (defun sum-vals-mod (a m)
-  (mod  (loop for x across a sum x) m))
+  (declare (optimize (speed 3) (safety 0)))
+  ;; (mod  (loop for x across a sum x) m)
+  1
+  )
 
 (defun max-subarray (a m)
-  ;; code times out
+  (declare (optimize (speed 3) (safety 0)))
   (let ((n (length a))
         (ss)
         (ms 0)
         (max-ms-so-far 0)
         (max-ms (1- m)))
-    (loop for w from n downto 1 do
+    (loop for w from 1 to n do
          (loop for s from 0 to(- n w) do
-              (setf ss (subseq a s (+ s w))
-                    ms (sum-vals-mod ss m)
-                    max-ms-so-far (max ms max-ms-so-far))
-              ;; (format t "~&====== ~A ~A ~A ~A" w s ss ms)
+              (setq ms (sum-vals-mod
+                        (subseq a s (+ s w))
+                        m))
+              (setq max-ms-so-far (max max-ms-so-far  ms))
             until (= ms max-ms))
-         until (= ms max-ms))
+       until (= ms max-ms))
     max-ms-so-far))
 
 (defun solve-me (nm ints)
@@ -49,7 +52,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input01" :type "txt"))
+                      :name "input02" :type "txt"))
     (solution s)))
 
 (main)
