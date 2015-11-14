@@ -1,3 +1,11 @@
+(defun max-subarray (a m)
+  (let ((max-so-far 0)
+        (max-ending-here 0))
+    (loop for x across a do
+         (setf max-ending-here (max 0          (+ max-ending-here x))
+               max-so-far      (max max-so-far (mod max-ending-here m))))
+    max-so-far))
+
 (defun solve-me (nm ints)
   (let ((a (make-array (car nm) :initial-contents ints)))
     (princ  (max-subarray a (cadr nm))  )
