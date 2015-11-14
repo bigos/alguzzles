@@ -1,9 +1,8 @@
 (defun sum-vals-mod (a m)
   (mod  (loop for x across a sum x) m))
 
-
 (defun max-subarray (a m)
-  ;; (format t "array: ~A m: ~A" a m)
+  ;; code times out
   (let ((n (length a))
         (ss)
         (ms 0)
