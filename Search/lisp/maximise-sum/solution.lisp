@@ -3,20 +3,26 @@
 
 
 (defun max-subarray (a m)
-  (format t "array: ~A m: ~A" a m)
+  ;; (format t "array: ~A m: ~A" a m)
   (let ((n (length a))
-        (ss))
+        (ss)
+        (ms 0)
+        (max-ms-so-far 0)
+        (max-ms (1- m)))
     (loop for w from n downto 1 do
          (loop for s from 0 to(- n w) do
-              (setf ss (subseq a s (+ s w)))
-              (format t "~&====== ~A ~A ~A ~A" w s ss (sum-vals-mod ss m))
-              )
-         )
-    (terpri)))
+              (setf ss (subseq a s (+ s w))
+                    ms (sum-vals-mod ss m)
+                    max-ms-so-far (max ms max-ms-so-far))
+              ;; (format t "~&====== ~A ~A ~A ~A" w s ss ms)
+            until (= ms max-ms))
+         until (= ms max-ms))
+    max-ms-so-far))
 
 (defun solve-me (nm ints)
   (let ((a (make-array (car nm) :initial-contents ints)))
-    (max-subarray a (cadr nm))))
+    (princ (max-subarray a (cadr nm)))
+    (terpri)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -44,7 +50,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input01" :type "txt"))
     (solution s)))
 
 (main)
