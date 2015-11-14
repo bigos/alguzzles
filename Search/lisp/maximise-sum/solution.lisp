@@ -5,15 +5,6 @@
   )
 
 (defun max-subarray (a m)
-<<<<<<< HEAD
-  (let ((max-so-far 0)
-        (max-ending-here 0))
-    (loop for x across a do
-         (setf max-ending-here (max 0          (+ max-ending-here x))
-               max-so-far      (max max-so-far (mod max-ending-here
-                                                    m))))
-    max-so-far))
-=======
   (declare (optimize (speed 3) (safety 0)))
   (let ((n (length a))
         (ss)
@@ -29,7 +20,6 @@
             until (= ms max-ms))
        until (= ms max-ms))
     max-ms-so-far))
->>>>>>> 13a93eb673505b07031b6b4a714705d8e26c62a0
 
 (defun solve-me (nm ints)
   (let ((a (make-array (car nm) :initial-contents ints)))
