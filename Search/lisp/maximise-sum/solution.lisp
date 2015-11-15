@@ -4,6 +4,23 @@
       (aref a end)
       (- (aref a end) (aref a (1- start)))))
 
+;;; translation of following:
+;; https://github.com/arcturus611/Learning-C/blob/master/HRe_CONTEST_max_mod_subarray.c
+;;; wrong results
+(defun max-mod-subarray (a n m)
+  (loop for i from 0 below n do
+       (setf (aref a i) (mod (aref a i) m)))
+  (let ((max-ending-here (aref a 0))
+        (max-so-far (aref a 0))
+        (temp-sum)
+        (temp-val))
+    (loop for i from 1 below n do
+         (setf temp-val (aref a i)
+               temp-sum (mod (+ temp-val max-ending-here) m)
+               max-ending-here (max temp-val temp-sum)
+               max-so-far (max max-so-far max-ending-here)))
+    max-so-far))
+
 (defun max-subarray (a n m)
   (declare (optimize (speed 3) (safety 0))
            (inline indexed-subarray))
@@ -14,10 +31,10 @@
        for x across a
        for i = 0 then (1+ i)
        for y = (aref a 0) then (+ x y) do
-         (setf (aref indexes i) y))
-    (loop for s from 0 below n do
+         (setf (aref indexes i) (mod y m)))
+    (loop for s from (1- n) downto 0 do
          (loop for x from s below n do
-              (setf my-max (max my-max
+              (setq my-max (max my-max
                                 (mod (indexed-subarray indexes s x)
                                      m)))))
     my-max))
@@ -53,7 +70,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input01" :type "txt"))
+                      :name "input01A" :type "txt"))
     (solution s)))
 
 (main)
