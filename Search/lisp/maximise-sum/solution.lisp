@@ -1,29 +1,30 @@
-(defun sum-vals-mod (a m)
+(defun indexed-subarray (a start end)
   (declare (optimize (speed 3) (safety 0)))
-  ;; (mod  (loop for x across a sum x) m)
-  1
-  )
+  (if (zerop start)
+      (aref a end)
+      (- (aref a end) (aref a (1- start)))))
 
-(defun max-subarray (a m)
-  (declare (optimize (speed 3) (safety 0)))
-  (let ((n (length a))
-        (ss)
-        (ms 0)
-        (max-ms-so-far 0)
-        (max-ms (1- m)))
-    (loop for w from 1 to n do
-         (loop for s from 0 to(- n w) do
-              (setq ms (sum-vals-mod
-                        (subseq a s (+ s w))
-                        m))
-              (setq max-ms-so-far (max max-ms-so-far  ms))
-            until (= ms max-ms))
-       until (= ms max-ms))
-    max-ms-so-far))
+(defun max-subarray (a n m)
+  (declare (optimize (speed 3) (safety 0))
+           (inline indexed-subarray))
+  (let ((indexes (make-array n))
+        (my-max 0)
+        (found nil))
+    (loop
+       for x across a
+       for i = 0 then (1+ i)
+       for y = (aref a 0) then (+ x y) do
+         (setf (aref indexes i) y))
+    (loop for s from 0 below n do
+         (loop for x from s below n do
+              (setf my-max (max my-max
+                                (mod (indexed-subarray indexes s x)
+                                     m)))))
+    my-max))
 
 (defun solve-me (nm ints)
   (let ((a (make-array (car nm) :initial-contents ints)))
-    (princ (max-subarray a (cadr nm)))
+    (princ (max-subarray a (car nm) (cadr nm)))
     (terpri)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -52,7 +53,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input02" :type "txt"))
+                      :name "input01" :type "txt"))
     (solution s)))
 
 (main)
