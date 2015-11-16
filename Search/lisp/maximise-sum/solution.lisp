@@ -3,26 +3,22 @@
 ;;; slime-compile-defun with a cursor inside of a defun
 
 (defun max-subarray (ints n m)
-  ;; (declare (optimize (speed 3)))
-  (let ((indexes (make-array (list n)))
-        (my-max 0))
+  ;(declare (optimize (speed 3) (safety 0)))
+  (let ((indexes (make-array (list n))))
     (loop
        for x in ints
        for i = 0 then (1+ i)
        for y = (car ints) then (+ x y)
        do
          (setf (aref indexes i) (mod y m)))
-    (loop for s from 0 below n do
-         (loop for x from s below n do
-              (setq my-max (max my-max
-                                (mod
-                                 (if (zerop s)
-                                     (aref indexes x)
-                                     (- (aref indexes x)
-                                        (aref indexes (1- s))))
-                                 m)
-                                ))))
-    my-max))
+    (loop for s from 0 below n
+       maximize (loop for x from s below n
+                   maximize (mod
+                             (if (zerop s)
+                                 (aref indexes x)
+                                 (- (aref indexes x)
+                                    (aref indexes (1- s))))
+                             m)))))
 
 (defun solve-me (nm ints)
   (princ (max-subarray ints (car nm) (cadr nm)))
