@@ -3,7 +3,7 @@
 ;;; slime-compile-defun with a cursor inside of a defun
 
 (defun max-subarray (ints n m)
-  ;(declare (optimize (speed 3) (safety 0)))
+  ;;  (declare (optimize (speed 3) (safety 0)))
   (let ((indexes (make-array (list n))))
     (loop
        for x in ints
