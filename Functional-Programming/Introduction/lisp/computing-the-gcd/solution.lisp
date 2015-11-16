@@ -1,6 +1,3 @@
-(defun solve-me (a b)
-  (format t "~a ~A " a b))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -15,8 +12,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((params (split-and-parse (read-line stream))))
-    (solve-me (car params) (cadr params))))
+  (let* ((params (split-and-parse (read-line stream)))
+         (a (car params))
+         (b (cadr params)))
+    (format t
+            "~A~%"
+            (gcd (max a b) (min a b)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
