@@ -1,7 +1,11 @@
-;;;
-
 (defun solve-me (orders)
-  (princ orders))
+  (let* ((sorted (sort  orders
+                        (lambda (x y) (< (+ (elt x 1) (elt x 2))
+                                         (+ (elt y 1) (elt y 2))))))
+         (d))
+    (setf d (loop for o in sorted collect (car o)))
+    (princ (car d))
+    (loop for x in (cdr d) do (format t " ~A" x))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -19,7 +23,7 @@
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream)))
          (orders
-          (loop for x from 0 below tc
+          (loop for x from 1 to tc
              for o = (split-and-parse (read-line stream))
              collect (list x (car o) (cadr o)))))
     (solve-me orders)))
@@ -31,7 +35,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input1" :type "txt"))
     (solution s)))
 
 (main)
