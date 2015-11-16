@@ -1,48 +1,32 @@
-(defun indexed-subarray (a start end)
-  (declare (optimize (speed 3) (safety 0)))
-  (if (zerop start)
-      (aref a end)
-      (- (aref a end) (aref a (1- start)))))
+;;; to see compiler notes run
+;;; M-x slime-compile-file in the Emacs buffer
+;;; slime-compile-defun with a cursor inside of a defun
 
-;;; translation of following:
-;; https://github.com/arcturus611/Learning-C/blob/master/HRe_CONTEST_max_mod_subarray.c
-;;; wrong results
-(defun max-mod-subarray (a n m)
-  (loop for i from 0 below n do
-       (setf (aref a i) (mod (aref a i) m)))
-  (let ((max-ending-here (aref a 0))
-        (max-so-far (aref a 0))
-        (temp-sum)
-        (temp-val))
-    (loop for i from 1 below n do
-         (setf temp-val (aref a i)
-               temp-sum (mod (+ temp-val max-ending-here) m)
-               max-ending-here (max temp-val temp-sum)
-               max-so-far (max max-so-far max-ending-here)))
-    max-so-far))
-
-(defun max-subarray (a n m)
-  (declare (optimize (speed 3) (safety 0))
-           (inline indexed-subarray))
-  (let ((indexes (make-array n))
-        (my-max 0)
-        (found nil))
+(defun max-subarray (ints n m)
+  ;; (declare (optimize (speed 3)))
+  (let ((indexes (make-array (list n)))
+        (my-max 0))
     (loop
-       for x across a
+       for x in ints
        for i = 0 then (1+ i)
-       for y = (aref a 0) then (+ x y) do
+       for y = (car ints) then (+ x y)
+       do
          (setf (aref indexes i) (mod y m)))
-    (loop for s from (1- n) downto 0 do
+    (loop for s from 0 below n do
          (loop for x from s below n do
               (setq my-max (max my-max
-                                (mod (indexed-subarray indexes s x)
-                                     m)))))
+                                (mod
+                                 (if (zerop s)
+                                     (aref indexes x)
+                                     (- (aref indexes x)
+                                        (aref indexes (1- s))))
+                                 m)
+                                ))))
     my-max))
 
 (defun solve-me (nm ints)
-  (let ((a (make-array (car nm) :initial-contents ints)))
-    (princ (max-subarray a (car nm) (cadr nm)))
-    (terpri)))
+  (princ (max-subarray ints (car nm) (cadr nm)))
+  (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
