@@ -1,3 +1,8 @@
+(defun solve-me (a b)
+  (if (zerop b)
+      a
+      (solve-me b (mod a b) )))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -17,7 +22,7 @@
          (b (cadr params)))
     (format t
             "~A~%"
-            (gcd (max a b) (min a b)))))
+            (solve-me (max a b) (min a b)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
