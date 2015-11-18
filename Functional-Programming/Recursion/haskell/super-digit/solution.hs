@@ -1,12 +1,15 @@
 import Control.Monad
 -- import Debug.Trace
 
+       -- not working
 
+getData = do
+  dd <- fmap (map read . words) getLine
+  let n = head dd :: Int
+  let k = last dd :: Int
+  return (n, k)
 
 main :: IO ()
 main = do
-  nk <- readLn :: IO Int
-  n = first nk
-  k = second nk
-  let solution = solve n k
-  mapM_ print solution
+  nk <- getData
+  print  nk
