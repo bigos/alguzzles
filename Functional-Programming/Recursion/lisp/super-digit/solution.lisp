@@ -1,9 +1,8 @@
 (defun num2digits (n)
-  (format nil
-          "~D"
-          (apply '+ (loop for x across n
-                       collect (- (char-code x)
-                                  (char-code #\0))))))
+  (format nil "~D"
+   (loop for x across n
+      sum (- (char-code x)
+             (char-code #\0)))))
 
 (defun superdigit (p)
   (if (eq (length p) 1)
@@ -15,8 +14,7 @@
           (superdigit
            (with-output-to-string (x)
              (dotimes (_ k)
-               (format x "~d" n))))))
-
+               (format x "~D" n))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
