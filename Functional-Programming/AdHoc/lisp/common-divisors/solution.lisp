@@ -1,5 +1,31 @@
+(defun small-divisors (n fls)
+  (loop for d from 1 to fls
+     when (zerop (mod n d))
+     collect d))
+
+(defun divisors (n)
+  (let* ((nsqrt (sqrt n))
+         (small-divisors (small-divisors n (floor nsqrt)))
+         (reversed-divisors))
+    ;; do not include sqrt twice
+    (setf reversed-divisors             ;we do the assignment only once, so it's not cheating
+          (if (eq (floor nsqrt)
+                  (ceiling nsqrt))
+              (cdr (reverse small-divisors))
+              (reverse small-divisors)))
+    (if (= n 1)
+        '(1)
+        (concatenate 'list
+                     small-divisors
+                     (loop for x in reversed-divisors
+                        collect (/ n x))))))
+
 (defun solve-me (m l)
-  (format t "~A ~A~%" m l))
+  (let ((dm (divisors m))
+        (dl (divisors l)))
+    (princ
+     (count-if (lambda (x) (when (position x dl) x)) dm))
+    (terpri)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -28,7 +54,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
