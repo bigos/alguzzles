@@ -1,5 +1,21 @@
+(defun num2digits (n)
+  (format nil
+          "~D"
+          (apply '+ (loop for x across n
+                       collect (- (char-code x)
+                                  (char-code #\0))))))
+
+(defun superdigit (p)
+  (if (eq (length p) 1)
+      p
+      (superdigit (num2digits p))))
+
 (defun solve-me (n k)
-  (format t "~A ~A~%" n k))
+  (format t "~A~%"
+          (superdigit
+           (with-output-to-string (x)
+             (dotimes (_ k)
+               (format x "~d" n))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
