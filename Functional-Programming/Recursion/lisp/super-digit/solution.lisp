@@ -1,20 +1,11 @@
-(defun num2digits (n)
-  (loop for x across n
-     sum (- (char-code x)
-            (char-code #\0))))
-
 (defun superdigit (p)
-  (format t "~A~%" p)
-  (if (< p 10)
-      p
-      (superdigit
-       (num2digits (format nil "~d" (reduce '+ p))))))
+  (format t " Z~sZ ~%" p))
 
 (defun solve-me (n k)
   (princ
-   (car
-    (superdigit
-     (loop for x from 0 below k append n)))))
+   (superdigit
+    (with-output-to-string (x)
+      (loop for x from 0 below k do (princ n))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -31,8 +22,7 @@
 
 (defun solution (&optional stream)
   (let* ((nk (split-by-one-space (read-line stream)))
-         (n (loop for c across (car nk) collect (- (char-code c)
-                                                   (char-code #\0))))
+         (n (car nk))
          (k (parse-integer (cadr nk))))
     (solve-me n k)))
 
