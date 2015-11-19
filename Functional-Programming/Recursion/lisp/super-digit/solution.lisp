@@ -1,11 +1,20 @@
+(defun num2digits (n)
+  (format nil "~D"
+   (loop for x across n
+      sum (- (char-code x)
+             (char-code #\0)))))
+
 (defun superdigit (p)
-  (format t " Z~sZ ~%" p))
+  (if (eq (length p) 1)
+      p
+      (superdigit (num2digits p))))
 
 (defun solve-me (n k)
-  (princ
-   (superdigit
-    (with-output-to-string (x)
-      (loop for x from 0 below k do (princ n))))))
+  (format t "~A~%"
+          (superdigit
+           (with-output-to-string (x)
+             (dotimes (_ k)
+               (format x "~D" n))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -21,10 +30,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let* ((nk (split-by-one-space (read-line stream)))
-         (n (car nk))
-         (k (parse-integer (cadr nk))))
-    (solve-me n k)))
+  (let ((nk (split-and-parse (read-line stream))))
+    (solve-me (car nk) (cadr nk))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
