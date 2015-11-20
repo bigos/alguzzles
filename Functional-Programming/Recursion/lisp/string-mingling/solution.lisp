@@ -1,8 +1,10 @@
 (defun solve-me (p q)
-  (loop for x1 across p
-     for y1 across q do
-       (princ x1)
-       (princ y1)))
+  (if (zerop (length p))
+      nil
+      (progn
+        (princ (elt p 0))
+        (princ (elt q 0))
+        (solve-me (subseq p 1) (subseq q 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
