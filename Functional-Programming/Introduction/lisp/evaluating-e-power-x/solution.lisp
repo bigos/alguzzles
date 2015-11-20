@@ -3,20 +3,13 @@
       1
       (* n (fact(- n 1)))))
 
-(defun integral (n)
-  (if (zerop n)
-      0
-      (+ n (integral (1- n)))))
-
 (defun pel (x n)
-  (if (zerop x)
-      1
-      (/ (expt x n)
-         (fact n))))
+  ;;(format t "~&~a^~A / ~A   ====~%" x n (fact n))
+  (/ (expt x n)
+     (fact n)))
 
 (defun solve-me (x)
-  (format t "the x is ~a~%" x)
-  (format t "~A~%" (+ 1.0 (loop for n from 1 below 10 sum (pel x n )))))
+  (format t "~D~%" (* 1.0 (loop for a from 0 below 10 sum (pel x a) ))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
