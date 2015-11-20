@@ -1,5 +1,22 @@
+(defun fact (n)
+  (if (< n 2)
+      1
+      (* n (fact(- n 1)))))
+
+(defun integral (n)
+  (if (zerop n)
+      0
+      (+ n (integral (1- n)))))
+
+(defun pel (x n)
+  (if (zerop x)
+      1
+      (/ (expt x n)
+         (fact n))))
+
 (defun solve-me (x)
-  (format t "the x is ~a~%" x))
+  (format t "the x is ~a~%" x)
+  (format t "~A~%" (+ 1.0 (loop for n from 1 below 10 sum (pel x n )))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
