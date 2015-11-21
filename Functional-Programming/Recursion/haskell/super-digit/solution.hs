@@ -4,7 +4,8 @@ import Control.Monad
 -- not working
 
 
-main :: IO ()
+
 main = do
-  nk <- readLn :: IO [Char]
-  print  nk
+    contents <- getContents
+    map contents
+    print contents
