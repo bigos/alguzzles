@@ -7,4 +7,5 @@ import Control.Monad
 
 main = do
     contents <- getContents
-    print ( words contents)
+    let nk = map read (words contents) :: [Int]
+    print nk
