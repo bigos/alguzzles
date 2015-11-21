@@ -7,5 +7,4 @@ import Control.Monad
 
 main = do
     contents <- getContents
-    map contents
-    print contents
+    print ( words contents)
