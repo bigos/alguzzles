@@ -1,11 +1,11 @@
 import Control.Monad
 -- import Debug.Trace
 
--- not working
+solution :: Int -> Int -> (Int, Int)
+solution n k = (n, k)
 
-
-
+main :: IO ()
 main = do
     contents <- getContents
     let nk = map read (words contents) :: [Int]
-    print nk
+    print (  solution (head nk) (head(tail nk)))
