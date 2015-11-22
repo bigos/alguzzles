@@ -1,0 +1,46 @@
+Problem Statement
+
+Given a string, str= "s1s2…sn", consisting of n lower case latin characters ('a'-'z'), remove all of the characters that occurred previously in the string. That is, remove all characters, si, for which
+∃j,sj=si and j<i
+
+Input Format
+
+Input will contain a string str of length n.
+
+Output Format
+
+Print the string after removing all characters that occurred previously.
+
+Constraints
+- 1≤n≤105
+- si∈{′a′, ′b′,…, ′z′},where 1≤i≤n
+
+Sample Input #00
+
+accabb
+
+Sample Output #00
+
+acb
+
+Sample Input #01
+
+abc
+
+Sample Output #01
+
+abc
+
+Sample Input #02
+
+pprrqq
+
+Sample Output #02
+
+prq
+
+Explanation
+
+Test case #00: For str= ′′accabb′′, characters at index 3,4,6 are removed as they already occurred.
+Test case #01: As each character occurs only once, nothing is removed.
+Test case #02: For str= ′′pprrqq′′, each character occurs in a pair (two), and the second of the characters is removed (i.e., characters at positions 2,4,6 are removed).
