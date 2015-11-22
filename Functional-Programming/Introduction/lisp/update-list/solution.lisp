@@ -1,7 +1,5 @@
-(defun solve-me (str)
-  (let ((hash (make-hash-table)))
-    (loop for c across str do (setf (gethash c hash) c))
-    (maphash (lambda (k v) (declare (ignore v)) (princ k)) hash)))
+(defun solve-me (nums)
+  (map 'list (lambda (x) (abs x)) nums))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -17,8 +15,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((str (read-line stream)))
-    (solve-me str)))
+  (loop for r in (solve-me (loop for x = (read stream nil) ; nil means not to throw error when eof reached
+                              until (null x) ; so that we can read nil when the stream runs out
+                              collect x))
+     do (princ r)
+       (terpri)))
+
+;;; (solution)
+
 (defun main ()
   (with-open-file (s (make-pathname
                       :directory
