@@ -3,8 +3,9 @@ import Control.Monad
 
 solveMe :: [Int] -> [Int]
 solveMe n
-  | length n == 1 = n
-  | otherwise     = solveMe (map (\x -> read [x] :: Int) (show (sum n)))
+  | (head digitSum) < 10 = digitSum
+  | otherwise     = solveMe digitSum
+  where digitSum = map (\x -> read [x] :: Int) (show (sum n)) :: [Int]
 
 -- intToStr :: Int -> [Char]
 -- intToStr n = show n
