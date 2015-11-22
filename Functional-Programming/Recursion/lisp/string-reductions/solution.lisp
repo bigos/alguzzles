@@ -1,3 +1,8 @@
+(defun solve-me (str)
+  (let ((hash (make-hash-table)))
+    (loop for c across str do (setf (gethash c hash) c))
+    (maphash (lambda (k v) (declare (ignore v)) (princ k)) hash)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -13,7 +18,7 @@
 
 (defun solution (&optional stream)
   (let ((str (read-line stream)))
-    (princ str)))
+    (solve-me str)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
