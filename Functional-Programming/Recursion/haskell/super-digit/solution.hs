@@ -2,7 +2,9 @@ import Control.Monad
 -- import Debug.Trace
 
 solveMe :: [Char] -> [Char]
-solveMe n = n
+solveMe n
+  | length n == 1 = n
+  | otherwise     = solveMe ( intToStr( sum(strToInts n)) )
 
 intToStr :: Int -> [Char]
 intToStr n = show n
@@ -17,6 +19,7 @@ main :: IO ()
 main = do
     contents <- getContents -- read data from the stream
     let nk = (words contents) -- split by 1 space
+    -- assign args, reading second arg as integer using read
     let myargs = prepareArgs (head nk) (read ( head (tail nk)))
     let res = solveMe myargs
-    print res
+    putStrLn res
