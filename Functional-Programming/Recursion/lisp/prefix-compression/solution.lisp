@@ -1,5 +1,27 @@
+;; (defun rec (x y pref)
+;;   (format t "~&pref ~S ~S ~S~%" pref (subseq x 0 pref) (subseq y 0 pref))
+;;   (if (or (not (equalp (subseq x 0 pref)
+;;                        (subseq y 0 pref)))
+;;           )
+;;       (list (list pref
+;;                   (subseq x 0 (1- pref)))
+;;             (list (- (length x) pref)
+;;                   (subseq x pref))
+;;             (list (- (length y) pref)
+;;                   (subseq y pref)))
+;;       (rec x y (1+ pref))))
+
 (defun solve-me (x y)
-  (format t "~A~%~A~%" x y))
+  (let ((prefix-len
+         (loop for cx across x
+            for cy across y
+            while (eql cx cy)
+            count cx)))
+    (format t "~A ~A~%~A ~A~%~A ~A"
+            prefix-len (subseq x 0 prefix-len)
+            (- (length x) prefix-len) (subseq x prefix-len)
+            (- (length y) prefix-len) (subseq y prefix-len)
+            )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
