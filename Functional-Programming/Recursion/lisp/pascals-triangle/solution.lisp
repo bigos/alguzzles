@@ -1,5 +1,20 @@
+(defun fact (n)
+  (if (< n 2)
+      1
+      (* n (fact(- n 1)))))
+
+(defun rec (k r)
+  (loop for n from 0 to r do (format t
+                                     (if (zerop n) "~&~a" " ~a")
+                                     (/ (fact n)
+                                        (fact (* (fact r)
+                                                 (- n r))))))
+  (if (>= r k)
+      T
+      (rec k (1+ r))))
+
 (defun solve-me (k)
-  (princ k)  )
+  (rec k 0)  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
