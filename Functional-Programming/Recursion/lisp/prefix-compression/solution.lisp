@@ -1,22 +1,12 @@
-;; (defun rec (x y pref)
-;;   (format t "~&pref ~S ~S ~S~%" pref (subseq x 0 pref) (subseq y 0 pref))
-;;   (if (or (not (equalp (subseq x 0 pref)
-;;                        (subseq y 0 pref)))
-;;           )
-;;       (list (list pref
-;;                   (subseq x 0 (1- pref)))
-;;             (list (- (length x) pref)
-;;                   (subseq x pref))
-;;             (list (- (length y) pref)
-;;                   (subseq y pref)))
-;;       (rec x y (1+ pref))))
+(defun rec (x y res)
+  (if (and (< res (length x))
+           (< res (length y))
+           (equalp (elt x res) (elt y res)))
+      (rec x y (1+ res))
+      res))
 
 (defun solve-me (x y)
-  (let ((prefix-len
-         (loop for cx across x
-            for cy across y
-            while (eql cx cy)
-            count cx)))
+  (let ((prefix-len (rec x y 0)))
     (format t "~A ~A~%~A ~A~%~A ~A"
             prefix-len (subseq x 0 prefix-len)
             (- (length x) prefix-len) (subseq x prefix-len)
