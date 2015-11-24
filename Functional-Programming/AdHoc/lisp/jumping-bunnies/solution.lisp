@@ -24,7 +24,7 @@
          (i (sort (split-and-parse (read-line stream)) '>))
          (fst (elt i 0))
          (snd (elt i 1)))
-    (solve-me n i (* fst snd) (* fst snd))))
+    (solve-me n (subseq i 2) (* fst snd) (* fst snd))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
