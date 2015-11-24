@@ -1,5 +1,10 @@
-(defun solve-me (n i)
-  (format t "~A ~A~%" n i))
+(defun divides (x y)
+  (zerop (mod x y)))
+
+(defun solve-me (n i c)
+  (if (every (lambda (x) (divides c x)) i)
+      (princ c)
+      (solve-me n i (1+ c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -17,7 +22,7 @@
 (defun solution (&optional stream)
   (let ((n (parse-integer (read-line stream)))
         (i (split-and-parse (read-line stream))))
-    (solve-me n i)))
+    (solve-me n i 1)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
