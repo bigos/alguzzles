@@ -1,20 +1,24 @@
-(defun fact (n)
-  (if (< n 2)
-      1
-      (* n (fact(- n 1)))))
-
-(defun rec (k r)
-  (loop for n from 0 to r do (format t
-                                     (if (zerop n) "~&~a" " ~a")
-                                     (/ (fact n)
-                                        (fact (* (fact r)
-                                                 (- n r))))))
-  (if (>= r k)
-      T
-      (rec k (1+ r))))
-
 (defun solve-me (k)
-  (rec k 0)  )
+  (loop for r from 0 below k do
+       (print-row r)
+       (terpri))  )
+
+
+(defun print-row (n)
+  (let ((c 1))
+    (format t "~&~a" c)
+    (loop for top from n downto 1
+       for b from 1 to n
+       do
+         (setf c (* c (/ top b)))
+         (format t " ~a" c))))
+
+;; 1
+;; 1 1
+;; 1 2 1
+;; 1 3 3 1
+;; 1 4 6 4 1
+;; 1 5 X X 5 1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
