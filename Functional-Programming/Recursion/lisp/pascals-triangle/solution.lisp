@@ -1,24 +1,17 @@
 (defun solve-me (k)
   (loop for r from 0 below k do
-       (print-row r)
-       (terpri))  )
+       (format t "~&~a" 1)
+       (print-row r 1 r 1)
+       (terpri)))
 
 
-(defun print-row (n)
-  (let ((c 1))
-    (format t "~&~a" c)
-    (loop for top from n downto 1
-       for b from 1 to n
-       do
-         (setf c (* c (/ top b)))
-         (format t " ~a" c))))
-
-;; 1
-;; 1 1
-;; 1 2 1
-;; 1 3 3 1
-;; 1 4 6 4 1
-;; 1 5 X X 5 1
+(defun print-row (n top b c)
+  (if (> top  n)
+      nil
+      (progn
+        (setf c (* c (/ b top )))
+        (format t " ~a" c)
+        (print-row n (1+ top) (1- b) c))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
