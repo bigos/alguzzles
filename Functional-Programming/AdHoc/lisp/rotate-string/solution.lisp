@@ -1,5 +1,21 @@
+(defun rots (s l)
+  (if (zerop l)
+      (terpri)
+      (progn
+        (princ s)
+        (princ #\space)
+        (rots (concatenate 'string
+                           (subseq s 1)
+                           (subseq s 0 1))
+              (1- l)))))
+
 (defun solve-me (ss)
-  (format t  "args ~A~%" ss))
+  ;; (format t  "args ~a ~%" ss)
+  (loop for s in ss do
+       (rots (concatenate 'string
+                          (subseq s 1)
+                          (subseq s 0 1))
+             (length s))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
