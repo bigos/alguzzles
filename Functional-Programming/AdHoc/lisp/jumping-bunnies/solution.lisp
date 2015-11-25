@@ -1,17 +1,10 @@
-(defun solve-me (k)
-  (loop for r from 0 below k do
-       (format t "~&~a" 1)
-       (print-row r 1 r 1)
-       (terpri)))
+(defun divides (x y)
+  (zerop (mod x y)))
 
-
-(defun print-row (n top b c)
-  (if (> top  n)
-      nil
-      (progn
-        (setf c (* c (/ b top )))
-        (format t " ~a" c)
-        (print-row n (1+ top) (1- b) c))))
+(defun solve-me (n i c incr)
+  (if (every (lambda (x) (divides c x)) i)
+      (format t "~&~A~%" c)
+      (solve-me n i (+ c incr) incr)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -27,8 +20,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((k (parse-integer (read-line stream))))
-    (solve-me k)))
+  (let* ((n (parse-integer (read-line stream)))
+         (i (sort (split-and-parse (read-line stream)) '>))
+         (fst (elt i 0))
+         (snd (elt i 1)))
+    (solve-me n (subseq i 2) (* fst snd) (* fst snd))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -37,7 +33,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
