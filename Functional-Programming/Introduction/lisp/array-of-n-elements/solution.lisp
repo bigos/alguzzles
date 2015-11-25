@@ -1,11 +1,5 @@
-(defun solve-me (n l)
-  ;; (format t "~&puzzle ~A ~A~%" n l)
-  (if (zerop l )
-      nil
-      (progn
-        (princ (car n))
-        (when (> l 1) (princ ", "))
-        (solve-me (cdr n) (1- l)))))
+(defun f (n)
+  (make-array n :initial-element 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -22,9 +16,7 @@
 
 (defun solution (&optional stream)
   (let* ((n (parse-integer (read-line stream))))
-    (princ "[")
-    (solve-me (loop for x from 1 to n collect x) n)
-    (princ "]")))
+    (format t "~S" (length (f n)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
