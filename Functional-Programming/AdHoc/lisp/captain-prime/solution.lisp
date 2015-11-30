@@ -11,47 +11,47 @@
 
 ;; (successive-left "1367" 4 T )
 (defun successive-left (n ln r)
-  (format t "~&left ~A ~A ~A~%" n ln r)
+  ;; (format t "~&left ~A ~A ~A~%" n ln r)
   (let ((ss (subseq n 1)))
     (let ((p (prime-p ss)))
-      (format t "~A ~A ~a~%" p ss (eq p r))
-      (if (not (eq p r))
+      ;; (format t "~A ~A ~a~%" p ss (eq p r))
+      (if (not p)
           nil
           (if (= ln 2)
-              (eq p r)
+              p
               (successive-left ss (1- ln) r))))))
 
 ;; (successive-right "2333" 4 T )
 (defun successive-right (n ln r)
-  (format t "~&right ~A ~A ~A~%" n ln r)
+  ;; (format t "~&right ~A ~A ~A~%" n ln r)
   (let ((ss (subseq n 0 (1- ln))))
     (let ((p (prime-p ss)))
-      (format t "~A ~A ~a~%" p ss (eq p r))
-      (if (not (eq p r))
+      ;; (format t "~A ~A ~a~%" p ss (eq p r))
+      (if (not p)
           nil
           (if (= ln 2)
-              (eq p r)
+              p
               (successive-right ss (1- ln) r))))))
 
 (defun contains-zero-p (n)
   (position #\0 n))
 
 (defun central-p (n ln)
-  (format t "~%~%~&trying central~%")
+  ;; (format t "~%~%~&trying central~%")
   (and
    (successive-left n ln T)
    (successive-right n ln T)))
 
 (defun left-p (n ln)
-  (format t "~%~%~&trying left~%")
+  ;; (format t "~%~%~&trying left~%")
   (and
    (successive-left n ln T)
-   (successive-right n ln NIL)))
+   (not (successive-right n ln T))))
 
 (defun right-p (n ln)
-  (format t "~%~%~&trying right~%")
+  ;; (format t "~%~%~&trying right~%")
   (and
-   (successive-left n ln NIL)
+   (not (successive-left n ln T))
    (successive-right n ln T)))
 
 (defun solve-me (n)
@@ -65,7 +65,7 @@
                         "LEFT"
                         (if (right-p n ln) "RIGHT")))
                "DEAD"))
-    (format t "--------------------")))
+    (terpri)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
