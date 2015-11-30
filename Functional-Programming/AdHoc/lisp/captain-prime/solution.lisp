@@ -1,4 +1,5 @@
 (defun prime-p (n)
+  ;;(format t "~&prime-p ~A~%" n)
   (let ((x (parse-integer n)))
     (or (eq 1 x)
         (not
@@ -10,6 +11,7 @@
 
 ;; (successive-left "1367" 4 T )
 (defun successive-left (n ln r)
+  (format t "~&left ~A ~A ~A~%" n ln r)
   (let ((ss (subseq n 1)))
     (let ((p (prime-p ss)))
       (format t "~A ~A ~a~%" p ss (eq p r))
@@ -21,6 +23,7 @@
 
 ;; (successive-right "2333" 4 T )
 (defun successive-right (n ln r)
+  (format t "~&right ~A ~A ~A~%" n ln r)
   (let ((ss (subseq n 0 (1- ln))))
     (let ((p (prime-p ss)))
       (format t "~A ~A ~a~%" p ss (eq p r))
@@ -30,36 +33,39 @@
               (eq p r)
               (successive-right ss (1- ln) r))))))
 
-
 (defun contains-zero-p (n)
   (position #\0 n))
 
 (defun central-p (n ln)
-  (or (not (contains-zero-p n))
-      (prime-p n)
-      (successive-left n ln T)
-      (successive-right n ln T)))
+  (format t "~%~%~&trying central~%")
+  (and
+   (successive-left n ln T)
+   (successive-right n ln T)))
 
 (defun left-p (n ln)
-  (or (not (contains-zero-p n))
-      (prime-p n)
-      (successive-left n ln T)
-      (successive-right n ln NIL)))
+  (format t "~%~%~&trying left~%")
+  (and
+   (successive-left n ln T)
+   (successive-right n ln NIL)))
 
 (defun right-p (n ln)
-  (or (not (contains-zero-p n))
-      (prime-p n)
-      (successive-left n ln NIL)
-      (successive-right n ln T)))
+  (format t "~%~%~&trying right~%")
+  (and
+   (successive-left n ln NIL)
+   (successive-right n ln T)))
 
 (defun solve-me (n)
   ;; (format t "~A~%" n)
   (let ((ln (length n)))
-    (princ (cond ((central-p n ln) "CENTRAL")
-                 ((left-p n ln) "LEFT")
-                 ((right-p n ln) "RIGHT")
-                 (T "DEAD")))
-    (terpri)))
+    (princ (if (and (not (contains-zero-p n))
+                    (prime-p n))
+               (if  (central-p n ln)
+                    "CENTRAL"
+                    (if (left-p n ln)
+                        "LEFT"
+                        (if (right-p n ln) "RIGHT")))
+               "DEAD"))
+    (format t "--------------------")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
