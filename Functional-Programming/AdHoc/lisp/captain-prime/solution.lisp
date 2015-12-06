@@ -1,12 +1,14 @@
 (defun prime-p (n)
   ;;(format t "~&prime-p ~A~%" n)
   (let ((x (parse-integer n)))
-    (not
-     (loop for d from 2 to (sqrt x)
-        for m = (mod x d)
-        when (zerop m)
-        collect d
-        until (zerop m)))))
+    (if (= x 1)
+        nil                             ;1 is not prime
+        (not
+         (loop for d from 2 to (sqrt x)
+            for m = (mod x d)
+            when (zerop m)
+            collect d
+            until (zerop m))))))
 
 
 (defun dirleft (n l)
@@ -96,7 +98,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input1" :type "txt"))
+                      :name "input09" :type "txt"))
     (solution s)))
 
 (main)
