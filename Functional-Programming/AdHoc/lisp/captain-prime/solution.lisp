@@ -8,50 +8,53 @@
         collect d
         until (zerop m)))))
 
-;; (successive-left "1367" 4 T )
-(defun successive-left (n ln )
-  ;;(format t "~&left ~A ~A ~%" n ln )
-  (let ((ss (subseq n 1)))
-    (let ((p (prime-p ss)))
-      (if (not p)
-          nil
-          (if (= ln 2)
-              p
-              (successive-left ss (1- ln)))))))
 
-;; (successive-right "2333" 4 T )
-(defun successive-right (n ln )
-  ;;(format t "~&right ~A ~A~%" n ln )
-  (let ((ss (subseq n 0 (1- ln))))
-    (let ((p (prime-p ss)))
-      (if (not p)
-          nil
-          (if (= ln 2)
-              p
-              (successive-right ss (1- ln)))))))
+(defun dirleft (n l)
+         (subseq n 0 (1- l)))
 
+(defun dirright (n l)
+          (subseq n 1 l))
 
+(defun choosedir (dir n l)
+           (if (equalp dir 'left)
+               (dirleft n l)
+               (dirright n l)))
+
+(defun successives (dir n l)
+  (labels ((succ (n l r)
+             ;; (format t "~A~&" n)
+             (if (<= l 0)
+                 r
+                 (succ (choosedir dir n l)
+                       (1- l)
+                       (push (prime-p n) r)))))
+    (succ (choosedir dir n l)
+          (1- l)
+          nil)))
 
 (defun contains-zero-p (n)
   (position #\0 n))
 
+(defun every-prime (l)
+  (not (some #'null l)))
+
 (defun central-p (n ln)
   ;;(format t "~%~%~&trying central ~A ~A~%" n ln)
   (and
-   (successive-left n ln)
-   (successive-right n ln)))
+   (every-prime (successives 'left n ln))
+   (every-prime (successives 'right n ln))))
 
 (defun left-p (n ln)
   ;; (format t "~%~%~&trying left~%")
   (and
-   (successive-left n ln)
-   (not (successive-right n ln))))
+   (not (every-prime (successives 'left n ln)))
+   (every-prime (successives 'right n ln))))
 
 (defun right-p (n ln)
   ;; (format t "~%~%~&trying right~%")
   (and
-   (not (successive-left n ln))
-   (successive-right n ln)))
+   (every-prime (successives 'left n ln))
+   (not (every-prime (successives 'right n ln)))))
 
 (defun solve-me (n)
   ;; (format t "~A~%" n)
