@@ -1,5 +1,18 @@
+(defun find-it (x)
+  (case x
+    ((1 9 45 55 99) T)
+    (otherwise nil)))
+
 (defun solve-me (a b)
-  (format t "range from ~A to ~A" a b))
+  (let ((found))
+    (loop for x from a to b do
+         (when (find-it x)
+           (when found
+             (princ  " "))
+           (princ x)
+           (setf found T)))
+    (unless found
+      (princ "INVALID RANGE"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
