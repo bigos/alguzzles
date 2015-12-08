@@ -1,5 +1,13 @@
-(defun solve-me (l)
-  l)
+(defun solve-me (l &optional (r 0) (g 0) (y 0) (b 0))
+  ;; finish me
+  (if (null l)
+      'finished-result
+      (solve-me (cdr l)
+                (+ r (v (car l)))
+                (+ g (v (car l)))
+                (+ y (v (car l)))
+                (+ b (v (car l)))
+                )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -17,10 +25,11 @@
 (defun solution (&optional stream)
   (let ((tc (parse-integer (read-line stream))))
     (loop for c from 1 to tc do
-         (princ (solve-me (loop for c
-                             across (read-line stream)
-                             collect c)))
-         (terpri))))
+         (format t "~A~%" (if (solve-me (loop for c
+                                           across (read-line stream)
+                                           collect (format nil "~A" (char-upcase c))))
+                              "True"
+                              "False")))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
