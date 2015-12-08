@@ -1,13 +1,22 @@
+(proclaim '(optimize (debug 3)))
+
 (defun solve-me (l &optional (r 0) (g 0) (y 0) (b 0))
   ;; finish me
+
+  (cond ((equalp (car l) "R") (setf r (1+ r)))
+        ((equalp (car l) "G") (setf g (1+ g)))
+        ((equalp (car l) "Y") (setf y (1+ y)))
+        ((equalp (car l) "B") (setf b (1+ b))))
+
+  (format t "~s ~A~A~A~A !!!! ~%" l r g y b)
+
   (if (null l)
       'finished-result
       (solve-me (cdr l)
-                (+ r (v (car l)))
-                (+ g (v (car l)))
-                (+ y (v (car l)))
-                (+ b (v (car l)))
-                )))
+                r
+                g
+                y
+                b)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
