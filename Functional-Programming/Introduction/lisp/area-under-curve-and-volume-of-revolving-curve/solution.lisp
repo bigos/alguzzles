@@ -3,7 +3,7 @@
   (if (not as)
       0
       (solve-me (+ (* (car as)
-                      (expt STUCK-HERE (car bs))) ;what is x ?
+                      (expt STUCK-HERE (car bs))) ;what is x ? is it an index of the slice of the curve?
                    (solve-me (cdr as) (cdr bs) lr)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
