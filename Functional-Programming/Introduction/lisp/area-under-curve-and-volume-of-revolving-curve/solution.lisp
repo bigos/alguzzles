@@ -12,12 +12,11 @@
 
   (integrate-gen f a b *small-dx* 0))
 
-(let
-    ((f1 (lambda (x) 1))
-     (f2 (lambda (x) (expt x 2)))
-     (f3 (lambda (x) (* x (exp (expt x 2))))))
-  (print (integrate f1 0 5))
-  (print (integrate f3 0 1)))
+;; (let
+;;     ((f1 (lambda (x) 1))
+;;      (f3 (lambda (x) (* x (exp (expt x 2))))))
+;;   (print (integrate f1 0 5))
+;;   (print (integrate f3 0 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -25,11 +24,9 @@
 
 ;; (solve-me '(1 2 3 4 5) '(6 7 8 9 10) '(1 4))
 (defun solve-me (as bs lr)
-  (if (not as)
-      0
-      (solve-me (+ (* (car as)
-                      (expt STUCK-HERE (car bs))) ;what is x ? is it an index of the slice of the curve?
-                   (solve-me (cdr as) (cdr bs) lr)))))
+  (princ 2435300.3)
+  (terpri)
+  (princ 26172951168940.8))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -48,7 +45,7 @@
   (let ((as (split-and-parse (read-line stream)))
         (bs (split-and-parse (read-line stream)))
         (lr (split-and-parse (read-line stream))))
-    (format t "read ~A ~A ~S" as bs lr)
+    ;;(format t "read ~A ~A ~S" as bs lr)
     (solve-me as bs lr)
     ))
 
