@@ -1,9 +1,5 @@
-(defun my-solution (n k l)
-  (format t "n ~A k ~A l ~A~%" n k l))
-
-(defun solve-me (l1 l2)
-  ;; (format t "l1 ~A l2 ~A~%" l1 l2)
-  (my-solution (car l1) (cadr l1) l2))
+(defun solve-me (mc l)
+  (format t "~A ~A~%" mc l))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -21,7 +17,7 @@
   (let ((tc (parse-integer (read-line stream))))
     (loop for x from 1 to tc do
          (solve-me
-          (split-and-parse (read-line stream))
+          (cadr (split-and-parse (read-line stream)))
           (split-and-parse (read-line stream))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
