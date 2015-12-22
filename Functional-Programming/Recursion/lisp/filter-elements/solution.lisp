@@ -1,5 +1,15 @@
 (defun solve-me (mc l)
-  (format t "~A ~A~%" mc l))
+  (let ((res (reverse
+              (remove-duplicates
+               (loop for x in l
+                  when (>= (count x l ) mc) collect x)))))
+    (if res
+        (progn
+          (loop for x in res
+             for fst = T then nil do
+               (format t "~A~A" (if fst "" " ") x))
+          (terpri))
+        (format t "~A~%" -1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
