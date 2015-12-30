@@ -1,36 +1,32 @@
+;;; -----------------------------------------------------------------------
 (defparameter *small-dx* 0.001)
 
 (defun integrate(f a b)
-  "integrate a function f from a to b"
-
-  (defun integrate-gen(f x b dx sum)
-    "the generalized inner function for tail-recursion.
-       integrate a function f from x to b"
-    (if (> x b)
-        sum
-        (integrate-gen f (+ x dx) b dx (+ sum (* (funcall f x) dx)))))
-
-  (integrate-gen f a b *small-dx* 0))
-
-;; (let
-;;     ((f1 (lambda (x) 1))
-;;      (f3 (lambda (x) (* x (exp (expt x 2))))))
-;;   (print (integrate f1 0 5))
-;;   (print (integrate f3 0 1)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;; try again later
-
+  (labels ((integrate-gen (f x b dx sum)
+             (if (> x b)
+                 sum
+                 (integrate-gen f (+ x dx) b dx (+ sum (* (funcall f x) dx))))))
+    (integrate-gen f a b *small-dx* 0)))
 
 ;; (solve-me '(1 2 3 4 5) '(6 7 8 9 10) '(1 4))
-(defun solve-me (as bs lr)
-  (princ 2435300.3)
-  (terpri)
-  (princ 26172951168940.8))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun solve-me (as bs lr)
+  (princ (loop for x from (1- (car lr)) to (1- (cadr lr))
+            ;; do
+            ;;   (format t
+            ;;           "~A ~A ~A - ~A ~A ~%"
+            ;;           x
+            ;;           (elt as x)
+            ;;           (elt bs x)
+            ;;           (cons (elt as x) (elt as (1+ x)))
+            ;;           (elt bs x))
+
+            sum (integrate (lambda (i) (expt i (elt bs x)))
+                           (elt as x)
+                           (elt as (1+ x))))))
+
+;;; --------------------------------------------------------------------------
+
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
      as j = (position #\Space string :start i)
