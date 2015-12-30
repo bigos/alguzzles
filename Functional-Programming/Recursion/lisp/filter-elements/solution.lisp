@@ -1,15 +1,31 @@
 (defun solve-me (mc l)
-  (let ((res (reverse
-              (remove-duplicates
-               (loop for x in l
-                  when (>= (count x l ) mc) collect x)))))
-    (if res
-        (progn
-          (loop for x in res
-             for fst = T then nil do
-               (format t "~A~A" (if fst "" " ") x))
-          (terpri))
-        (format t "~A~%" -1))))
+  (let ((count-hash (make-hash-table))
+        (pos-hash (make-hash-table))
+        (found-hash (make-hash-table))
+        (spacer))
+    (labels ((solve-rec (mc l pos)
+               (unless (null l)
+                 (unless (gethash (car l) pos-hash nil)
+                   (setf (gethash (car l) pos-hash) pos))
+                 (incf (gethash (car l) count-hash 0))
+                 (when (eq (gethash (car l) count-hash 0) mc)
+                   (setf (gethash (gethash (car l) pos-hash -1)
+                                  found-hash)
+                         (car l)))
+                 (solve-rec mc (cdr l) (1+ pos))))
+             (print-results ()
+               (if (zerop (hash-table-count found-hash))
+                   (format t "-1")
+                   (loop for x from 0 to (hash-table-count pos-hash)
+                      for y = (gethash x found-hash nil) do
+                        (when y
+                          (format t "~A~A" (if spacer " " "") y))
+                        (unless spacer
+                          (setf spacer T)))
+                   )))
+      (solve-rec mc l 0)
+      (print-results)
+      (terpri))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
