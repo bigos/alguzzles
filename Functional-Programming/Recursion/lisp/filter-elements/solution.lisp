@@ -16,13 +16,11 @@
              (print-results ()
                (if (zerop (hash-table-count found-hash))
                    (format t "-1")
-                   (loop for x from 0 to (hash-table-count pos-hash)
+                   (loop for x from 0 to (length l)
                       for y = (gethash x found-hash nil) do
                         (when y
-                          (format t "~A~A" (if spacer " " "") y))
-                        (unless spacer
-                          (setf spacer T)))
-                   )))
+                          (format t "~A~A" (if spacer " " "") y)
+                          (setf spacer T))))))
       (solve-rec mc l 0)
       (print-results)
       (terpri))))
@@ -53,7 +51,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input01" :type "txt"))
     (solution s)))
 
 (main)
