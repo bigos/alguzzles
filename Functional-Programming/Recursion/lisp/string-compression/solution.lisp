@@ -2,24 +2,39 @@
   (eq (car str)
       (cadr str)))
 
-(defun compress (str count result)
-  (format t "~A ~A ~A~%" str count result)
+(defun compress (rev-str last result)
+  (format t "~&------~%~A~% ~A~% ~A~%" rev-str last result)
+  (if (not rev-str)
+      result
+      (if (equalp last (car rev-str))
+          (compress (cdr rev-str)
+                    last
+                    result)
+          (compress (cdr rev-str)
+                    (car rev-str)
+                    (cons (cons (caar rev-str) (cdar rev-str)) result)
+                    ))))
+
+(defun count-occurence (str count result)
+  ;; (format t "~A ~A ~A~%" str count result)
   (if (not str)
       result
-      (compress (cdr str)
-                (if (two-same str)
-                    (1+ count)
-                    0)                
-                (cons (cons count (car str)) result)
-                                        )))
+      (count-occurence (cdr str)
+                       (if (two-same str)
+                           (1+ count)
+                           1)
+                       (cons (cons (car str) count) result)
+                       )))
 
 ;; (solve-me "aabbbccccdeff")
 (defun solve-me (str)
   (princ
-   (reverse
-    (compress (map 'list (lambda (x) x) str)
-              0
-              nil))))
+   (compress
+    (count-occurence (map 'list (lambda (x) x) str)
+                     1
+                     nil)
+    nil
+    nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
