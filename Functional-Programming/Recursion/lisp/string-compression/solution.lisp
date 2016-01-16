@@ -1,6 +1,25 @@
+(defun two-same (str)
+  (eq (car str)
+      (cadr str)))
+
+(defun compress (str count result)
+  (format t "~A ~A ~A~%" str count result)
+  (if (not str)
+      result
+      (compress (cdr str)
+                (if (two-same str)
+                    (1+ count)
+                    0)                
+                (cons (cons count (car str)) result)
+                                        )))
+
+;; (solve-me "aabbbccccdeff")
 (defun solve-me (str)
-  ;; TODO: finish me
-  str)
+  (princ
+   (reverse
+    (compress (map 'list (lambda (x) x) str)
+              0
+              nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
