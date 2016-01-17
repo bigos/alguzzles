@@ -1,5 +1,20 @@
+;;; mutually recursive with get-power
+(defun get-base (l res)
+  (if (not l)
+      res
+      (get-power (cdr l) (car l) res )))
+
+;;; mutually recursive with get-base
+(defun get-power (l base res)
+  (get-base (cdr l) (push (expt base (car l)) res)))
+
+(defun get-result (l)
+  (let ((number (apply #'* (get-base l nil))))
+    (format t "==== ~A ~A~%" l number)))
+
 (defun solve-me (l)
-  (format t "~A~%" l))
+  (format t "~A~%" l)
+  (map 'list (lambda (x) (get-result x)) l))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -16,8 +31,8 @@
 
 (defun solution (&optional stream)
   (let ((tc (parse-integer (read-line stream))))
-    (dotimes (x tc)
-      (solve-me (split-and-parse (read-line stream))))))
+    (solve-me (loop for x from 0 below tc
+                 collect (split-and-parse (read-line stream))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
