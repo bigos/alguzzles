@@ -1,40 +1,46 @@
-(defun two-same (str)
-  (eq (car str)
-      (cadr str)))
+(defun two-same (str last)
+  (eq (car str) last))
 
-(defun compress (rev-str last result)
-  (format t "~&------~%~A~% ~A~% ~A~%" rev-str last result)
-  (if (not rev-str)
-      result
-      (if (equalp last (car rev-str))
-          (compress (cdr rev-str)
-                    last
-                    result)
-          (compress (cdr rev-str)
-                    (car rev-str)
-                    (cons (cons (caar rev-str) (cdar rev-str)) result)
-                    ))))
-
-(defun count-occurence (str count result)
-  ;; (format t "~A ~A ~A~%" str count result)
+;; (compress (str-to-list "aabbbccccdeff-") 1 nil)
+(defun compress (str count last)
   (if (not str)
-      result
-      (count-occurence (cdr str)
-                       (if (two-same str)
-                           (1+ count)
-                           1)
-                       (cons (cons (car str) count) result)
-                       )))
+      (progn
+        (when last
+          (princ last))
+        (when (> count 1)
+          (princ count))
+        nil)
+      (progn
+        (if (two-same str last)
+            (progn
+              (compress (cdr str) (1+ count) (car str)))
+            (progn
+              (when last
+                (princ last))
+              (when (> count 1)
+                (princ count))
+              (compress (cdr str) 1 (car str))
+              )))))
 
-;; (solve-me "aabbbccccdeff")
+;; (defun count-occurence (str count result)
+;;   ;; (format t "~A ~A ~A~%" str count result)
+;;   (if (not str)
+;;       result
+;;       (count-occurence (cdr str)
+;;                        (if (two-same str)
+;;                            (1+ count)
+;;                            1)
+;;                        (cons (cons (car str) count) result)
+;;                        )))
+
+(defun str-to-list (str)
+  (map 'list (lambda (x) x) str))
+
+;; (solve-me (str-to-list "aabbbccccdeff"))
 (defun solve-me (str)
-  (princ
-   (compress
-    (count-occurence (map 'list (lambda (x) x) str)
-                     1
-                     nil)
-    nil
-    nil)))
+  (compress str
+            1
+            nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -51,7 +57,7 @@
 
 (defun solution (&optional stream)
   (let ((str (read-line stream)))
-    (princ (solve-me str))))
+    (solve-me (str-to-list str))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
