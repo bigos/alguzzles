@@ -1,3 +1,9 @@
+;;   (if (not l)
+;;       (list (reverse r1) (reverse r2))
+;;       (split-list (cddr l)
+;;                   (cons (car l) r1)
+;;                   (cons (cadr l) r2))))
+
 ;;; mutually recursive with get-power
 (defun get-base (l res)
   (if (not l)
