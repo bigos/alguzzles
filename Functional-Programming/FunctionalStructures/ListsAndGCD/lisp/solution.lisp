@@ -4,6 +4,8 @@
 ;;                   (cons (car l) r1)
 ;;                   (cons (cadr l) r2))))
 
+;;; you can use (gcd 6 12 15)
+
 ;;; mutually recursive with get-power
 (defun get-base (l res)
   (if (not l)
@@ -16,11 +18,12 @@
 
 (defun get-result (l)
   (let ((number (apply #'* (get-base l nil))))
-    (format t "==== ~A ~A~%" l number)))
+    (format t "==== ~A ~A~%" l number)
+    number))
 
 (defun solve-me (l)
   (format t "~A~%" l)
-  (map 'list (lambda (x) (get-result x)) l))
+  (princ (apply #'gcd (map 'list (lambda (x) (get-result x)) l))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -51,4 +54,3 @@
     (solution s)))
 
 (main)
-
