@@ -21,6 +21,7 @@
     (format t "==== ~A ~A~%" l number)
     number))
 
+;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
 (defun solve-me (l)
   (format t "~A~%" l)
   (princ (apply #'gcd (map 'list (lambda (x) (get-result x)) l))))
