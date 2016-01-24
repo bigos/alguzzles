@@ -1,11 +1,58 @@
+(defun two-same (l last)
+  (eq (car l) last))
+
+;; (compress (str-to-list "aabbbccccdeff-") 1 nil)
+(defun compress (str count last)
+  (if (not str)
+      (progn
+        (when last
+          (princ last))
+        (when (> count 0)
+          (princ count))
+        nil)
+      (progn
+        (if (two-same str last)
+            (progn
+              (compress (cdr str) (1+ count) (car str)))
+            (progn
+              (when last
+                (princ last))
+              (when (> count 1)
+                (princ count))
+              (compress (cdr str) 1 (car str))
+              )))))
+
+
 ;; (decompose 1125 (prime-factors 1125) nil)
 ;; returns (5 5 5 3 3)
 ;; which is almost the solution to the problem
+
+;;; this is wrong
+;; CL-USER> (decompose 4 '(2) nil)
+;; 2 >>> 4   (2) : NIL
+;; 1 >>> 2   (2) : (2)
+;; (2)
+;; CL-USER> (decompose 8 '(2) nil)
+;; 4 >>> 8   (2) : NIL
+;; 2 >>> 4   (2) : (2)
+;; 1 >>> 2   (2) : (2 2)
+;; (2 2)
+
+;;; this is correct
+;; CL-USER> (decompose 1125 '(3 5) nil)
+;; 375 >>> 1125   (3 5) : NIL
+;; 125 >>> 375   (3 5) : (3)
+;; 125/3 >>> 125   (3 5) : (3 3)
+;; 25 >>> 125   (5) : (5 3 3)
+;; 5 >>> 25   (5) : (5 5 3 3)
+;; 1 >>> 5   (5) : (5 5 5 3 3)
+;; (3 3 5 5 5)
+
 (defun decompose (n prime-factors acc)
   (let ((res (/ n (car prime-factors))))
   (format t "~a >>> ~A   ~A : ~A~%" res n prime-factors acc)
     (if (eq res 1)
-        acc    
+        (reverse  acc)    
         (if (eq (type-of res) 'RATIO)
             (decompose n (cdr prime-factors) (cons (cadr prime-factors) acc))
             (decompose res prime-factors (cons (car prime-factors) acc))))))
@@ -62,6 +109,8 @@
          (rf (apply #'gcd results)))
     ;; basically we need prime factors of greates common divisor
     (format t "~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
+    (princ
+     (compress  (decompose 1125 (prime-factors 1125) nil) 1 nil))
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -89,7 +138,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input1" :type "txt"))
     (solution s)))
 
 (main)
