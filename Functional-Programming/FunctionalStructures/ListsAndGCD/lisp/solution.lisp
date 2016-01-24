@@ -1,8 +1,31 @@
-;;   (if (not l)
-;;       (list (reverse r1) (reverse r2))
-;;       (split-list (cddr l)
-;;                   (cons (car l) r1)
-;;                   (cons (cadr l) r2))))
+(defun small-divisors (n f)
+  "divisors of n from 1 to f, which is (floor (sqrt n))"   
+  (loop for x from 1 to f
+     when (zerop (mod n x))
+     collect x))
+
+(defun large-divisors (n small-divisors)
+  "divisors from (sqrt n) to n"
+  (loop for x in (reverse small-divisors)
+     collect (/ n x)))
+
+(defun divisors (n)
+  (let ((small-divs))
+    (multiple-value-bind (f r) (floor (sqrt n))
+      (setf small-divs (small-divisors n f))
+      (concatenate
+       'list
+       small-divs
+       (if (zerop r)
+           (cdr (large-divisors n small-divs))
+           (large-divisors n small-divs))))))
+
+(defun primep (n)
+  (equalp (divisors n)
+          (list 1 n)))
+
+(defun prime-factors (n)
+  (remove-if-not #'primep (divisors n)))
 
 ;;; you can use (gcd 6 12 15)
 
@@ -23,8 +46,12 @@
 
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
 (defun solve-me (l)
-  (format t "~A~%" l)
-  (princ (apply #'gcd (map 'list (lambda (x) (get-result x)) l))))
+  (let* ((results (map 'list (lambda (x) (get-result x)) l))
+         (rf (apply #'gcd results)))
+    ;; basically we need prime factors of greates common divisor
+    (format t "~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
+    (loop for x in results do
+         (format t "!!!!! ~A ! ~A~%" x (prime-factors x)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
