@@ -2,60 +2,39 @@
   (eq (car l) last))
 
 ;; (compress (str-to-list "aabbbccccdeff-") 1 nil)
-(defun compress (str count last)
+(defun compress (str count last acc)
   (if (not str)
       (progn
         (when last
-          (princ last))
+          (push last acc))
         (when (> count 0)
-          (princ count))
-        nil)
+          (push count acc))
+        (reverse acc))
       (progn
         (if (two-same str last)
             (progn
-              (compress (cdr str) (1+ count) (car str)))
+              (compress (cdr str) (1+ count) (car str) acc))
             (progn
               (when last
-                (princ last))
-              (when (> count 1)
-                (princ count))
-              (compress (cdr str) 1 (car str))
+                (push last acc))
+              (when (> count 1)          
+                (push count acc))
+              (compress (cdr str) 1 (car str) acc)
               )))))
 
-
-;; (decompose 1125 (prime-factors 1125) nil)
-;; returns (5 5 5 3 3)
-;; which is almost the solution to the problem
-
-;;; this is wrong
-;; CL-USER> (decompose 4 '(2) nil)
-;; 2 >>> 4   (2) : NIL
-;; 1 >>> 2   (2) : (2)
-;; (2)
-;; CL-USER> (decompose 8 '(2) nil)
-;; 4 >>> 8   (2) : NIL
-;; 2 >>> 4   (2) : (2)
-;; 1 >>> 2   (2) : (2 2)
-;; (2 2)
-
-;;; this is correct
-;; CL-USER> (decompose 1125 '(3 5) nil)
-;; 375 >>> 1125   (3 5) : NIL
-;; 125 >>> 375   (3 5) : (3)
-;; 125/3 >>> 125   (3 5) : (3 3)
-;; 25 >>> 125   (5) : (5 3 3)
-;; 5 >>> 25   (5) : (5 5 3 3)
-;; 1 >>> 5   (5) : (5 5 5 3 3)
-;; (3 3 5 5 5)
-
-(defun decompose (n prime-factors acc)
+(defun decompose-inner (n prime-factors acc)
   (let ((res (/ n (car prime-factors))))
-  (format t "~a >>> ~A   ~A : ~A~%" res n prime-factors acc)
+  ;; (format t "~a >>> ~A   ~A : ~A~%" res n prime-factors acc)
     (if (eq res 1)
         (reverse  acc)    
         (if (eq (type-of res) 'RATIO)
-            (decompose n (cdr prime-factors) (cons (cadr prime-factors) acc))
-            (decompose res prime-factors (cons (car prime-factors) acc))))))
+            (decompose-inner n (cdr prime-factors) (cons (cadr prime-factors) acc))
+            (decompose-inner res prime-factors (cons (car prime-factors) acc))))))
+
+(defun decompose (n prime-factors)
+  (if (eq 1 (length prime-factors))
+      (decompose-inner n prime-factors prime-factors)
+      (decompose-inner n prime-factors nil)))
 
 (defun small-divisors (n f)
   "divisors of n from 1 to f, which is (floor (sqrt n))"   
@@ -100,7 +79,7 @@
 
 (defun get-result (l)
   (let ((number (apply #'* (get-base l nil))))
-    (format t "==== ~A ~A~%" l number)
+    ;; (format t "==== ~A ~A~%" l number)
     number))
 
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
@@ -108,9 +87,11 @@
   (let* ((results (map 'list (lambda (x) (get-result x)) l))
          (rf (apply #'gcd results)))
     ;; basically we need prime factors of greates common divisor
-    (format t "~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
-    (princ
-     (compress  (decompose 1125 (prime-factors 1125) nil) 1 nil))
+    ;; (format t "~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
+    (loop for x in (compress (decompose rf (prime-factors rf)) 1 nil nil)
+       for s = "" then " "
+       do
+         (format t "~A~A" s x))
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
