@@ -1,3 +1,15 @@
+;; (decompose 1125 (prime-factors 1125) nil)
+;; returns (5 5 5 3 3)
+;; which is almost the solution to the problem
+(defun decompose (n prime-factors acc)
+  (let ((res (/ n (car prime-factors))))
+  (format t "~a >>> ~A   ~A : ~A~%" res n prime-factors acc)
+    (if (eq res 1)
+        acc    
+        (if (eq (type-of res) 'RATIO)
+            (decompose n (cdr prime-factors) (cons (cadr prime-factors) acc))
+            (decompose res prime-factors (cons (car prime-factors) acc))))))
+
 (defun small-divisors (n f)
   "divisors of n from 1 to f, which is (floor (sqrt n))"   
   (loop for x from 1 to f
@@ -50,8 +62,7 @@
          (rf (apply #'gcd results)))
     ;; basically we need prime factors of greates common divisor
     (format t "~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
-    (loop for x in results do
-         (format t "!!!!! ~A ! ~A~%" x (prime-factors x)))))
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
