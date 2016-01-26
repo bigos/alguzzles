@@ -1,9 +1,8 @@
 (defun two-same (l last)
   (eq (car l) last))
 
-;; (compress (str-to-list "aabbbccccdeff-") 1 nil)
-(defun compress (str count last acc)
-  (if (not str)
+(defun compress (l count last acc)
+  (if (not l)
       (progn
         (when last
           (push last acc))
@@ -11,16 +10,15 @@
           (push count acc))
         (reverse acc))
       (progn
-        (if (two-same str last)
+        (if (two-same l last)
             (progn
-              (compress (cdr str) (1+ count) (car str) acc))
+              (compress (cdr l) (1+ count) (car l) acc))
             (progn
               (when last
                 (push last acc))
               (when (> count 1)          
                 (push count acc))
-              (compress (cdr str) 1 (car str) acc)
-              )))))
+              (compress (cdr l) 1 (car l) acc))))))
 
 (defun decompose-inner (n prime-factors acc)
   (let ((res (/ n (car prime-factors))))
@@ -65,17 +63,10 @@
 (defun prime-factors (n)
   (remove-if-not #'primep (divisors n)))
 
-;;; you can use (gcd 6 12 15)
-
-;;; mutually recursive with get-power
 (defun get-base (l res)
   (if (not l)
       res
-      (get-power (cdr l) (car l) res )))
-
-;;; mutually recursive with get-base
-(defun get-power (l base res)
-  (get-base (cdr l) (push (expt base (car l)) res)))
+      (get-base (cddr l) (cons (expt (car l) (cadr l)) res))))
 
 (defun get-result (l)
   (let ((number (apply #'* (get-base l nil))))
@@ -119,7 +110,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input1" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
