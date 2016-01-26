@@ -39,8 +39,18 @@
 
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
 (defun solve-me (l)
-  (let* ((rf (apply #'gcd (map 'list (lambda (x) (get-result x)) l))))
-    ;; (princ l)        
+  (let* ((rl) (rf))
+    (princ l)
+    (terpri)
+    (princ "now we'll find rl")
+    ;; timeout here
+    (setf rl (map 'list (lambda (x) (get-result x)) l))
+    (princ rl)
+    (terpri)
+    (princ "now gcd")
+    (setf rf (apply #'gcd rl))
+    (princ rf)
+    (terpri)
     (loop for x in (compress (prime-factors rf) 1 nil nil)
        for s = "" then " "
        do
@@ -72,7 +82,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input08" :type "txt"))
     (solution s)))
 
 (main)
