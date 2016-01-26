@@ -67,7 +67,7 @@
   (equalp (divisors n)
           (list 1 n)))
 
-(defun prime-factors (n)
+(defun prime-divisors (n)
   (remove-if-not #'primep (divisors n)))
 
 (defun get-base (l res)
@@ -78,16 +78,18 @@
 (defun get-result (l)
   (apply #'* (get-base l nil)))
 
+(defun prime-factors (n) n)
+
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
 (defun solve-me (l)
-  (let* ((results (map 'list (lambda (x) (get-result x)) l))
-         (rf (apply #'gcd results)))
+  (let* ((rf (apply #'gcd (map 'list (lambda (x) (get-result x)) l))))
     (princ l)
-    ;; (format t "~&~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
     ;; rf is
     ;; rf seems to be the cause of timeouts, prime-factors seem to get choked with it
     ;; 2281687790422554067453416082191776817489009509246934422242458148952537553271
-    (loop for x in (compress (decompose rf (prime-factors rf)) 1 nil nil)
+
+    ;; on input 03 we get wrong answer when we decompose prime divisors of 735000
+    (loop for x in (compress (decompose rf (prime-divisors rf)) 1 nil nil)
        for s = "" then " "
        do
          (format t "~A~A" s x))
@@ -118,7 +120,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input04" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
