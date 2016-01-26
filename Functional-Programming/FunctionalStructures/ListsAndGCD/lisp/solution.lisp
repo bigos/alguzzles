@@ -8,7 +8,7 @@
           (push last acc))
         (when (> count 0)
           (push count acc))
-        (reverse acc))
+        (cdr (reverse acc)))
       (progn
         (if (two-same l last)
             (progn
@@ -16,59 +16,9 @@
             (progn
               (when last
                 (push last acc))
-              (when (> count 1)          
+              (when (> count 0)          
                 (push count acc))
               (compress (cdr l) 1 (car l) acc))))))
-
-(defun decompose-inner (n prime-factors acc)
-  (let ((res (/ n (car prime-factors))))
-  ;; (format t "~a >>> ~A   ~A : ~A~%" res n prime-factors acc)
-    (if (eq res 1)
-        (reverse  acc)    
-        (if (eq (type-of res) 'RATIO)
-            (decompose-inner n (cdr prime-factors) (cons (cadr prime-factors) acc))
-            (decompose-inner res prime-factors (cons (car prime-factors) acc))))))
-
-(defun decompose (n prime-factors)
-  (if (eq 1 (length prime-factors))
-      (decompose-inner n prime-factors prime-factors)
-      (decompose-inner n prime-factors nil)))
-
-(defun small-divisors (n f)
-  "divisors of n from 1 to f, which is (floor (sqrt n))"   
-  (loop for x from 1 to f
-     when (zerop (mod n x))
-     collect x))
-
-(defun large-divisors (n small-divisors)
-  "divisors from (sqrt n) to n"
-  (loop for x in (reverse small-divisors)
-     collect (/ n x)))
-
-;; (time (divisors 228175654564568779))
-;; Evaluation took:
-;; 11.635 seconds of real time
-;; 11.624000 seconds of total run time (11.620000 user, 0.004000 system)
-;; 99.91% CPU
-;; 33,664,519,926 processor cycles
-;; 89,408 bytes consed
-(defun divisors (n)
-  (let ((small-divs))
-    (multiple-value-bind (f r) (floor (sqrt n))
-      (setf small-divs (small-divisors n f))
-      (concatenate
-       'list
-       small-divs
-       (if (zerop r)
-           (cdr (large-divisors n small-divs))
-           (large-divisors n small-divs))))))
-
-(defun primep (n)
-  (equalp (divisors n)
-          (list 1 n)))
-
-(defun prime-divisors (n)
-  (remove-if-not #'primep (divisors n)))
 
 (defun get-base (l res)
   (if (not l)
@@ -78,18 +28,20 @@
 (defun get-result (l)
   (apply #'* (get-base l nil)))
 
-(defun prime-factors (n) n)
+(defun prime-factors (n)
+  (prime-factors-inner n 2))
+
+(defun prime-factors-inner (n p)
+  (cond ((= n 1) nil)
+        ((zerop (rem n p))
+         (cons p (prime-factors-inner (/ n p) p)))
+        (T (prime-factors-inner n (1+ p)))))
 
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
 (defun solve-me (l)
   (let* ((rf (apply #'gcd (map 'list (lambda (x) (get-result x)) l))))
-    (princ l)
-    ;; rf is
-    ;; rf seems to be the cause of timeouts, prime-factors seem to get choked with it
-    ;; 2281687790422554067453416082191776817489009509246934422242458148952537553271
-
-    ;; on input 03 we get wrong answer when we decompose prime divisors of 735000
-    (loop for x in (compress (decompose rf (prime-divisors rf)) 1 nil nil)
+    ;; (princ l)        
+    (loop for x in (compress (prime-factors rf) 1 nil nil)
        for s = "" then " "
        do
          (format t "~A~A" s x))
