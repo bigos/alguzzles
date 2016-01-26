@@ -77,8 +77,8 @@
 (defun solve-me (l)
   (let* ((results (map 'list (lambda (x) (get-result x)) l))
          (rf (apply #'gcd results)))
-    ;; basically we need prime factors of greates common divisor
-    ;; (format t "~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
+    ;; (princ l)
+    ;; (format t "~&~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
     (loop for x in (compress (decompose rf (prime-factors rf)) 1 nil nil)
        for s = "" then " "
        do
@@ -110,7 +110,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
