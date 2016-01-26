@@ -45,6 +45,13 @@
   (loop for x in (reverse small-divisors)
      collect (/ n x)))
 
+;; (time (divisors 228175654564568779))
+;; Evaluation took:
+;; 11.635 seconds of real time
+;; 11.624000 seconds of total run time (11.620000 user, 0.004000 system)
+;; 99.91% CPU
+;; 33,664,519,926 processor cycles
+;; 89,408 bytes consed
 (defun divisors (n)
   (let ((small-divs))
     (multiple-value-bind (f r) (floor (sqrt n))
@@ -69,16 +76,17 @@
       (get-base (cddr l) (cons (expt (car l) (cadr l)) res))))
 
 (defun get-result (l)
-  (let ((number (apply #'* (get-base l nil))))
-    ;; (format t "==== ~A ~A~%" l number)
-    number))
+  (apply #'* (get-base l nil)))
 
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
 (defun solve-me (l)
   (let* ((results (map 'list (lambda (x) (get-result x)) l))
          (rf (apply #'gcd results)))
-    ;; (princ l)
+    (princ l)
     ;; (format t "~&~A ~A   ~A   -->-  ~A~%" l results rf (prime-factors rf))
+    ;; rf is
+    ;; rf seems to be the cause of timeouts, prime-factors seem to get choked with it
+    ;; 2281687790422554067453416082191776817489009509246934422242458148952537553271
     (loop for x in (compress (decompose rf (prime-factors rf)) 1 nil nil)
        for s = "" then " "
        do
@@ -110,7 +118,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input07" :type "txt"))
+                      :name "input04" :type "txt"))
     (solution s)))
 
 (main)
