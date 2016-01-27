@@ -1,6 +1,3 @@
-(defun two-same (l last)
-  (eq (car l) last))
-
 (defun compress (l count last acc)
   (if (not l)
       (progn
@@ -10,7 +7,7 @@
           (push count acc))
         (cdr (reverse acc)))
       (progn
-        (if (two-same l last)
+        (if (eq (car l) last)
             (progn
               (compress (cdr l) (1+ count) (car l) acc))
             (progn
@@ -20,13 +17,12 @@
                 (push count acc))
               (compress (cdr l) 1 (car l) acc))))))
 
-(defun get-base (l res)
+;;; it's a choker
+(defun get-result (l &optional (res 1))
   (if (not l)
       res
-      (get-base (cddr l) (cons (expt (car l) (cadr l)) res))))
-
-(defun get-result (l)
-  (apply #'* (get-base l nil)))
+    (get-result (cddr l)
+                (* res (expt (car l) (cadr l))))))
 
 (defun prime-factors (n)
   (prime-factors-inner n 2))
@@ -38,6 +34,7 @@
         (T (prime-factors-inner n (1+ p)))))
 
 ;; http://www.mathwarehouse.com/arithmetic/numbers/prime-number/prime-factorization-calculator.php
+
 (defun solve-me (l)
   (let* ((rl) (rf))
     (princ l)
@@ -52,12 +49,12 @@
     (princ rf)
     (terpri)
     (loop for x in (compress (prime-factors rf) 1 nil nil)
-       for s = "" then " "
-       do
-         (format t "~A~A" s x))
+          for s = "" then " "
+          do
+          (format t "~A~A" s x))
     ))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
      as j = (position #\Space string :start i)
@@ -82,7 +79,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input08" :type "txt"))
+                      :name "input04" :type "txt"))
     (solution s)))
 
 (main)
