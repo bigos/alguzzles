@@ -17,6 +17,12 @@
                 (push count acc))
               (compress (cdr l) 1 (car l) acc))))))
 
+;;; split list to pairs
+(defun ltc (l r)
+  (if (not l)
+      r
+      (ltc (cddr l) (cons (cons (car l) (cadr l)) r))))
+
 ;;; it's a choker
 ;;; there's possibility to optimise it
 (defun get-result (l &optional (res 1))
