@@ -18,6 +18,7 @@
               (compress (cdr l) 1 (car l) acc))))))
 
 ;;; it's a choker
+;;; there's possibility to optimise it
 (defun get-result (l &optional (res 1))
   (if (not l)
       res
