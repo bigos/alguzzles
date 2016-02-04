@@ -1,4 +1,6 @@
-(Defun looper (n m l &optional (acc 0))
+(proclaim '(optimize (speed 3) (safety 0)))
+
+(defun looper (n m l &optional (acc 0))
   (if (< m n)        
       acc
       (looper n (1- m) (cdr l) (apply #'logxor (cons acc (subseq l 0 n))))))
