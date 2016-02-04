@@ -1,5 +1,12 @@
+(Defun looper (n m l &optional (acc 0))
+  (if (< m n)        
+      acc
+      (looper n (1- m) (cdr l) (apply #'logxor (cons acc (subseq l 0 n))))))
+
 (defun solve-me (n a)
-  (format t "~A ~A ~%" n a))
+  ;; (format t "~A ~A ~%" n a)
+  (format t "~A~%"
+          (apply #'logxor (loop for x from 1 to n collect (looper x n a)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
