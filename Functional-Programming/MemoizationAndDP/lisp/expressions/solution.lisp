@@ -12,6 +12,7 @@
 ;; 22 * 79 - 21
 ;; lisp version
 ;; (- (* 22 79) 21)
+;;; looks like some kind of RPN calculation
 
 (defun solve-me (tc l)
   (format t "args: ~A ~A~%" tc l))
