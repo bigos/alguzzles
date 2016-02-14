@@ -1,3 +1,18 @@
+(defun permute (list)
+  (if list
+      (mapcan #'(lambda (x)
+                  (mapcar #'(lambda (y) (cons x y))
+                          (permute (remove x list))))
+              list)
+      '(()))) ; else
+
+;; example imput 
+;; 22 79 21
+;; with infix operators
+;; 22 * 79 - 21
+;; lisp version
+;; (- (* 22 79) 21)
+
 (defun solve-me (tc l)
   (format t "args: ~A ~A~%" tc l))
 
