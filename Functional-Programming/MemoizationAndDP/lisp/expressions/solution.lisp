@@ -12,10 +12,45 @@
 ;; 22 * 79 - 21
 ;; lisp version
 ;; (- (* 22 79) 21)
-;;; looks like some kind of RPN calculation
+
+
+;; (combinator '(iced jam plain) 2)
+(defun combinator (cc k)
+  (cond ((zerop k) '(()))
+        ((not cc) nil)
+        (T (append
+            (map 'list
+                 (lambda (x) (cons (car cc) x))
+                 (combinator cc (- k 1)))
+            (combinator (cdr cc) k)))))
+
+(defun opernums (nums oper acc)
+  (if (not oper)
+      acc
+      (opernums (cdr nums)
+                (cdr oper)
+                (funcall (car oper) acc (car nums)))))
+
+(defun calc (nums oper)
+  (opernums (cdr nums) oper (car nums)))
+
+(defun print-result (l o)
+  (when o     
+      (format t "~A~a" (car o) (car l))
+      (print-result (cdr l)
+                    (cdr o))))
 
 (defun solve-me (tc l)
-  (format t "args: ~A ~A~%" tc l))
+  (let ((ops (combinator '(* + -) (- tc 1))))
+    ;; (format t "args: ~A ~A ~A~%" tc l ops)
+    (loop for o in ops
+       for r = (mod (calc l o) 101) then (mod (calc l o) 101)
+       ;; do
+       ;;   (format t "~&~a ~A ~A~%" o (calc l o) r)
+       until (zerop r)
+       finally (progn
+                 (format t "~A" (car l))
+                 (print-result (cdr l) o)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
