@@ -1,3 +1,31 @@
+;;; (variations 2 3) => 000 .. 111
+(defun variations (n l)
+  (let ((buckets
+         (make-array l :initial-element 0))
+        (limit n)
+        (results))
+    (labels ((reset-bucket (level)
+               (loop for x from 0 below level do (setf (elt buckets x) 0)))
+             (variation (level)
+               ;; get value and append it to results
+               (when (zerop level )
+                 (setf results
+                       (append results
+                               (list (loop for x from 0 below l
+                                        collect (elt buckets x))))))
+               ;; increase value
+               (incf (elt buckets level))
+               ;; go to next level if necessary
+               (when (>= (elt buckets level) limit)
+                 (when (< level (1- l))
+                   (variation (1+ level))))
+               ;; zero lower levels
+               (reset-bucket level)
+               (setf level 0)))
+      (loop  while  (every (lambda (x) (< x  n)) buckets) do
+           (variation 0)))
+    results))
+
 (defun permute (list)
   (if list
       (mapcan #'(lambda (x)
@@ -6,7 +34,7 @@
               list)
       '(()))) ; else
 
-;; example imput 
+;; example imput
 ;; 22 79 21
 ;; with infix operators
 ;; 22 * 79 - 21
@@ -35,13 +63,15 @@
   (opernums (cdr nums) oper (car nums)))
 
 (defun print-result (l o)
-  (when o     
+  (when o
       (format t "~A~a" (car o) (car l))
       (print-result (cdr l)
                     (cdr o))))
 
 (defun solve-me (tc l)
-  (let ((ops (combinator '(* + -) (- tc 1))))
+  (let ((ops (loop for o in  (variations 3 (-  tc 1))
+                collect (loop for x in o
+                           collect (elt '(* + -) x)))))
     ;; (format t "args: ~A ~A ~A~%" tc l ops)
     (loop for o in ops
        for r = (mod (calc l o) 101) then (mod (calc l o) 101)
