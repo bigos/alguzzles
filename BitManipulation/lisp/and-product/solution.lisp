@@ -1,7 +1,13 @@
 (proclaim '(optimize (speed 3)))
 
+(defun logandnums (s e)
+  (apply 'logand (num-sequence s e)))
+
+(defun num-sequence (s n)
+  (loop for x from s to n collect x))
+
 (defun solve-me (n)
-  (format t "solving ~A~%" n))
+  (format t "~A~%" (logandnums (car n) (cadr n))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -29,7 +35,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
