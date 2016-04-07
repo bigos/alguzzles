@@ -1,5 +1,13 @@
 (proclaim '(optimize (speed 3)))
 
+(defun rec-num (s e acc)
+  (if (> s e)
+      acc
+      (rec-num (1+ s) e (push (cons (expt 2 s) (1- (expt 2 (1+ s)))) acc))))
+
+(defun num-ranges (e)
+  (rec-num 1 e (list (cons 0 1))))
+
 (defun pivot-numbers ()
   (loop for x from 0 to 32 collect  (list x (expt 2 x))))
 
@@ -12,13 +20,19 @@
 (defun num-sequence (s n)
   (loop for x from s to n collect x))
 
+(defun num-test (s e)
+  (loop for c in (num-ranges 31)
+     when (and (>= s (car c)) (<= s (cdr c))
+               (>= e (car c)) (<= e (cdr c)))
+     collect c))
+
 (defun solve-me (n)
   (let ((s (car n))
         (e (cadr n)))
       (format t "~A~%"
               ;; if within same pivot sequence eg 4-7 or 8-15
               ;; use following else 0
-              (if test
+              (if (num-test s e)
                   (if (oddp (car n))
                       (logand (1- (car n)) (cadr n))
                       (logand (car n) (cadr n)))
@@ -50,7 +64,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input07" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
