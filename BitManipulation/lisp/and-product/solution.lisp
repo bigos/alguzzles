@@ -1,4 +1,19 @@
-(proclaim '(optimize (speed 3)))
+;; (proclaim '(optimize (speed 3)))
+
+(defun int2bin (n)
+  (format nil "~10,'0b" n))
+
+(defun discrepancies (s e)
+  (let ((c (solve-me (list s e)))
+        (l (apply 'logand (num-sequence s e))))
+    (if (eq c l)
+        (format t "~a and ~a are equal   ~A ~A~%" s e c (int2bin c))
+        (format t "~a and ~a ARE NOT equal   ~A ~A ~A ~A~%" s e c (int2bin c) l (int2bin l)))))
+
+;; example of missed possibilities
+;; (discrepancies-loop 13 31)
+(defun discrepancies-loop (s e)
+                    (loop for x from s to e do (discrepancies x e)))
 
 (defun rec-num (s e acc)
   (if (> s e)
@@ -29,14 +44,11 @@
 (defun solve-me (n)
   (let ((s (car n))
         (e (cadr n)))
-      (format t "~A~%"
-              ;; if within same pivot sequence eg 4-7 or 8-15
-              ;; use following else 0
-              (if (num-test s e)
-                  (if (oddp (car n))
-                      (logand (1- (car n)) (cadr n))
-                      (logand (car n) (cadr n)))
-                  0))))
+    (if (num-test s e)
+        (if (oddp (car n))
+            (logand (1- (car n)) (cadr n))
+            (logand (car n) (cadr n)))
+        0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
