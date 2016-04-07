@@ -64,7 +64,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
