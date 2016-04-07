@@ -1,5 +1,8 @@
 (proclaim '(optimize (speed 3)))
 
+(defun rangenums (s e)
+  (loop for x from s to e collect (list x (logandnums x e))))
+
 (defun logandnums (s e)
   (apply 'logand (num-sequence s e)))
 
@@ -7,7 +10,7 @@
   (loop for x from s to n collect x))
 
 (defun solve-me (n)
-  (format t "~A~%" (logandnums (car n) (cadr n))))
+  (format t "~A~%" (logand (car n) (cadr n))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
