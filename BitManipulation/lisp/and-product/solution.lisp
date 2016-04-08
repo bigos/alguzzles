@@ -1,5 +1,7 @@
 (proclaim '(optimize (speed 3)))
 
+;; (rec-powers-of-two 65535 0 nil)
+;; causes heap exhaustion problems
 (defun rec-powers-of-two (l n acc)
   (if (>= n l)
       acc
@@ -47,7 +49,7 @@
   (if (eq s e)
       s
       (if (num-test s e)
-          (car (last (power-of-2-composition s (rec-powers-of-two e 0 nil))))
+          (car (last (power-of-2-composition s  (rec-powers-of-two 33 0 nil))))
           0)))
 
 (defun int2bin (n)
@@ -57,12 +59,12 @@
   (let ((c (solve-me (list s e)))
         (l (apply 'logand (num-sequence s e)))
         (f (finding s e)))
-    (if (eq c l)
+    (if (and (eq c l) (eq f l))
         (format t "~a and ~a are equal   ~A ~A    ~A~%" s e c (int2bin c) f)
         (format t "~a and ~a ARE NOT equal   ~A ~A ~A ~A      ~A~%" s e c (int2bin c) l (int2bin l) f))))
 
 ;; example of missed possibilities
-;; (discrepancies-loop 13 31)
+;; (discrepancies-loop 359 411 )
 (defun discrepancies-loop (s e)
                     (loop for x from s to e do (discrepancies x e)))
 
@@ -127,7 +129,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
