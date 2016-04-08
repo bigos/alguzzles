@@ -1,44 +1,5 @@
 (proclaim '(optimize (speed 3)))
 
-;; (rec-powers-of-two 65535 0 nil)
-;; causes heap exhaustion problems
-(defun rec-powers-of-two (l n acc)
-  (if (>= n l)
-      acc
-      (rec-powers-of-two l (1+ n) (push (expt 2 n) acc))))
-
-;; (power-of-2-composition 17 (rec-powers-of-two 33 0 nil))
-(defun power-of-2-composition (n powers)
-  (if (>= n (car powers))
-      (list (- n (car powers))
-            powers
-            (+ (first-gteq (- n (car powers)) (power-2-sums (cdr powers) nil))
-               (car powers))
-            )
-      (power-of-2-composition n (cdr powers))))
-
-;;; eventually i will be able to figure out first number for comparison of only
-;;; two numbers and make it super quick
-(defun power-2-sums (l acc)
-  (if (not l)
-      (cons 0 (reverse acc))
-      (power-2-sums (cdr l)
-                    (push (if (null acc)
-                              (car l)
-                              (+ (car l) (car acc)))
-                          acc))))
-;;; almost there
-(defun first-gteq (n l)
-  (cond ((null l)
-         l)
-        ((null (cadr l))
-         (car l))
-        ((<= (car l) n (1- (cadr l)))
-         (car l))
-        (T
-         (first-gteq n (cdr l)))))
-
-
 ;; (require :sb-sprof)
 ;; (sb-sprof:with-profiling (:max-samples 1000
 ;;                                        :report :flat
@@ -49,19 +10,23 @@
   (if (eq s e)
       s
       (if (num-test s e)
-          (car (last (power-of-2-composition s  (rec-powers-of-two 33 0 nil))))
+          (cond ((eq (1+ s) e) (logand s e))
+                (T (logand s (1+ s) e)))
           0)))
+
+(defun value-progression (s e)
+  (loop for x from s to e
+     for y = x then (logand x y) finally (return y)))
 
 (defun int2bin (n)
   (format nil "~10,'0b" n))
 
 (defun discrepancies (s e)
-  (let ((c (solve-me (list s e)))
-        (l (apply 'logand (num-sequence s e)))
-        (f (finding s e)))
-    (if (and (eq c l) (eq f l))
-        (format t "~a and ~a are equal   ~A ~A    ~A~%" s e c (int2bin c) f)
-        (format t "~a and ~a ARE NOT equal   ~A ~A ~A ~A      ~A~%" s e c (int2bin c) l (int2bin l) f))))
+  (let ((c (value-progression s e))
+        (l (apply 'logand (num-sequence s e))))
+    (if (eq c l)
+        (format t "~a and ~a are equal   ~A ~A    ~%" s e c (int2bin c) )
+        (format t "~a and ~a ARE NOT equal   ~A ~A ~A ~A      ~%" s e c (int2bin c) l (int2bin l)))))
 
 ;; example of missed possibilities
 ;; (discrepancies-loop 359 411 )
@@ -99,7 +64,7 @@
   (let ((s (car n))
         (e (cadr n)))
     (if (num-test s e)
-        (finding s e)
+        (value-progression s e)
         0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
