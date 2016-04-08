@@ -15,7 +15,6 @@
   (if (>= n (car powers))
       (list (- n (car powers))
             powers
-            (power-2-sums (cdr powers) nil)
             (+ (first-gteq (- n (car powers)) (power-2-sums (cdr powers) nil))
                (car powers))
             )
