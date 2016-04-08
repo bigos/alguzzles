@@ -16,6 +16,8 @@
       (list (- n (car powers))
             powers
             (power-2-sums (cdr powers) nil)
+            (+ (first-gteq (- n (car powers)) (power-2-sums (cdr powers) nil))
+               (car powers))
             )
       (power-of-2-composition n (cdr powers))))
 
@@ -31,10 +33,14 @@
                           acc))))
 ;;; almost there
 (defun first-gteq (n l)
-  (if (<= (car l) n (1- (cadr l)))
-      (car l)
-      (first-gteq n (cdr l))
-      ))
+  (cond ((null l)
+         l)
+        ((null (cadr l))
+         (car l))
+        ((<= (car l) n (1- (cadr l)))
+         (car l))
+        (T
+         (first-gteq n (cdr l)))))
 
 (defun int2bin (n)
   (format nil "~10,'0b" n))
