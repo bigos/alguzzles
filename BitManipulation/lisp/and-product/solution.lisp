@@ -13,19 +13,28 @@
 ;; (power-of-2-composition 17 (rec-powers-of-two 33 0 nil))
 (defun power-of-2-composition (n powers)
   (if (>= n (car powers))
-      (list (- n (car powers)) powers)
+      (list (- n (car powers))
+            powers
+            (power-2-sums (cdr powers) nil)
+            )
       (power-of-2-composition n (cdr powers))))
 
 ;;; eventually i will be able to figure out first number for comparison of only
 ;;; two numbers and make it super quick
 (defun power-2-sums (l acc)
   (if (not l)
-      (reverse acc)
+      (cons 0 (reverse acc))
       (power-2-sums (cdr l)
                     (push (if (null acc)
                               (car l)
                               (+ (car l) (car acc)))
                           acc))))
+;;; almost there
+(defun first-gteq (n l)
+  (if (<= (car l) n (1- (cadr l)))
+      (car l)
+      (first-gteq n (cdr l))
+      ))
 
 (defun int2bin (n)
   (format nil "~10,'0b" n))
