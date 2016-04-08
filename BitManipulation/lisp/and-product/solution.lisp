@@ -1,10 +1,5 @@
 ;; (proclaim '(optimize (speed 3)))
 
-(defparameter *limit* (expt 2 32))
-
-(defparameter powers-of-two (loop for x from 0 to 32
-                               for y = 1 then (* y 2) collect (list x y)))
-
 (defun rec-powers-of-two (l n acc)
   (if (>= n l)
       acc
@@ -72,9 +67,6 @@
 (defun num-ranges (e)
   (rec-num 1 e (list (cons 0 1))))
 
-(defun pivot-numbers ()
-  (loop for x from 0 to 32 collect  (list x (expt 2 x))))
-
 (defun rangenums (s e)
   (loop for x from s to e collect (list x (logandnums x e))))
 
@@ -113,7 +105,8 @@
 (defun solution (&optional stream)
   (let ((tc (parse-integer (read-line stream))))
     (dotimes (x tc)
-      (solve-me (split-and-parse (read-line stream))))))
+      (princ (solve-me (split-and-parse (read-line stream))))
+      (terpri))))
 
 
 ;; (solution) ; uncomment this when running on hacker-rank
@@ -123,7 +116,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
