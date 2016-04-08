@@ -41,15 +41,23 @@
         (T
          (first-gteq n (cdr l)))))
 
+(defun finding (s e)
+  (if (eq s e)
+      s
+      (if (num-test s e)
+          (car (last (power-of-2-composition s (rec-powers-of-two e 0 nil))))
+          0)))
+
 (defun int2bin (n)
   (format nil "~10,'0b" n))
 
 (defun discrepancies (s e)
   (let ((c (solve-me (list s e)))
-        (l (apply 'logand (num-sequence s e))))
+        (l (apply 'logand (num-sequence s e)))
+        (f (finding s e)))
     (if (eq c l)
-        (format t "~a and ~a are equal   ~A ~A~%" s e c (int2bin c))
-        (format t "~a and ~a ARE NOT equal   ~A ~A ~A ~A~%" s e c (int2bin c) l (int2bin l)))))
+        (format t "~a and ~a are equal   ~A ~A    ~A~%" s e c (int2bin c) f)
+        (format t "~a and ~a ARE NOT equal   ~A ~A ~A ~A      ~A~%" s e c (int2bin c) l (int2bin l) f))))
 
 ;; example of missed possibilities
 ;; (discrepancies-loop 13 31)
@@ -86,9 +94,7 @@
   (let ((s (car n))
         (e (cadr n)))
     (if (num-test s e)
-        (if (oddp (car n))
-            (logand (1- (car n)) (cadr n))
-            (logand (car n) (cadr n)))
+        (finding s e)
         0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -117,7 +123,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input10" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
