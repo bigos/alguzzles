@@ -1,4 +1,4 @@
-;; (proclaim '(optimize (speed 3)))
+(proclaim '(optimize (speed 3)))
 
 (defun rec-powers-of-two (l n acc)
   (if (>= n l)
@@ -36,6 +36,13 @@
         (T
          (first-gteq n (cdr l)))))
 
+
+;; (require :sb-sprof)
+;; (sb-sprof:with-profiling (:max-samples 1000
+;;                                        :report :flat
+;;                                        :mode :alloc
+;;                                        :loop T)
+;;   (finding 4096 8191))
 (defun finding (s e)
   (if (eq s e)
       s
@@ -84,6 +91,8 @@
                (>= e (car c)) (<= e (cdr c)))
      collect c))
 
+;; much garbage collection
+;; (time (solve-me (list 32768 65535)))
 (defun solve-me (n)
   (let ((s (car n))
         (e (cadr n)))
