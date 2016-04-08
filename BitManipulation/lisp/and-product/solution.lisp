@@ -76,8 +76,10 @@
 (defun num-sequence (s n)
   (loop for x from s to n collect x))
 
+(defparameter *numranges* (num-ranges 31))
+
 (defun num-test (s e)
-  (loop for c in (num-ranges 31)
+  (loop for c in *numranges*
      when (and (>= s (car c)) (<= s (cdr c))
                (>= e (car c)) (<= e (cdr c)))
      collect c))
@@ -116,7 +118,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input10" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
