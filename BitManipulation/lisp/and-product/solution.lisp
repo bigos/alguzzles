@@ -18,6 +18,15 @@
   (loop for x from s to e
      for y = x then (logand x y) finally (return y)))
 
+(defun value-progression-64 (s e)
+  ;; cheating here with the expotentiation
+  (loop for x from s to (min (+ (expt 2 23) s) e)
+     for y = x then (logand x y) finally (return y)))
+
+(defun value-progression-cons (s e)
+  (loop for x from s to e
+     for y = x then (logand x y) collect (cons x y)))
+
 (defun int2bin (n)
   (format nil "~10,'0b" n))
 
@@ -64,7 +73,7 @@
   (let ((s (car n))
         (e (cadr n)))
     (if (num-test s e)
-        (value-progression s e)
+        (value-progression-64 s e)
         0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -94,7 +103,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input10" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
