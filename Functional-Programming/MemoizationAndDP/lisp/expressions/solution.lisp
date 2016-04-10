@@ -16,20 +16,10 @@
                                                (car numbers)))
                        (ops (loop for i across buckets
                                collect (elt '(* + -) i))))
-                   ;; (format t
-                   ;;         "~A ~A ~A~%"
-                   ;;         buckets
-                   ;;         ops
-                   ;;         myres)
                    (when (zerop (rem myres 101))
                      (format t "~a" (car numbers))
                      (print-my-rec (cdr numbers) ops)
-                     (setf found T))
-
-                   (setf results
-                         (append results
-                                 (list (loop for x from 0 below l
-                                          collect (elt buckets x)))))))
+                     (setf found T))))
                ;; increase value
                (incf (elt buckets level))
                ;; go to next level if necessary
@@ -39,7 +29,7 @@
                ;; zero lower levels
                (reset-bucket level)
                (setf level 0)))
-      (loop  while  (every (lambda (x) (< x  n)) buckets)
+      (loop  while (every (lambda (x) (< x n)) buckets)
          until found
          do
            (variation 0)))
