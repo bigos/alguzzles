@@ -1,5 +1,5 @@
 ;;; (variations 2 3) => 000 .. 111
-(defun variations (n l)
+(defun variations (n l numbers)
   (let ((buckets
          (make-array l :initial-element 0))
         (limit n)
@@ -9,6 +9,16 @@
              (variation (level)
                ;; get value and append it to results
                (when (zerop level )
+                 (format t
+                         "~A ~A ~A~%"
+                         buckets
+                         (loop for i across buckets
+                            collect (elt '(* + -) i))
+                         (calc-expression 0
+                                          buckets
+                                          (cdr numbers)
+                                          (car numbers))
+                         )
                  (setf results
                        (append results
                                (list (loop for x from 0 below l
@@ -25,6 +35,18 @@
       (loop  while  (every (lambda (x) (< x  n)) buckets) do
            (variation 0)))
     results))
+
+(defun calc-expression (opi buckets numbers acc)
+  (if (>= opi (length buckets))
+      acc
+      (calc-expression (1+ opi)
+                       buckets
+                       (cdr numbers)
+                       (apply (elt '(* + -) (aref buckets opi))
+                              (list acc
+                                    (car numbers))))))
+
+
 
 (defun permute (list)
   (if list
@@ -69,18 +91,7 @@
                     (cdr o))))
 
 (defun solve-me (tc l)
-  (let ((ops (loop for o in  (variations 3 (-  tc 1))
-                collect (loop for x in o
-                           collect (elt '(* + -) x)))))
-    ;; (format t "args: ~A ~A ~A~%" tc l ops)
-    (loop for o in ops
-       for r = (mod (calc l o) 101) then (mod (calc l o) 101)
-       ;; do
-       ;;   (format t "~&~a ~A ~A~%" o (calc l o) r)
-       until (zerop r)
-       finally (progn
-                 (format t "~A" (car l))
-                 (print-result (cdr l) o)))))
+  (variations 3 (- tc 1) l))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
