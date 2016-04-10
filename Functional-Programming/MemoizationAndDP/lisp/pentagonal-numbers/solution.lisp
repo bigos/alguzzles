@@ -1,3 +1,23 @@
+;; CL-USER> (vals 11 5 5)
+;; (5 15 30 50 75 105 140 180 225 275 330)
+;; CL-USER> (vals 12  3 2)
+;; (3 8 15 24 35 48 63 80 99 120 143 168)
+;;; if i could substract bottom left eg. 15 - 3 or 30 - 8
+;; I could get the desired values
+;;;  now the problem is how to write a function that would calculate the value
+;; without accum
+
+(defun val2 (n)
+  (* (+ 2 n) n))
+
+(defun val5 (n)
+  (* (* 2.5 (1+ n)) n))
+
+(defun solve-me-too (n)
+  (cond ((eq n 1) 1)
+        ((eq n 2) 5)
+        (T (- (val5 (1- n)) (val2 (- n 2))))))
+
 (defun solve-me (n)
   (loop for s from 1 to n
      for x = 1 then (+ x 5)
