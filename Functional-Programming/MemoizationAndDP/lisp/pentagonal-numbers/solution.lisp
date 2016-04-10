@@ -11,7 +11,9 @@
   (* (+ 2 n) n))
 
 (defun val5 (n)
-  (* (* 2.5 (1+ n)) n))
+  (/ (* (* 5 (1+ n))
+        n)
+     2))
 
 (defun solve-me-too (n)
   (cond ((eq n 1) 1)
@@ -41,7 +43,7 @@
   (let ((tc (parse-integer (read-line stream))))
     (loop for n from 1 to tc do
          (princ
-          (solve-me
+          (solve-me-too
            (parse-integer (read-line stream))))
          (terpri))))
 
