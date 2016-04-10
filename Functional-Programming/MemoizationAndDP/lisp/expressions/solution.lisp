@@ -3,26 +3,33 @@
   (let ((buckets
          (make-array l :initial-element 0))
         (limit n)
+        (found)
         (results))
     (labels ((reset-bucket (level)
                (loop for x from 0 below level do (setf (elt buckets x) 0)))
              (variation (level)
                ;; get value and append it to results
                (when (zerop level )
-                 (format t
-                         "~A ~A ~A~%"
-                         buckets
-                         (loop for i across buckets
-                            collect (elt '(* + -) i))
-                         (calc-expression 0
-                                          buckets
-                                          (cdr numbers)
-                                          (car numbers))
-                         )
-                 (setf results
-                       (append results
-                               (list (loop for x from 0 below l
-                                        collect (elt buckets x))))))
+                 (let ((myres (calc-expression 0
+                                               buckets
+                                               (cdr numbers)
+                                               (car numbers)))
+                       (ops (loop for i across buckets
+                               collect (elt '(* + -) i))))
+                   ;; (format t
+                   ;;         "~A ~A ~A~%"
+                   ;;         buckets
+                   ;;         ops
+                   ;;         myres)
+                   (when (zerop (rem myres 101))
+                     (format t "~a" (car numbers))
+                     (print-my-rec (cdr numbers) ops)
+                     (setf found T))
+
+                   (setf results
+                         (append results
+                                 (list (loop for x from 0 below l
+                                          collect (elt buckets x)))))))
                ;; increase value
                (incf (elt buckets level))
                ;; go to next level if necessary
@@ -32,7 +39,9 @@
                ;; zero lower levels
                (reset-bucket level)
                (setf level 0)))
-      (loop  while  (every (lambda (x) (< x  n)) buckets) do
+      (loop  while  (every (lambda (x) (< x  n)) buckets)
+         until found
+         do
            (variation 0)))
     results))
 
@@ -46,7 +55,13 @@
                               (list acc
                                     (car numbers))))))
 
-
+(defun print-my-rec (numbers ops)
+  (if (null numbers)
+      nil
+      (progn
+        (format t "~A" (car ops))
+        (format t "~A" (car numbers))
+        (print-my-rec (cdr numbers) (cdr ops)))))
 
 (defun permute (list)
   (if list
