@@ -18,10 +18,11 @@
   (loop for x from s to e
      for y = x then (logand x y) finally (return y)))
 
-(defun value-progression-64 (s e)
+(defun value-progression-64 (st e)
   ;; cheating here with the expotentiation
-  (loop for x from s to (min (+ (expt 2 23) s) e)
-     for y = x then (logand x y) finally (return y)))
+  (let ((s (if (oddp st) (1- st) st)))
+    (loop for x from s to  e by 2
+       for y = x then (logand x y) finally (return y))))
 
 (defun value-progression-cons (s e)
   (loop for x from s to e
@@ -103,7 +104,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input07" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
