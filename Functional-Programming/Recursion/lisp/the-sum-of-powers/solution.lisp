@@ -1,4 +1,35 @@
-(defun sums-of-powers (x b)
+;;; (variations 2 3) => 000 .. 111
+(defun variations (n l)
+  (let ((buckets
+         (make-array l :initial-element 0))
+        (limit n)
+        (results))
+    (labels ((reset-bucket (level)
+               (loop for x from 0 below level do (setf (elt buckets x) 0)))
+             (variation (level)
+               ;; get value and append it to results
+               (when (zerop level )
+                 (format t "~%")
+                 (setf results
+                       (append results
+                               (list (loop for x from 0 below l
+                                        collect (elt buckets x))))))
+             ;; increase value
+             (incf (elt buckets level))
+             ;; go to next level if necessary
+             (when (>= (elt buckets level) limit)
+               (when (< level (1- l))
+                 (variation (1+ level))))
+             ;; zero lower levels
+             (reset-bucket level)
+             (setf level 0)))
+    (loop  while (every (lambda (x) (< x n)) buckets)
+       do
+         (variation 0)))
+  results))
+
+(defun sums-of-powers (total power)
+  "number of ways unique numbers raised to power can be added up"
   ;; for now just return 1
   1)
 
