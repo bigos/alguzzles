@@ -1,37 +1,25 @@
-;;; (variations 2 3) => 000 .. 111
-(defun variations (n l)
-  (let ((buckets
-         (make-array l :initial-element 0))
-        (limit n)
-        (results))
-    (labels ((reset-bucket (level)
-               (loop for x from 0 below level do (setf (elt buckets x) 0)))
-             (variation (level)
-               ;; get value and append it to results
-               (when (zerop level )
-                 (format t "~%")
-                 (setf results
-                       (append results
-                               (list (loop for x from 0 below l
-                                        collect (elt buckets x))))))
-             ;; increase value
-             (incf (elt buckets level))
-             ;; go to next level if necessary
-             (when (>= (elt buckets level) limit)
-               (when (< level (1- l))
-                 (variation (1+ level))))
-             ;; zero lower levels
-             (reset-bucket level)
-             (setf level 0)))
-    (loop  while (every (lambda (x) (< x n)) buckets)
-       do
-         (variation 0)))
-  results))
+(defun powers (l p)
+  (loop for x from 1 to l
+     for y = (expt x p)
+     when (<= y l) collect y
+     until (>= y l)))
+
+(defun res-find (wanted powers visited found)
+  (dolist (p powers)
+    (let (current-total (apply '+ (cons p visited)))
+      (cond ((eq current-total wanted)
+             ;; add to found
+             )
+            ((> current-total wanted)
+             ;;  give op on the option
+             )
+            (T
+             ;; else try more
+             )))))
 
 (defun sums-of-powers (total power)
   "number of ways unique numbers raised to power can be added up"
-  ;; for now just return 1
-  1)
+  (length (res-find total (powers total power) '() nil)))
 
 (defun solve-me (x n)
   (print (sums-of-powers x n)))
