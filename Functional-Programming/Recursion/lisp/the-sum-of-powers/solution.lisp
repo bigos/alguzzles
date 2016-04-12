@@ -1,8 +1,12 @@
 (defun add-up (buckets my-powers total)
-  (eq total
-      (loop for i from 0 below (length my-powers)
-         sum (* (elt my-powers i)
-                (elt buckets i)))))
+  (labels ((calc (i)
+             (* (elt my-powers i)
+                (elt buckets i))))
+    (eq total
+        (loop for i from 0 below (length my-powers)
+           for s = (calc i) then (+ s (calc i))
+           until (>= s total)
+           finally (return s)))))
 
 ;;; (variations 2 3) => 000 .. 111
 (defun variations (n l my-powers total)
@@ -75,7 +79,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
