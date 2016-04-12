@@ -16,7 +16,7 @@
                ;; get value and append it to results
 
                (when (zerop level )
-                 ;; (format t "~A~%" buckets)
+                 ;;  (format t "~A~%" buckets)
                  (when (add-up buckets my-powers total)
                    (push buckets results)))
 
