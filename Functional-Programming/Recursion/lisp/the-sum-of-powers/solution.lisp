@@ -1,12 +1,8 @@
 (defun add-up (buckets my-powers total)
-  (labels ((calc (i)
-             (* (elt my-powers i)
-                (elt buckets i))))
-    (eq total
-        (loop for i from 0 below (length my-powers)
-           for s = (calc i) then (+ s (calc i))
-           until (>= s total)
-           finally (return s)))))
+  (eq total
+      (loop for i from 0 below (length my-powers)
+         sum (* (elt my-powers i)
+                (elt buckets i)))))
 
 ;;; (variations 2 3) => 000 .. 111
 (defun variations (n l my-powers total)
