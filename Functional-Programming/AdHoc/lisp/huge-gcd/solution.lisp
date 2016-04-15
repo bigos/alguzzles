@@ -79,8 +79,9 @@
 
 (defun solve-me (n na m mb)
   (declare (ignore n m))
-  (find-gcd (apply '* na)
-            (apply '* mb)))
+  (mod (find-gcd (apply '* na)
+                 (apply '* mb))
+       (+ (expt 10 9) 7)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
