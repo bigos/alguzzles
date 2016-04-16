@@ -19,9 +19,10 @@
         (a (split-and-parse (read-line stream)))
         (tc (parse-integer (read-line stream)))
         (s))
+    (declare (ignore size-of-a))
     (loop for x from 1 to tc do
          (setf s (parse-integer (read-line stream)))
-         (format t "~a" (solve-me a s)))))
+         (format t "~a~%" (solve-me a s)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
