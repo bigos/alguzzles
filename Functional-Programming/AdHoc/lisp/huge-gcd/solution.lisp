@@ -29,12 +29,18 @@
        collect (car r))))
 
 (defun find-gcd (da db)
-  (loop for v in (find-gcd-components da db)
-     for r = (apply 'expt v) then (* r (apply 'expt v))
-       finally (return r)))
+  (let ((gcd-compobents (find-gcd-components da db)))
+    (labels ((apply-vals (v)
+               (if v
+                   (apply 'expt v)
+                   1)))
+        (if (null gcd-compobents)
+            1
+            (loop for v in gcd-compobents
+               for r = (apply-vals v) then (* r (apply-vals v))
+               finally (return r))))))
 
-(defun solve-me (n na m mb)
-  (declare (ignore n m))
+(defun solve-me (na mb)
   (mod (find-gcd (apply '* na)
                  (apply '* mb))
        (+ (expt 10 9) 7)))
@@ -57,7 +63,8 @@
         (na (split-and-parse (read-line stream)))
         (m (parse-integer (read-line stream)))
         (mb (split-and-parse (read-line stream))))
-    (format t "~a" (solve-me n na m mb))))
+    (declare (ignore n m))
+    (format t "~a" (solve-me na mb))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -66,7 +73,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input1" :type "txt"))
     (solution s)))
 
 (main)
