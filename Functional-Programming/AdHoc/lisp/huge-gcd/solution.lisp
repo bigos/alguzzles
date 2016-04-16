@@ -34,11 +34,9 @@
                (if v
                    (apply 'expt v)
                    1)))
-        (if (null gcd-compobents)
-            1
-            (loop for v in gcd-compobents
-               for r = (apply-vals v) then (* r (apply-vals v))
-               finally (return r))))))
+        (loop for v in gcd-compobents
+           for r = (apply-vals v) then (* r (apply-vals v))
+           finally (return r)))))
 
 (defun solve-me (na mb)
   (mod (find-gcd (apply '* na)
