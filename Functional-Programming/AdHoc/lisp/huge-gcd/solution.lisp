@@ -1,3 +1,5 @@
+(declaim (optimize (space 0) (safety 0) (speed 3)))
+
 (defun factor (n &optional (acc))
   (when (> n 1)
     (loop with max-d = (isqrt n)
