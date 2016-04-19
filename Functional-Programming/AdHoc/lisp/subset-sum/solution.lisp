@@ -1,29 +1,22 @@
-(defun comb (m list s)
+(defun comb (m list)
   (let ((result))
-    (labels ((summing (l)
-               (loop for x in l
-                  when (listp x) sum (car x)
-                  unless (listp x) sum x))
-             (comb1 (l c m)
+    (labels ((comb1 (l c m)
                (when (>= (length l) m)
                  (when (zerop m)
-
-                   ;; higher order function should go here
-                   (if (>=  (summing result) s)
-                       (return-from comb (length result)))
-                   (return-from comb1 (push c result))
-
-                   )
+                   (return-from comb1 (push c result)))
                  (comb1 (cdr l) c m)
                  (comb1 (cdr l) (cons (first l) c) (1- m)))))
       (comb1 list nil m))
-    -1))
+    result))
 
 (defun solve-me (a s)
-  (loop for x from 1 to (length a)
-     with y = (comb x a s)
-     until (> y -1)
-       finally (return y)))
+  ;; (format t "~&args ~A ~A~%" a s)
+  (loop for x from 1 upto (length a)
+     for y = (map 'list (lambda (x) (>= (apply '+ x) s) ) (comb x a))
+     while (every 'null y)
+     finally (return (if (<= x (length a))
+                         x
+                         -1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
