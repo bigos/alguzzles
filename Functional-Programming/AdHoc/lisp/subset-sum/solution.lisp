@@ -1,3 +1,13 @@
+(defun comb (m list)
+  (let ((result))
+    (labels ((comb1 (l c m)
+               (when (>= (length l) m)
+                 (if (zerop m) (return-from comb1 (push c result)))
+                 (comb1 (cdr l) c m)
+                 (comb1 (cdr l) (cons (first l) c) (1- m)))))
+      (comb1 list nil m))
+    result))
+
 (defun solve-me (a s)
   -1)
 
