@@ -1,12 +1,12 @@
-(declaim (optimize (space 0) (safety 0) (speed 3)))
+;;; (declaim (optimize (space 0) (safety 0) (speed 3)))
 
-;;; we do not need to use combinations, if we sort the numbers we can figure out minimal set for required number, duh
 (defun solve-me (a s)
-  (loop for x from 1 upto (length a)
-     for y = (every 'null (map 'list (lambda (x) (>= (apply '+ x) s) ) (comb x a)))
-     while y
-     finally (return (if (<= x (length a))
-                         x
+  (loop for x in a
+     for y = x then (+ x y)
+     for z = 1 then (1+ z)
+     until (>= y s)
+     finally (return (if (>= y s)
+                         z
                          -1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -24,7 +24,7 @@
 
 (defun solution (&optional stream)
   (let ((size-of-a (parse-integer (read-line stream)))
-        (a (split-and-parse (read-line stream)))
+        (a (sort  (split-and-parse (read-line stream)) '>))
         (tc (parse-integer (read-line stream)))
         (s))
     (declare (ignore size-of-a))
