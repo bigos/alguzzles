@@ -1,16 +1,16 @@
--- solution.hs - running in terminal $ cat ./input0.txt | runhaskell solution.hs
--- stucck :-(
+-- solve :: Int -> [Int] -> Int -> (Int,[Int],Int)
+-- solve n a s = (n, a, s)
 
-import Control.Monad
 
-solve :: Int -> [Int] -> Int -> (Int,[Int],Int)
-solve n a s = (n, a, s)
+getData :: IO (Int, [Int], Int, [Int])
+getData = do
+  n <- readLn :: IO Int
+  a <- readLn :: IO [Int]
+  tc <- readLn :: IO Int
+  as <- readLn :: IO [Int]
+  return (n, a, tc, as)
 
 main :: IO ()
 main = do
-  n <- getLine
-  a <- getLine
-  tc <- getLine
-  eses <- replicateM (read tc) getLine
-  -- print  (n,a, tc, eses)
-  map (\x -> solve n a x) eses
+  inputs <- getData
+  print inputs
