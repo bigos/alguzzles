@@ -1,3 +1,5 @@
+(declaim (optimize (space 0) (safety 0) (speed 3)))
+
 (defun comb (m list)
   (let ((result))
     (labels ((comb1 (l c m)
@@ -10,10 +12,9 @@
     result))
 
 (defun solve-me (a s)
-  ;; (format t "~&args ~A ~A~%" a s)
   (loop for x from 1 upto (length a)
-     for y = (map 'list (lambda (x) (>= (apply '+ x) s) ) (comb x a))
-     while (every 'null y)
+     for y = (every 'null (map 'list (lambda (x) (>= (apply '+ x) s) ) (comb x a)))
+     while y
      finally (return (if (<= x (length a))
                          x
                          -1))))
