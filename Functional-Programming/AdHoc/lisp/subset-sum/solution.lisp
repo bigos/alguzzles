@@ -2,19 +2,17 @@
 
 (defun binary-search-val (low high added s)
   (let ((pointer (floor (/ (+ low high) 2))))
-    ;; (format t "~A ~A ~A    ~A   ~A~%" low pointer high (aref added pointer) s)
+    ;; (format t "~A ~A ~A    ~A   ~A ~A~%" low pointer high (aref added pointer) s added)
     (cond ((and (zerop pointer)
                 (>= (aref added pointer) s))
-           (progn ;; (format t "~&cond1~%")
-                  pointer))
+           pointer)
           ((and (>= (aref added pointer) s)
                 (<  (aref added (1- pointer)) s))
-           (progn ;; (format t "~&cond2~%")
-                  pointer))
-
+           pointer)
           (T (if (< (aref added pointer) s)
-               (binary-search-val pointer high added s)
-               (binary-search-val low pointer added s))))))
+                 (binary-search-val pointer high added s)
+                 (binary-search-val low pointer added s)
+                 )))))
 
 (defun solve-me (size-of-a added s)
   (if (< (aref added (1- size-of-a)) s)
@@ -54,7 +52,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input09" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
