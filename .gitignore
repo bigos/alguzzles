@@ -1,2 +1,9 @@
 # ignore Emacs' dir-locals.el files
 .dir-locals.el
+
+# haskell compiler temporary files
+*.o
+*.hi
+
+# compiled executable of haskel solution.hs
+solution
