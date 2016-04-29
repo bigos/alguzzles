@@ -1,19 +1,18 @@
 import Data.List
 import Data.Array
 
-binarySearch :: Integral a => (a -> Ordering) -> (a, a) -> Maybe a
-binarySearch p (low,high)
-  | high < low = Nothing
-  | otherwise =
-      let mid = (low + high) `div` 2 in
-      case p mid of
-        LT -> binarySearch p (low, mid-1)
-        GT -> binarySearch p (mid+1, high)
-        EQ -> Just mid
-
-binarySearchArray :: (Ix i, Integral i, Ord e) => Array i e -> e -> Maybe i
-binarySearchArray a x = binarySearch p (bounds a) where
-  p m = x `compare` (a ! m)
+binarySearch haystack needle lo hi
+  | hi < lo = Nothing
+  | pivot == needle = Just mid
+  | (mid-1) < 1 = Nothing
+  | (pivot > needle && prevpivot < needle) = Just (mid-1)
+  | pivot > needle = binarySearch haystack needle lo (mid-1)
+  | pivot < needle = binarySearch haystack needle (mid+1) hi
+  | otherwise = Just mid
+  where
+    mid = lo + (hi-lo) `div` 2
+    pivot = haystack!mid
+    prevpivot = haystack!(mid-1)
 
 solveMe :: ( Array Int Int, Int) -> IO ()
 solveMe ( a, s) = do
