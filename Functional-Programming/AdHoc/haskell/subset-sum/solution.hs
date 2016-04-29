@@ -1,23 +1,29 @@
-solve :: (Int, [Int], Int, Int ) -> IO ()
-solve (n, a, tc, as) = do
-  print (n,a,tc,as)
+process :: (Int, [Int], Int) -> IO ()
+process (n, a, tc) = do
+  print (n,a,tc)
   print a
   print tc
-  print as
+  print "-- monadic code to read subsequent lines --"
+  mapM_ (\y -> getLine >>= \rl -> print (y, rl) )
+    [1 .. tc]
 
 
-getData :: IO (Int, [Int], Int, Int)
+getData :: IO (Int, [Int], Int)
 getData = do
   n <- getLine
   a <- getLine
   tc <- getLine
-  as <- getLine
   return (read n,
           map (\x -> read x :: Int) (words a), -- read space separated string as array of ints
-          read tc,
-          read as)
+          read tc)
 
 main :: IO ()
 main = do
   inputArgs <- getData
-  solve inputArgs
+  process inputArgs
+
+-- do notaion explained
+-- https://en.wikibooks.org/wiki/Haskell/do_notation
+
+-- Haskell input output
+-- http://book.realworldhaskell.org/read/io.html
