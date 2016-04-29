@@ -1,5 +1,11 @@
--- solve :: Int -> [Int] -> Int -> (Int,[Int],Int)
--- solve n a s = (n, a, s)
+solve :: (Int, [Int], Int, Int ) -> IO ()
+solve (n, a, tc, as) = do
+  print (n,a,tc,as)
+  print a
+  print tc
+  print as
+
+
 getData :: IO (Int, [Int], Int, Int)
 getData = do
   n <- getLine
@@ -8,10 +14,10 @@ getData = do
   as <- getLine
   return (read n,
           map (\x -> read x :: Int) (words a), -- read space separated string as array of ints
-          read tc, read as)
+          read tc,
+          read as)
 
 main :: IO ()
 main = do
-  inputStrings <- getData
-
-  print inputStrings
+  inputArgs <- getData
+  solve inputArgs
