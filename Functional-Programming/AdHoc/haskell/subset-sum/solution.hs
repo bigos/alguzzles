@@ -2,23 +2,22 @@ import Data.List
 import Data.Array
 
 binarySearch haystack needle lo hi
-  | hi < lo = Nothing
-  | pivot == needle = Just mid
-  | (mid-1) < 1 = Nothing
-  | (pivot > needle && prevpivot < needle) = Just (mid-1)
+  | hi < lo = (-1)
+  | pivot == needle = mid
+  | (mid-1) < 1 = (-1)
+  | (pivot > needle && prevpivot < needle) = (mid-1)
   | pivot > needle = binarySearch haystack needle lo (mid-1)
   | pivot < needle = binarySearch haystack needle (mid+1) hi
-  | otherwise = Just mid
+  | otherwise = mid
   where
     mid = lo + (hi-lo) `div` 2
     pivot = haystack!mid
     prevpivot = haystack!(mid-1)
 
-solveMe :: ( Array Int Int, Int) -> IO ()
-solveMe ( a, s) = do
-  print a
-  print s
-  print "+++++"
+solveMe :: ( Int, Array Int Int, Int) -> IO ()
+solveMe (n, a, s) = do
+  print  (binarySearch a s 1 n)
+
 
 -- IO because we read from stdin after parsing arguments
 process :: (Int, [Int], Int) -> IO ()
@@ -28,7 +27,7 @@ process (n, a, tc) = do
   -- of iterations
   mapM_ (\ _ -> getLine >>=
                 \ rl ->
-                  solveMe (added, (read rl :: Int)) )
+                  solveMe (n, added, (read rl :: Int)) )
     [1 .. tc]
   where added = array (1, n) (zip [1 .. n] (scanl1 (+) a))
 
@@ -39,7 +38,7 @@ getData = do
   a <- getLine
   tc <- getLine
   return (read n,
-          reverse $ sort (  map (\x -> read x :: Int) (words a)), -- read space separated string as array of ints
+          sort (  map (\x -> read x :: Int) (words a)), -- read space separated string as array of ints
           read tc)
 
 main :: IO ()
