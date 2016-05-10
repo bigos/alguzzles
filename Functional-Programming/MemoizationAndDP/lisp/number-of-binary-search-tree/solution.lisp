@@ -1,4 +1,7 @@
-;;;
+;;; http://stackoverflow.com/questions/1701612/permutations-of-bst
+
+(defun countInversions (l)
+  )
 
 (defun solve-me (s)
   s)
