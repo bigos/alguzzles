@@ -1,20 +1,27 @@
 (defun points (l first-point last-seen acc)
   (format t "~&~A : ~A ~A : ~A~%" l first-point last-seen acc)
   (if (null l)
-      (cons first-point acc)
+      acc
       (points (cdr l)
               (if first-point
                   first-point
                   (car l))
               (car l)                   ;; last seen
               (if last-seen             ;; acc
-                  (cons (car l)
+                  (cons (triangle-area (car l) last-seen first-point)
                         acc)
                   '())
               )))
+;;; now i need area of triangle from the coordinates
+(defun triangle-area (a b c)
+  (list a b c))
+
+;;; use this to have starting point for the first triangle
+(defun triangle-points (l first-point last-seen acc)
+  (points (cddr l) (car l) (nth 1 l) acc))
 
 (defun solve-me (l)
-  (points l nil nil nil))
+  (triangle-points l nil nil nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
