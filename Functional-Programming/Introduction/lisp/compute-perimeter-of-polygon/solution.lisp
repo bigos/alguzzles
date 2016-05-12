@@ -1,5 +1,24 @@
+(defun distance (a b)
+  (sqrt
+   (+ (expt (- (car a) (car b)) 2)
+      (expt (- (cadr a) (cadr b)) 2))))
+
+(defun points (l first-point last-seen acc)
+  ;; (format t "~&~A : ~A ~A : ~A~%" l first-point last-seen acc)
+  (if (null l)
+      (cons (distance last-seen first-point)  acc)
+      (points (cdr l)
+              (if first-point
+                  first-point
+                  (car l))
+              (car l)       ;; last seen
+              (if last-seen ;; acc
+                  (cons (distance last-seen (car l))
+                        acc)
+                  '(0)))))
+
 (defun solve-me (l)
-  l)
+  (apply #'+ (points l nil nil nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
