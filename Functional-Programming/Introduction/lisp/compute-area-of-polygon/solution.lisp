@@ -1,5 +1,20 @@
+(defun points (l first-point last-seen acc)
+  (format t "~&~A : ~A ~A : ~A~%" l first-point last-seen acc)
+  (if (null l)
+      (cons first-point acc)
+      (points (cdr l)
+              (if first-point
+                  first-point
+                  (car l))
+              (car l)                   ;; last seen
+              (if last-seen             ;; acc
+                  (cons (car l)
+                        acc)
+                  '())
+              )))
+
 (defun solve-me (l)
-  l)
+  (points l nil nil nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
