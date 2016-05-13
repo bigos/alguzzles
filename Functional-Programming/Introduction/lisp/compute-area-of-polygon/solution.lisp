@@ -1,36 +1,30 @@
 ;; http://code.activestate.com/recipes/578047-area-of-polygon-using-shoelace-formula/
 
-(defun points (l first-point last-seen acc)
-  ;; (format t "~&~A : ~A ~A : ~A~%" l first-point last-seen acc)
+(defun points (l first-point last-seen acc+ acc-)
+  (format t "~&~A : ~A : ~A  ~A~%" l last-seen acc+ acc-)
   (if (null l)
-      (apply #'+ acc)
+      (list (cons
+             (list (cadr first-point) (car last-seen))
+             acc+)
+            (cons
+             (list (car first-point) (cadr last-seen))
+             acc-))
       (points (cdr l)
               (if first-point
                   first-point
                   (car l))
-              (car l)       ;; last seen
-              (if last-seen ;; acc
-                  (cons (triangle-area (car l) last-seen first-point)
-                        acc)
-                  '()))))
-
-;;; now i need area of triangle from the coordinates
-(defun triangle-area (a b c)
-  ;; (format t "~&a ~A b ~A c ~A~%" a b c)
-  (abs (/ (+ (* (car a)
-                (- (cadr b) (cadr c)))
-             (* (car b)
-                (- (cadr c) (cadr a)))
-             (* (car c)
-                (- (cadr a) (cadr b))))
-          2.0)))
-
-;;; use this to have starting point for the first triangle
-(defun triangle-points (l acc)
-  (points (cddr l) (car l) (nth 1 l) acc))
+              (car l) ;; last seen
+              (when last-seen
+                (cons (list (car last-seen)
+                            (cadr (car l)))
+                      acc+))
+              (when last-seen
+                (cons (list (car (car l))
+                            (cadr last-seen))
+                      acc-)))))
 
 (defun solve-me (l)
-  (triangle-points l nil))
+  (points l nil nil nil nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -58,7 +52,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input1" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
