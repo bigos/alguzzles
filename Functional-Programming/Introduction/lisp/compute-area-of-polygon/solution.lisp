@@ -10,7 +10,6 @@
              (list (car first-point) (cadr last-seen))
              acc-))
       (points (cdr l)
-              central-point
               (if first-point
                   first-point
                   (car l))
