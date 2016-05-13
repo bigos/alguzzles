@@ -1,3 +1,13 @@
+(defun substract-vectors (a b)
+  (list (- (car a) (car b))
+        (- (cadr a) (cadr b))))
+
+(defun my-vectors (points)
+  (list (substract-vectors (elt points 1)
+                           (elt points 0))
+        (substract-vectors (elt points 2)
+                           (elt points 0))))
+
 (defun points (l last-point before-last-point acc two-last-points)
   (if (null l)
       acc
