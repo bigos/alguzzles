@@ -1,7 +1,24 @@
-;; http://code.activestate.com/recipes/578047-area-of-polygon-using-shoelace-formula/
+(defun points (l last-point before-last-point acc two-last-points)
+  (if (null l)
+      acc
+      (points (cdr l)
+              (car l)                   ;future last
+              last-point
+              (cons (list (car l)
+                          (if last-point
+                              last-point
+                              (cadr two-last-points))
+                          (if before-last-point
+                              before-last-point
+                              (if last-point
+                                  (cadr two-last-points)
+                                  (car two-last-points))))
+                    acc)
+              two-last-points)))
 
 (defun solve-me (l)
-  l)
+  (format t "~A~%" l)
+  (points l nil nil nil (subseq l (- (length l) 2))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
