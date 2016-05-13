@@ -1,7 +1,7 @@
 ;; http://code.activestate.com/recipes/578047-area-of-polygon-using-shoelace-formula/
 
 (defun points (l first-point last-seen acc+ acc-)
-  (format t "~&~A : ~A : ~A  ~A~%" l last-seen acc+ acc-)
+  ;; (format t "~&~A : ~A : ~A  ~A~%" l last-seen acc+ acc-)
   (if (null l)
       (list (cons
              (list (cadr first-point) (car last-seen))
@@ -24,7 +24,13 @@
                       acc-)))))
 
 (defun solve-me (l)
-  (points l nil nil nil nil))
+  (let ((data
+         (points l nil nil nil nil)))
+    (/ (abs (+ (apply '+ (map 'list (lambda (x) (* (car x) (cadr x)))
+                                (car data)))
+                 (apply '+ (map 'list (lambda (x) (- 0 (* (car x) (cadr x))))
+                                (cadr data)))))
+       2.0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
