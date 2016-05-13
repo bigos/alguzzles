@@ -1,10 +1,11 @@
 ;; http://code.activestate.com/recipes/578047-area-of-polygon-using-shoelace-formula/
 
-(defun points (l first-point last-seen acc)
-  ;; (format t "~&~A : ~A ~A : ~A~%" l first-point last-seen acc)
+(defun points (l central-point first-point last-seen acc)
+  ;; (format t "~&~A : ~A ~A ~A : ~A~%" l central-point first-point last-seen acc)
   (if (null l)
       (apply #'+ acc)
       (points (cdr l)
+              central-point
               (if first-point
                   first-point
                   (car l))
@@ -25,9 +26,21 @@
                 (- (cadr a) (cadr b))))
           2.0)))
 
-;;; use this to have starting point for the first triangle
+(defun find-central-point (l)
+  (let ((min-x (apply 'min (map 'list 'car l)))
+        (max-x (apply 'max (map 'list 'car l)))
+        (min-y (apply 'min (map 'list 'cadr l)))
+        (max-y (apply 'max (map 'list 'cadr l)))
+        (mid-x)
+        (mid-y))
+    (setf mid-x (floor (/ (+ min-x max-x) 2))
+          mid-y (floor (/ (+ min-y max-y) 2))
+          )
+    (format t "~&~A --- central point data~%" l)
+    (list mid-x mid-y)))
+
 (defun triangle-points (l acc)
-  (points (cddr l) (car l) (nth 1 l) acc))
+  (points (cddr l) (find-central-point l) (car l) (nth 1 l) acc))
 
 (defun solve-me (l)
   (triangle-points l nil))
