@@ -1,15 +1,17 @@
-() ;;; (loop for x in zzz do (format t "~A ~A ~A~%" x (my-test x) (my-vectors x)))
-
 (defun substract-vectors (a b)
   (list (- (car a) (car b))
         (- (cadr a) (cadr b))))
 
 (defun my-vectors (points)
   (list
-   (substract-vectors (elt points 1)
-                      (elt points 0))
-   (substract-vectors (elt points 2)
-                      (elt points 0))))
+   (substract-vectors
+    (elt points 0)
+    (elt points 1)
+    )
+   (substract-vectors
+    (elt points 2)
+    (elt points 1)
+    )))
 (defun rtd (r)
   (* r (/ 180.0 pi)))
 
@@ -18,15 +20,11 @@
      (* (cadr a) (cadr b))))
 
 (defun vector-dziel (a b)
+  ;; (format t "~A ~A~%" a b)
   (* (sqrt (+ (expt (car a) 2)
               (expt (cadr a) 2)))
      (sqrt (+ (expt (car b) 2)
               (expt (cadr b) 2)))))
-
-;;; i have problem getting expected vector angle in degrees
-;; radians to degrees seems to work
-;; the formula seems to work
-;; but the degree angles are wrong, why?
 
 (defun my-test (points)
   (let* ((res (my-vectors points))
@@ -34,7 +32,7 @@
          (v2 (cadr res))
          (dot (vector-dot v1 v2))
          (dziel (vector-dziel v1 v2)))
-    ;; (format t "~A ~A dot ~A dziel ~A result ~A~%" v1 v2 dot dziel (rtd (acos (/ dot dziel))))
+    ;; (format t "~a / ~A ~A dot ~A dziel ~A result ~A ~A~%" points v1 v2 dot dziel (/ dot dziel) (rtd (acos (/ dot dziel))))
     (rtd (acos (/ dot dziel))) ))
 
 (defun points (l last-point before-last-point acc two-last-points)
@@ -62,9 +60,8 @@
           (loop for x in
                (points l nil nil nil (subseq l (- (length l) 2)))
              sum (my-test x)))
-     (format t "~A~%" result)
-    (if (and (> result 178)
-             (< result 180.000006 ))
+      (format t "~A~%" result)
+     (if (< (mod result 360) 5)
         "YES"
         "NO")))
 
