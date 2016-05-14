@@ -1,4 +1,5 @@
 ;;; i forgot to sort the points before evaluation
+;; probably need to use giftwrap algorithm and see if I have visited every point
 
 (defun rotate-vector-90deg-ccw (a)
   (list (- (cadr a)) (car a)))
