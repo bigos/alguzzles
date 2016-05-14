@@ -1,4 +1,4 @@
-;;; (loop for x in zzz do (format t "~A ~A ~A~%" x (my-test x) (my-vectors x)))
+() ;;; (loop for x in zzz do (format t "~A ~A ~A~%" x (my-test x) (my-vectors x)))
 
 (defun substract-vectors (a b)
   (list (- (car a) (car b))
@@ -34,8 +34,8 @@
          (v2 (cadr res))
          (dot (vector-dot v1 v2))
          (dziel (vector-dziel v1 v2)))
-         ;;; (format t "~A ~A dot ~A dziel ~A result ~A~%" v1 v2 dot dziel (/ dot dziel))
-    (list 'aaaaa dot  dziel (rtd (acos (/ dot dziel))) 'zzzz)))
+    ;; (format t "~A ~A dot ~A dziel ~A result ~A~%" v1 v2 dot dziel (rtd (acos (/ dot dziel))))
+    (rtd (acos (/ dot dziel))) ))
 
 (defun points (l last-point before-last-point acc two-last-points)
   (if (null l)
@@ -56,13 +56,22 @@
               two-last-points)))
 
 (defun solve-me (l)
-  (format t "~A~%" l)
-  (points l nil nil nil (subseq l (- (length l) 2))))
+  (let ((result))
+    ;; (format t "~A~%" l)
+    (setf result
+          (loop for x in
+               (points l nil nil nil (subseq l (- (length l) 2)))
+             sum (my-test x)))
+     (format t "~A~%" result)
+    (if (and (> result 178)
+             (< result 180.000006 ))
+        "YES"
+        "NO")))
 
 ;;; concave
-(defparameter zzz (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (1 1))))
+;;; (defparameter zzz (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (1 1))))
 ;;; convex
-(defparameter aaa (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (-1 0))))
+;;; (defparameter aaa (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (-1 0))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -90,7 +99,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
