@@ -1,3 +1,5 @@
+;;; i forgot to sort the points before evaluation
+
 (defun rotate-vector-90deg-ccw (a)
   (list (- (cadr a)) (car a)))
 
@@ -32,13 +34,34 @@
      (sqrt (+ (expt (car b) 2)
               (expt (cadr b) 2)))))
 
+(defun vector-angle (a b)
+  (rtd (acos (/ (vector-dot a b)
+                (vector-dziel a b)))))
+
 (defun my-test (points)
   (let* ((res (my-vectors points))
          (v1 (car res))
          (v2 (cadr res))
+         (v1-rotated (rotate-vector-90deg-ccw v1))
+         (v2-rotated (rotate-vector-90deg-ccw v2))
          (dot (vector-dot v1 v2))
-         (dziel (vector-dziel v1 v2)))
-    ;; (format t "~a / ~A ~A dot ~A dziel ~A result ~A ~A~%" points v1 v2 dot dziel (/ dot dziel) (rtd (acos (/ dot dziel))))
+         (dziel (vector-dziel v1 v2))
+         (v1-rot-and-v2 (vector-angle v1-rotated v2)))
+    (format t "~a / ~A ~A  ~A ~A   angle v1v2 ~A other ~A ~A  = ~A~%"
+            points v1 v2
+            v1-rotated
+            v2-rotated
+            (vector-angle v1 v2)
+            (vector-angle v1-rotated v2)
+            (vector-angle v2-rotated v1)
+
+            (if (< (if (not (realp v1-rot-and-v2))
+                       (realpart v1-rot-and-v2)
+                       v1-rot-and-v2)
+                   90)
+                'less
+                'more)
+            )
     (rtd (acos (/ dot dziel))) ))
 
 (defun points (l last-point before-last-point acc two-last-points)
