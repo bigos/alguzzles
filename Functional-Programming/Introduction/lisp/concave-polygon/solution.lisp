@@ -1,8 +1,3 @@
-;;; concave
-(defparameter zzz (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (1 1))))
-;;; convex
-(defparameter aaa (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (-1 0))))
-
 ;;; (loop for x in zzz do (format t "~A ~A ~A~%" x (my-test x) (my-vectors x)))
 
 (defun substract-vectors (a b)
@@ -39,8 +34,8 @@
          (v2 (cadr res))
          (dot (vector-dot v1 v2))
          (dziel (vector-dziel v1 v2)))
-         (format t "~A ~A ~A ~A ~A~%" v1 v2 dot dziel (/ dot dziel))
-    (list 'aaaaa dot  dziel (rtd (cos (/ dot dziel))) 'zzzz)))
+         ;;; (format t "~A ~A dot ~A dziel ~A result ~A~%" v1 v2 dot dziel (/ dot dziel))
+    (list 'aaaaa dot  dziel (rtd (acos (/ dot dziel))) 'zzzz)))
 
 (defun points (l last-point before-last-point acc two-last-points)
   (if (null l)
@@ -63,6 +58,11 @@
 (defun solve-me (l)
   (format t "~A~%" l)
   (points l nil nil nil (subseq l (- (length l) 2))))
+
+;;; concave
+(defparameter zzz (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (1 1))))
+;;; convex
+(defparameter aaa (solve-me '((-1 1) (0 2) (1 3) (3 3) (3 2) (3 -1) (2 -1) (1 -1) (-1 0))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
