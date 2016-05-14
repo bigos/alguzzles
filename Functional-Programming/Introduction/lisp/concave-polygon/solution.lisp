@@ -1,17 +1,23 @@
+(defun rotate-vector-90deg-ccw (a)
+  (list (- (cadr a)) (car a)))
+
 (defun substract-vectors (a b)
   (list (- (car a) (car b))
         (- (cadr a) (cadr b))))
+
+(defun add-vectors (a b)
+  (list (+ (car a) (car b))
+        (+ (cadr a) (cadr b))))
 
 (defun my-vectors (points)
   (list
    (substract-vectors
     (elt points 0)
-    (elt points 1)
-    )
+    (elt points 1))
    (substract-vectors
     (elt points 2)
-    (elt points 1)
-    )))
+    (elt points 1))))
+
 (defun rtd (r)
   (* r (/ 180.0 pi)))
 
@@ -20,7 +26,7 @@
      (* (cadr a) (cadr b))))
 
 (defun vector-dziel (a b)
-  ;; (format t "~A ~A~%" a b)
+  ;; (format tg "~A ~A~%" a b)
   (* (sqrt (+ (expt (car a) 2)
               (expt (cadr a) 2)))
      (sqrt (+ (expt (car b) 2)
