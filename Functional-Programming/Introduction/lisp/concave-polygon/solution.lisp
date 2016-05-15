@@ -1,6 +1,51 @@
 ;;; i forgot to sort the points before evaluation
 ;; probably need to use giftwrap algorithm and see if I have visited every point
 
+(defun sort-points (l mid-x mid-y q+x+y q-x+y q-x-y q+x-y)  ;counterclockwise
+  (if (null l)
+      (list (sort q+x+y (lambda (x y) (> (car x) (car y)) ))
+            (sort q-x+y (lambda (x y) (> (car x) (car y)) ))
+            (sort q-x-y (lambda (x y) (< (car x) (car y)) ))
+            (sort q+x-y (lambda (x y) (< (car x) (car y)) )))
+      (sort-points (cdr l) mid-x mid-y
+                   (if (and (>= (caar l) mid-x)
+                            (>= (cadar l) mid-y))
+                       (cons (car l) q+x+y)
+                       q+x+y)
+                   (if (and (< (caar l) mid-x)
+                            (>= (cadar l) mid-y))
+                       (cons (car l) q-x+y)
+                       q-x+y)
+                   (if (and (< (caar l) mid-x)
+                            (< (cadar l) mid-y))
+                       (cons (car l) q-x-y)
+                       q-x-y)
+                   (if (and (>= (caar l) mid-x)
+                            (< (cadar l) mid-y))
+                       (cons (car l) q+x-y)
+                       q+x-y))))
+
+(defun find-min-maxes-inner (l min-x max-x min-y max-y)
+  (if (null l)
+      (list min-x max-x min-y max-y)
+      (find-min-maxes-inner (cdr l)
+                      (if (< (caar l) min-x)
+                          (caar l)
+                          min-x)
+                      (if (> (caar l) max-x)
+                          (caar l)
+                          max-x)
+                      (if (< (cadar l) min-y)
+                          (cadar l)
+                          min-y)
+                      (if (> (cadar l) max-y)
+                          (cadar l)
+                          max-y))))
+
+(defun find-min-maxes (l)
+  (if l
+      (find-min-maxes-inner l (caar l) (caar l) (cadar l) (cadar l))))
+
 (defun rotate-vector-90deg-ccw (a)
   (list (- (cadr a)) (car a)))
 
@@ -84,14 +129,34 @@
               two-last-points)))
 
 (defun solve-me (l)
-  (let ((result))
-    ;; (format t "~A~%" l)
+  (let ((result)
+        (minmaxes (find-min-maxes l))
+        (min-x)
+        (max-x)
+        (min-y)
+        (max-y)
+        (midpoint-x)
+        (midpoint-y)
+        (q+x+y) ;quadrants for points
+        (q-x+y)
+        (q-x-y)
+        (q+x-y)
+        (serted))
+    (setf min-x (nth 0 minmaxes)
+          max-x (nth 1 minmaxes)
+          min-y (nth 2 minmaxes)
+          max-y (nth 3 minmaxes))
+    (setf midpoint-x (/ (+ min-x max-x) 2)
+          midpoint-y (/ (+ min-y max-y) 2))
+    (format t "===== ~A  ~A ~A~%" l midpoint-x midpoint-y)
+    (setf sorted (sort-points l midpoint-x midpoint-y nil nil nil nil))
+    (format t "** ~A **~%" sorted)
     (setf result
           (loop for x in
                (points l nil nil nil (subseq l (- (length l) 2)))
              sum (my-test x)))
-      (format t "~A~%" result)
-     (if (< (mod result 360) 5)
+    (format t "~A~%" result)
+    (if (< (mod result 360) 5)
         "YES"
         "NO")))
 
