@@ -1,5 +1,4 @@
-;;; i forgot to sort the points before evaluation
-;; probably need to use giftwrap algorithm and see if I have visited every point
+;;; need to verify later if the points are being sorted correctly
 
 (defun sort-points (l mid-x mid-y q+x+y q-x+y q-x-y q+x-y)  ;counterclockwise
   (if (null l)
@@ -100,15 +99,14 @@
             (vector-angle v1 v2)
             (vector-angle v1-rotated v2)
             (vector-angle v2-rotated v1)
-
-            (if (< (if (not (realp v1-rot-and-v2))
-                       (realpart v1-rot-and-v2)
-                       v1-rot-and-v2)
+            (if (< (realpart v1-rot-and-v2)
                    90)
                 'less
-                'more)
-            )
-    (rtd (acos (/ dot dziel))) ))
+                'more))
+    (if (< (realpart v1-rot-and-v2)
+           90)
+        'convex
+        'concave)))
 
 (defun points (l last-point before-last-point acc two-last-points)
   (if (null l)
@@ -137,26 +135,23 @@
         (max-y)
         (midpoint-x)
         (midpoint-y)
-        (q+x+y) ;quadrants for points
-        (q-x+y)
-        (q-x-y)
-        (q+x-y)
-        (serted))
+
+        (sorted))
     (setf min-x (nth 0 minmaxes)
           max-x (nth 1 minmaxes)
           min-y (nth 2 minmaxes)
           max-y (nth 3 minmaxes))
     (setf midpoint-x (/ (+ min-x max-x) 2)
           midpoint-y (/ (+ min-y max-y) 2))
-    (format t "===== ~A  ~A ~A~%" l midpoint-x midpoint-y)
-    (setf sorted (sort-points l midpoint-x midpoint-y nil nil nil nil))
-    (format t "** ~A **~%" sorted)
+     (format t "===== ~A  ~A ~A~%" l midpoint-x midpoint-y)
+    (setf sorted (apply 'append (sort-points l midpoint-x midpoint-y nil nil nil nil)))
+     (format t "** ~A **~%" sorted)
     (setf result
           (loop for x in
-               (points l nil nil nil (subseq l (- (length l) 2)))
-             sum (my-test x)))
+               (points sorted nil nil nil (subseq sorted (- (length sorted) 2)))
+             collect (my-test x)))
     (format t "~A~%" result)
-    (if (< (mod result 360) 5)
+    (if (notany (lambda (x) (equalp x 'concave)) result)
         "YES"
         "NO")))
 
