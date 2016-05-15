@@ -1,5 +1,10 @@
 ;;; need to verify later if the points are being sorted correctly
 
+;;; did i get the meaning of convex and concave wrong?
+;;; test case 3 answer is yes
+;;; drawing-5.svg looks convex
+;;; dots do not make concave polygon
+
 (defun sort-points (l mid-x mid-y q+x+y q-x+y q-x-y q+x-y)  ;counterclockwise
   (if (null l)
       (list (sort q+x+y (lambda (x y) (> (car x) (car y)) ))
