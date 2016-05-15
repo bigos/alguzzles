@@ -97,17 +97,17 @@
          (dot (vector-dot v1 v2))
          (dziel (vector-dziel v1 v2))
          (v1-rot-and-v2 (vector-angle v1-rotated v2)))
-    (format t "~a / ~A ~A  ~A ~A   angle v1v2 ~A other ~A ~A  = ~A~%"
-            points v1 v2
-            v1-rotated
-            v2-rotated
-            (vector-angle v1 v2)
-            (vector-angle v1-rotated v2)
-            (vector-angle v2-rotated v1)
-            (if (< (realpart v1-rot-and-v2)
-                   90)
-                'less
-                'more))
+    ;; (format t "~a / ~A ~A  ~A ~A   angle v1v2 ~A other ~A ~A  = ~A~%"
+    ;;         points v1 v2
+    ;;         v1-rotated
+    ;;         v2-rotated
+    ;;         (vector-angle v1 v2)
+    ;;         (vector-angle v1-rotated v2)
+    ;;         (vector-angle v2-rotated v1)
+    ;;         (if (< (realpart v1-rot-and-v2)
+    ;;                90)
+    ;;             'less
+    ;;             'more))
     (if (< (realpart v1-rot-and-v2)
            90)
         'convex
@@ -148,15 +148,15 @@
           max-y (nth 3 minmaxes))
     (setf midpoint-x (/ (+ min-x max-x) 2)
           midpoint-y (/ (+ min-y max-y) 2))
-     (format t "===== ~A  ~A ~A~%" l midpoint-x midpoint-y)
+    ;; (format t "===== ~A  ~A ~A~%" l midpoint-x midpoint-y)
     (setf sorted (apply 'append (sort-points l midpoint-x midpoint-y nil nil nil nil)))
-     (format t "** ~A **~%" sorted)
+    ;; (format t "** ~A **~%" sorted)
     (setf result
           (loop for x in
                (points sorted nil nil nil (subseq sorted (- (length sorted) 2)))
              collect (my-test x)))
-    (format t "~A~%" result)
-    (if (notany (lambda (x) (equalp x 'concave)) result)
+    ;; (format t "~A~%" result)
+    (if (some (lambda (x) (equalp x 'concave)) result)
         "YES"
         "NO")))
 
@@ -191,7 +191,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
