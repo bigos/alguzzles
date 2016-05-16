@@ -1,6 +1,4 @@
 import Data.List
-import Data.Array
-import Data.Traversable
 import Control.Monad
 
 str2ints :: String -> [Int]
@@ -21,10 +19,26 @@ findmaxx a = maximum $ map fst a
 findmaxy :: [(Int, Int)] -> Int
 findmaxy a = maximum $ map snd a
 
-doit :: [(Int, Int)] -> IO()
-doit ii = do
-  print (findminx ii, findminy ii, findmaxx ii, findmaxy ii ,"\n",ii)
+findBoundaries :: [(Int, Int)] -> (Int, Int, Int, Int)
+findBoundaries a = (findminx a,
+                   findmaxx a,
+                   findminy a,
+                   findmaxy a)
 
+averx :: (Int, Int, Int, Int) -> Int
+averx (l, h, _, _) = div (l + h) 2
+
+avery :: (Int, Int, Int, Int) -> Int
+avery (_, _, l, h) = div (l + h) 2
+
+midpoints :: (Int, Int, Int, Int) -> (Int, Int)
+midpoints cc = (averx cc, avery cc)
+
+doit :: [(Int, Int)] -> IO()
+doit coords = do
+  print ("boundaries", (findBoundaries coords),
+         "midpoints", midpoints (findBoundaries coords),
+         "all points", coords)
 
 main :: IO()
 main = do
