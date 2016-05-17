@@ -60,7 +60,7 @@ getCoords coords = map (\ x -> tuplify x) coords
 
 doit :: [(Int, Int)] -> IO()
 doit coords = do
-  if length coords == length (convexHull coords) then print "YES" else print "NO"
+  if length coords == length (convexHull coords) then putStrLn "NO" else putStrLn "YES"
 
 main :: IO()
 main = do
