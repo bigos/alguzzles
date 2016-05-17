@@ -2,72 +2,68 @@ import Data.List
 import Data.Function
 import Control.Monad
 
+-- Coordinate type
+type R = Int
 
-str2ints :: String -> [Int]
-str2ints s = map (\x -> read x) (words s)
+-- Vector / point type
+type R2 = (R, R)
 
-tuplify :: [String] -> [(Int, Int)]
-tuplify zz = map (\x -> (x !! 0, x !! 1)) (map str2ints zz)
+-- Checks if it's shortest to rotate from the OA to the OB vector in a clockwise
+-- direction.
+clockwise :: R2 -> R2 -> R2 -> Bool
+clockwise o a b = (a `sub` o) `cross` (b `sub` o) <= 0
 
-findminx :: [(Int, Int)] -> Int
-findminx a = minimum $ map fst a
+-- 2D cross product.
+cross :: R2 -> R2 -> R
+cross (x1, y1) (x2, y2) = x1 * y2 - x2 * y1
 
-findminy :: [(Int, Int)] -> Int
-findminy a = minimum $ map snd a
+-- Subtract two vectors.
+sub :: R2 -> R2 -> R2
+sub (x1, y1) (x2, y2) = (x1 - x2, y1 - y2)
 
-findmaxx :: [(Int, Int)] -> Int
-findmaxx a = maximum $ map fst a
+-- Implements the monotone chain algorithm
+convexHull :: [R2] -> [R2]
+convexHull [] = []
+convexHull [p] = [p]
+convexHull points = lower ++ upper
+  where
+    sorted = sort points
+    lower = chain sorted
+    upper = chain (reverse sorted)
 
-findmaxy :: [(Int, Int)] -> Int
-findmaxy a = maximum $ map snd a
+chain :: [R2] -> [R2]
+chain = go []
+  where
+    -- The first parameter accumulates a monotone chain where the most recently
+    -- added element is at the front of the list.
+    go :: [R2] -> [R2] -> [R2]
+    go acc@(r1:r2:rs) (x:xs) =
 
-findBoundaries :: [(Int, Int)] -> (Int, Int, Int, Int)
-findBoundaries a = (findminx a,
-                   findmaxx a,
-                   findminy a,
-                   findmaxy a)
+      if clockwise r2 r1 x
+        -- Made a clockwise turn - remove the most recent part of the chain.
+        then go (r2:rs) (x:xs)
+        -- Made a counter-clockwise turn - append to the chain.
+        else go (x:acc) xs
+    -- If there's only one point in the chain, just add the next visited point.
+    go acc (x:xs) = go (x:acc) xs
+    -- No more points to consume - finished!  Note: the reverse here causes the
+    -- result to be consistent with the other examples (a ccw hull), but
+    -- removing that and using (upper ++ lower) above will make it cw.
+    go acc [] = reverse $ tail acc
 
-averx :: (Int, Int, Int, Int) -> Int
-averx (l, h, _, _) = div (l + h) 2
+tuplify :: String -> (Int, Int)
+tuplify a = (read $ nthWord 0, read $ nthWord 1)
+  where nthWord i = (words a) !! i
 
-avery :: (Int, Int, Int, Int) -> Int
-avery (_, _, l, h) = div (l + h) 2
-
-midpoints :: (Int, Int, Int, Int) -> (Int, Int)
-midpoints cc = (averx cc, avery cc)
-
-sortPoints [] midpoints tr tl bl br =
-  [sortBy (\ x y -> compare (fst x) (fst y) ) tr,
-   sortBy (\ x y -> compare (fst x) (fst y) ) tl,
-   reverse $ sortBy (\ x y -> compare (fst x) (fst y) ) bl,
-   reverse $ sortBy (\ x y -> compare (fst x) (fst y) ) br]
-sortPoints coords midpoints tr tl bl br =
-  sortPoints (tail coords) midpoints (cmp coords midpoints tr
-                                      (\ caar cadar midx midy ->
-                                         caar >= midx && dadar >= midy) )
-  (cmp tl)
-  (cmp bl)
-  (cmp br)
-
-  -- untested code trying to port lisp version
-cmp coords midpoints corner lamfun
-  |  = ((head coords) ++ corner)
-  | otherwise = corner
-
-
+getCoords :: [String] -> [(Int, Int)]
+getCoords coords = map (\ x -> tuplify x) coords
 
 doit :: [(Int, Int)] -> IO()
 doit coords = do
-  print ("boundaries", (findBoundaries coords),
-         "midpoints", midpoints (findBoundaries coords),
-         "all points", coords,
-         "sorted points", (
-            sortPoints coords
-            (midpoints (findBoundaries coords) )
-            [] [] [] [] ))
+  if length coords == length (convexHull coords) then print "YES" else print "NO"
 
 main :: IO()
 main = do
   nlines <- getLine
   inputs <- replicateM (read  nlines :: Int) getLine
-  doit (tuplify inputs)
+  doit ( getCoords inputs)
