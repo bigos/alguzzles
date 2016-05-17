@@ -42,15 +42,18 @@ sortPoints [] midpoints tr tl bl br =
    reverse $ sortBy (\ x y -> compare (fst x) (fst y) ) bl,
    reverse $ sortBy (\ x y -> compare (fst x) (fst y) ) br]
 sortPoints coords midpoints tr tl bl br =
-  sortPoints (tail coords) midpoints (cmp coords midpoints tr >= >=)
+  sortPoints (tail coords) midpoints (cmp coords midpoints tr
+                                      (\ caar cadar midx midy ->
+                                         caar >= midx && dadar >= midy) )
   (cmp tl)
   (cmp bl)
   (cmp br)
 
   -- untested code trying to port lisp version
-cmp coords midpoints corner fn1 fn2 = if datest then ( (head coords) ++ corner) else corner
-  where
-    datest = (fst head coords fn1 (fst midpoints) ) && (head tail coords fn2 (snd midpoints))
+cmp coords midpoints corner lamfun
+  |  = ((head coords) ++ corner)
+  | otherwise = corner
+
 
 
 doit :: [(Int, Int)] -> IO()
