@@ -1,5 +1,7 @@
 import Data.List
+import Data.Function
 import Control.Monad
+
 
 str2ints :: String -> [Int]
 str2ints s = map (\x -> read x) (words s)
@@ -34,11 +36,32 @@ avery (_, _, l, h) = div (l + h) 2
 midpoints :: (Int, Int, Int, Int) -> (Int, Int)
 midpoints cc = (averx cc, avery cc)
 
+sortPoints [] midpoints tr tl bl br =
+  [sortBy (\ x y -> compare (fst x) (fst y) ) tr,
+   sortBy (\ x y -> compare (fst x) (fst y) ) tl,
+   reverse $ sortBy (\ x y -> compare (fst x) (fst y) ) bl,
+   reverse $ sortBy (\ x y -> compare (fst x) (fst y) ) br]
+sortPoints coords midpoints tr tl bl br =
+  sortPoints (tail coords) midpoints (cmp coords midpoints tr >= >=)
+  (cmp tl)
+  (cmp bl)
+  (cmp br)
+
+  -- untested code trying to port lisp version
+cmp coords midpoints corner fn1 fn2 = if datest then ( (head coords) ++ corner) else corner
+  where
+    datest = (fst head coords fn1 (fst midpoints) ) && (head tail coords fn2 (snd midpoints))
+
+
 doit :: [(Int, Int)] -> IO()
 doit coords = do
   print ("boundaries", (findBoundaries coords),
          "midpoints", midpoints (findBoundaries coords),
-         "all points", coords)
+         "all points", coords,
+         "sorted points", (
+            sortPoints coords
+            (midpoints (findBoundaries coords) )
+            [] [] [] [] ))
 
 main :: IO()
 main = do
