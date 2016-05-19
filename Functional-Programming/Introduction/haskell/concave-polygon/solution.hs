@@ -11,7 +11,7 @@ type R2 = (R, R)
 -- Checks if it's shortest to rotate from the OA to the OB vector in a clockwise
 -- direction.
 clockwise :: R2 -> R2 -> R2 -> Bool
-clockwise o a b = (a `sub` o) `cross` (b `sub` o) <= 0
+clockwise o a b = (a `sub` o) `cross` (b `sub` o) < 0
 
 -- 2D cross product.
 cross :: R2 -> R2 -> R
@@ -60,7 +60,7 @@ getCoords coords = map (\ x -> tuplify x) coords
 
 doit :: [(Int, Int)] -> IO()
 doit coords = do
-  if length coords == length (convexHull coords) then print "YES" else print "NO"
+  if length coords == length (convexHull coords) then putStrLn "NO" else putStrLn "YES"
 
 main :: IO()
 main = do
