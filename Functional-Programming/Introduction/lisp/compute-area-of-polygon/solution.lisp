@@ -27,9 +27,9 @@
   (let ((data
          (points l nil nil nil nil)))
     (/ (abs (+ (apply '+ (map 'list (lambda (x) (* (car x) (cadr x)))
-                                (car data)))
-                 (apply '+ (map 'list (lambda (x) (- 0 (* (car x) (cadr x))))
-                                (cadr data)))))
+                              (car data)))
+               (apply '+ (map 'list (lambda (x) (- 0 (* (car x) (cadr x))))
+                              (cadr data)))))
        2.0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
