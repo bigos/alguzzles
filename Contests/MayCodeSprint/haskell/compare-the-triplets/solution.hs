@@ -1,29 +1,24 @@
-import Control.Applicative
+import Data.List
+import Data.Function
 import Control.Monad
-import System.IO
+import Text.Printf
 
-solve a0 a1 a2 b0 b1 b2 = print 1
+solve [] [] asc bsc = (asc, bsc)
+solve (a:as) (b:bs) asc bsc
+  | a > b = solve as bs (asc + 1) bsc
+  | a < b = solve as bs asc (bsc + 1)
+  | otherwise = solve as bs asc bsc
 
-main :: IO ()
+splitAndRead :: String -> [Int]
+splitAndRead str = map read (words str)
+
+strf :: Int -> Int -> String
+strf a b = printf "%d %d" a b
+
+main :: IO()
 main = do
-    a0_temp <- getLine
-    let a0_t = words a0_temp
-    let a0 = read $ a0_t!!0 :: Int
-    let a1 = read $ a0_t!!1 :: Int
-    let a2 = read $ a0_t!!2 :: Int
-    b0_temp <- getLine
-    let b0_t = words b0_temp
-    let b0 = read $ b0_t!!0 :: Int
-    let b1 = read $ b0_t!!1 :: Int
-    let b2 = read $ b0_t!!2 :: Int
-    -- print [a0,a1,a2,-999,b0,b1,b2]
-    solve a0 a1 a2 b0 b1 b2
-
-getMultipleLines :: Int -> IO [String]
-getMultipleLines n
-    | n <= 0 = return []
-    | otherwise = do
-        x <- getLine
-        xs <- getMultipleLines (n-1)
-        let ret = (x:xs)
-        return ret
+  l1 <- getLine
+  l2 <- getLine
+  let res = (solve (splitAndRead l1) (splitAndRead l2) 0 0)
+  let str = strf (fst res) (snd res)
+  putStrLn str
