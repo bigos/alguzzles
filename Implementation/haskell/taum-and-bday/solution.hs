@@ -7,7 +7,7 @@ exdata = [["10 10","1 1 1"],["5 9","2 3 4"],["3 6","9 1 1"],["7 7","4 2 1"],["3 
 -- hacking progress
 -- λ> map (\ x -> (splitAndRead $ x !! 0, splitAndRead $ x !! 1, "   ") ) exdata
 
-mimimalBribe bwnums bwccosts = (min (bn * bc) bcc) + (min (wn * wc) wcc)
+minimalBribe bwnums bwccosts = (min (bn * bc) bcc) + (min (wn * wc) wcc)
   where
     bn = bwnums !! 0
     wn = bwnums !! 1
@@ -25,8 +25,11 @@ prepare inputs = map (\ x -> (input1 x, input2 x)) inputs
     input1 x = splitAndRead $ x !! 0
     input2 x = splitAndRead $ x !! 1
 
+solve inputs = map (\ x -> minimalBribe (fst x) (snd x)) (prepare inputs)
+
+
 main :: IO()
 main = do
   tc <- getLine
   inputs <- replicateM (read  tc) (replicateM 2 getLine)
-  print inputs
+  mapM_ (\ x -> print x) (solve  inputs)
