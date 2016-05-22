@@ -1,6 +1,7 @@
 import Data.List
 import Data.Char
 import Data.Function
+import Data.List
 import Control.Monad
 import Text.Printf
 
@@ -11,13 +12,22 @@ strf :: Int -> Int -> String
 strf a b = printf "%d %d" a b
 
 
---solveMe :: Int -> Int -> [Int]
-solveMe a b = [b,a]
+checkIndex x k = ("eee", x, frm, "    ")
+  where
+    posi = fst x
+    i = snd x
+    frm = abs (posi - i) == k
+
+checkAbsolute x k = map (\ z ->  checkIndex z k) x
+
+solveMe n k = map (\ x -> checkAbsolute (zip x ii) k) p
+  where p = permutations [1 .. n]
+        ii = [1 .. n]
 
 --solve :: [Int] -> [Int]
-solve x = solveMe a b
-  where a = x !! 0
-        b = x !! 1
+solve x = solveMe n k
+  where n = x !! 0
+        k = x !! 1
 
 main :: IO()
 main = do
@@ -27,5 +37,3 @@ main = do
   -- print zzz
   let rrr = map (\ x -> solve x) zzz
   print rrr
-
-sampledata = [[2,1],[3,0],[3,2]] -- zzz
