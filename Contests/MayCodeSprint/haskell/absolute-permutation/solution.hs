@@ -12,17 +12,19 @@ strf :: Int -> Int -> String
 strf a b = printf "%d %d" a b
 
 
-checkIndex x k = ("eee", x, frm, "    ")
+calculate x k = (fst x, frm)
   where
     posi = fst x
     i = snd x
     frm = abs (posi - i) == k
 
-checkAbsolute x k = map (\ z ->  checkIndex z k) x
+checkAbsolute x k = map (\ z ->  calculate z k) x
 
-solveMe n k = map (\ x -> checkAbsolute (zip x ii) k) p
+-- nailed the results
+solveMe n k = map (\x -> (" ---> ",x, " <<< ") ) doit
   where p = permutations [1 .. n]
         ii = [1 .. n]
+        doit = map (\ x -> checkAbsolute (zip x ii) k) p
 
 --solve :: [Int] -> [Int]
 solve x = solveMe n k
