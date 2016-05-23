@@ -21,15 +21,22 @@ calculate x k = (fst x, frm)
 checkAbsolute x k = map (\ z ->  calculate z k) x
 
 -- nailed the results
-solveMe n k = map (\x -> (" ---> ",x, " <<< ") ) doit
+solveMe n k = map (\x -> ( result x) ) checked
   where p = permutations [1 .. n]
         ii = [1 .. n]
-        doit = map (\ x -> checkAbsolute (zip x ii) k) p
+        checked = map (\ x -> checkAbsolute (zip x ii) k) p
+        filterTrue x = map snd x
+        filterPermutations x = map fst x
+        alltrue x = all (\ x -> x == True) (filterTrue x)
+        result x = if (alltrue x) then (filterPermutations x) else []
+
 
 --solve :: [Int] -> [Int]
-solve x = solveMe n k
+solve x = alt
   where n = x !! 0
         k = x !! 1
+        searchResults = solveMe n k
+        alt = filter (\ x -> x /= []) searchResults
 
 main :: IO()
 main = do
