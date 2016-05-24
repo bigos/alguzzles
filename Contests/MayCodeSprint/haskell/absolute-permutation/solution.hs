@@ -20,18 +20,23 @@ calculate x k = (fst x, frm)
 
 checkAbsolute x k = map (\ z ->  calculate z k) x
 
--- solveMe :: Int -> Int -> a
--- solveMe n k = map (\ x -> checkAbsolute (zip x [1 .. n]) k) p
---     where p = permutations [1 .. n]
---           filterTrue x = map snd x
---           filterPermutations x = map fst x
---           alltrue x = all (\ x -> x == True) (filterTrue x)
---           result x = if (alltrue x) then (filterPermutations x) else [-1]
+-- nailed the results
+solveMe n k = map (\x -> ( result x) ) checked
+  where p = permutations [1 .. n]
+        ii = [1 .. n]
+        checked = map (\ x -> checkAbsolute (zip x ii) k) p
+        filterTrue x = map snd x
+        filterPermutations x = map fst x
+        alltrue x = all (\ x -> x == True) (filterTrue x)
+        result x = if (alltrue x) then (filterPermutations x) else []
 
-solveMe :: Int -> Int -> IO()
-solveMe n k = do
-  print n
 
+--solve :: [Int] -> [Int]
+solve x = alt
+  where n = x !! 0
+        k = x !! 1
+        searchResults = solveMe n k
+        alt = filter (\ x -> x /= []) searchResults
 
 printRec [] _ = putStrLn ""
 printRec (x:xs) sep = do
@@ -48,4 +53,8 @@ main = do
   tc <- getLine
   inputs <- replicateM (read  tc) getLine
   let zzz = map (\ x -> splitAndRead x) inputs
-  mapM_ (\ x -> solveMe x!!0 x!!1) zzz
+  -- print zzz
+  -- putStrLn "-----------"
+  let rrr = map (\ x -> solve x) zzz
+  -- print rrr
+  mapM_ (\ x -> printAR x) rrr
