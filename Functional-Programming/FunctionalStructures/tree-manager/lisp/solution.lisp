@@ -1,5 +1,49 @@
+(defparameter *operations*
+  '((change . change-value)
+    (print . print)
+    (visit . visit-left)
+    (visit . visit-right)
+    (visit . visit-parent)
+    (visit . visit-child)
+    (insert . insert-left)
+    (insert . insert-right)
+    (insert . insert-child)
+    (delete . delete)))
+
+;;; ----------------------------------------------
+
+(defun execute-command (line)
+  (let ((command (car line)))))
+
+(defun change-value (new-val)
+  (setf (node-value *current-node*) new-val))
+
+;;; ----------------------------------------------
+(defstruct node
+  (value 0    :type fixnum)
+  (parent)
+  (left)
+  (right)
+  (root nil   :type boolean :read-only T))
+
+(defun init-operations ())
+
+(defun init-tree ()
+  (defparameter *root* (make-node :root T ))
+  (defparameter *current-node* *root*))
+
+(defun process-commands (l)
+  (if (null l)
+      l
+      (progn
+        (format t "~A~%" (car l))
+        (execute-command (car l))
+        (process-commands (cdr l)))))
+
 (defun solve-me (l)
-  l)
+  (init-operations)
+  (init-tree)
+  (process-commands l))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
