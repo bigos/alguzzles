@@ -1,30 +1,69 @@
-(defparameter *operations*
-  '((change . change-value)
-    (print . print)
-    (visit . visit-left)
-    (visit . visit-right)
-    (visit . visit-parent)
-    (visit . visit-child)
-    (insert . insert-left)
-    (insert . insert-right)
-    (insert . insert-child)
-    (delete . delete)))
-
-;;; ----------------------------------------------
-
-(defun execute-command (line)
-  (let ((command (car line)))))
-
-(defun change-value (new-val)
-  (setf (node-value *current-node*) new-val))
-
-;;; ----------------------------------------------
 (defstruct node
   (value 0    :type fixnum)
   (parent)
   (left)
   (right)
   (root nil   :type boolean :read-only T))
+
+(defun execute-command (command-line)
+  (let ((com (car command-line)))
+    (format t "~&~S <<<<=======~%" com)
+    (cond ((equal com "change")
+           (change-value (nth 1 command-line)))
+          ((equal com "print")
+           (format t "~A~%" (node-value *current-node*)))
+          ((equal com "visit")
+           (let ((com2 (nth 1 command-line)))
+             (cond ((equal com2 "left")
+                    (visit-left))
+                   ((equal com2 "right")
+                    (visit-right))
+                   ((equal com2 "parent")
+                    (visit-parent))
+                   ((equal com2 "child")
+                    (visit-child (nth 2 command-line)))
+                   (T (cerror "do not select" "not implemented ~A" com2)))))
+          ((equal com "insert")
+           (let ((com2 (nth 1 command-line)))
+             (cond ((equal com2 "left")
+                    (insert-left (nth 2 command-line)))
+                   ((equal com2 "right")
+                    (insert-right (nth 2 command-line)))
+                   ((equal com2 "child")
+                    (insert-child (nth 2 command-line)))
+                   (T (cerror "do not select" "not implemented ~A" com2)))))
+          ((equal com "delete")
+           (delete-recursively))
+          (T (cerror "do not select this option" "not implemented function ~A" com )))))
+
+;;; ----------------------------------------------
+(defun msg (l)
+  (format t "running ~A~%" l))
+
+(defun change-value (new-val)
+  (msg 'change-value)
+  (setf (node-value *current-node*) (parse-integer new-val)))
+
+(defun visit-left ()
+  )
+(defun visit-right ()
+  )
+(defun visit-parent ()
+  )
+(defun visit-child (n)
+  )
+
+(defun insert-left (x)
+  )
+(defun insert-right (x)
+  )
+(defun insert-child (x)
+  (make-node :value (parse-integer x)
+             :parent *current-node*))
+
+(defun delete-recursively ()
+  )
+;;; ----------------------------------------------
 
 (defun init-operations ())
 
@@ -38,6 +77,7 @@
       (progn
         (format t "~A~%" (car l))
         (execute-command (car l))
+        (format t "~&~A~&" *current-node*)
         (process-commands (cdr l)))))
 
 (defun solve-me (l)
