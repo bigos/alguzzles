@@ -1,15 +1,19 @@
+;;; this stops from stack stack exhaustion happening when printing parent nodes
+(setf *print-circle* T)
+
 (defstruct node
   (value 0    :type fixnum)
   (parent)
   (left)
   (right)
-  (root nil   :type boolean :read-only T))
+  (root nil   :type boolean :read-only T)
+  (children))
 
 (defun execute-command (command-line)
   (let ((com (car command-line)))
     (format t "~&~S <<<<=======~%" com)
     (cond ((equal com "change")
-           (change-value (nth 1 command-line)))
+           (change-value (parse-integer (nth 1 command-line))))
           ((equal com "print")
            (format t "~A~%" (node-value *current-node*)))
           ((equal com "visit")
@@ -21,16 +25,16 @@
                    ((equal com2 "parent")
                     (visit-parent))
                    ((equal com2 "child")
-                    (visit-child (nth 2 command-line)))
+                    (visit-child (parse-integer (nth 2 command-line))))
                    (T (cerror "do not select" "not implemented ~A" com2)))))
           ((equal com "insert")
            (let ((com2 (nth 1 command-line)))
              (cond ((equal com2 "left")
-                    (insert-left (nth 2 command-line)))
+                    (insert-left (parse-integer (nth 2 command-line))))
                    ((equal com2 "right")
-                    (insert-right (nth 2 command-line)))
+                    (insert-right (parse-integer (nth 2 command-line))))
                    ((equal com2 "child")
-                    (insert-child (nth 2 command-line)))
+                    (insert-child (parse-integer (nth 2 command-line))))
                    (T (cerror "do not select" "not implemented ~A" com2)))))
           ((equal com "delete")
            (delete-recursively))
@@ -42,7 +46,7 @@
 
 (defun change-value (new-val)
   (msg 'change-value)
-  (setf (node-value *current-node*) (parse-integer new-val)))
+  (setf (node-value *current-node*) new-val))
 
 (defun visit-left ()
   )
@@ -51,15 +55,35 @@
 (defun visit-parent ()
   )
 (defun visit-child (n)
-  )
+  (let ((first-child (car (last (node-children *current-node*)))))
+    (if (eq 1 n)
+        (setf *current-node* first-child)
+        (progn
+          (setf *current-node*
+                (nth (1- n)
+                     (reverse (node-children *current-node*))))
+          ))))
 
 (defun insert-left (x)
   )
 (defun insert-right (x)
+  (cerror "stop here" "not implemented")
   )
+
+;;; I need a list of previously created nodes
+;;; maximum number of operations Q is (expt 10 5)
+;;; so I need maximum (expt 10 5) node ids.
+;;; but
+;;; should i have traversable tree of nodes instead?
+;;; esp when we have fixed stack exhaustion
+
 (defun insert-child (x)
-  (make-node :value (parse-integer x)
-             :parent *current-node*))
+  (let ((child-node
+         (make-node :value x
+                    :parent *current-node*)))
+    (push child-node (node-children *current-node*))
+    ;; (format t "~& !!!!!!!!!!!!~A ~%!!!~A~%" (node-children *current-node*) *current-node*)
+    ))
 
 (defun delete-recursively ()
   )
