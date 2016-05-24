@@ -38,11 +38,23 @@ solve x = alt
         searchResults = solveMe n k
         alt = filter (\ x -> x /= []) searchResults
 
+printRec [] _ = putStrLn ""
+printRec (x:xs) sep = do
+  putStr sep
+  putStr (show x)
+  printRec xs " "
+
+
+printAR [] = putStrLn "-1"
+printAR a  = printRec ( head a) ""
+
 main :: IO()
 main = do
   tc <- getLine
   inputs <- replicateM (read  tc) getLine
   let zzz = map (\ x -> splitAndRead x) inputs
   -- print zzz
+  -- putStrLn "-----------"
   let rrr = map (\ x -> solve x) zzz
-  print rrr
+  -- print rrr
+  mapM_ (\ x -> printAR x) rrr
