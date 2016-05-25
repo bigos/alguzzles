@@ -53,6 +53,7 @@
 (defun visit-right ()
   )
 (defun visit-parent ()
+  (cerror "stop here" "not implemented")
   )
 (defun visit-child (n)
   (let ((first-child (car (last (node-children *current-node*)))))
@@ -66,9 +67,13 @@
 
 (defun insert-left (x)
   )
+
 (defun insert-right (x)
-  (cerror "stop here" "not implemented")
-  )
+  (let ((new-node
+         (make-node :value x
+                    :parent (node-parent *current-node*)
+                    :left *current-node*)))
+    (setf (node-right *current-node*) new-node)))
 
 ;;; I need a list of previously created nodes
 ;;; maximum number of operations Q is (expt 10 5)
