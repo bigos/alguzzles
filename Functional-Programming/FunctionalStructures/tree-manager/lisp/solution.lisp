@@ -50,11 +50,13 @@
 
 (defun visit-left ()
   )
+
 (defun visit-right ()
-  )
+  (setf *current-node* (node-right *current-node*)))
+
 (defun visit-parent ()
-  (cerror "stop here" "not implemented")
   )
+
 (defun visit-child (n)
   (let ((first-child (car (last (node-children *current-node*)))))
     (if (eq 1 n)
