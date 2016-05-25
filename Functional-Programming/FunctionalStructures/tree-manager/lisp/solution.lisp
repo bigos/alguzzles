@@ -88,11 +88,10 @@
   (let ((child-node
          (make-node :value x
                     :parent *current-node*)))
-    (push child-node (node-children *current-node*))
-    ;; (format t "~& !!!!!!!!!!!!~A ~%!!!~A~%" (node-children *current-node*) *current-node*)
-    ))
+    (push child-node (node-children *current-node*))))
 
 (defun delete-recursively ()
+  (cerror "not now" "not implemented yet")
   )
 ;;; ----------------------------------------------
 
