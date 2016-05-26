@@ -75,7 +75,8 @@
          (make-node :value x
                     :parent (node-parent *current-node*)
                     :left *current-node*)))
-    (setf (node-right *current-node*) new-node)))
+    (setf (node-right *current-node*) new-node)
+    (push new-node (node-children (node-parent *current-node*)))))
 
 ;;; I need a list of previously created nodes
 ;;; maximum number of operations Q is (expt 10 5)
@@ -91,8 +92,15 @@
     (push child-node (node-children *current-node*))))
 
 (defun delete-recursively ()
-  (cerror "not now" "not implemented yet")
-  )
+  (let ((current-value (node-value *current-node*))
+        (left-node (node-left *current-node*))
+        (right-node (node-right *current-node*)))
+    (setf (node-left right-node) left-node)
+    (setf (node-right left-node) right-node)
+    (setf *current-node* (node-parent *current-node*))
+    (delete-if (lambda (x)
+                 (eq current-value (node-value x)))
+               (node-children *current-node*))))
 ;;; ----------------------------------------------
 
 (defun init-operations ())
