@@ -11,7 +11,7 @@
 
 (defun execute-command (command-line)
   (let ((com (car command-line)))
-    (format t "~&~S <<<<=======~%" com)
+    ;; (format t "~&~S <<<<=======~%" com)
     (cond ((equal com "change")
            (change-value (parse-integer (nth 1 command-line))))
           ((equal com "print")
@@ -41,34 +41,37 @@
           (T (cerror "do not select this option" "not implemented function ~A" com )))))
 
 ;;; ----------------------------------------------
-(defun msg (l)
-  (format t "running ~A~%" l))
 
 (defun change-value (new-val)
-  (msg 'change-value)
   (setf (node-value *current-node*) new-val))
 
 (defun visit-left ()
-  )
+  (setf *current-node* (node-left *current-node*)))
 
 (defun visit-right ()
   (setf *current-node* (node-right *current-node*)))
 
 (defun visit-parent ()
-  )
+  (setf *current-node* (node-parent *current-node*)))
 
 (defun visit-child (n)
-  (let ((first-child (car (last (node-children *current-node*)))))
-    (if (eq 1 n)
-        (setf *current-node* first-child)
-        (progn
-          (setf *current-node*
-                (nth (1- n)
-                     (reverse (node-children *current-node*))))
-          ))))
+  (let ((first-child
+         (loop for cc in (node-children *current-node*)
+            until (null (node-left cc))
+            finally (return cc))))
+    (setf *current-node* first-child)
+    (when (> n 1)
+      (loop for y from n downto 2 do
+           (visit-right)))))
 
 (defun insert-left (x)
-  )
+  (let ((new-node
+         (make-node :value x
+                    :parent (node-parent *current-node*)
+                    :right *current-node*)))
+    (setf (node-left *current-node*) new-node)
+    (push new-node (node-children (node-parent *current-node*)))
+    )  )
 
 (defun insert-right (x)
   (let ((new-node
@@ -78,17 +81,14 @@
     (setf (node-right *current-node*) new-node)
     (push new-node (node-children (node-parent *current-node*)))))
 
-;;; I need a list of previously created nodes
-;;; maximum number of operations Q is (expt 10 5)
-;;; so I need maximum (expt 10 5) node ids.
-;;; but
-;;; should i have traversable tree of nodes instead?
-;;; esp when we have fixed stack exhaustion
-
 (defun insert-child (x)
-  (let ((child-node
+  (let ((current-lefmost (car (node-children *current-node*)))
+        (child-node
          (make-node :value x
                     :parent *current-node*)))
+    (when current-lefmost
+      (setf (node-left current-lefmost) child-node)
+      (setf (node-right child-node) current-lefmost))
     (push child-node (node-children *current-node*))))
 
 (defun delete-recursively ()
@@ -113,9 +113,9 @@
   (if (null l)
       l
       (progn
-        (format t "~A~%" (car l))
+        ;;(format t "~A~%" (car l))
         (execute-command (car l))
-        (format t "~&~A~&" *current-node*)
+        ;;(format t "~&~A~&" *current-node*)
         (process-commands (cdr l)))))
 
 (defun solve-me (l)
@@ -138,9 +138,9 @@
 
 (defun solution (&optional stream)
   (let ((n (parse-integer (read-line stream))))
-    (format t "~A~%" (solve-me (loop for x from 1 to n
-                                  collect
-                                    (split-by-one-space (read-line stream)))))))
+    (solve-me (loop for x from 1 to n
+                 collect
+                   (split-by-one-space (read-line stream))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
