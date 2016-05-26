@@ -1,0 +1,31 @@
+As a General, you initially have N armies numbered from 1 to N under your command. Each army consists of some number of soldiers, and each soldier is assigned an integer, c, representative of his combat ability. Since, you are responsible for all of them, you want to give orders to your armies and query them about their current state. You must handle Q events, where each event is one of the following types:
+
+1 - (find-strongest i) - Print the maximum combat ability of any soldier in army i.
+2 - (strongest-died i) - A soldier with the maximum combat ability among all soldiers in army i has died, so the soldier is removed from the army.
+3 - (recruit i c)      - A soldier with combat ability c has joined army i.
+4 - (merge i j)        - Armies i and j are merged into a single army i, and army j is removed (ceases to exist).
+
+Note: The input can be quite large, so we suggest you use fast I/O methods.
+
+Input Format
+
+The first line contains 2 space-separated integers, N (the number of armies you command) and Q (the number of events taking place), respectively. Each of the Q subsequent lines describes a single event.
+
+Each event first contains an integer, t, describing the event type.
+If t=1 or t=2, the line contains 1 more integer denoting the parameter of the event.
+If t=3 or t=4, the line contains 2 more integers denoting the respective parameters of the event.
+
+Sample Input
+
+2 6
+3 1 10
+3 2 20
+4 1 2
+1 1
+2 1
+1 1
+
+Sample Output
+
+20
+10
