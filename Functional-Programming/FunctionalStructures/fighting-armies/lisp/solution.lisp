@@ -1,3 +1,18 @@
+(defun command-nums ()
+  (list nil find-strongest strongest-died recruit merge))
+
+(defun find-strongest (i)
+  (car (aref *armies* i)))
+
+(defun strongest-died (i)
+  (setf (aref *armies* i) (cdr (aref *armies* i))))
+
+(defun recruit (i c)
+  (setf (aref *armies* i) c))
+
+;;; merge armies keeping correct sorting
+(defun merge (i j))
+
 (defun process-event (l)
   (format t "processing ~A ~A~%" *n* l))
 
