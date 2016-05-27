@@ -29,10 +29,10 @@
         (T (cerror "missed" "case missing"))))
 
 (defun command-nums ()
-  (list nil find-strongest strongest-died recruit merge))
+  '(nil find-strongest strongest-died recruit merge-armies))
 
 (defun find-strongest (i)
-  (car (aref *armies* i)))
+  (format t "~&~A" (car (aref *armies* i))))
 
 (defun strongest-died (i)
   (setf (aref *armies* i) (cdr (aref *armies* i))))
@@ -42,7 +42,7 @@
         (insertion-sort (cons c (aref *armies* i)))))
 
 ;;; merge armies keeping correct sorting
-(defun merge (i j)
+(defun merge-armies (i j)
   ;; recursive merge i and j onto i
   (setf (aref *armies* i)
         (rec-merge-sort (aref *armies* i)
@@ -53,7 +53,14 @@
 
 
 (defun process-event (l)
-  (format t "processing ~A ~A~%" *n* l))
+  ;; (format t "processing ~A ~A~%" *n* l)
+  (cond ((eq (car l) 1) (find-strongest (cadr l)))
+        ((eq (car l) 2) (strongest-died (cadr l)))
+        ((eq (car l) 3) (recruit (cadr l)
+                                 (caddr l)))
+        ((eq (car l) 4) (merge-armies (cadr l)
+                                      (caddr l)))
+        (T (cerror "no" "function"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -71,7 +78,8 @@
 (defun solution (&optional stream)
   (let ((nq (split-and-parse (read-line stream))))
     ;; (format t "nq ~A~%" nq)
-    (setf *n* (car nq))
+    (defparameter *n* (car nq))
+    (defparameter *armies* (make-array 1100000 :initial-element nil))
     (dotimes (x (cadr nq))
       (process-event (split-and-parse (read-line stream))))))
 
