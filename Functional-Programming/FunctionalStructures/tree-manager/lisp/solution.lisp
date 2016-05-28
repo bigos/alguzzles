@@ -1,3 +1,5 @@
+(declaim (optimize (space 0) (safety 3) (debug 3)))
+
 ;;; this stops from stack stack exhaustion happening when printing parent nodes
 (setf *print-circle* T)
 
@@ -95,8 +97,17 @@
   (let ((current-value (node-value *current-node*))
         (left-node (node-left *current-node*))
         (right-node (node-right *current-node*)))
-    (setf (node-left right-node) left-node)
-    (setf (node-right left-node) right-node)
+
+    (when (and left-node right-node)
+      (setf (node-left right-node) left-node)
+      (setf (node-right left-node) right-node))
+
+    (when (and left-node (null right-node))
+      (setf (node-right left-node) nil))
+
+    (when (and right-node (null left-node))
+      (setf (node-left right-node) nil))
+
     (setf *current-node* (node-parent *current-node*))
     (delete-if (lambda (x)
                  (eq current-value (node-value x)))
@@ -113,7 +124,8 @@
   (if (null l)
       l
       (progn
-        ;;(format t "~A~%" (car l))
+        ;;(format t "~A =======~%" (car l))
+        ;; (format t "~&before action ~A~&" *current-node*)
         (execute-command (car l))
         ;;(format t "~&~A~&" *current-node*)
         (process-commands (cdr l)))))
@@ -149,7 +161,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input05" :type "txt"))
     (solution s)))
 
 (main)
