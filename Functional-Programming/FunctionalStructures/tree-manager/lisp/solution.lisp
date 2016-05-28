@@ -198,7 +198,7 @@
   (if (null l)
       l
       (progn
-        (format t "~A =======~%" (car l))
+        ;; (format t "~A =======~%" (car l))
         ;;(format t "~&before action ~A~&" *current-node*)
         (execute-command (car l))
         ;; (format t "~&~A~&" *current-node*)
@@ -235,7 +235,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
