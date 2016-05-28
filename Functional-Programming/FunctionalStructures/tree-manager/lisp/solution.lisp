@@ -126,7 +126,6 @@
   (let ((new-node
          (make-node :value x
                     :parent (node-parent *current-node*)
-                    :left (node-left *current-node*)
                     :right *current-node*)))
     ;;(format t "~% new node >>> ~A~%" new-node)
     (setf (node-left *current-node*) new-node)
@@ -139,7 +138,6 @@
   (let ((new-node
          (make-node :value x
                     :parent (node-parent *current-node*)
-                    :left *current-node*
                     :right (node-right *current-node*))))
     (setf (node-right *current-node*) new-node)
     (push new-node (node-children (node-parent *current-node*)))
