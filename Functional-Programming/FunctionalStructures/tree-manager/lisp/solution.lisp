@@ -1,4 +1,4 @@
-(declaim (optimize (space 0) (safety 3) (debug 3)))
+(declaim (optimize (space 3) (safety 3) (debug 0)))
 
 ;;; this stops from stack stack exhaustion happening when printing parent nodes
 (setf *print-circle* T)
@@ -43,42 +43,42 @@
           (T (cerror "do not select this option" "not implemented function ~A" com )))))
 
 (defun examine-children (&optional (n nil))
-  (let ((nodes-left-nil (loop for cc in (node-children (if n n *current-node*))
-                           when (null (node-left cc)) collect cc))
-        (nodes-right-nil (loop for cc in (node-children (if n n *current-node*))
-                            when (null (node-right cc)) collect cc))
-        (left-vals (loop for lc in (node-children (if n n *current-node*))
-                      collect (if (node-left lc)
-                                  (node-value (node-left lc))
-                                  nil)))
-        (right-vals (loop for rc in (node-children (if n n *current-node*))
-                       collect (if (node-right rc)
-                                   (node-value (node-right rc))
-                                   nil)))
-        (left-counts (make-hash-table :test 'equalp))
-        (righ-counts (make-hash-table :test 'equalp)))
+  (when nil (progn (let ((nodes-left-nil (loop for cc in (node-children (if n n *current-node*))
+                                            when (null (node-left cc)) collect cc))
+                         (nodes-right-nil (loop for cc in (node-children (if n n *current-node*))
+                                             when (null (node-right cc)) collect cc))
+                         (left-vals (loop for lc in (node-children (if n n *current-node*))
+                                       collect (if (node-left lc)
+                                                   (node-value (node-left lc))
+                                                   nil)))
+                         (right-vals (loop for rc in (node-children (if n n *current-node*))
+                                        collect (if (node-right rc)
+                                                    (node-value (node-right rc))
+                                                    nil)))
+                         (left-counts (make-hash-table :test 'equalp))
+                         (righ-counts (make-hash-table :test 'equalp)))
 
 
-    (loop for lv in left-vals
-       for lhkey = (format nil "~A" lv) then (format nil "~A" lv)
-       do
-         (incf (gethash lhkey  left-counts 0)))
+                     (loop for lv in left-vals
+                        for lhkey = (format nil "~A" lv) then (format nil "~A" lv)
+                        do
+                          (incf (gethash lhkey  left-counts 0)))
 
-    (loop for rv in right-vals
-       for rhkey = (format nil "~A" rv) then (format nil "~A" rv)
-       do
-         (incf (gethash rhkey righ-counts 0)))
+                     (loop for rv in right-vals
+                        for rhkey = (format nil "~A" rv) then (format nil "~A" rv)
+                        do
+                          (incf (gethash rhkey righ-counts 0)))
 
 
-    (loop for k being the hash-keys of left-counts
-       do (when (> (gethash k left-counts) 1)
-            (cerror "lll" "zzz")) )
+                     (loop for k being the hash-keys of left-counts
+                        do (when (> (gethash k left-counts) 1)
+                             (cerror "lll" "zzz ~a" k)) )
 
-    (loop for k being the hash-keys of righ-counts
-       do (when (> (gethash k righ-counts) 1)
-            (cerror "rrr" "aaa")))
+                     (loop for k being the hash-keys of righ-counts
+                        do (when (> (gethash k righ-counts) 1)
+                             (cerror "rrr" "aaa ~A" k)))
 
-    ))
+                     ))))
 
 (defun examine-siblings ()
   (if (node-parent *current-node*)
@@ -190,8 +190,8 @@
         ;;(format t "~&before action ~A~&" *current-node*)
         (execute-command (car l))
         ;; (format t "~&~A~&" *current-node*)
-        (examine-children)
-        (examine-siblings)
+        ;; (examine-children)
+        ;; (examine-siblings)
         (process-commands (cdr l)))))
 
 (defun solve-me (l)
@@ -225,7 +225,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input05" :type "txt"))
+                      :name "input11" :type "txt"))
     (solution s)))
 
 (main)
