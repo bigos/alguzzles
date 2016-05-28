@@ -42,46 +42,108 @@
            (delete-recursively))
           (T (cerror "do not select this option" "not implemented function ~A" com )))))
 
+(defun examine-children (&optional (n nil))
+  (let ((nodes-left-nil (loop for cc in (node-children (if n n *current-node*))
+                           when (null (node-left cc)) collect cc))
+        (nodes-right-nil (loop for cc in (node-children (if n n *current-node*))
+                            when (null (node-right cc)) collect cc))
+        (left-vals (loop for lc in (node-children (if n n *current-node*))
+                      collect (if (node-left lc)
+                                  (node-value (node-left lc))
+                                  nil)))
+        (right-vals (loop for rc in (node-children (if n n *current-node*))
+                       collect (if (node-right rc)
+                                   (node-value (node-right rc))
+                                   nil)))
+        (left-counts (make-hash-table :test 'equalp))
+        (righ-counts (make-hash-table :test 'equalp)))
+
+
+    (loop for lv in left-vals
+       for lhkey = (format nil "~A" lv) then (format nil "~A" lv)
+       do
+         (incf (gethash lhkey  left-counts 0)))
+
+    (loop for rv in right-vals
+       for rhkey = (format nil "~A" rv) then (format nil "~A" rv)
+       do
+         (incf (gethash rhkey righ-counts 0)))
+
+
+    (loop for k being the hash-keys of left-counts
+       do (when (> (gethash k left-counts) 1)
+            (cerror "lll" "zzz")) )
+
+    (loop for k being the hash-keys of righ-counts
+       do (when (> (gethash k righ-counts) 1)
+            (cerror "rrr" "aaa")))
+
+    ))
+
+(defun examine-siblings ()
+  (if (node-parent *current-node*)
+      (examine-children (node-parent *current-node*))))
 ;;; ----------------------------------------------
 
 (defun change-value (new-val)
   (setf (node-value *current-node*) new-val))
 
 (defun visit-left ()
-  (setf *current-node* (node-left *current-node*)))
+  (setf *current-node* (node-left *current-node*))
+  (examine-children)
+  (examine-siblings)
+  (when (null *current-node*) (cerror "current" "nil")))
 
 (defun visit-right ()
-  (setf *current-node* (node-right *current-node*)))
+  (setf *current-node* (node-right *current-node*))
+  (examine-children)
+  (examine-siblings)
+  (when (null *current-node*) (cerror "current" "nil")))
 
 (defun visit-parent ()
-  (setf *current-node* (node-parent *current-node*)))
+  (setf *current-node* (node-parent *current-node*))
+  (examine-children)
+  (examine-siblings)
+  (when (null *current-node*) (cerror "current" "nil")))
 
 (defun visit-child (n)
+  (examine-children)
   (let ((first-child
          (loop for cc in (node-children *current-node*)
             until (null (node-left cc))
             finally (return cc))))
+    (examine-children)
     (setf *current-node* first-child)
+    (when (null *current-node*) (cerror "current" "nil"))
     (when (> n 1)
       (loop for y from n downto 2 do
-           (visit-right)))))
+           (visit-right)))
+    (examine-children)
+    (examine-siblings)))
 
 (defun insert-left (x)
+  ;;(format t "~A        <<<  inserting left ~%" *current-node*)
   (let ((new-node
          (make-node :value x
                     :parent (node-parent *current-node*)
+                    :left (node-left *current-node*)
                     :right *current-node*)))
+    ;;(format t "~% new node >>> ~A~%" new-node)
     (setf (node-left *current-node*) new-node)
+    ;;(format t "~&current node after new node creation~A~%" *current-node*)
     (push new-node (node-children (node-parent *current-node*)))
+    (examine-siblings)
     )  )
 
 (defun insert-right (x)
   (let ((new-node
          (make-node :value x
                     :parent (node-parent *current-node*)
-                    :left *current-node*)))
+                    :left *current-node*
+                    :right (node-right *current-node*))))
     (setf (node-right *current-node*) new-node)
-    (push new-node (node-children (node-parent *current-node*)))))
+    (push new-node (node-children (node-parent *current-node*)))
+    (examine-siblings)))
 
 (defun insert-child (x)
   (let ((current-lefmost (car (node-children *current-node*)))
@@ -91,27 +153,31 @@
     (when current-lefmost
       (setf (node-left current-lefmost) child-node)
       (setf (node-right child-node) current-lefmost))
-    (push child-node (node-children *current-node*))))
+    (push child-node (node-children *current-node*))
+    (examine-siblings)))
 
 (defun delete-recursively ()
-  (let ((current-value (node-value *current-node*))
+  (let ((this-node *current-node*)
         (left-node (node-left *current-node*))
         (right-node (node-right *current-node*)))
 
-    (when (and left-node right-node)
-      (setf (node-left right-node) left-node)
+
+    (when right-node
+      (setf (node-left right-node) left-node))
+
+    (when left-node
       (setf (node-right left-node) right-node))
 
-    (when (and left-node (null right-node))
-      (setf (node-right left-node) nil))
-
-    (when (and right-node (null left-node))
-      (setf (node-left right-node) nil))
+    (setf (node-value *current-node*) -1)
 
     (setf *current-node* (node-parent *current-node*))
+    (when (null *current-node*) (cerror "current" "nil"))
     (delete-if (lambda (x)
-                 (eq current-value (node-value x)))
-               (node-children *current-node*))))
+                 (<  (node-value x) 0))
+               (node-children *current-node*))
+    (setf this-node nil)
+    (examine-children)
+    (examine-siblings)))
 ;;; ----------------------------------------------
 
 (defun init-operations ())
@@ -124,10 +190,10 @@
   (if (null l)
       l
       (progn
-        ;;(format t "~A =======~%" (car l))
-        ;; (format t "~&before action ~A~&" *current-node*)
+        (format t "~A =======~%" (car l))
+        ;;(format t "~&before action ~A~&" *current-node*)
         (execute-command (car l))
-        ;;(format t "~&~A~&" *current-node*)
+        (format t "~&~A~&" *current-node*)
         (process-commands (cdr l)))))
 
 (defun solve-me (l)
@@ -161,7 +227,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input05" :type "txt"))
+                      :name "input10" :type "txt"))
     (solution s)))
 
 (main)
