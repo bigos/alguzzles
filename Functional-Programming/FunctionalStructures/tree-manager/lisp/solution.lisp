@@ -150,13 +150,16 @@
     (examine-siblings)))
 
 (defun insert-child (x)
-  (let ((current-lefmost (car (node-children *current-node*)))
-        (child-node
-         (make-node :value x
-                    :parent *current-node*)))
-    (when current-lefmost
-      (setf (node-left current-lefmost) child-node)
-      (setf (node-right child-node) current-lefmost))
+  (let* ((first-child
+          (loop for cc in (node-children *current-node*)
+             until (null (node-left cc))
+             finally (return cc)))
+         (child-node
+          (make-node :value x
+                     :parent *current-node*
+                     :right first-child)))
+    (when first-child
+      (setf (node-left first-child) child-node))
     (push child-node (node-children *current-node*))
     (examine-siblings)))
 
@@ -198,7 +201,7 @@
         (format t "~A =======~%" (car l))
         ;;(format t "~&before action ~A~&" *current-node*)
         (execute-command (car l))
-        (format t "~&~A~&" *current-node*)
+        ;; (format t "~&~A~&" *current-node*)
         (process-commands (cdr l)))))
 
 (defun solve-me (l)
@@ -232,7 +235,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input10" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
