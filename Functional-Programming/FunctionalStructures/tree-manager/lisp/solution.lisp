@@ -126,13 +126,16 @@
   (let ((new-node
          (make-node :value x
                     :parent (node-parent *current-node*)
+                    :left (node-left *current-node*)
                     :right *current-node*)))
-    ;;(format t "~% new node >>> ~A~%" new-node)
-    (setf (node-left *current-node*) new-node)
+    (if (node-left new-node)
+        (setf  (node-right (node-left new-node)) new-node)))
+
     ;;(format t "~&current node after new node creation~A~%" *current-node*)
     (push new-node (node-children (node-parent *current-node*)))
+    (format t "~A~%" "next sibling check")
     (examine-siblings)
-    )  )
+    )
 
 (defun insert-right (x)
   (let ((new-node
@@ -178,7 +181,8 @@
     (examine-siblings)))
 ;;; ----------------------------------------------
 
-(defun init-operations ())
+(defun init-operations ()
+  (defparameter *current-node* nil))
 
 (defun init-tree ()
   (defparameter *root* (make-node :root T ))
