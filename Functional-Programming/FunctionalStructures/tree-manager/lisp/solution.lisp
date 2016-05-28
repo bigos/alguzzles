@@ -129,22 +129,22 @@
                      :parent (node-parent *current-node*)
                      :left left-node
                      :right *current-node*)))
-    (format t "aaaaaaaaaaa")
     (when left-node
       (setf  (node-right left-node) new-node))
-    (format t "bbbbbbbbbbbbbbbbb ~a" new-node)
-    ;;(format t "~&current node after new node creation~A~%" *current-node*)
+    (setf (node-left *current-node*) new-node)
     (push new-node (node-children (node-parent *current-node*)))
-    (format t "ccccccccccccccc")
-    (format t "~A~%" "next sibling check")
     (examine-siblings))
   )
 
 (defun insert-right (x)
-  (let ((new-node
-         (make-node :value x
-                    :parent (node-parent *current-node*)
-                    :right (node-right *current-node*))))
+  (let* ((right-node (node-right *current-node*))
+         (new-node
+          (make-node :value x
+                     :parent (node-parent *current-node*)
+                     :right right-node
+                     :left *current-node*)))
+    (when right-node
+      (setf (node-left right-node) new-node))
     (setf (node-right *current-node*) new-node)
     (push new-node (node-children (node-parent *current-node*)))
     (examine-siblings)))
