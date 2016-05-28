@@ -90,20 +90,14 @@
 
 (defun visit-left ()
   (setf *current-node* (node-left *current-node*))
-  (examine-children)
-  (examine-siblings)
   (when (null *current-node*) (cerror "current" "nil")))
 
 (defun visit-right ()
   (setf *current-node* (node-right *current-node*))
-  (examine-children)
-  (examine-siblings)
   (when (null *current-node*) (cerror "current" "nil")))
 
 (defun visit-parent ()
   (setf *current-node* (node-parent *current-node*))
-  (examine-children)
-  (examine-siblings)
   (when (null *current-node*) (cerror "current" "nil")))
 
 (defun visit-child (n)
@@ -112,14 +106,11 @@
          (loop for cc in (node-children *current-node*)
             until (null (node-left cc))
             finally (return cc))))
-    (examine-children)
     (setf *current-node* first-child)
     (when (null *current-node*) (cerror "current" "nil"))
     (when (> n 1)
       (loop for y from n downto 2 do
-           (visit-right)))
-    (examine-children)
-    (examine-siblings)))
+           (visit-right)))))
 
 (defun insert-left (x)
   ;;(format t "~A        <<<  inserting left ~%" *current-node*)
@@ -132,9 +123,7 @@
     (when left-node
       (setf  (node-right left-node) new-node))
     (setf (node-left *current-node*) new-node)
-    (push new-node (node-children (node-parent *current-node*)))
-    (examine-siblings))
-  )
+    (push new-node (node-children (node-parent *current-node*)))))
 
 (defun insert-right (x)
   (let* ((right-node (node-right *current-node*))
@@ -146,8 +135,7 @@
     (when right-node
       (setf (node-left right-node) new-node))
     (setf (node-right *current-node*) new-node)
-    (push new-node (node-children (node-parent *current-node*)))
-    (examine-siblings)))
+    (push new-node (node-children (node-parent *current-node*)))))
 
 (defun insert-child (x)
   (let* ((first-child
@@ -160,8 +148,7 @@
                      :right first-child)))
     (when first-child
       (setf (node-left first-child) child-node))
-    (push child-node (node-children *current-node*))
-    (examine-siblings)))
+    (push child-node (node-children *current-node*))))
 
 (defun delete-recursively ()
   (let ((this-node *current-node*)
@@ -175,16 +162,17 @@
     (when left-node
       (setf (node-right left-node) right-node))
 
-    (setf (node-value *current-node*) -1)
+    (setf (node-value *current-node*) -1
+          (node-left *current-node*) nil
+          (node-right *current-node*) nil)
 
     (setf *current-node* (node-parent *current-node*))
     (when (null *current-node*) (cerror "current" "nil"))
-    (delete-if (lambda (x)
-                 (<  (node-value x) 0))
-               (node-children *current-node*))
-    (setf this-node nil)
-    (examine-children)
-    (examine-siblings)))
+    (setf (node-children *current-node*)
+          (remove-if (lambda (x)
+                       (<  (node-value x) 0))
+                     (node-children *current-node*)))
+    (setf this-node nil)))
 ;;; ----------------------------------------------
 
 (defun init-operations ()
@@ -202,6 +190,8 @@
         ;;(format t "~&before action ~A~&" *current-node*)
         (execute-command (car l))
         ;; (format t "~&~A~&" *current-node*)
+        (examine-children)
+        (examine-siblings)
         (process-commands (cdr l)))))
 
 (defun solve-me (l)
@@ -235,7 +225,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input10" :type "txt"))
+                      :name "input05" :type "txt"))
     (solution s)))
 
 (main)
