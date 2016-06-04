@@ -1,5 +1,15 @@
+(setf *print-circle* T)
+(defparameter *visited* nil)
+
+(defstruct node
+  (id)
+  (neighbours))
+
 (defun solve-me (n m edges s)
-  (format t "args are ~A ~A ~A ~A~%" n m edges s))
+  (let ((starting-node))
+    (format t "args are ~A ~A ~A ~A~%" n m edges s)
+    ;; finish me
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
