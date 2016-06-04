@@ -6,9 +6,17 @@
   (neighbours))
 
 (defun solve-me (n m edges s)
-  (let ((starting-node))
+  (let ((nodes (make-array (list (1+ n)))))
     (format t "args are ~A ~A ~A ~A~%" n m edges s)
     ;; finish me
+    (loop for i from 1 to n do
+         (setf (aref nodes i) (make-node :id i)))
+    (loop for vert in edges do
+         (progn
+           (push (car vert) (node-neighbours (aref nodes (cadr vert))))
+           (push (cadr vert) (node-neighbours (aref nodes (car vert))))))
+
+
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
