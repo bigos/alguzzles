@@ -5,17 +5,20 @@
   (neighbours))
 
 (defun solve-me (n m edges s)
+  (declare (ignore m))
   (let ((nodes (make-array (list (1+ n))))
         (res)
         (visited)
         (found))
-    (format t "args are ~A ~A ~A ~A~%" n m edges s)
+    ;; (format t "args are ~A ~A ~A ~A~%" n m edges s)
     (labels ((bdf-shortest (s i)
                (setf visited nil
                      found nil)
-               (format t "~&======================= ~A ~A~%" s i)
+               ;; (format t "~&======================= ~A ~A~%" s i)
                (bdf-rec s i 0)
-               (unless found (format t ":-( :-( :-( )))not found ~A~%" i)))
+               (unless found
+                 ;; (format t ":-( :-( :-( )))not found ~A~%" i)
+                 (format t "-1 ")))
              (neighbours (i)
                (node-neighbours (aref nodes i)))
              (not-yet-visited-neighbours (i)
@@ -25,11 +28,12 @@
                (if (eq s e)
                    (progn
                      (setf found T)
-                     (format t "!!!!!!! target found ~A~%" c))
+                     ;; (format t "!!!!!!! target found ~A~%" c)
+                     (format t "~A " (* 6 c)))
                    (progn
                      (push s visited)
-                     (format t "visited ~A  c ~A~%" visited c)
-                     (format t "not yet visited neighbours ~A~%" (not-yet-visited-neighbours s))
+                     ;; (format t "visited ~A  c ~A~%" visited c)
+                     ;; (format t "not yet visited neighbours ~A~%" (not-yet-visited-neighbours s))
                      (loop for nv in (not-yet-visited-neighbours s) do
                           (unless found
                             (bdf-rec nv e (1+ c)))
@@ -43,8 +47,8 @@
                    (node-neighbours (aref nodes (cadr vert))))
              (push (cadr vert)
                    (node-neighbours (aref nodes (car vert))))))
-      (setf res (loop for i from 1 to n
-                   unless (eq i s) collect (bdf-shortest s i))))))
+      (setf res (loop for i from 1 to n do
+                     (unless (eq i s) (bdf-shortest s i)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -74,7 +78,8 @@
       (dotimes (_b m)
         (push (split-and-parse (read-line stream)) edges))
       (setf s (parse-integer (read-line stream)))
-      (solve-me n m edges s))))
+      (solve-me n m edges s)
+      (format t "~%"))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
