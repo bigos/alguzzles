@@ -1,54 +1,31 @@
 (setf *print-circle* T)
 
+(declaim (optimize (debug 3)))
+
 (defstruct node
   (id)
+  (dist) ; distance from start
+  (prev) ; previous node following shortest path
   (neighbours))
 
-(defun solve-me (n m edges s)
-  (declare (ignore m))
-  (let ((nodes (make-array (list (1+ n))))
-        (res)
-        (visited)
-        (found))
-    ;; (format t "args are ~A ~A ~A ~A~%" n m edges s)
-    (labels ((bdf-shortest (s i)
-               (setf visited nil
-                     found nil)
-               ;; (format t "~&======================= ~A ~A~%" s i)
-               (bdf-rec s i 0)
-               (unless found
-                 ;; (format t ":-( :-( :-( )))not found ~A~%" i)
-                 (format t "-1 ")))
-             (neighbours (i)
-               (node-neighbours (aref nodes i)))
-             (not-yet-visited-neighbours (i)
-               (remove-if (lambda (x) (some (lambda (y) (eq x y)) visited))
-                          (neighbours i)))
-             (bdf-rec (s e c)
-               (if (eq s e)
-                   (progn
-                     (setf found T)
-                     ;; (format t "!!!!!!! target found ~A~%" c)
-                     (format t "~A " (* 6 c)))
-                   (progn
-                     (push s visited)
-                     ;; (format t "visited ~A  c ~A~%" visited c)
-                     ;; (format t "not yet visited neighbours ~A~%" (not-yet-visited-neighbours s))
-                     (loop for nv in (not-yet-visited-neighbours s) do
-                          (unless found
-                            (bdf-rec nv e (1+ c)))
-                          )))))
+(defun try-me (nodes)
+  (/ nodes 0))
 
-      (loop for i from 1 to n do
-           (setf (aref nodes i) (make-node :id i)))
-      (loop for vert in edges do
-           (progn
-             (push (car vert)
-                   (node-neighbours (aref nodes (cadr vert))))
-             (push (cadr vert)
-                   (node-neighbours (aref nodes (car vert))))))
-      (setf res (loop for i from 1 to n do
-                     (unless (eq i s) (bdf-shortest s i)))))))
+(defun solve-me (n m edges s)
+  (declare (ignore m))                  ; m is number of edges
+  (let ((nodes (make-array (list (1+ n))))
+        (visited))
+    (format t "args are ~A ~A ~A ~%" n edges s)
+    ;; (setf (aref nodes 0) nil)
+    (loop for i from 1 to n do
+         (setf (aref nodes i)
+               (make-node :id i :dist most-positive-fixnum)))
+    (loop for e in edges do
+         (push (car e)  (node-neighbours (aref nodes (cadr e))))
+         (push (cadr e) (node-neighbours (aref nodes (car  e)))))
+    (setf (node-dist (aref nodes s)) 0)
+    (try-me nodes)
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
