@@ -1,6 +1,6 @@
 (setf *print-circle* T)
 
-(declaim (optimize (debug 0) (speed 3) (space 0)))
+(declaim (optimize (speed 3) (space 3) ))
 
 (defparameter my-big-number 1000000)
 
@@ -25,34 +25,26 @@
                (setf (node-dist (aref nodes s)) 0
                      queue (list s)
                      found nil))
-             (visited? (i)
-               (< (node-dist (aref nodes i)) my-big-number))
              (unvisited-neighbours (i)
                (loop for n in (node-neighbours (aref nodes i))
-                  unless (visited? n) collect n))
-             (my-search (i)            ;find shortest path from s to i
+                  unless (< (node-dist (aref nodes n)) my-big-number) collect n))
+             (my-search (i) ;find shortest path from s to i
                (let (new-queue)
-                 ;; (format t "going to search ~A  ~A~%" i queue)
                  (loop until (or (null queue) found) do
                       (setf new-queue nil)
-                    ;; (format t "iteration~%")
                       (loop for n in queue do
-                         ;; (format t "running ~%" n)
                            (loop for unv in (unvisited-neighbours n) do
-                              ;; (format t "fooooooooooooooooooo ~A ~%" (aref nodes n))
                                 (push unv new-queue)
                                 (setf (node-dist (aref nodes unv)) (+ (if (node-prev (aref nodes n))
                                                                           (node-dist (aref nodes n))
                                                                           0)
                                                                       6)
                                       (node-prev (aref nodes unv)) (aref nodes n))
-                                (when (eq i unv) (setf found T))
-                                ))
+                                (when (eq i unv) (setf found T))))
                       (setf queue new-queue))
-                 (if found
-                     (format t "~A~A" separator (node-dist (aref nodes i)))
-                     (format t "~A~A" separator -1))
-                 (setf separator " ")))
+                 (when found
+                   (princ separator)
+                   (princ (node-dist (aref nodes i))))))
              (mark-accessible ()
                (let (new-queue)
                  (loop until (null queue) do
@@ -60,16 +52,8 @@
                       (loop for n in queue do
                            (loop for unv in (unvisited-neighbours n) do
                                 (push unv new-queue)
-                                (setf (node-dist (aref nodes unv)) (+ (if (node-prev (aref nodes n))
-                                                                          (node-dist (aref nodes n))
-                                                                          0)
-                                                                      6)
-                                      (node-prev (aref nodes unv)) (aref nodes n)
-                                      (node-accessible (aref nodes unv)) T
-                                      )))
-                      (setf queue new-queue))
-                 ))
-             )
+                                (setf (node-accessible (aref nodes unv)) T)))
+                      (setf queue new-queue)))))
 
       (loop for i from 1 to n do
            (setf (aref nodes i)
@@ -85,9 +69,10 @@
            (unless (eq i s)
              (node-reset)
              (if (node-accessible (aref nodes i))
-                 (progn (my-search i)
-                        )
-                 (format t "~A~A" separator -1))
+                 (my-search i)
+                 (progn
+                   (princ separator)
+                   (princ -1)))
              (setf separator " ")))
       ;; (try-me nodes)
       )))
@@ -130,7 +115,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input05" :type "txt"))
     (solution s)))
 
 (main)
