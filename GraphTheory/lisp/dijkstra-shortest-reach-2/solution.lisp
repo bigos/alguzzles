@@ -12,7 +12,7 @@
   (neighbours))
 
 (defun solve-me (n m edges s)
-  ;; TODO: finish me, old solution needs modification
+  ;; TODO: finish me, old solution needs modification, so I can add up different distances between nodes
   (declare (ignore m))                  ; m is number of edges
   (let ((nodes (make-array (list (1+ n))))
         (queue)
