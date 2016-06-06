@@ -28,17 +28,18 @@
              (unvisited-neighbours (i)
                (loop for n in (node-neighbours (aref nodes i))
                   unless (< (node-dist (aref nodes n)) my-big-number) collect n))
-             (my-search (i) ;find shortest path from s to i
+             (my-search (i)            ;find shortest path from s to i
                (let (new-queue)
                  (loop until (or (null queue) found) do
                       (setf new-queue nil)
-                      (loop for n in queue do
-                           (loop for unv in (unvisited-neighbours n) do
+                      (loop for n in queue
+                         until found
+                         do
+                           (loop for unv in (unvisited-neighbours n)
+                              until found
+                              do
                                 (push unv new-queue)
-                                (setf (node-dist (aref nodes unv)) (+ (if (node-prev (aref nodes n))
-                                                                          (node-dist (aref nodes n))
-                                                                          0)
-                                                                      6)
+                                (setf (node-dist (aref nodes unv)) (+ (node-dist (aref nodes n)) 6)
                                       (node-prev (aref nodes unv)) (aref nodes n))
                                 (when (eq i unv) (setf found T))))
                       (setf queue new-queue))
@@ -52,7 +53,9 @@
                       (loop for n in queue do
                            (loop for unv in (unvisited-neighbours n) do
                                 (push unv new-queue)
-                                (setf (node-accessible (aref nodes unv)) T)))
+                                (setf (node-dist (aref nodes unv)) 6
+                                      (node-accessible (aref nodes unv)) T
+                                      )))
                       (setf queue new-queue)))))
 
       (loop for i from 1 to n do
@@ -74,7 +77,6 @@
                    (princ separator)
                    (princ -1)))
              (setf separator " ")))
-      ;; (try-me nodes)
       )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
