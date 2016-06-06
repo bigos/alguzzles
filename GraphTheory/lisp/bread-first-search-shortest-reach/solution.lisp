@@ -14,25 +14,45 @@
 (defun solve-me (n m edges s)
   (declare (ignore m))                  ; m is number of edges
   (let ((nodes (make-array (list (1+ n))))
-        (visited))
-    (format t "args are ~A ~A ~A ~%" n edges s)
-    (labels ((visited? (i)
-               (some (lambda (x) (eq x i)) visited))
+        (queue)
+        (found)
+        (separator))
+    ;; (format t "args are ~A ~A ~A ~%" n edges s)
+    (labels ((node-reset ()
+               (loop for i from 1 to n do
+                    (setf (node-dist (aref nodes i)) most-positive-fixnum
+                          (node-prev (aref nodes i)) nil))
+               (setf (node-dist (aref nodes s)) 0
+                     queue (list s)
+                     found nil))
+             (visited? (i)
+               (< (node-dist (aref nodes i)) most-positive-fixnum))
              (unvisited-neighbours (i)
                (loop for n in (node-neighbours (aref nodes i))
                   unless (visited? n) collect n))
-             (my-search (i)             ;find shortest path from s to i
-               (push i visited)
-               (loop for nv in (unvisited-neighbours i)
-                  for alt = (+ (node-dist (aref nodes i)) 6)
-                  do
-                    (format t "~& ===== ~A  ~A ~A~%" i nv s)
-                    (when (< alt (node-dist (aref nodes nv)))
-                      (setf
-                       (node-dist (aref nodes nv)) alt
-                       (node-prev (aref nodes nv)) i)))
-               )
-             )
+             (my-search (i)            ;find shortest path from s to i
+               (let (new-queue)
+                 ;; (format t "going to search ~A  ~A~%" i queue)
+                 (loop until (or (null queue) found) do
+                      (setf new-queue nil)
+                      ;; (format t "iteration~%")
+                      (loop for n in queue do
+                           ;; (format t "running ~%" n)
+                           (loop for unv in (unvisited-neighbours n) do
+                                ;; (format t "fooooooooooooooooooo ~A ~%" (aref nodes n))
+                                (push unv new-queue)
+                                (setf (node-dist (aref nodes unv)) (+ (if (node-prev (aref nodes n))
+                                                                          (node-prev (aref nodes n))
+                                                                          0)
+                                                                      6)
+                                      (node-prev (aref nodes unv)) (aref nodes n))
+                                (when (eq i unv) (setf found T))
+                                ))
+                      (setf queue new-queue))
+                 (if found
+                     (format t "~A~A" separator (node-dist (aref nodes i)))
+                     (format t "~A~A" separator -1))
+                 (setf separator " "))))
 
       (loop for i from 1 to n do
            (setf (aref nodes i)
@@ -41,12 +61,12 @@
            (push (car e ) (node-neighbours (aref nodes (cadr e))))
            (push (cadr e) (node-neighbours (aref nodes (car  e)))))
 
+      (setf separator "")
       (loop for i from 1 to n do
-           (setf visited nil
-                 (node-dist (aref nodes s)) 0)
            (unless (eq i s)
+             (node-reset)
              (my-search i)))
-      (try-me nodes)
+      ;; (try-me nodes)
       )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
