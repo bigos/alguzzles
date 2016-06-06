@@ -8,7 +8,7 @@
   (prev) ; previous node following shortest path
   (neighbours))
 
-(defun try-me (nodes)
+(defun try-me (nodes)                   ; examine errors easily
   (/ nodes 0))
 
 (defun solve-me (n m edges s)
@@ -16,16 +16,38 @@
   (let ((nodes (make-array (list (1+ n))))
         (visited))
     (format t "args are ~A ~A ~A ~%" n edges s)
-    ;; (setf (aref nodes 0) nil)
-    (loop for i from 1 to n do
-         (setf (aref nodes i)
-               (make-node :id i :dist most-positive-fixnum)))
-    (loop for e in edges do
-         (push (car e)  (node-neighbours (aref nodes (cadr e))))
-         (push (cadr e) (node-neighbours (aref nodes (car  e)))))
-    (setf (node-dist (aref nodes s)) 0)
-    (try-me nodes)
-    ))
+    (labels ((visited? (i)
+               (some (lambda (x) (eq x i)) visited))
+             (unvisited-neighbours (i)
+               (loop for n in (node-neighbours (aref nodes i))
+                  unless (visited? n) collect n))
+             (my-search (i)             ;find shortest path from s to i
+               (push i visited)
+               (loop for nv in (unvisited-neighbours i)
+                  for alt = (+ (node-dist (aref nodes i)) 6)
+                  do
+                    (format t "~& ===== ~A  ~A ~A~%" i nv s)
+                    (when (< alt (node-dist (aref nodes nv)))
+                      (setf
+                       (node-dist (aref nodes nv)) alt
+                       (node-prev (aref nodes nv)) i)))
+               )
+             )
+
+      (loop for i from 1 to n do
+           (setf (aref nodes i)
+                 (make-node :id i :dist most-positive-fixnum)))
+      (loop for e in edges do
+           (push (car e ) (node-neighbours (aref nodes (cadr e))))
+           (push (cadr e) (node-neighbours (aref nodes (car  e)))))
+
+      (loop for i from 1 to n do
+           (setf visited nil
+                 (node-dist (aref nodes s)) 0)
+           (unless (eq i s)
+             (my-search i)))
+      (try-me nodes)
+      )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
