@@ -1,15 +1,12 @@
 (setf *print-circle* T)
 
-(declaim (optimize (debug 3)))
+(declaim (optimize (debug 0) (speed 3) (space 0)))
 
 (defstruct node
   (id)
   (dist) ; distance from start
   (prev) ; previous node following shortest path
   (neighbours))
-
-(defun try-me (nodes)                   ; examine errors easily
-  (/ nodes 0))
 
 (defun solve-me (n m edges s)
   (declare (ignore m))                  ; m is number of edges
@@ -42,7 +39,7 @@
                                 ;; (format t "fooooooooooooooooooo ~A ~%" (aref nodes n))
                                 (push unv new-queue)
                                 (setf (node-dist (aref nodes unv)) (+ (if (node-prev (aref nodes n))
-                                                                          (node-prev (aref nodes n))
+                                                                          (node-dist (aref nodes n))
                                                                           0)
                                                                       6)
                                       (node-prev (aref nodes unv)) (aref nodes n))
@@ -107,7 +104,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input05" :type "txt"))
     (solution s)))
 
 (main)
