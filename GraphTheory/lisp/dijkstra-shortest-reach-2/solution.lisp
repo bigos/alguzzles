@@ -18,7 +18,7 @@
         (queue)
         (found)
         (separator))
-    ;; (format t "args are ~A ~A ~A ~%" n edges s)
+    (format t "args are ~A ~A ~A ~%" n edges s)
     (labels ((node-reset ()
                (loop for i from 1 to n do
                     (setf (node-dist (aref nodes i)) my-big-number
@@ -27,22 +27,23 @@
                      queue (list s)
                      found nil))
              (unvisited-neighbours (i)
-               (loop for n in (node-neighbours (aref nodes i))
-                  unless (< (node-dist (aref nodes n)) my-big-number) collect n))
+               (loop for n in
+                    (loop for nn in (node-neighbours (aref nodes i)) collect nn)
+                  unless (< (node-dist (aref nodes (car n))) my-big-number) collect n))
              (my-search (i)            ;find shortest path from s to i
                (let (new-queue)
                  (loop until (or (null queue) found) do
                       (setf new-queue nil)
                       (loop for n in queue
-                         until found
-                         do
+                         until found do
                            (loop for unv in (unvisited-neighbours n)
-                              until found
-                              do
-                                (push unv new-queue)
-                                (setf (node-dist (aref nodes unv)) (+ (node-dist (aref nodes n)) 6)
-                                      (node-prev (aref nodes unv)) (aref nodes n))
-                                (when (eq i unv) (setf found T))))
+                              until found do
+                                (push (car unv) new-queue)
+                                (format t "~&/////////////////// ~A~%" unv)
+                                (setf (node-dist (aref nodes (car unv))) (+ (node-dist (aref nodes n))
+                                                                      (cdr unv) )
+                                      (node-prev (aref nodes (car unv))) (aref nodes n))
+                                (when (eq i (car unv)) (setf found T))))
                       (setf queue new-queue))
                  (when found
                    (princ separator)
@@ -53,18 +54,17 @@
                       (setf new-queue nil)
                       (loop for n in queue do
                            (loop for unv in (unvisited-neighbours n) do
-                                (push unv new-queue)
-                                (setf (node-dist (aref nodes unv)) 6
-                                      (node-accessible (aref nodes unv)) T
-                                      )))
+                                (push (car unv) new-queue)
+                                (setf (node-dist (aref nodes (car unv))) 6
+                                      (node-accessible (aref nodes (car unv))) T)))
                       (setf queue new-queue)))))
 
       (loop for i from 1 to n do
            (setf (aref nodes i)
                  (make-node :id i :dist my-big-number)))
       (loop for e in edges do
-           (push (car e ) (node-neighbours (aref nodes (cadr e))))
-           (push (cadr e) (node-neighbours (aref nodes (car  e)))))
+           (push (cons (car e ) (caddr e)) (node-neighbours (aref nodes (cadr e))))
+           (push (cons (cadr e) (caddr e)) (node-neighbours (aref nodes (car  e)))))
 
       (node-reset)
       (mark-accessible)
@@ -77,8 +77,8 @@
                  (progn
                    (princ separator)
                    (princ -1)))
-             (setf separator " ")))
-      )))
+             (setf separator " "))))
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -118,7 +118,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input05" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
