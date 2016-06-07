@@ -1,6 +1,6 @@
 (setf *print-circle* T)
 
-(declaim (optimize (debug 3)))
+(declaim (optimize (debug 0) (speed 3)))
 
 (defparameter my-big-number 1000000)
 
@@ -59,7 +59,7 @@
                                   (setf (node-dist (aref nodes (car unv))) alt
                                         (node-prev (aref nodes (car unv))) (aref nodes n))
                                   (clear-visited)
-                                  (setf new-queue (list s))
+                                  ;;(setf new-queue (list s))
 
                                   )))
                       (setf queue  new-queue)))))
