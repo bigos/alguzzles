@@ -35,7 +35,7 @@
                (loop for i from 1 to n do (setf (node-visited (aref nodes i)) nil)))
              (my-node-dist (i) (node-dist (aref nodes i)))
              (my-node-prev (i) (node-prev (aref nodes i)))
-             (my-search (i)            ;find shortest path from s to i
+             (my-search ()            ;find shortest path from s to i
                (let ((new-queue)
                      (alt))
                  ;; (format t "~&=========== ~A~%" i)
@@ -70,19 +70,18 @@
       (loop for e in edges do
            (push (cons (car e ) (caddr e)) (node-neighbours (aref nodes (cadr e))))
            (push (cons (cadr e) (caddr e)) (node-neighbours (aref nodes (car  e)))))
-      (node-reset)
       (setf separator "")
-      (loop for i from 1 to n do
-           (unless (eq i s)
-             (node-reset)
 
-             (my-search i)
-             (if (eq (node-dist (aref nodes i)) my-big-number)
-                 (format t "~A-1" separator)
-                 (format t "~A~A" separator (node-dist (aref nodes i))))
+        (node-reset)
+        (my-search )
+        (loop for i from 1 to n do
+             (unless (eq i s)
+               (if (eq (node-dist (aref nodes i)) my-big-number)
+                   (format t "~A-1" separator)
+                   (format t "~A~A" separator (node-dist (aref nodes i))))
 
 
-             (setf separator " ")))
+               (setf separator " ")))
       ;; (try-me nodes)
       )
     ))
