@@ -1,14 +1,18 @@
 (setf *print-circle* T)
 
-(declaim (optimize (speed 3) (space 3) ))
+(declaim (optimize (speed 3) (space 3) (debug 3)))
 
 (defparameter my-big-number 1000000)
+
+(defun try-me (x)
+  (/ x 0))
 
 (defstruct node
   (id)
   (dist) ; distance from start
   (prev) ; previous node following shortest path
   (accessible) ; accessible from start
+  (visited)
   (neighbours))
 
 (defun solve-me (n m edges s)
@@ -22,42 +26,44 @@
     (labels ((node-reset ()
                (loop for i from 1 to n do
                     (setf (node-dist (aref nodes i)) my-big-number
-                          (node-prev (aref nodes i)) nil))
+                          (node-prev (aref nodes i)) nil
+                          (node-visited (aref nodes i)) nil))
                (setf (node-dist (aref nodes s)) 0
                      queue (list s)
                      found nil))
              (unvisited-neighbours (i)
-               (loop for n in
-                    (loop for nn in (node-neighbours (aref nodes i)) collect nn)
-                  unless (< (node-dist (aref nodes (car n))) my-big-number) collect n))
+               (loop for nn in (node-neighbours (aref nodes i))
+                  unless (node-visited (aref nodes (car nn)))
+                  collect nn))
              (my-search (i)            ;find shortest path from s to i
-               (let (new-queue)
-                 (loop until (or (null queue) found) do
-                      (setf new-queue nil)
-                      (loop for n in queue
-                         until found do
-                           (loop for unv in (unvisited-neighbours n)
-                              until found do
-                                (push (car unv) new-queue)
-                                (format t "~&/////////////////// ~A~%" unv)
-                                (setf (node-dist (aref nodes (car unv))) (+ (node-dist (aref nodes n))
-                                                                      (cdr unv) )
-                                      (node-prev (aref nodes (car unv))) (aref nodes n))
-                                (when (eq i (car unv)) (setf found T))))
-                      (setf queue new-queue))
-                 (when found
-                   (princ separator)
-                   (princ (node-dist (aref nodes i))))))
-             (mark-accessible ()
-               (let (new-queue)
-                 (loop until (null queue) do
+               (let ((new-queue)
+                     (alt))
+                 (format t "~&=========== ~A~%" i )
+                 (loop until  (null queue)  do
                       (setf new-queue nil)
                       (loop for n in queue do
+                           (setf (node-visited (aref nodes n)) T)
+                           (format t "~&------ ~A ~A uuuuuuuuuu  ~a   qqqq ~A~%" n (node-dist (aref nodes n)) (unvisited-neighbours n) queue)
                            (loop for unv in (unvisited-neighbours n) do
                                 (push (car unv) new-queue)
-                                (setf (node-dist (aref nodes (car unv))) 6
-                                      (node-accessible (aref nodes (car unv))) T)))
-                      (setf queue new-queue)))))
+                                (format t "~& .......... ~A~%" new-queue)
+                                (format t "~&/////////////////// ~a ~A~%" n unv )
+
+                                (setf alt (+ (node-dist (aref nodes n)) (cdr unv)))
+                                (format t "~&alt is ~A    ~%" alt )
+
+                                (when (< alt (node-dist (aref nodes (car unv ))))
+                                  (format t "found shorter~%")
+                                  (setf (node-dist (aref nodes (car unv))) alt
+                                        (node-prev (aref nodes (car unv))) (aref nodes n))
+                                        ;(format t "~A~%" nodes)
+                                  )
+
+
+                                ))
+                      (setf queue new-queue))
+                 (format t "finished~% ~A~%" nodes)
+                 )))
 
       (loop for i from 1 to n do
            (setf (aref nodes i)
@@ -67,17 +73,16 @@
            (push (cons (cadr e) (caddr e)) (node-neighbours (aref nodes (car  e)))))
 
       (node-reset)
-      (mark-accessible)
       (setf separator "")
       (loop for i from 1 to n do
            (unless (eq i s)
              (node-reset)
-             (if (node-accessible (aref nodes i))
-                 (my-search i)
-                 (progn
-                   (princ separator)
-                   (princ -1)))
-             (setf separator " "))))
+
+             (my-search i)
+
+             (setf separator " ")))
+      ;; (try-me nodes)
+      )
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
