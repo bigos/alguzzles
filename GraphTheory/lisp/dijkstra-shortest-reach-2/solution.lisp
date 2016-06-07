@@ -22,7 +22,7 @@
         (queue)
         (found)
         (separator))
-    (format t "args are ~A ~A ~A ~%" n edges s)
+    ;; (format t "args are ~A ~A ~A ~%" n edges s)
     (labels ((node-reset ()
                (loop for i from 1 to n do
                     (setf (node-dist (aref nodes i)) my-big-number
@@ -35,35 +35,30 @@
                (loop for nn in (node-neighbours (aref nodes i))
                   unless (node-visited (aref nodes (car nn)))
                   collect nn))
-             (my-search (i)            ;find shortest path from s to i
+             (my-search ()            ;find shortest path from s to i
                (let ((new-queue)
                      (alt))
-                 (format t "~&=========== ~A~%" i )
+                 ;; (format t "~&=========== ~A~%" i )
                  (loop until  (null queue)  do
                       (setf new-queue nil)
                       (loop for n in queue do
                            (setf (node-visited (aref nodes n)) T)
-                           (format t "~&------ ~A ~A uuuuuuuuuu  ~a   qqqq ~A~%" n (node-dist (aref nodes n)) (unvisited-neighbours n) queue)
+                           ;(format t "~&------ ~A ~A uuuuuuuuuu  ~a   qqqq ~A~%" n (node-dist (aref nodes n)) (unvisited-neighbours n) queue)
                            (loop for unv in (unvisited-neighbours n) do
                                 (push (car unv) new-queue)
-                                (format t "~& .......... ~A~%" new-queue)
-                                (format t "~&/////////////////// ~a ~A~%" n unv )
+                                ;;(format t "~& .......... ~A~%" new-queue)
+                                ;;(format t "~&/////////////////// ~a ~A~%" n unv )
 
                                 (setf alt (+ (node-dist (aref nodes n)) (cdr unv)))
-                                (format t "~&alt is ~A    ~%" alt )
+                                ;;(format t "~&alt is ~A    ~%" alt )
 
                                 (when (< alt (node-dist (aref nodes (car unv ))))
-                                  (format t "found shorter~%")
+                                  ;;(format t "found shorter~%")
                                   (setf (node-dist (aref nodes (car unv))) alt
                                         (node-prev (aref nodes (car unv))) (aref nodes n))
                                         ;(format t "~A~%" nodes)
-                                  )
-
-
-                                ))
-                      (setf queue new-queue))
-                 (format t "finished~% ~A~%" nodes)
-                 )))
+                                  )))
+                      (setf queue new-queue)))))
 
       (loop for i from 1 to n do
            (setf (aref nodes i)
@@ -78,7 +73,11 @@
            (unless (eq i s)
              (node-reset)
 
-             (my-search i)
+             (my-search )
+             (if (eq (node-dist (aref nodes i)) my-big-number)
+                 (format t "~A-1" separator)
+                 (format t "~A~A" separator (node-dist (aref nodes i))))
+
 
              (setf separator " ")))
       ;; (try-me nodes)
