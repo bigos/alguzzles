@@ -1,6 +1,6 @@
 (setf *print-circle* T)
 
-(declaim (optimize (speed 3) (space 3) (debug 3)))
+(declaim (optimize (debug 0) (speed 3)))
 
 (defparameter my-big-number 1000000)
 
@@ -31,34 +31,38 @@
                (setf (node-dist (aref nodes s)) 0
                      queue (list s)
                      found nil))
-             (unvisited-neighbours (i)
-               (loop for nn in (node-neighbours (aref nodes i))
-                  unless (node-visited (aref nodes (car nn)))
-                  collect nn))
+             (clear-visited ()
+               (loop for i from 1 to n do (setf (node-visited (aref nodes i)) nil)))
+             (my-node-dist (i) (node-dist (aref nodes i)))
+             (my-node-prev (i) (node-prev (aref nodes i)))
              (my-search ()            ;find shortest path from s to i
                (let ((new-queue)
                      (alt))
-                 ;; (format t "~&=========== ~A~%" i )
-                 (loop until  (null queue)  do
+                 ;; (format t "~&=========== ~A~%" i)
+                 (loop until (or found (null queue))  do
                       (setf new-queue nil)
-                      (loop for n in queue do
+                      ;; (format t "~&queue ~A~%" queue)
+                      (loop for n in queue
+                         do
                            (setf (node-visited (aref nodes n)) T)
-                           ;(format t "~&------ ~A ~A uuuuuuuuuu  ~a   qqqq ~A~%" n (node-dist (aref nodes n)) (unvisited-neighbours n) queue)
-                           (loop for unv in (unvisited-neighbours n) do
-                                (push (car unv) new-queue)
-                                ;;(format t "~& .......... ~A~%" new-queue)
-                                ;;(format t "~&/////////////////// ~a ~A~%" n unv )
+                           (loop for unv in (node-neighbours (aref nodes n))
+                              do
+                                (unless (node-visited (aref nodes (car unv)))
+                                  (push (car unv) new-queue))
 
-                                (setf alt (+ (node-dist (aref nodes n)) (cdr unv)))
-                                ;;(format t "~&alt is ~A    ~%" alt )
+
+                                (setf alt (+ (my-node-dist  n)
+                                             (cdr unv)))
 
                                 (when (< alt (node-dist (aref nodes (car unv ))))
-                                  ;;(format t "found shorter~%")
+                                  ;; (format t "found shorter ~A~%" alt)
                                   (setf (node-dist (aref nodes (car unv))) alt
                                         (node-prev (aref nodes (car unv))) (aref nodes n))
-                                        ;(format t "~A~%" nodes)
+                                  (clear-visited)
+                                  ;;(setf new-queue (list s))
+
                                   )))
-                      (setf queue new-queue)))))
+                      (setf queue  new-queue)))))
 
       (loop for i from 1 to n do
            (setf (aref nodes i)
@@ -66,20 +70,18 @@
       (loop for e in edges do
            (push (cons (car e ) (caddr e)) (node-neighbours (aref nodes (cadr e))))
            (push (cons (cadr e) (caddr e)) (node-neighbours (aref nodes (car  e)))))
-
-      (node-reset)
       (setf separator "")
-      (loop for i from 1 to n do
-           (unless (eq i s)
-             (node-reset)
 
-             (my-search )
-             (if (eq (node-dist (aref nodes i)) my-big-number)
-                 (format t "~A-1" separator)
-                 (format t "~A~A" separator (node-dist (aref nodes i))))
+        (node-reset)
+        (my-search )
+        (loop for i from 1 to n do
+             (unless (eq i s)
+               (if (eq (node-dist (aref nodes i)) my-big-number)
+                   (format t "~A-1" separator)
+                   (format t "~A~A" separator (node-dist (aref nodes i))))
 
 
-             (setf separator " ")))
+               (setf separator " ")))
       ;; (try-me nodes)
       )
     ))
@@ -122,7 +124,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input01" :type "txt"))
     (solution s)))
 
 (main)
