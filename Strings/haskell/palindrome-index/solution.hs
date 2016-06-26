@@ -1,5 +1,12 @@
-import Data.List
-import Data.Array
+import Prelude
+import Data.Map (toList, fromListWith)
+
+palindromic input = length odds < 2
+  where
+    odds = filter odd (map snd (strFreq input))
+
+strFreq :: String -> [(Char, Int)]
+strFreq input = toList $ fromListWith (+) [(c, 1) | c <- input]
 
 main :: IO ()
 main = do
