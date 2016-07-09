@@ -5,9 +5,14 @@ palindrome a = reverse a == a
 
 stringRange s = [0 .. (length s - 1)]
 
-tryRemove x i = (take i x) ++ (drop (i+1) x)
+                -- inefficient
+-- tryRemove x i = (take i x) ++ (drop (i+1) x)
+tryRemove x i = (fst d) ++ (drop 1 (snd d))
+  where d = splitAt i x
 
-solveMe x l = head $ filter (\ y -> y > (-2)) indexes
+solveMe x l = if indexes == []
+  then (-1)
+  else head $ filter (\ y -> y > (-2)) indexes
   where
     indexes = map (\a -> if (palindrome (tryRemove x a)) then a else (-9)) l
 
