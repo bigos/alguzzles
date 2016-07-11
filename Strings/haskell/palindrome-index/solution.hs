@@ -18,13 +18,13 @@ stringReversed s = (s, reverse s)
 
 stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
-isPalindromeAt s i = (fst ss) == (snd ss)
+isPalindromeAt s i = nn
   where ss = stringsSplit (stringReversed s) i
+        nn = if ((fst ss) == (snd ss)) then i else (0 - i)
 
-solveMe x l = map (\y -> sa y) l
-  where sa z = stringsSplit (stringReversed x) z
+solveMe x l = map (\y -> isPalindromeAt x y) l
 
---solve x = if palindrome x then (-1) else solveMe x (stringRange x)
+solve x = if palindrome x then (-1) else solveMe x (stringRange x)
 
 printRes :: Int -> IO()
 printRes x = do
