@@ -20,11 +20,12 @@ stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
 isPalindromeAt s i = nn
   where ss = stringsSplit (stringReversed s) i
-        nn = if ((fst ss) == (snd ss)) then i else (0 - i)
+        nn = if ((fst ss) == (snd ss)) then i else (i - 100)
 
 solveMe x l = map (\y -> isPalindromeAt x y) l
 
-solve x = if palindrome x then (-1) else solveMe x (stringRange x)
+solve x = if palindrome x then (-1) else nx
+  where nx =  head $ filter (\y -> y >= 0)  $ solveMe x (stringRange x)
 
 printRes :: Int -> IO()
 printRes x = do
@@ -35,6 +36,8 @@ main = do
   mydata <- getContents
   let mylines = lines mydata
   let tc = read (head mylines) ::Int
+
+  mapM_ (\ x -> printRes (solve x)) (tail mylines )
 
 
 -- do notaion explained
