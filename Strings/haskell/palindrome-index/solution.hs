@@ -18,6 +18,8 @@ stringReversed s = (s, reverse s)
 
 stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
+isPalindromeAt s i = (fst ss) == (snd ss)
+  where ss = stringsSplit (stringReversed s) i
 
 solveMe x l = map (\y -> sa y) l
   where sa z = stringsSplit (stringReversed x) z
