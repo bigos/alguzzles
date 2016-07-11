@@ -35,7 +35,7 @@ main = do
   mydata <- getContents
   let mylines = lines mydata
   let tc = read (head mylines) ::Int
-  print tc
+
 
 -- do notaion explained
 -- https://en.wikibooks.org/wiki/Haskell/do_notation
