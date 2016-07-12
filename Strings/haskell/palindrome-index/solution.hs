@@ -25,7 +25,7 @@ isPalindromeAt s i = nn
 
 solveMe x l = map (\y -> isPalindromeAt x y) l
 
-solve x = if palindrome x then (-1) else nx
+solve x = trace ("---> " ++ show ( take 2 x)) $ if palindrome x then (-1) else nx
   where nx =  head $ filter (\y -> y >= 0)  $ solveMe x (stringRange x)
 
 printRes :: Int -> IO()
@@ -36,7 +36,7 @@ main :: IO ()
 main = do
   tcx <- getLine
   let tc = read tcx
-  replicateM_ tc (getLine >>= \myLine -> print $ take 1 myLine)
+  replicateM_ tc (getLine >>= \myLine -> print $ solve myLine)
 
 
   -- mapM_ (\ x -> printRes (solve x)) (tail mylines )
