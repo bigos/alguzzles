@@ -15,7 +15,7 @@ tryRemove x i = (fst d) ++ (drop 1 (snd d))
   where d = splitAt i x
 
 stringReversed :: String -> (String, String)
-stringReversed s = (s, reverse s)
+stringReversed s = trace ("reversing ") $ (s, reverse s)
 
 stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
@@ -27,10 +27,6 @@ solveMe x l = head $ filter (\y -> y >= 0) $ map (\y -> isPalindromeAt x y) l
 
 solve x = if palindrome x then (-1) else nx
   where nx = solveMe x (stringRange x)
-
-printRes :: Int -> IO()
-printRes x = do
-  print x
 
 main :: IO ()
 main = do
