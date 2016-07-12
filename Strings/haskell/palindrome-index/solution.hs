@@ -15,7 +15,7 @@ tryRemove x i = (fst d) ++ (drop 1 (snd d))
   where d = splitAt i x
 
 stringReversed :: String -> (String, String)
-stringReversed s = trace ("reversing ") $ (s, reverse s)
+stringReversed s = (s, reverse s)
 
 stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
