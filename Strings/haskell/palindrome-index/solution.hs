@@ -36,7 +36,7 @@ main :: IO ()
 main = do
   tcx <- getLine
   let tc = read tcx
-  replicateM_ tc (getLine >>= \myLine -> print (solve myLine))
+  replicateM_ tc (getLine >>= \myLine -> print $ take 1 myLine)
 
 
   -- mapM_ (\ x -> printRes (solve x)) (tail mylines )
