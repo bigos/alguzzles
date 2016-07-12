@@ -19,14 +19,14 @@ stringReversed s = trace ("reversing ") $ (s, reverse s)
 
 stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
-isPalindromeAt s i = nn
-  where ss = stringsSplit (stringReversed s) i
+isPalindromeAt (s1, s2) i = nn
+  where ss = stringsSplit (s1, s2) i
         nn = if ((fst ss) == (snd ss)) then i else (0 - i - 100)
 
 solveMe x l = head $ filter (\y -> y >= 0) $ map (\y -> isPalindromeAt x y) l
 
 solve x = if palindrome x then (-1) else nx
-  where nx = solveMe x (stringRange x)
+  where nx = solveMe (stringReversed x) (stringRange x)
 
 main :: IO ()
 main = do
