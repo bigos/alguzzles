@@ -1,5 +1,6 @@
 import Debug.Trace
 import Prelude
+import Control.Monad
 
 -- version with trace
 -- palindrome a = trace ("print a:  " ++ show a) $ reverse a == a
@@ -24,7 +25,7 @@ isPalindromeAt s i = nn
 
 solveMe x l = map (\y -> isPalindromeAt x y) l
 
-solve x = if palindrome x then (-1) else nx
+solve x = trace ("----->>> "++ show x) $ if palindrome x then (-1) else nx
   where nx =  head $ filter (\y -> y >= 0)  $ solveMe x (stringRange x)
 
 printRes :: Int -> IO()
@@ -33,11 +34,12 @@ printRes x = do
 
 main :: IO ()
 main = do
-  mydata <- getContents
-  let mylines = lines mydata
-  let tc = read (head mylines) ::Int
+  tcx <- getLine
+  let tc = read tcx
+  replicateM_ tc (getLine >>= \myLine -> print (solve myLine))
 
-  mapM_ (\ x -> printRes (solve x)) (tail mylines )
+
+  -- mapM_ (\ x -> printRes (solve x)) (tail mylines )
 
 
 -- do notaion explained
