@@ -25,7 +25,7 @@ isPalindromeAt s i = nn
 
 solveMe x l = map (\y -> isPalindromeAt x y) l
 
-solve x = trace ("----->>> "++ show x) $ if palindrome x then (-1) else nx
+solve x = if palindrome x then (-1) else nx
   where nx =  head $ filter (\y -> y >= 0)  $ solveMe x (stringRange x)
 
 printRes :: Int -> IO()
