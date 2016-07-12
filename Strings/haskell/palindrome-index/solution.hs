@@ -21,12 +21,12 @@ stringsSplit (s1, s2) x = (tryRemove s1 x, tryRemove s2 ((length s1) - x - 1))
 
 isPalindromeAt s i = nn
   where ss = stringsSplit (stringReversed s) i
-        nn = if ((fst ss) == (snd ss)) then i else (i - 100)
+        nn = if ((fst ss) == (snd ss)) then i else (0 - i - 100)
 
-solveMe x l = map (\y -> isPalindromeAt x y) l
+solveMe x l = head $ filter (\y -> y >= 0) $ map (\y -> isPalindromeAt x y) l
 
-solve x = trace ("---> " ++ show ( take 2 x)) $ if palindrome x then [ (-1)] else nx
-  where nx =  filter (\y -> y >= 0)  $ solveMe x (stringRange x)
+solve x = if palindrome x then (-1) else nx
+  where nx = solveMe x (stringRange x)
 
 printRes :: Int -> IO()
 printRes x = do
