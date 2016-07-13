@@ -8,10 +8,12 @@ palindrome a = reverse a == a
 
 palRanges :: String -> [(Int, Int)]
 palRanges s = (zip [0..h1] ( reverse [h2..k]))
-  where k = (length s) - 1
-        h1 = (div (length s) 2) - 1
+  where lns = length s
+        k = (lns) - 1
+        h1 = (div (lns) 2) - 1
         h2 = k - h1
 
+-- this needs fixing
 palDiff s = map (\(x,y) -> if (s!!x == s!!y ) then (False, x, y) else (True, x, y)) (palRanges s)
 
 palFilt s = filter (\(r, x, y) -> r == True) (palDiff s)
