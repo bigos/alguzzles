@@ -14,8 +14,8 @@ palRanges s = (zip [0..h1] ( reverse [h2..k]))
         h2 = k - h1
 
 paldiffRec :: String -> String -> [(Bool, Int, Int)] -> [(Int, Int)] -> [(Bool, Int, Int)]
-paldiffRec _ _ acc [] = acc
-paldiffRec s sr acc rr = paldiffRec (tail s) (tail sr) (acc ++ [(res, i1, i2)]) (tail rr)
+paldiffRec _ _ acc [] = reverse acc
+paldiffRec s sr acc rr = paldiffRec (tail s) (tail sr) ([(res, i1, i2)] ++ acc) (tail rr)
   where res = if (head s) == (head sr) then False else True
         (i1, i2) = head rr
 
