@@ -14,7 +14,7 @@ palRanges s = (zip [0..h1] ( reverse [h2..k]))
         h2 = k - h1
 
 -- this needs fixing
--- !! are slow, perhaps recursion could do?
+-- !! are slow,
 palDiff s = map (\(x,y) -> if (s!!x == s!!y ) then (False, x, y) else (True, x, y)) (palRanges s)
 
 palFilt s = filter (\(r, x, y) -> r == True) (palDiff s)
