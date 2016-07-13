@@ -13,10 +13,19 @@ palRanges s = (zip [0..h1] ( reverse [h2..k]))
         h1 = (div (lns) 2) - 1
         h2 = k - h1
 
+paldiffRec :: String -> String -> [(Bool, Int, Int)] -> [(Int, Int)] -> [(Bool, Int, Int)]
+paldiffRec _ _ acc [] = acc
+paldiffRec s sr acc rr = paldiffRec (tail s) (tail sr) (acc ++ [(res, i1, i2)]) (tail rr)
+  where res = if (head s) == (head sr) then False else True
+        (i1, i2) = head rr
+
 -- this needs fixing
 -- !! are slow,
-palDiff s = map (\(x,y) -> if (s!!x == s!!y ) then (False, x, y) else (True, x, y)) (palRanges s)
+palDiff :: String -> [(Bool, Int, Int)]
+-- palDiff s = map (\(x,y) -> if (s!!x == s!!y ) then (False, x, y) else (True, x, y)) (palRanges s)
+palDiff s = paldiffRec s (reverse s) [] (palRanges s)
 
+palFilt :: String -> [(Bool, Int, Int)]
 palFilt s = filter (\(r, x, y) -> r == True) (palDiff s)
 
 palCandidate s = map (\(_, x, y) -> max (pal x)  (pal y) ) (palFilt s)
