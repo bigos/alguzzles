@@ -7,16 +7,16 @@ import Control.Monad
 palindrome a = reverse a == a
 
 palRanges :: String -> [(Int, Int)]
-palRanges s = (zip [0..h1] ( reverse [h2..k]))
+palRanges s = zip [0..h1] (reverse [h2..k])
   where lns = length s
-        k = (lns) - 1
-        h1 = (div (lns) 2) - 1
+        k  = lns - 1
+        h1 = div lns 2 - 1
         h2 = k - h1
 
 paldiffRec :: String -> String -> [(Bool, Int, Int)] -> [(Int, Int)] -> [(Bool, Int, Int)]
 paldiffRec _ _ acc [] = reverse acc
-paldiffRec s sr acc rr = paldiffRec (tail s) (tail sr) ([(res, i1, i2)] ++ acc) (tail rr)
-  where res = if (head s) == (head sr) then False else True
+paldiffRec s sr acc rr = paldiffRec (tail s) (tail sr) ((res, i1, i2) : acc) (tail rr)
+  where res = head s /= head sr
         (i1, i2) = head rr
 
 -- this needs fixing
@@ -26,15 +26,15 @@ palDiff :: String -> [(Bool, Int, Int)]
 palDiff s = paldiffRec s (reverse s) [] (palRanges s)
 
 palFilt :: String -> [(Bool, Int, Int)]
-palFilt s = filter (\(r, x, y) -> r == True) (palDiff s)
+palFilt s = filter (\(r, x, y) -> r) (palDiff s)
 
 palCandidate s = map (\(_, x, y) -> max (pal x)  (pal y) ) (palFilt s)
-  where pal sx = if (palindrome (tryRemove s sx)) then sx else ((-sx) - 1)
+  where pal sx = if palindrome (tryRemove s sx) then sx else (-sx) - 1
 
-palResult s = head $ filter (\x -> x >= 0) (palCandidate s)
+palResult s = head $ filter (>= 0) (palCandidate s)
 
 -- tryRemove x i = (take i x) ++ (drop (i+1) x)
-tryRemove x i = (fst d) ++ (drop 1 (snd d))
+tryRemove x i = fst d ++ drop 1 (snd d)
   where d = splitAt i x
 
 solve x = if palindrome x then (-1) else ng
