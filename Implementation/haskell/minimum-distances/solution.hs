@@ -4,10 +4,23 @@ import System.IO
 import Debug.Trace
 import Data.Array
 
-solve :: [Int] -> Int
-solve x = trace ("tracing " ++ show x) $  x!!1
-  where lx = length x
-        arr = array (lx, lx) [(a, b) | a <- x, b <- x]
+r2 res result
+  | result == (-1) = res
+  | res < result = res
+  | otherwise = result
+
+setResult r rv c cv result
+  | cv == rv && res > 0 = r2 res result
+  | otherwise = result
+  where res = c - r
+
+-- stuck with loop within loop
+-- can map over map do it?
+l1 sa r rv result
+  | r >= sa = result
+  | otherwise = result
+
+solve sa a = l1 sa 0 (a!!0) (-1)
 
 main :: IO ()
 main = do
@@ -15,4 +28,4 @@ main = do
     let n = read n_temp :: Int
     a_temp <- getLine
     let a = map read $ words a_temp :: [Int]
-    print $ solve a
+    print $ solve n a
