@@ -14,13 +14,14 @@ setResult r rv c cv result
   | otherwise = result
   where res = c - r
 
--- stuck with loop within loop
--- can map over map do it?
-l1 sa r rv result
-  | r >= sa = result
-  | otherwise = result
+-- what shall i do about the result
+-- no global variables in Hskell
+l1 sa a r = map (\c -> setResult r rv c cv result)  [r..(sa-1)]
+  where rv = a!!r
+        cv = a!!c
 
-solve sa a = l1 sa 0 (a!!0) (-1)
+-- solve sa a = l1 sa 0 (a!!0) (-1)
+solve sa a = map (\r -> l1 sa a r ) [0..(sa-1)]
 
 main :: IO ()
 main = do
