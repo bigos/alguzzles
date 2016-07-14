@@ -15,13 +15,13 @@ setResult r rv c cv result
   where res = c - r
 
 -- what shall i do about the result
--- no global variables in Hskell
-l1 sa a r = map (\c -> setResult r rv c cv result)  [r..(sa-1)]
-  where rv = a!!r
-        cv = a!!c
+-- no global variables in Haskell
+l1 sa a r = foldl (\result c -> setResult r (a!!r) c (a!!c) result) (-1) [r..(sa-1)]
 
 -- solve sa a = l1 sa 0 (a!!0) (-1)
-solve sa a = map (\r -> l1 sa a r ) [0..(sa-1)]
+solve sa a = positives
+  where positives = filter (\x -> x>0) mydata
+        mydata = map (\r -> l1 sa a r ) [0..(sa-1)]
 
 main :: IO ()
 main = do
