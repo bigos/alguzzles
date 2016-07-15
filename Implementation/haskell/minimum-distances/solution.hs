@@ -18,10 +18,11 @@ setResult r rv c cv result
 -- no global variables in Haskell
 l1 sa a r = foldl (\result c -> setResult r (a!!r) c (a!!c) result) (-1) [r..(sa-1)]
 
--- solve sa a = l1 sa 0 (a!!0) (-1)
-solve sa a = positives
+solve :: Int -> [Int] -> Int
+solve sa a = minpos
   where positives = filter (\x -> x>0) mydata
         mydata = map (\r -> l1 sa a r ) [0..(sa-1)]
+        minpos = if positives == [] then (-1) else minimum positives
 
 main :: IO ()
 main = do
