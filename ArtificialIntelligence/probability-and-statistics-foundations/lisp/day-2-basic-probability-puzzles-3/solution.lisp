@@ -6,4 +6,8 @@
   (/ wanted-outcomes
      possible-outcomes))
 
-;;; independent events - when one event does not influence the second event
+;;; interesting sequence
+(loop for x from 1 to 12
+   collect (list x
+                 (mod x (/ 12 4))
+                 (mod x (/ 12 3))))
