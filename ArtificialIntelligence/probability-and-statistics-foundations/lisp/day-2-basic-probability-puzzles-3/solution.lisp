@@ -38,7 +38,8 @@
                ;; get value and append it to results
 
                (when (zerop level )
-                 (format t "======= ~A~%" buckets)
+                 ;; (format t "======= ~A~%" buckets)
+                 (push (loop for x across buckets collect x) results)
                  )
 
                ;; increase value
@@ -53,9 +54,9 @@
       (loop  for x from 1 to (apply #'* level-limits)
          do
            (variation 0)))
-    results))
+    (reverse results)))
 
-(defparameter comb1 (test3d 503 7 9 63))
+
 
 (defun only-one-black (x)
   (let ((a (nth 2 x))
@@ -64,7 +65,3 @@
     (or (and (>= a 4) (< b 5) (< c 4))
         (and (< a 4) (>= b 5) (< c 4))
         (and (< a 4) (< b 5) (>= c 4)))))
-
-(defparameter comb2 (remove-if-not #'only-one-black comb1))
-
-(format t "the solution is ~A~%" (/ (length comb2) (* 7 8 9)))
