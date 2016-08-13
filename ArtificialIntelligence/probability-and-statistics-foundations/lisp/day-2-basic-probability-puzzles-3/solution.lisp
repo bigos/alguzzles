@@ -59,3 +59,11 @@
     (or (and (<  a 4) (>= b 3) (>= c 3))
         (and (>= a 4) (<  b 3) (>= c 3))
         (and (>= a 4) (>= b 3) (<  c 3)))))
+
+(defun permute (list)
+  (if list
+      (mapcan #'(lambda (x)
+                  (mapcar #'(lambda (y) (cons x y))
+                          (permute (remove x list))))
+              list)
+      '(()))) ; else

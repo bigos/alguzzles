@@ -1,0 +1,2 @@
+* link
+[[www.hackerrank.com/challenges/divisible-sum-pairs][https://www.hackerrank.com/challenges/divisible-sum-pairs]]
