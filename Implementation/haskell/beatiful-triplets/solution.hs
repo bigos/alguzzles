@@ -1,7 +1,16 @@
+consumeUntil :: [Int] -> Int -> Int
+consumeUntil [] _ = (-1)
+consumeUntil a n  = if head a >= n then (if head a == n then n else (0-n)) else consumeUntil (tail a) n
+
+-- numbers in a seem to be subsequent with few gaps
 solution :: Int -> [Int] -> Int -> Int
-solution _ [] c = c
-solution d a _  = length $ filter (\x -> ((x!!1 - x!!0) == d) && (x!!1 - x!!0) == (x!!2 - x!!1)) triplets
-  where triplets = filter (\x -> x!!0 < x!!1 && x!!1 < x!!2) [[i,j,k] | i<-a, j<-a, k<-a]
+solution _ [] acc = acc
+solution d a  acc = solution d (tail a) (if triplet then (acc + 1) else acc)
+  where dpart = take (2* d) a
+        foundi = head a
+        wantedj = foundi + d
+        wantedk = foundi + 2 * d
+        triplet = (consumeUntil dpart wantedj > 0) && (consumeUntil dpart wantedk > 0)
 
 main :: IO()
 main = do
