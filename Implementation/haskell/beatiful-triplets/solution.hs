@@ -6,7 +6,7 @@ consumeUntil a n  = if head a >= n then (if head a == n then n else (0-n)) else 
 solution :: Int -> [Int] -> Int -> Int
 solution _ [] acc = acc
 solution d a  acc = solution d (tail a) (if triplet then (acc + 1) else acc)
-  where dpart = take (2* d) a
+  where dpart = take (2 * d+1) a
         foundi = head a
         wantedj = foundi + d
         wantedk = foundi + 2 * d
