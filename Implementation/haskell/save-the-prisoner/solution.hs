@@ -1,7 +1,14 @@
 import Control.Monad
 
+zzz :: [Int] -> Int
+zzz a = 1 + mod (x - 1) n
+  where n = a!!0
+        m = a!!1
+        s = (a!!2)-1
+        x = mod (s + m) n
+
 solution :: [[Int]] -> [Int]
-solution a = [1]                -- TODO:
+solution aa = map zzz aa
 
 line2int :: String -> [Int]
 line2int s = map read $ words s
