@@ -7,7 +7,7 @@
           (rec-solve (1+ steps)
                      (cons (cadr s)
                            (cons 1
-                                 (cdr    (cdr (cdr s))))))
+                                 (cdr (cdr (cdr s))))))
           (rec-solve steps
                      (cdr s)))))
 
