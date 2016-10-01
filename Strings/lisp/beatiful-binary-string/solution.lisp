@@ -1,8 +1,28 @@
+;;; (declaim (optimize (debug 3)))
+
+(defun rec-solve (steps s)
+  (if (< (length s) 3)
+      steps
+      (if (equal (take 3 s) '(0 1 0))
+          (rec-solve (1+ steps)
+                     (cons (cadr s)
+                           (cons 1
+                                 (cdr (cdr (cdr s))))))
+          (rec-solve steps
+                     (cdr s)))))
+
 (defun solve-me (n b)
-  (format t "~A ~A~%" n b))
+  (declare (ignore n))
+  (format t "~A~%" (rec-solve 0 b)))
+
+(defun take (n seq)
+  (subseq seq 0 n))
+
+(defun drop (n seq)
+  (subseq seq n))
 
 (defun str2num (s)
-  (loop for i  from 0 below (length s) collect (subseq s i (1+ i))))
+  (loop for i  from 0 below (length s) collect (parse-integer (subseq s i (1+ i)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
