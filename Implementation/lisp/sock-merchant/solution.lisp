@@ -1,5 +1,12 @@
 (defun solve-me (a b)
-  (format T "=== ~a ~a~%" a b))
+  (let ((ht1 (make-hash-table))
+        (total 0))
+    (loop for x in b do
+         (incf (gethash x ht1 0)))
+    (maphash (lambda (_ v)
+               (incf total (floor (/ v 2))))
+             ht1)
+      (format T "~A~%" total)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
