@@ -1,7 +1,23 @@
-(defun solve-me (s tt a b m n ma-ds nb-ds)
-  (format t "=== ~A ~A ~A ~A ~A ~A ~A ~A~%" s tt a b m n ma-ds nb-ds))
+(defun summed (ds lr rr)
+  (length
+   (loop for d in ds
+      when (and (>= d lr)
+                (<= d rr))
+      collect 1)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun solve-me (s tt a b m n ma-ds nb-ds)
+  ;;(format t "=== ~A ~A ~A ~A ~A ~A ~A ~A~%" s tt a b m n ma-ds nb-ds)
+  (declare (ignore m n))
+  (let ((alr (- s a))
+        (arr (- tt a))
+        (blr (- 0 (- b s)))
+        (brr (- 0 (- b tt)))
+        )
+    (format t "~A~%" (summed ma-ds alr arr))
+    (format t "~A~%" (summed nb-ds blr brr))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
      as j = (position #\Space string :start i)
