@@ -1,0 +1,8 @@
+* the link
+https://www.hackerrank.com/challenges/strange-advertising
+
+* sample input
+3
+
+* sample output
+9
