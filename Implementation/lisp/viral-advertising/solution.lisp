@@ -1,7 +1,3 @@
-(defun hx (n x)
-  (* (floor (/ n 2))
-     x))
-
 (defun cc (m)
        (floor (/ (* m 3) 2)))
 
