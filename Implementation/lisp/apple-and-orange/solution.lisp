@@ -7,13 +7,11 @@
 
 
 (defun solve-me (s tt a b m n ma-ds nb-ds)
-  ;;(format t "=== ~A ~A ~A ~A ~A ~A ~A ~A~%" s tt a b m n ma-ds nb-ds)
   (declare (ignore m n))
   (let ((alr (- s a))
         (arr (- tt a))
         (blr (- 0 (- b s)))
-        (brr (- 0 (- b tt)))
-        )
+        (brr (- 0 (- b tt))))
     (format t "~A~%" (summed ma-ds alr arr))
     (format t "~A~%" (summed nb-ds blr brr))))
 
