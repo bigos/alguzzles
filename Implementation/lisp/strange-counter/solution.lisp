@@ -1,7 +1,7 @@
-(defparameter *max-val* (expt 10 12))
+(defparameter *max-val* (* 5 (expt 10 12)))
 
 (defun tops (n tx v res)
-  (cond ((> tx *max-val*) nil)
+  (cond ((> tx *max-val*) 'error)
         ((>= tx n) (push (cons tx v) res))
         (T (tops n (+ tx v) (* v 2) (push (cons tx  v) res)))))
 
