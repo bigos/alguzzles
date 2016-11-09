@@ -1,32 +1,42 @@
 (defun city-map (n mi)
-  (let ((cc (make-array n :initial-element nil)))
+  (let ((cc (make-array n :initial-element nil))
+        (pri (make-array n :initial-element n))
+        (nxi (make-array n :initial-element n))
+        (last-found)
+        (nearest (make-array n :initial-element n)))
     (loop for x in mi do
          (setf (aref cc x) T))
-    cc))
 
-(defun find-prev (n i mv)
-  (loop for x from i downto 0
-     until (aref mv x)
-     finally (return (- i x))))
+    (setq last-found nil)
+    (loop for x from 0 below n do
+         (if (aref cc x)
+             (setf
+              (aref pri x) 0
+              last-found x)
+             (if last-found
+                 (setf (aref pri x) (- x last-found)))))
 
-(defun find-next (n i mv)
-  (loop for x from i below n
-     until (aref mv x)
-       finally (return (- x i))))
+    (setq last-found nil)
+    (loop for x from (1- n) downto 0 do
+         (if (aref cc x)
+             (setf
+              (aref nxi x) 0
+              last-found x)
+             (if last-found
+                 (setf (aref nxi x) (- last-found x)))))
 
-
-(defun find-nearest (n i mv)
-  (if (aref mv i)
-      0
-      (min
-       (find-prev n i mv)
-       (find-next n i mv))))
+    (loop for x from 0 below n do
+         (setf (aref nearest x) (min (aref pri x)
+                                     (aref nxi x))))
+    (list
+     cc pri nxi nearest)))
 
 (defun solve-me (n m mi)
   (declare (ignore m))
   (let ((mv (city-map n mi)))
     (format t "~A~%"
-            (loop for x from 0 below n maximize (find-nearest n x mv)))))
+            (loop for x across (car (last mv))
+                 maximize x))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
