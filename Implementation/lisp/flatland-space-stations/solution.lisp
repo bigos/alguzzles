@@ -4,16 +4,29 @@
          (setf (aref cc x) T))
     cc))
 
+(defun find-prev (n i mv)
+  (loop for x from i downto 0
+     until (aref mv x)
+     finally (return (- i x))))
+
+(defun find-next (n i mv)
+  (loop for x from i below n
+     until (aref mv x)
+       finally (return (- x i))))
+
+
+(defun find-nearest (n i mv)
+  (if (aref mv i)
+      0
+      (min
+       (find-prev n i mv)
+       (find-next n i mv))))
+
 (defun solve-me (n m mi)
   (declare (ignore m))
-  (format t "~A~%" (max
-                    ;; beginning to 1st
-                    (car mi)
-                    ;; end to last
-                    (- (1- n) (car (last mi)))
-                    ;; middle
-                    (floor (/ (- (car (last mi)) (car mi))
-                              2)))))
+  (let ((mv (city-map n mi)))
+    (format t "~A~%"
+            (loop for x from 0 below n maximize (find-nearest n x mv)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
