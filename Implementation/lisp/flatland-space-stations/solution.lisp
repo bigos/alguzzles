@@ -28,14 +28,13 @@
     (loop for x from 0 below n do
          (setf (aref nearest x) (min (aref pri x)
                                      (aref nxi x))))
-    (list
-     cc pri nxi nearest)))
+    nearest))
 
 (defun solve-me (n m mi)
   (declare (ignore m))
   (let ((mv (city-map n mi)))
     (format t "~A~%"
-            (loop for x across (car (last mv))
+            (loop for x across mv
                  maximize x))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
