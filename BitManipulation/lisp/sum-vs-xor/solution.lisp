@@ -3,14 +3,26 @@
 (defparameter *cnt* 0)
 
 (defun pattern (n)
-  (loop for x from 0 to n do
-       (format t "~6,B ~3,d ~a ~3,d ~3,d~%" x x
-               (if (eq (+ n x) (logxor n x))
-                   #\= #\!)
-               (+ n x) (logxor n x))))
+  (let ((sum-nx)
+        (xor-nx))
+    (format t "~A binary ~6,B~%~%" n n)
+    (loop for x from 0 to n do
+         (setf
+          sum-nx (+ n x)
+          xor-nx (logxor n x))
+         (when (eq sum-nx xor-nx)
+
+           (format t "~6,B ~3,d ~a ~3,d ~3,d ~a ~,B~%" x x
+                   (if (eq sum-nx xor-nx)
+                       #\= #\!)
+                   (+ n x)
+                   xor-nx
+                   (if (zerop (mod x 4)) #\H #\.)
+                   xor-nx
+                   )))))
 
 (defun solve-me (n)
-  (loop for x from 0 to n do
+  (loop for x from 0 to 500 do
        (when (eq (+ n x)
                  (logxor n x))
          (incf *cnt*)))
