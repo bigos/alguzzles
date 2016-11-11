@@ -1,23 +1,13 @@
 (proclaim '(optimize (speed 3) (safety 0)))
 
-(defparameter *cnt* 0)
-
-(defun xnums (n x a b)
-  (format t "~A ~A ~A~%" n a b)
-  (if (>= x n)
-      (concatenate 'list a b)
-      (xnums n
-             (1+ x)
-             (concatenate 'list
-                          a
-                          (loop for z in a collect (+ z z)))
-             (concatenate 'list a b)
-             )))
-
-(defun powers-2 (n)
-  (loop for p from 1 to 20
-     collect (expt 2 p)
-     until (>= (expt 2 p) n)))
+(defun powers-of-2 (n)
+  (reverse
+   (subseq
+    (reverse
+     (loop for p from 0 to 20
+        collect p
+        until (>= (expt 2 p) n)))
+    0 2)))
 
 (defun counts (m n)
   (let ((nums))
@@ -34,27 +24,27 @@
                  (length nums)
                  (loop for p from 0 until (eq (expt 2 p)
                                               (length nums))
-                    finally (return p)))
-         )))
+                    finally (return p))))))
+(defun find-num (n)
+  (let ((range-powers (powers-of-2 n)))
+    (cond ((eq n (expt 2 (cadr range-powers)))
+           n)
+          (T
+           (binary-find-num n
+                            (car range-powers)
+                            (cadr range-powers)
+                            (1- (car range-powers))
+                            (- (expt 2 (cadr range-powers))
+                               (expt 2 (1- (car range-powers)))))))))
 
-(defun pattern (n)
-  (let ((sum-nx)
-        (xor-nx))
-    (format t "~A binary ~6,B~%~%" n n)
-    (loop for x from 0 to n do
-         (setf
-          sum-nx (+ n x)
-          xor-nx (logxor n x))
-         (when (eq sum-nx xor-nx)
-
-           (format t "~6,B ~3,d ~a ~3,d ~3,d ~a ~,B~%" x x
-                   (if (eq sum-nx xor-nx)
-                       #\= #\!)
-                   (+ n x)
-                   xor-nx
-                   (if (zerop (mod x 4)) #\H #\.)
-                   xor-nx
-                   )))))
+(defun binary-find-num (n ps pe pp pv)
+  (format t "~A ~A ~A ~A ~a~%" n ps pe pp pv)
+  (if (eq pv n)
+      (expt 2 pp)
+      (if (< n pv)
+          (binary-find-num n ps pe pp (- pv (expt 2 (1- pp))))
+          (binary-find-num n ps pe (1- pp) (+ pv (expt 2 (1- pp))))
+          )))
 
 (defun solve-me (n)
   (loop for x from 0 to 500 do
