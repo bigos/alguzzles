@@ -2,6 +2,32 @@
 
 (defparameter *cnt* 0)
 
+(defun xnums (n x a)
+  (format t "~A ~A~%" n a)
+  (if (>= x n)
+      a                                 ; (subseq a (- (car a) n))
+      (xnums n
+             (1+ x)
+             (concatenate 'list
+                          (loop for z in a collect (+ z z)) a
+                          ))))
+
+(defun powers-2 (n)
+  (loop for p from 1 to 20
+     collect (expt 2 p)
+     until (>= (expt 2 p) n)))
+
+(defun counts (n)
+  (let ((nums))
+    (loop for x from 1 to n do
+         (setf nums
+               (loop for y from 0 to x
+                  when (eq (+ x y)
+                           (logxor x y))
+                  collect y))
+         (format t " ~3,d ~3,d~%"  x (length nums) )
+         )))
+
 (defun pattern (n)
   (let ((sum-nx)
         (xor-nx))
