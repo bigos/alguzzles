@@ -19,15 +19,22 @@
      collect (expt 2 p)
      until (>= (expt 2 p) n)))
 
-(defun counts (n)
+(defun counts (m n)
   (let ((nums))
-    (loop for x from 1 to n do
+    (loop for x from m to n by 1 do
          (setf nums
                (loop for y from 0 to x
                   when (eq (+ x y)
                            (logxor x y))
                   collect y))
-         (format t " ~3,d ~3,d ~6,b~%"  x (length nums) (length nums))
+         (format t "~6,b ~3,d ~3,d ~6,b ~a~%"
+                 x
+                 x
+                 (length nums)
+                 (length nums)
+                 (loop for p from 0 until (eq (expt 2 p)
+                                              (length nums))
+                    finally (return p)))
          )))
 
 (defun pattern (n)
