@@ -2,15 +2,17 @@
 
 (defparameter *cnt* 0)
 
-(defun xnums (n x a)
-  (format t "~A ~A~%" n a)
+(defun xnums (n x a b)
+  (format t "~A ~A ~A~%" n a b)
   (if (>= x n)
-      a                                 ; (subseq a (- (car a) n))
+      (concatenate 'list a b)
       (xnums n
              (1+ x)
              (concatenate 'list
-                          (loop for z in a collect (+ z z)) a
-                          ))))
+                          a
+                          (loop for z in a collect (+ z z)))
+             (concatenate 'list a b)
+             )))
 
 (defun powers-2 (n)
   (loop for p from 1 to 20
@@ -25,7 +27,7 @@
                   when (eq (+ x y)
                            (logxor x y))
                   collect y))
-         (format t " ~3,d ~3,d~%"  x (length nums) )
+         (format t " ~3,d ~3,d ~6,b~%"  x (length nums) (length nums))
          )))
 
 (defun pattern (n)
