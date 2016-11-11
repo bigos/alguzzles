@@ -35,15 +35,18 @@
                             (cadr range-powers)
                             (1- (car range-powers))
                             (- (expt 2 (cadr range-powers))
-                               (expt 2 (1- (car range-powers)))))))))
+                               (expt 2 (1- (car range-powers))))
+                            'down)))))
 
-(defun binary-find-num (n ps pe pp pv)
-  (format t "~A ~A ~A ~A ~a~%" n ps pe pp pv)
+(defun binary-find-num (n ps pe pp pv dir)
+  (format t "~A ~A ~A - ~A ~A ~A~%" n ps pe pp pv dir)
   (if (eq pv n)
       (expt 2 pp)
       (if (< n pv)
-          (binary-find-num n ps pe pp (- pv (expt 2 (1- pp))))
-          (binary-find-num n ps pe (1- pp) (+ pv (expt 2 (1- pp))))
+          (binary-find-num n ps pe
+                           (1- pp) (- pv (expt 2 (1- pp))) 'up)
+          (binary-find-num n ps pe
+                           (1- pp) (+ pv (expt 2 (1- pp))) 'down)
           )))
 
 (defun solve-me (n)
