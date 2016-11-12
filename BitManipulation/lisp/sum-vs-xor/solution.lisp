@@ -17,14 +17,15 @@
                   when (eq (+ x y)
                            (logxor x y))
                   collect y))
-         (format t "~6,b ~3,d ~3,d ~6,b ~a~%"
+         (format t "~6,b ~3,d ~3,d ~6,b ~a     ~a~%"
                  x
                  x
                  (length nums)
                  (length nums)
                  (loop for p from 0 until (eq (expt 2 p)
                                               (length nums))
-                    finally (return p))))))
+                    finally (return p))
+                 (find-num x)))))
 (defun find-num (n)
   (let ((range-powers (powers-of-2 n)))
     (cond ((eq n (expt 2 (cadr range-powers)))
@@ -43,7 +44,7 @@
                             'down)))))
 
 (defun binary-find-num (n ps pe pp pv  up dir prevdir)
-  (format t "~A ~A ~A - ~A ~A ~A : ~A ~A~%" n ps pe  pp pv up  dir prevdir)
+  ;(format t "~A ~A ~A - ~A ~A ~A : ~A ~A~%" n ps pe  pp pv up  dir prevdir)
   (if (eq pv n)
       (expt 2 pp)
       (if (< n pv)
@@ -55,7 +56,7 @@
                            dir)
           (binary-find-num n ps pe
                            (- pp 1)
-                           (+ pv (expt 2 (- pp 1)))
+                           (+ pv (expt 2 (1- up)))
                            (1- up)
                            'down
                            dir)
