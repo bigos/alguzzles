@@ -26,48 +26,30 @@
                                               (length nums))
                     finally (return p))
                  (find-num x)))))
+
 (defun find-num (n)
   (let ((range-powers (powers-of-2 n)))
-    (cond ((eq n (expt 2 (cadr range-powers)))
-           n)
-          (T
-           (binary-find-num n
-                            (car range-powers)
-                            (cadr range-powers)
-                            (1- (car range-powers))
-                            (- (expt 2 (cadr range-powers))
-                               (expt 2 (1- (car range-powers))))
+    (if  (eq n (expt 2 (cadr range-powers)))
+         n
+         (binary-find-num n
+                          (1- (car range-powers))
+                          (- (expt 2 (cadr range-powers))
+                             (expt 2 (1- (car range-powers))))
+                          (1- (car range-powers))))
+    ))
 
-                            (1- (car range-powers))
-
-                            'down
-                            'down)))))
-
-(defun binary-find-num (n ps pe pp pv  up dir prevdir)
-  ;(format t "~A ~A ~A - ~A ~A ~A : ~A ~A~%" n ps pe  pp pv up  dir prevdir)
+(defun binary-find-num (n pp pv  up )
   (if (eq pv n)
       (expt 2 pp)
-      (if (< n pv)
-          (binary-find-num n ps pe
-                           pp
-                           (- pv (expt 2 (1- up)))
-                           (- up 1)
-                           'up
-                           dir)
-          (binary-find-num n ps pe
-                           (- pp 1)
-                           (+ pv (expt 2 (1- up)))
-                           (1- up)
-                           'down
-                           dir)
-          )))
+      (binary-find-num n
+                       (if (< n pv)
+                           (- pp 0)
+                           (- pp 1))
+                       (funcall (if (< n pv) #'- #'+) pv (expt 2 (1- up)))
+                       (1- up))))
 
 (defun solve-me (n)
-  (loop for x from 0 to 500 do
-       (when (eq (+ n x)
-                 (logxor n x))
-         (incf *cnt*)))
-  (princ *cnt*)
+  (princ (find-num n))
   (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -94,7 +76,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
