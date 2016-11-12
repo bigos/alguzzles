@@ -55,8 +55,13 @@
                        (funcall (if (< n pv) #'- #'+) pv (expt 2 (1- up)))
                        (1- up))))
 
+;;; incredibly simple solution
 (defun solve-me (n)
-  (princ (find-num n))
+  (princ
+   (if (or (eq n 0)
+           (eq n 1))
+       1
+       (expt 2 (loop for c across (format nil "~b" n) when (eq c #\0) count c))))
   (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
