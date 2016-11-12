@@ -35,8 +35,7 @@
                           (1- (car range-powers))
                           (- (expt 2 (cadr range-powers))
                              (expt 2 (1- (car range-powers))))
-                          (1- (car range-powers))))
-    ))
+                          (1- (car range-powers))))))
 
 (defun binary-find-num (n pp pv  up )
   (if (eq pv n)
