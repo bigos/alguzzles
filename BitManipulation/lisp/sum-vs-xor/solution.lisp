@@ -1,13 +1,17 @@
 (proclaim '(optimize (speed 3) (safety 0)))
 
 (defun powers-of-2 (n)
-  (reverse
-   (subseq
-    (reverse
-     (loop for p from 0 to 20
-        collect p
-        until (>= (expt 2 p) n)))
-    0 2)))
+  (cond
+    ((eq n 0) '( 0 1))
+    ((eq n 1) '(1 2))
+    (T
+     (reverse
+      (subseq
+       (reverse
+        (loop for p from 0 to 20
+           collect p
+           until (>= (expt 2 p) n)))
+       0 2)))))
 
 (defun counts (m n)
   (let ((nums))
@@ -29,13 +33,17 @@
 
 (defun find-num (n)
   (let ((range-powers (powers-of-2 n)))
-    (if  (eq n (expt 2 (cadr range-powers)))
-         n
-         (binary-find-num n
-                          (1- (car range-powers))
-                          (- (expt 2 (cadr range-powers))
-                             (expt 2 (1- (car range-powers))))
-                          (1- (car range-powers))))))
+    (cond
+      ((eq n 0) 1)
+      ((eq n 1) 1)
+      (T
+       (if  (eq n (expt 2 (cadr range-powers)))
+            n
+            (binary-find-num n
+                             (1- (car range-powers))
+                             (- (expt 2 (cadr range-powers))
+                                (expt 2 (1- (car range-powers))))
+                             (1- (car range-powers))))))))
 
 (defun binary-find-num (n pp pv  up )
   (if (eq pv n)
