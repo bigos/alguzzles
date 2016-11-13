@@ -1,5 +1,23 @@
-(defun solve-me (s)
-  (format t "~A~%" s))
+(defun solve-me (s n r)
+  (if (>= (+ n 1) (length s))
+      r
+      (if (equalp (subseq s n (1+ n))
+                  (subseq s (+ n 1) (+ n 2)))
+          (solve-me s (+ n 2) (push (list n (subseq s n (1+ n)) ) r))
+          (solve-me s (+ n 1) (push (subseq s n (1+ n)) r)))))
+
+(defun solve-me-once (s n r)
+  (let ((singles (solve-me s n r))
+        (r))
+
+    (loop for i in singles do
+         (when (atom i)
+           (push i r)))
+
+    (if (zerop (length r))
+        (format t "Empty String~%")
+        (loop for c in r do (princ c))
+         )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -16,7 +34,7 @@
 
 (defun solution (&optional stream)
   (let ((s (read-line stream)))
-    (solve-me s)))
+    (solve-me-once (format nil "~A-" s) 0 nil)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
