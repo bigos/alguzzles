@@ -1,13 +1,17 @@
 (proclaim '(optimize (speed 3) (safety 0)))
 
 (defun powers-of-2 (n)
-  (reverse
-   (subseq
-    (reverse
-     (loop for p from 0 to 20
-        collect p
-        until (>= (expt 2 p) n)))
-    0 2)))
+  (cond
+    ((eq n 0) '( 0 1))
+    ((eq n 1) '(1 2))
+    (T
+     (reverse
+      (subseq
+       (reverse
+        (loop for p from 0 to 20
+           collect p
+           until (>= (expt 2 p) n)))
+       0 2)))))
 
 (defun counts (m n)
   (let ((nums))
@@ -17,41 +21,47 @@
                   when (eq (+ x y)
                            (logxor x y))
                   collect y))
-         (format t "~6,b ~3,d ~3,d ~6,b ~a~%"
+         (format t "~6,b ~3,d ~3,d ~6,b ~a     ~a~%"
                  x
                  x
                  (length nums)
                  (length nums)
                  (loop for p from 0 until (eq (expt 2 p)
                                               (length nums))
-                    finally (return p))))))
+                    finally (return p))
+                 (find-num x)))))
+
 (defun find-num (n)
   (let ((range-powers (powers-of-2 n)))
-    (cond ((eq n (expt 2 (cadr range-powers)))
-           n)
-          (T
-           (binary-find-num n
-                            (car range-powers)
-                            (cadr range-powers)
-                            (1- (car range-powers))
-                            (- (expt 2 (cadr range-powers))
-                               (expt 2 (1- (car range-powers)))))))))
+    (cond
+      ((eq n 0) 1)
+      ((eq n 1) 1)
+      (T
+       (if  (eq n (expt 2 (cadr range-powers)))
+            n
+            (binary-find-num n
+                             (1- (car range-powers))
+                             (- (expt 2 (cadr range-powers))
+                                (expt 2 (1- (car range-powers))))
+                             (1- (car range-powers))))))))
 
-(defun binary-find-num (n ps pe pp pv)
-  (format t "~A ~A ~A ~A ~a~%" n ps pe pp pv)
+(defun binary-find-num (n pp pv  up )
   (if (eq pv n)
       (expt 2 pp)
-      (if (< n pv)
-          (binary-find-num n ps pe pp (- pv (expt 2 (1- pp))))
-          (binary-find-num n ps pe (1- pp) (+ pv (expt 2 (1- pp))))
-          )))
+      (binary-find-num n
+                       (if (< n pv)
+                           (- pp 0)
+                           (- pp 1))
+                       (funcall (if (< n pv) #'- #'+) pv (expt 2 (1- up)))
+                       (1- up))))
 
+;;; incredibly simple solution
 (defun solve-me (n)
-  (loop for x from 0 to 500 do
-       (when (eq (+ n x)
-                 (logxor n x))
-         (incf *cnt*)))
-  (princ *cnt*)
+  (princ
+   (if (or (eq n 0)
+           (eq n 1))
+       1
+       (expt 2 (loop for c across (format nil "~b" n) when (eq c #\0) count c))))
   (terpri))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,7 +88,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
