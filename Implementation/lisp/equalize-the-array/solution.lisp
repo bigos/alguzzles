@@ -1,11 +1,14 @@
 (defun solve-me (a)
-  (format t "~A~%" a)
-  (let ((ht (make-hash-table)))
+  ;(format t "~A~%" a)
+  (let ((ht (make-hash-table))
+        (ls))
       (loop for c in a do
            (incf (gethash c ht 0)))
-      (format t "~A~%" (loop for k being the hash-keys in ht maximize (gethash k ht)))
 
-      ) )
+      (setf ls (loop for k being the hash-keys in ht maximize (gethash k ht)))
+      (format t "~A~%" (- (length a) ls))
+
+      ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
