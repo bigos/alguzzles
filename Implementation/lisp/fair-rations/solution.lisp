@@ -25,7 +25,10 @@
 
 (defun solve-me (n bn)
   (if (solvable bn)
-      (format t "yes")
+      (format t "~A~%"
+              (loop for cc in  (odd-rec  (odd-positions bn) nil nil)
+                 when (cadr cc) collect cc))
+
       (format T "NO~%")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
