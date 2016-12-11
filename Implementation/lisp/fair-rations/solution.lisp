@@ -9,14 +9,13 @@
                           acc)))))
 
 (defun odd-positions (a)
-  (let ((oi nil))
-    (loop
-       for l in a
-       for i = 0 then (1+ i)
-       for p = oi then (cond ((and (null p) (odd l)) i)
-                             ((and p (odd l)) nil)
-                             (T p))
-       collect (list l p))))
+  (loop
+     for l in a
+     for i = 0 then (1+ i)
+     for p = nil then (cond ((and (null p) (odd l)) i)
+                            ((and p (odd l)) nil)
+                            (T p))
+     collect (list l p)))
 
 (defun odd (n) (not (evenp n)))
 
@@ -24,6 +23,8 @@
   (evenp (loop for l in a when (odd l) count l)))
 
 (defun solve-me (n bn)
+  (declare (ignore n))
+  (format t "~A ===============~%~%" bn)
   (if (solvable bn)
       (format t "~A~%"
               (loop for cc in  (odd-rec  (odd-positions bn) nil nil)
