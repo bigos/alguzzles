@@ -57,7 +57,8 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input0" :type "txt")
+                 :if-does-not-exist :create    )
     (solution s)))
 
 (main)
