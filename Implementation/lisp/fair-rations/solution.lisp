@@ -22,11 +22,15 @@
 (defun solvable (a)
   (evenp (loop for l in a when (odd l) count l)))
 
+(defun odd-ranges (a)
+  ;; finish me
+  )
+
 (defun solve-me (n bn)
   (declare (ignore n))
   (format t "~A ===============~%~%" bn)
   (if (solvable bn)
-      (format t "~A~%"
+      (format t " :::::: ~A~%"
               (loop for cc in  (odd-rec  (odd-positions bn) nil nil)
                  when (cadr cc) collect cc))
 
