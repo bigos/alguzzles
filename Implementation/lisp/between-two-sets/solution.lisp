@@ -1,6 +1,35 @@
-(defun solve-me (n m la lb)
-  (format t "~A ~A    ~A ~A~%" n m la lb))
+;;; ----------------------------------------------------------------------------
 
+;;; get factors of all elements in lb
+;;; find factors X that are common to all elements of lb
+;;; sort them
+;;; remove factors X where not all elements in la are factors of X
+
+(defun common-factors (l)
+  (reduce 'intersection (map 'list 'factors l)))
+
+(defun a-factors (la lb)
+  (length
+   (remove-if (lambda (x) (< (length x)
+                             (length la)))
+              (map 'list (lambda (x)
+                           (intersection x la))
+                   (map 'list 'factors (common-factors lb))))))
+
+(defun factors (n &aux (lows '()) (highs '()))
+  (do ((limit (1+ (isqrt n))) (factor 1 (1+ factor)))
+      ((= factor limit)
+       (when (= n (* limit limit))
+         (push limit highs))
+       (remove-duplicates (nreconc lows highs)))
+    (multiple-value-bind (quotient remainder) (floor n factor)
+      (when (zerop remainder)
+        (push factor lows)
+        (push quotient highs)))))
+
+(defun solve-me (n m la lb)
+  (declare (ignore n m))
+  (format t "~A~%" (a-factors la lb)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
