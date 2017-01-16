@@ -1,5 +1,12 @@
-(use 'clojure.java.io)
+(use 'clojure.java.io 'clojure.pprint)
 
+(defn solve-me
+  [heights word]
+  (let [[chars] (doall (map (fn [x]  x) word)) ;; stuck here
+        ]
+    (cl-format true "==== ~A~%" (type chars))
+    (cl-format true "==== ~A~%" chars)
+      ))
 
 ;; -----------------------------------------------------------
 (defn read-lines
@@ -18,19 +25,7 @@
   [line]
   (map as-int (split-line line)))
 
-;; (defn char-range [start end]
-;;   (map char (range (int start) (inc (int end)))))
-
-;; (let [[heights] (read-lines as-ints 1)
-;;       [word] (read-lines identity 1)
-;;       hmap (zipmap (char-range \a \z) heights)]
-;;   (->> word
-;;        (map hmap)
-;;        (apply max)
-;;        (* (count word))
-;;        (println)))
-
-
 (let [[heights] (read-lines as-ints 1)
-      [word] (read-lines identity 1)]
-  (println (list heights "\n" word "\n")))
+      [word] (doall (read-lines identity 1))]
+  (println (list heights "\n" word "\n" ))
+  (solve-me heights word ))
