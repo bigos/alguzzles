@@ -1,18 +1,24 @@
 (use 'clojure.java.io)
 
-(defn solution
-  []
-  (println  *in*)
-  ;; (doseq [line (line-seq (java.io.BufferedReader *in*))]
-  ;;   println line)
-  )
+(println "aaaaaaaaaaaaaaaaaaaaaa")
+(print (type *in*))
+
+(println "")
+
+(println (line-seq (java.io.BufferedReader. *in*)))
+;; (defn solution
+;;   []
+;;   (println (type *in*))
+;;   ;; (doseq [line (line-seq (java.io.BufferedReader *in*))]
+;;   ;;   println line)
+;;   )
 
 
- (solution) ; uncomment on Hackerrank
+;;  (solution) ; uncomment on Hackerrank
 
 
 
-;; (solution (slurp "/home/jacek/Programming/alguzzles/Implementation/lisp/designer-pdf-viewer/input0.txt")
+;;
 ;;  )
 ;; -----------------------------------------------------------
 ;; (defn read-lines

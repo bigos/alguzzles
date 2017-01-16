@@ -22,3 +22,13 @@ run it in terminal
 #### using runhaskell ###
 
     $ cat ./input0.txt | runhaskell ./solution.hs
+
+
+### Running clojure programs  ###
+
+Install lein-exec:
+https://github.com/kumarshantanu/lein-exec
+
+run in terminal
+
+    $ cat ./input0.txt | lein exec ./solution.clj
