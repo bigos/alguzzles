@@ -19,22 +19,50 @@
 
 (defun odd (n) (not (evenp n)))
 
-(defun solvable (a)
-  (evenp (loop for l in a when (odd l) count l)))
-
 (defun odd-ranges (a)
-  ;; finish me
-  )
+  (loop
+     for e in a
+     with odd-seen = 0
+     with b = '_
+     with res = nil
+     with acc = nil
+     do
+       (when (odd e) (incf odd-seen))
+       (if (odd e)
+           (setq b (if (odd odd-seen) 'open-add 'close-add))
+           (setq b (if (odd odd-seen) 'add 'skip)))
+
+       (cond ((eq b 'add)
+              (push e acc))
+             ((eq b 'open-add)
+              (push e acc))
+             ((eq b 'close-add)
+              (push e acc)
+              (push acc res)
+              (setq acc nil)))
+     ;; collect (list  e odd-seen b)
+     finally
+       (return
+         (if (not (or (eq b 'skip)
+                      (eq b 'close-add)))
+             'no
+             res))))
+
+(defun find-sol (r)
+  ;; (format t "~&=== ~A~%" r)
+  (* 2 (1- (length r))))
 
 (defun solve-me (n bn)
   (declare (ignore n))
-  (format t "~A ===============~%~%" bn)
-  (if (solvable bn)
-      (format t " :::::: ~A~%"
-              (loop for cc in  (odd-rec  (odd-positions bn) nil nil)
-                 when (cadr cc) collect cc))
-
-      (format T "NO~%")))
+  (let ((ranges (odd-ranges bn)))
+    (format T "~A~%"
+            (cond ((eq ranges 'no)
+                   "NO")
+                  ((null ranges)
+                   0)
+                  (T
+                   (loop for r in ranges
+                      summing (find-sol r)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
