@@ -1,6 +1,33 @@
-(defun solve-me (ss st ik)
-  (format t "~A ~A ~A~%" ss st ik))
+(defun compare-strings (a b i)
+  (let* ((common-prefix-len
+          (loop for c in (map 'list (lambda (x y)
+                                      (cons x y))
+                              a b)
+             until (not (eql (car c) (cdr c)))
+             count c))
+         (min-len (abs (+ (- (length a) common-prefix-len)
+                          (- (length b) common-prefix-len)))))
+    (format nil " !!!!!!!!!! ~A !!! ~A~%" common-prefix-len min-len)
 
+    (cond ((eql i min-len)
+           ;; (princ 1)
+           T)
+          ((> i (+ (* 2 common-prefix-len) min-len))
+           ;; (princ 2)
+           T)
+          ((and
+            (> i min-len)
+            (zerop (mod (- i min-len) 2)))
+           ;; (princ 4)
+           T)
+          (T
+           nil))))
+
+(defun solve-me (ss st ik)
+  (format t "~A~%" (if (compare-strings ss st ik)
+                       "Yes"
+                       "No")))
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
