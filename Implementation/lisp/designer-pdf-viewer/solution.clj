@@ -4,12 +4,11 @@
   [heights word]
   (let [chars (doall (map (fn [x]  x) word))]
     (cl-format true "~S~%" (* 1
-                                   (count chars)
-                                   (apply max
-                                          (map
-                                           (zipmap "abcdefghijklmnopqrstuvwxyz" heights)
-                                           chars))))
-    ))
+                              (count chars)
+                              (apply max
+                                     (map
+                                      (zipmap "abcdefghijklmnopqrstuvwxyz" heights)
+                                      chars))))))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
