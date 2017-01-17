@@ -2,10 +2,9 @@
 
 (defn solve-me
   [heights word]
-  (let [[chars] (doall (map (fn [x]  x) word)) ;; stuck here
-        ]
-    (cl-format true "==== ~A~%" (type chars))
-    (cl-format true "==== ~A~%" chars)
+  (let [chars (doall (map (fn [x]  x) word))]
+    (cl-format true "==== ~A~%" (type (first chars)))
+    (cl-format true "==== ~s~%" chars)
       ))
 
 ;; -----------------------------------------------------------
