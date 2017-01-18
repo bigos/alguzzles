@@ -2,7 +2,13 @@
 
 (defn solve-me
   [n m k ii]
-  (cl-format true "~&solving ~s ~s ~s ~s~%" n m k ii))
+  (cl-format true "~&solving ~s ~s ~s ~s~%" n m k ii)
+  ;; sum each line
+  ;; where line is
+  ;; subtracting length of (overlapping) tracks from number n
+  ;; possibly counting points from range n that are not in track ranges
+  ;; read about operations on sets
+  )
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
