@@ -1,16 +1,5 @@
 (declaim (optimize (speed 3)))
 
-(defun range-values (s e)
-  (loop for x from (min s e) to (max s e) collect x))
-
-(defun range-length (s e)
-  (1+ (- (max s e) (min s e))))
-
-(defun find-val (columns ranges)
-  (if (null ranges)
-      columns
-      (- columns (apply 'range-length (car ranges)))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
@@ -29,26 +18,33 @@
          (n (nth 0 nmk))
          (m (nth 1 nmk))
          (k (nth 2 nmk))
-         (lm (make-array (list n m)
-                         :initial-element 1
-                         :element-type 'bit))
-         (max-lamps (* n m)))
+         (rh (make-hash-table))
+         (max-lamps (* n m))
+         (tempar))
     (loop
        for l from 1 to k
        for rl = (split-and-parse (read-line stream))
        do
-         (loop for c from (1- (cadr rl)) to (1- (caddr rl))
-            do
+         (push (cdr rl)
+               (gethash (car rl) rh)))
+    (loop
+       for r from 1 to n
+       for rhv = (gethash r rh)
+       do
+         (when rhv
+           (setf tempar (make-array (list m)
+                                    :initial-element 1
+                                    :element-type 'bit))
+           (loop for rse in rhv
+              do
+                (loop for c from (1- (car rse)) below (cadr rse)
+                   do
+                     (unless (zerop (aref tempar c))
+                       (setf (aref tempar c) 0
+                             max-lamps (1- max-lamps)))))
+           (format t "~s ~s~%" rhv tempar)
+           ))
 
-              (if (zerop (aref lm (1- (car rl)) c))
-                  (progn
-                    (setf  (aref lm (1- (car rl)) c) 0))
-                  (progn
-                    (setf  (aref lm (1- (car rl)) c) 0)
-                    (setf max-lamps (1- max-lamps)))
-                  )
-              )
-         )
     (format t "~S~%"  max-lamps)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
