@@ -1,9 +1,15 @@
-(defun solve-me (n m k ii)
-  (format t "====== ~s ~s ~s ~s ~%" n m k ii)
-  (let ((row-hash (make-hash-table)))
-    (loop for l in ii do
-         (setf (gethash (car l) row-hash) (union (cdr l) (ge)))
-         )))
+(declaim (optimize (debug 3)))
+
+(defun range-values (s e)
+  (loop for x from (min s e) to (max s e) collect x))
+
+(defun range-length (s e)
+  (1+ (- (max s e) (min s e))))
+
+(defun find-val (columns ranges)
+  (if (null ranges)
+      columns
+      (- columns (apply 'range-length (car ranges)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -19,12 +25,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let* ((nmk (split-and-parse (read-line stream))))
-    (solve-me (nth 0 nmk)
-              (nth 1 nmk)
-              (nth 2 nmk)
-              (loop for x from 0 below (nth 2 nmk)
-                 collect (split-and-parse (read-line stream))))))
+  (let* ((nmk (split-and-parse (read-line stream)))
+         (n (nth 0 nmk))
+         (m (nth 1 nmk))
+         (k (nth 2 nmk))
+         (rh (make-hash-table)))
+    (loop
+       for i from 0 below k
+       for read-row = (split-and-parse (read-line stream))
+       do
+         (push (cdr read-row) (gethash (car read-row) rh)))
+    (princ
+     (loop for i from 1 to n
+        sum
+          (find-val
+           m
+           (gethash i rh ))))
+    ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -33,7 +50,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input06" :type "txt"))
     (solution s)))
 
 (main)
