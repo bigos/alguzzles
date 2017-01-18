@@ -1,4 +1,4 @@
-(declaim (optimize (debug 3)))
+(declaim (optimize (speed 3)))
 
 (defun range-values (s e)
   (loop for x from (min s e) to (max s e) collect x))
@@ -29,19 +29,27 @@
          (n (nth 0 nmk))
          (m (nth 1 nmk))
          (k (nth 2 nmk))
-         (rh (make-hash-table)))
+         (lm (make-array (list n m)
+                         :initial-element 1
+                         :element-type 'bit))
+         (max-lamps (* n m)))
     (loop
-       for i from 0 below k
-       for read-row = (split-and-parse (read-line stream))
+       for l from 1 to k
+       for rl = (split-and-parse (read-line stream))
        do
-         (push (cdr read-row) (gethash (car read-row) rh)))
-    (princ
-     (loop for i from 1 to n
-        sum
-          (find-val
-           m
-           (gethash i rh ))))
-    ))
+         (loop for c from (1- (cadr rl)) to (1- (caddr rl))
+            do
+
+              (if (zerop (aref lm (1- (car rl)) c))
+                  (progn
+                    (setf  (aref lm (1- (car rl)) c) 0))
+                  (progn
+                    (setf  (aref lm (1- (car rl)) c) 0)
+                    (setf max-lamps (1- max-lamps)))
+                  )
+              )
+         )
+    (format t "~S~%"  max-lamps)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -50,7 +58,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input06" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
