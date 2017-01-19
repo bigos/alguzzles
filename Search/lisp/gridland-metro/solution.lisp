@@ -13,8 +13,10 @@
         (a2 (cadar ranges))
         (b1 (caadr ranges))
         (b2 (cadadr ranges)))
-        (declare (type fixnum a1 a2 b1 b2))
-    (if (cdr ranges)
+    (declare (type fixnum a1 a2 b1 b2))
+    (if (null (cdr ranges))
+        (cons (car ranges)
+              acc)
         (if (<= b1 (1+ a2))
             (remove-overlapping-2 (cons (list (min a1 b1)
                                               (max a2 b2))
@@ -22,15 +24,22 @@
                                   acc)
             (remove-overlapping-2 (cdr ranges)
                                   (cons (car ranges)
-                                        acc)))
-        (cons (car ranges) acc))))
+                                        acc))))))
 
 (defun sum-ranges (ranges)
-  (if (null ranges)
-      0
-      (loop for x in (remove-overlapping ranges)
-         sum (1+ (- (cadr x)
-                    (car x))))))
+  (declare (type list ranges))
+  (cond ((null ranges)
+         0)
+        ((eq (length ranges) 1)
+         (+ 1 (- (cadar ranges)
+                 (caar ranges))))
+        (t
+         (let ((rr (remove-overlapping ranges)))
+           (declare (type list rr))
+           (+ (length rr)
+              (loop for x in rr
+                 sum (- (cadr x) ; move summing to the other function
+                        (car x))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
