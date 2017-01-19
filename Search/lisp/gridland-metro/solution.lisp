@@ -1,7 +1,11 @@
-(declaim (optimize (speed 3)))
+;;; (declaim (optimize (speed 3)))
+(declaim (optimize (speed 3) (safety 0) (space 0) (debug 0)))
 
 (defun remove-overlapping (ranges)
-  (remove-overlapping-2 (sort ranges (lambda (x y) (<= (car x) (car y))))
+  (remove-overlapping-2 (sort ranges
+                              (lambda (x y)
+                                (<= (the fixnum (car x))
+                                    (the fixnum (car y)))))
                         nil))
 
 (defun remove-overlapping-2 (ranges acc)
@@ -9,6 +13,7 @@
         (a2 (cadar ranges))
         (b1 (caadr ranges))
         (b2 (cadadr ranges)))
+        (declare (type fixnum a1 a2 b1 b2))
     (if (cdr ranges)
         (if (<= b1 (1+ a2))
             (remove-overlapping-2 (cons (list (min a1 b1)
@@ -24,7 +29,8 @@
   (if (null ranges)
       0
       (loop for x in (remove-overlapping ranges)
-         sum (1+ (- (cadr x) (car x))))))
+         sum (1+ (- (cadr x)
+                    (car x))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -45,6 +51,7 @@
          (m (nth 1 nmk))
          (k (nth 2 nmk))
          (rh (make-hash-table)))
+    (declare (type fixnum n m k))
     (loop
        for l from 1 to k
        for rl = (split-and-parse (read-line stream))
@@ -52,10 +59,10 @@
          (push (cdr rl)
                (gethash (car rl) rh)))
     (princ
-     (loop
-        for r from 1 to n
-        for rhv = (gethash r rh)
-        sum (- m (sum-ranges rhv)) ))))
+     (- (* m n)
+        (loop
+           for r from 1 to n
+           sum (sum-ranges (gethash r rh)))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
