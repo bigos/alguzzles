@@ -1,30 +1,38 @@
-;;; (declaim (optimize (speed 3)))
-(declaim (optimize (speed 3) (safety 0) (space 0) (debug 0)))
+ (declaim (optimize (debug 3)))
+;;; (declaim (optimize (speed 3) (safety 0) (space 0) (debug 0)))
 
 (defun remove-overlapping (ranges)
   (remove-overlapping-2 (sort ranges
                               (lambda (x y)
                                 (<= (the fixnum (car x))
                                     (the fixnum (car y)))))
-                        nil))
+                        nil
+                        0))
 
-(defun remove-overlapping-2 (ranges acc)
+(defun remove-overlapping-2 (ranges acc sumacc)
+  (format t "KKK ~A ~A ~A~%" ranges acc sumacc)
   (let ((a1 (caar ranges))
         (a2 (cadar ranges))
         (b1 (caadr ranges))
         (b2 (cadadr ranges)))
     (declare (type fixnum a1 a2 b1 b2))
-    (if (null (cdr ranges))
-        (cons (car ranges)
-              acc)
-        (if (<= b1 (1+ a2))
-            (remove-overlapping-2 (cons (list (min a1 b1)
-                                              (max a2 b2))
-                                        (cddr ranges))
-                                  acc)
-            (remove-overlapping-2 (cdr ranges)
-                                  (cons (car ranges)
-                                        acc))))))
+    (cond ((null (cdr ranges))
+           (list (cons (car ranges)
+                       acc)
+                 sumacc))
+          (t
+           (if (<= b1 (1+ a2)) ;; overlapping
+               (remove-overlapping-2 (cons (list (min a1 b1)
+                                                 (max a2 b2))
+                                           (cddr ranges))
+                                     acc
+                                     sumacc)
+               (remove-overlapping-2 (cdr ranges)
+                                     (cons (car ranges)
+                                           acc)
+                                     (+ 1 (- (max a2 b2)
+                                             (min a1 b1))
+                                        sumacc)))))))
 
 (defun sum-ranges (ranges)
   (declare (type list ranges))
@@ -35,11 +43,7 @@
                  (caar ranges))))
         (t
          (let ((rr (remove-overlapping ranges)))
-           (declare (type list rr))
-           (+ (length rr)
-              (loop for x in rr
-                 sum (- (cadr x) ; move summing to the other function
-                        (car x))))))))
+           (format t "AAAAAAAAAAAAAAa ~A~%" rr)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
