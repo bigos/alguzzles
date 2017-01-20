@@ -1,36 +1,15 @@
-;;; (declaim (optimize (speed 3)))
-(declaim (optimize (speed 3) (safety 0) (space 0) (debug 0)))
+;; (declaim (optimize (debug 3)))
+;;; (declaim (optimize (speed 3) (safety 0) (space 0) (debug 0)))
 
-(defun remove-overlapping (ranges)
-  (remove-overlapping-2 (sort ranges
-                              (lambda (x y)
-                                (<= (the fixnum (car x))
-                                    (the fixnum (car y)))))
-                        nil))
+(defvar *lamps* 0)
 
-(defun remove-overlapping-2 (ranges acc)
-  (let ((a1 (caar ranges))
-        (a2 (cadar ranges))
-        (b1 (caadr ranges))
-        (b2 (cadadr ranges)))
-        (declare (type fixnum a1 a2 b1 b2))
-    (if (cdr ranges)
-        (if (<= b1 (1+ a2))
-            (remove-overlapping-2 (cons (list (min a1 b1)
-                                              (max a2 b2))
-                                        (cddr ranges))
-                                  acc)
-            (remove-overlapping-2 (cdr ranges)
-                                  (cons (car ranges)
-                                        acc)))
-        (cons (car ranges) acc))))
+;; (append  '((1 2)) (cons '(3 4) '((5 6))) )
 
-(defun sum-ranges (ranges)
-  (if (null ranges)
-      0
-      (loop for x in (remove-overlapping ranges)
-         sum (1+ (- (cadr x)
-                    (car x))))))
+(defun hashval (h rl)
+  (let ((row (car rl))
+        (range (cdr rl)))
+    (push range
+          (gethash row h))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -51,18 +30,16 @@
          (m (nth 1 nmk))
          (k (nth 2 nmk))
          (rh (make-hash-table)))
-    (declare (type fixnum n m k))
+    (declare (type fixnum n m k ))
+    (setf *lamps* (* n m))
     (loop
        for l from 1 to k
        for rl = (split-and-parse (read-line stream))
        do
-         (push (cdr rl)
-               (gethash (car rl) rh)))
-    (princ
-     (- (* m n)
-        (loop
-           for r from 1 to n
-           sum (sum-ranges (gethash r rh)))))))
+         (hashval rh rl)
+       finally
+         (/ rh 0)
+         (format t "~s~%" rh))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -71,7 +48,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input06" :type "txt"))
+                      :name "input0a" :type "txt"))
     (solution s)))
 
 (main)
