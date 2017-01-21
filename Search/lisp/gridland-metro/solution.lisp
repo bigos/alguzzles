@@ -29,17 +29,24 @@
          (n (nth 0 nmk))
          (m (nth 1 nmk))
          (k (nth 2 nmk))
-         (rh (make-hash-table)))
+         (rh (make-hash-table))
+         (track-rows))
     (declare (type fixnum n m k ))
     (setf *lamps* (* n m))
     (loop
        for l from 1 to k
-       for rl = (split-and-parse (read-line stream))
        do
-         (hashval rh rl)
-       finally
-         (/ rh 0)
-         (format t "~s~%" rh))))
+         (hashval rh
+                  (split-and-parse (read-line stream))))
+    (maphash (lambda (k v)
+               (push k track-rows)
+               (sort v (lambda (x y) (<= (car x) (car y))))
+               (format t " ===> ~S~%" v)
+               )
+             rh )
+    (format t "~S~%" track-rows)
+    (/ rh 0)
+    ))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
