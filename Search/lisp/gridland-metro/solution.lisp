@@ -60,10 +60,12 @@
 
     (maphash (lambda (_ v)
                (declare (ignore _))
-               (sort v (lambda (x y) (< (car x) (car y))))
-               (push (remove-overlapping v nil) track-rows))
+               (push (remove-overlapping (sort v (lambda (x y)
+                                                   (< (car x)
+                                                      (car y))))
+                                         nil)
+                     track-rows))
              rh)
-
     (format t "~A~%" (- (* n m) (sum-ranges track-rows)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
