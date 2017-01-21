@@ -1,4 +1,4 @@
-(defun degeneratep (a b c) (eql a (+ b c)))
+(defun degeneratep (a b c) (>= a (+ b c)))
 
 (defun solve-me (n ll)
   (let ((a (car ll))
@@ -42,7 +42,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input1" :type "txt"))
+                      :name "input02" :type "txt"))
     (solution s)))
 
 (main)
