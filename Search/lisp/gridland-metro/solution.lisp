@@ -1,9 +1,28 @@
-;; (declaim (optimize (debug 3)))
-;;; (declaim (optimize (speed 3) (safety 0) (space 0) (debug 0)))
+(declaim (optimize (speed 3) (safety 3) (debug 0)))
 
-(defvar *lamps* 0)
+(defun remove-overlapping (ranges acc)
+  (let ((a1 (caar ranges))
+        (a2 (cadar ranges))
+        (b1 (caadr ranges))
+        (b2 (cadadr ranges)))
 
-;; (append  '((1 2)) (cons '(3 4) '((5 6))) )
+    (if (null (cdr ranges))
+        (cons (car ranges) acc)
+        (if (<= b1 (+ 1 a2))
+            (remove-overlapping (cons (list (min a1 b1)
+                                            (max a2 b2))
+                                      (cddr ranges))
+                                acc)
+            (remove-overlapping (cdr ranges)
+                                (cons (car ranges)
+                                      acc))))))
+
+(defun sum-ranges (rr)
+  (loop for r in rr
+     sum
+       (loop for ar in r
+          sum
+            (+ 1 (abs (apply '- ar))))))
 
 (defun hashval (h rl)
   (let ((row (car rl))
@@ -31,22 +50,21 @@
          (k (nth 2 nmk))
          (rh (make-hash-table))
          (track-rows))
-    (declare (type fixnum n m k ))
     (setf *lamps* (* n m))
+
     (loop
        for l from 1 to k
        do
          (hashval rh
                   (split-and-parse (read-line stream))))
-    (maphash (lambda (k v)
-               (push k track-rows)
-               (sort v (lambda (x y) (<= (car x) (car y))))
-               (format t " ===> ~S~%" v)
-               )
-             rh )
-    (format t "~S~%" track-rows)
-    (/ rh 0)
-    ))
+
+    (maphash (lambda (_ v)
+               (declare (ignore _))
+               (sort v (lambda (x y) (< (car x) (car y))))
+               (push (remove-overlapping v nil) track-rows))
+             rh)
+
+    (format t "~A~%" (- (* n m) (sum-ranges track-rows)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -55,7 +73,10 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0a" :type "txt"))
+                      :name "input07" :type "txt"))
     (solution s)))
 
 (main)
+
+;; expected output for case 06
+;; 343959391703854850
