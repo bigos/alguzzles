@@ -1,5 +1,12 @@
 (defun solve-me (n k aa)
-  (format t "~A ~A ~A ~%" n k aa))
+  (let ((divisibles (sort
+                     (loop for x = k then (+ x k)
+                             until (> x (+ k (car aa) (cadr aa)))
+                        collect x)
+                     '>)))
+    (format t "~&~A ~A ~A ~A ~%" n k aa divisibles)
+
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -18,7 +25,7 @@
 (defun solution (&optional stream)
   (let ((nk (split-and-parse (read-line stream)))
         (aa (split-and-parse (read-line stream))))
-    (solve-me (car nk) (cadr nk) (sort aa '<))))
+    (solve-me (car nk) (cadr nk) (sort aa '>))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
