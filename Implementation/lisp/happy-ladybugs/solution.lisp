@@ -1,5 +1,24 @@
 (defun solve-me (n b)
-  (format t "~&=====> ~A ~A~%" n b))
+  (declare (ignore n))
+  (let ((h (make-hash-table))
+        (underscores)
+        (counts))
+    ;; (format t "~&=====> ~A ~A~%" n b)
+    (loop for c across b
+       do
+         (incf (gethash c h 0)))
+    (setf underscores (gethash #\_ h 0))
+    ;; (format t "underscores found ~d~%" underscores)
+    (maphash (lambda (k v)
+               (unless (eql k #\_)
+                 (push  (list k v) counts)))
+             h)
+    ;; (format t "counts ~s~%" counts)
+    (format t "~a~%"
+            (if (and (> underscores 0)
+                     (every (lambda (x) (> (cadr x) 1)) counts))
+                "YES"
+                "NO"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
