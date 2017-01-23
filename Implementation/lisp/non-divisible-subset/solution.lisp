@@ -19,11 +19,13 @@
   (zerop (mod n d)))
 
 (defun solve-me (n k aa)
-  ;(format t "=========== ~A ~A ~A~%" n k aa)
+                                        ;(format t "=========== ~A ~A ~A~%" n k aa)
   (let ((found))
     (loop for subset in (sort
-                         (map 'list #'remove-duplicates
-                              (combinator aa n))
+                         (remove-duplicates
+                          (map 'list #'remove-duplicates
+                               (combinator aa n))
+                          :test #'equal)
                          (lambda (x y) (> (length x) (length y))))
        for sp = (subset-pairs subset)
        do
@@ -64,7 +66,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input09" :type "txt"))
     (solution s)))
 
 (main)
