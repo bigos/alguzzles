@@ -7,33 +7,19 @@
                  (combinator cc (- k 1)))
             (combinator (cdr cc) k)))))
 
-(defun subsets-of-len (aa l)
-  (remove-if
-   (lambda (x)
-     (< (length (remove-duplicates x)) l))
-   (combinator  aa l)))
+;; (remove-duplicates (remove-if (lambda (x) (not  (eql 2 (length x)))) (map 'list 'remove-duplicates (combinator '(1 7 2 4) 4))) :test'equalp)
 
-(defun subset-pairs (aa)
-  (remove-if (lambda (x) (eql (car x) (cadr x))) (combinator aa 2)))
-
-(defun anygood (aa i k)
-  (notevery 'null
-            (map 'list
-                 (lambda (x)
-                   (every 'null
-                          (map 'list (lambda (y)
-                                       (zerop (mod (apply '+ y)
-                                                   k)))
-                               (subset-pairs x))))
-                 (subsets-of-len aa i))))
 
 (defun solve-me (n k aa)
-  (declare (ignore n))
+  (format t "=========== ~A ~A ~A~%" n k aa)
   (princ
-   (loop for i from 1 to k
-      for v = (anygood aa i k)
-      when v
-      maximize i)))
+
+   (sort
+    (map 'list #'remove-duplicates
+         (combinator aa n))
+   (lambda (x y) (> (length x) (length y))) )
+
+   ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -61,7 +47,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
