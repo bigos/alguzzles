@@ -32,7 +32,7 @@
              (setf found (every 'null (loop for s in sp
                                          collect
                                            (divides-by (apply '+ s) k))))
-             (setf found (divides-by (car subset) k))
+             (setf found (not (divides-by (car subset) k)))
              )
        until found
        finally
