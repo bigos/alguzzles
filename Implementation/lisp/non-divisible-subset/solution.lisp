@@ -1,4 +1,7 @@
+(declaim (optimize (speed 3) (space 0)))
+
 (defun combinator (cc k)
+
   (cond ((zerop k) '(()))
         ((not cc) nil)
         (T (append
@@ -9,17 +12,31 @@
 
 ;; (remove-duplicates (remove-if (lambda (x) (not  (eql 2 (length x)))) (map 'list 'remove-duplicates (combinator '(1 7 2 4) 4))) :test'equalp)
 
+(defun subset-pairs (aa)
+  (remove-if (lambda (x) (eql (car x) (cadr x))) (combinator aa 2)))
+
+(defun divides-by (n d)
+  (zerop (mod n d)))
 
 (defun solve-me (n k aa)
-  (format t "=========== ~A ~A ~A~%" n k aa)
-  (princ
+  ;(format t "=========== ~A ~A ~A~%" n k aa)
+  (let ((found))
+    (loop for subset in (sort
+                         (map 'list #'remove-duplicates
+                              (combinator aa n))
+                         (lambda (x y) (> (length x) (length y))))
+       for sp = (subset-pairs subset)
+       do
 
-   (sort
-    (map 'list #'remove-duplicates
-         (combinator aa n))
-   (lambda (x y) (> (length x) (length y))) )
-
-   ))
+         (if sp
+             (setf found (every 'null (loop for s in sp
+                                         collect
+                                           (divides-by (apply '+ s) k))))
+             (setf found (divides-by (car subset) k))
+             )
+       until found
+       finally
+         (format t "~&~A~%" (length subset)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -47,7 +64,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
