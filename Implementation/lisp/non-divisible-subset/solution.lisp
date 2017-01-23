@@ -1,12 +1,39 @@
-(defun solve-me (n k aa)
-  (let ((divisibles (sort
-                     (loop for x = k then (+ x k)
-                             until (> x (+ k (car aa) (cadr aa)))
-                        collect x)
-                     '>)))
-    (format t "~&~A ~A ~A ~A ~%" n k aa divisibles)
+(defun combinator (cc k)
+  (cond ((zerop k) '(()))
+        ((not cc) nil)
+        (T (append
+            (map 'list
+                 (lambda (x) (cons (car cc) x))
+                 (combinator cc (- k 1)))
+            (combinator (cdr cc) k)))))
 
-    ))
+(defun subsets-of-len (aa l)
+  (remove-if
+   (lambda (x)
+     (< (length (remove-duplicates x)) l))
+   (combinator  aa l)))
+
+(defun subset-pairs (aa)
+  (remove-if (lambda (x) (eql (car x) (cadr x))) (combinator aa 2)))
+
+(defun anygood (aa i k)
+  (notevery 'null
+            (map 'list
+                 (lambda (x)
+                   (every 'null
+                          (map 'list (lambda (y)
+                                       (zerop (mod (apply '+ y)
+                                                   k)))
+                               (subset-pairs x))))
+                 (subsets-of-len aa i))))
+
+(defun solve-me (n k aa)
+  (declare (ignore n))
+  (princ
+   (loop for i from 1 to k
+      for v = (anygood aa i k)
+      when v
+      maximize i)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -34,7 +61,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
