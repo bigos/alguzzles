@@ -1,4 +1,5 @@
-(declaim (optimize (speed 3) (space 0)))
+(declaim (optimize (speed 3)))
+
 
 ;;; (comb 3 '(1 2 4 7) #'print)
 (defun comb (m list fn) ; without repetition
@@ -81,7 +82,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
