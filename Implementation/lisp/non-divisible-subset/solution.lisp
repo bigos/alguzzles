@@ -26,10 +26,16 @@
     (loop for x in aa do (incf (gethash x h 0)))
 
     (maphash (lambda (hk hv)
-               (format T "~A ~A - ~A~%" hk hv (list (- k hk)  (gethash (- k hk) h '_))))
+               (format T "~A found ~A - ~A~%" hk hv (list (- k hk)  (gethash (- k hk) h '_))))
              h)
 
     ))
+
+;; for case 03
+;; we can have
+;; two sets of 4 and 1
+;; two sets of 3 and 2
+;; 10 - 4 = 6
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
