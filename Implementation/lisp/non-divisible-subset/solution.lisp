@@ -36,23 +36,23 @@
     ))
 
 ;; for case 03
-;; we can have
+;; with limit 5 we can have
 ;; 2 sets of 4 and 1
 ;; 2 sets of 3 and 2
-;; 10 - 4sets = 6
+;; 10 - 4 = 6
 
 ;; for case 02
-;; we can have
+;; with limit 9 we can have
 ;; 1 set of 7 and 2
-;; 6 - 1set = 5
+;; 6 - 1 = 5
 
 ;; for case 01
-;; we can have
+;; with limit 5 we can have
 ;; 0 sets of 2 and 3
 ;; 5 - 0 = 5
 
 ;; for case 0
-;; we caan have
+;; with limit 3 we can have
 ;; 1 set of 2 and 1
 ;; 4 - 1 = 3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
