@@ -19,43 +19,16 @@
                  (combinator cc (- k 1)))
             (combinator (cdr cc) k)))))
 
-(defun divides-by (n d)
-  (zerop (mod n d)))
-
-(defparameter *cc* nil)
-(defparameter *dd* nil)
-
-(defun pushme-cc (x) (push x *cc*))
-(defun pushme-dd (x) (push x *dd*))
-
 (defun solve-me (n k aaa)
-  (format t "=========== ~A ~A ~A~%" n k aaa)
-  (let ((found)
-        (aa (loop for ax in aaa collect (mod ax k))))
-    (format t "=============== ~A~%" aa)
-    (loop for x from n downto 2
-       do
-         (setf *cc* nil)
-         (comb x aa 'pushme-cc)
-         ;; (format t "cc: ~a~%" *cc*)
-         (loop for y in *cc*
-            do
-              ;; (format t "### ~a~%" y)
-              (setf *dd* nil)
-              (comb 2 y 'pushme-dd)
+  (let ((aa (loop for ax in aaa collect (mod ax k)))
+        (h (make-hash-table)))
+    (format t "=========== ~A ~A ~A~%" n k aa)
+    (loop for x in aa do (incf (gethash x h 0)))
 
-              (when (every 'null
-                           (loop for z in *dd*
-                              collect (divides-by (apply #'+ z) k)))
-                (setf found y))
-            until found)
-       until found)
-    (unless found
-      (loop for a in aa
-         do
-           (when (divides-by a k)
-             (setf found (list a)))))
-    (format t "~A~%" (length found))
+    (maphash (lambda (hk hv)
+               (format T "~A ~A - ~A~%" hk hv (list (- k hk)  (gethash (- k hk) h '_))))
+             h)
+
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
