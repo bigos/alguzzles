@@ -33,9 +33,14 @@
 
 ;; for case 03
 ;; we can have
-;; two sets of 4 and 1
-;; two sets of 3 and 2
-;; 10 - 4 = 6
+;; 2 sets of 4 and 1
+;; 2 sets of 3 and 2
+;; 10 - 4sets = 6
+
+;; for case 02
+;; we can have
+;; 1 set of 7 and 2
+;; 6 - 1set = 5
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -63,7 +68,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input02" :type "txt"))
     (solution s)))
 
 (main)
