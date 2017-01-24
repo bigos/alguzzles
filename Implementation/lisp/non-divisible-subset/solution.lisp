@@ -28,9 +28,11 @@
 (defun pushme-cc (x) (push x *cc*))
 (defun pushme-dd (x) (push x *dd*))
 
-(defun solve-me (n k aa)
-  ;; (format t "=========== ~A ~A ~A~%" n k aa)
-  (let ((found))
+(defun solve-me (n k aaa)
+  (format t "=========== ~A ~A ~A~%" n k aaa)
+  (let ((found)
+        (aa (loop for ax in aaa collect (mod ax k))))
+    (format t "=============== ~A~%" aa)
     (loop for x from n downto 2
        do
          (setf *cc* nil)
