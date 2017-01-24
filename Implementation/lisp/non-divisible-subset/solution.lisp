@@ -26,7 +26,11 @@
     (loop for x in aa do (incf (gethash x h 0)))
 
     (maphash (lambda (hk hv)
-               (format T "~A found ~A - ~A~%" hk hv (list (- k hk)  (gethash (- k hk) h '_))))
+               (format T "~A found ~A - ~A~%" hk hv
+                       (if (gethash (- k hk) h)
+                           (list (- k hk)
+                                 (gethash (- k hk) h ))
+                           nil)))
              h)
 
     ))
@@ -42,6 +46,15 @@
 ;; 1 set of 7 and 2
 ;; 6 - 1set = 5
 
+;; for case 01
+;; we can have
+;; 0 sets of 2 and 3
+;; 5 - 0 = 5
+
+;; for case 0
+;; we caan have
+;; 1 set of 2 and 1
+;; 4 - 1 = 3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -68,7 +81,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input02" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
