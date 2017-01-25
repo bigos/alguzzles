@@ -19,37 +19,28 @@
                  (combinator cc (- k 1)))
             (combinator (cdr cc) k)))))
 
-(defun solve-me (n k aaa)
-  (let ((aa (loop for ax in aaa collect (mod ax k)))
-        (h (make-hash-table))
-        (useful-numbers-hash (make-hash-table))
-        (result))
-    ;; (format t "=========== ~A ~A ~A~%" n k aa)
-    (loop for x in aa do (incf (gethash x h 0)))
+(defun solve-me (n k lis)
+  (let ((buckets (make-hash-table))
+        (count 0))
+    (loop for i in lis
+       do
+         (incf (gethash (mod i k) buckets 0)))
 
-    (maphash (lambda (hk hv)
-               ;; (format T "~A found ~A - ~A~%" hk hv
-               ;;         (if (gethash (- k hk) h)
-               ;;             (list (- k hk) (gethash (- k hk) h )) nil))
-               (if (gethash (- k hk) h)
-                   (setf (gethash hk useful-numbers-hash)
-                         (list (- k hk)
-                               (if (eql hk (- k hk))
-                                   (gethash hk h)
-                                   (min (gethash hk h)
-                                        (gethash (- k hk) h)))))))
-             h)
-    ;; (maphash (lambda (uk uv) (format T "^^^^ ~A ~A~%" uk uv))
-    ;;          useful-numbers-hash)
-    (setf result
-          (loop for x from (ceiling (/ k 2)) below k
-             collect (if (gethash x useful-numbers-hash)
-                         (cadr (gethash x useful-numbers-hash))
-                         0)))
-    (format t "~A~%" (if result
-                         (- n (loop for r in result
-                                 sum r))
-                         1))))
+    (when (> (gethash 0 buckets 0) 0)
+      (incf count))
+
+    (loop
+       for i from 1 to (floor (/ k 2))
+       for tmp = (max (gethash i buckets 0)
+                      (gethash (- k i) buckets 0))
+       do
+         (if (and (zerop (mod k 2))
+                  (eql i (floor (/ k 2)))
+                  (> (gethash (floor (/ k 2)) buckets 0) 0))
+             (incf count)
+             (incf count tmp)))
+
+    (format t "~A~%" count)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -77,7 +68,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input03" :type "txt"))
+                      :name "input09" :type "txt"))
     (solution s)))
 
 (main)
