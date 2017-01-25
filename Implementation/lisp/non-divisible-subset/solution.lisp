@@ -32,11 +32,20 @@
                            (list (- k hk) (gethash (- k hk) h )) nil))
                (if (gethash (- k hk) h)
                    (setf (gethash hk useful-numbers-hash)
-                         (list (- k hk) (min (gethash hk h)
-                                             (gethash (- k hk) h))))))
+                         (list (- k hk)
+                               (if (eql hk (- k hk))
+                                   (/ (gethash hk h) 2)
+                                   (min (gethash hk h)
+                                        (gethash (- k hk) h)))))))
              h)
     (maphash (lambda (uk uv) (format T "^^^^ ~A ~A~%" uk uv))
-             useful-numbers-hash)))
+             useful-numbers-hash)
+    (format t "&&&& ~A ~%"
+            (- n
+               (loop for x from (ceiling (/ k 2)) below k
+                  sum (if (gethash x useful-numbers-hash)
+                          (cadr (gethash x useful-numbers-hash))
+                          0))))))
 
 ;; for case 03
 ;; with limit 5 we can have
@@ -58,6 +67,15 @@
 ;; with limit 3 we can have
 ;; 1 set of 2 and 1
 ;; 4 - 1 = 3
+
+;;; unverified
+;; for case 0a
+;; with limit 6 we can have
+;; 1 set of 5 and 1
+;; 2 sets of 4 and 2
+;; 1 set of 3 and 3 !!!
+;; 10 - 4 = 6
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -84,7 +102,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input0a" :type "txt"))
     (solution s)))
 
 (main)
