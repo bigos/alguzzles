@@ -23,13 +23,13 @@
   (let ((aa (loop for ax in aaa collect (mod ax k)))
         (h (make-hash-table))
         (useful-numbers-hash (make-hash-table)))
-    (format t "=========== ~A ~A ~A~%" n k aa)
+    ;; (format t "=========== ~A ~A ~A~%" n k aa)
     (loop for x in aa do (incf (gethash x h 0)))
 
     (maphash (lambda (hk hv)
-               (format T "~A found ~A - ~A~%" hk hv
-                       (if (gethash (- k hk) h)
-                           (list (- k hk) (gethash (- k hk) h )) nil))
+               ;; (format T "~A found ~A - ~A~%" hk hv
+               ;;         (if (gethash (- k hk) h)
+               ;;             (list (- k hk) (gethash (- k hk) h )) nil))
                (if (gethash (- k hk) h)
                    (setf (gethash hk useful-numbers-hash)
                          (list (- k hk)
@@ -38,9 +38,9 @@
                                    (min (gethash hk h)
                                         (gethash (- k hk) h)))))))
              h)
-    (maphash (lambda (uk uv) (format T "^^^^ ~A ~A~%" uk uv))
-             useful-numbers-hash)
-    (format t "&&&& ~A ~%"
+    ;; (maphash (lambda (uk uv) (format T "^^^^ ~A ~A~%" uk uv))
+    ;;          useful-numbers-hash)
+    (format t "~A~%"
             (- n
                (loop for x from (ceiling (/ k 2)) below k
                   sum (if (gethash x useful-numbers-hash)
