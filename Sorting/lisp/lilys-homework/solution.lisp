@@ -1,38 +1,54 @@
 (defun  solve-me (n aa)
-  (declare (ignore n))
-  ;; (format t "~A~%"  aa)
-  (let ((bb (sort (copy-list aa) #'<))
-        (swaps 0)
-        (h (make-hash-table)))
+
+  (let* ((bb (sort (copy-list aa) #'<))
+         (swaps 0)
+         (hi (make-hash-table))
+         (arya (make-array (list n) :initial-contents aa))
+         (aryb (make-array (list n) :initial-contents bb)))
 
     (labels ((swap-pos (a b)
-               (let ((temp (gethash a h)))
-                 (setf (gethash a h) (gethash b h)
-                       (gethash b h) temp))
+               (format T "SWAPPING ~A ~A~%" a b)
+               (setf
+                (gethash (car a) hi) (cdr b)
+                (gethash (car b) hi) (cdr a)
+                (aref arya (cdr a)) (car b)
+                (aref arya (cdr b)) (car a))
                (incf swaps))
-             (dump-hash ()
-               (format t ">>> ~A~%"
-                       (loop for x in bb collect (list x 'at 'pos 'of (gethash x h))))))
 
-      ;; (format t "=== unsorted ~A sorted ~A~%" aa bb)
+             (dump-hash ()
+               (format t "~&=== value => index  ")
+               (maphash (lambda (k v) (format t "~a => ~A " k v)) hi)
+               (format t "== ~s ~%" arya)
+               )
+             (swapme (x)
+               (format t "~&~A~%" (list (aref arya x)
+                                        'is-at-pos
+                                        (gethash (aref arya x) hi)
+                                        'has-to-be-swapped-with
+                                        (aref aryb x)
+                                        'which-as-at-pos
+                                        (gethash (aref aryb x) hi)))
+
+               (list (cons (aref arya x) (gethash (aref arya x) hi))
+                     (cons (aref aryb x) (gethash (aref aryb x) hi))))
+             )
+
+      (format t "=== unsorted ~A sorted ~A  ary ~a  ~A~%" aa bb arya aryb)
       (loop
          for a in aa
-         for b in bb
+         for i = 0 then (1+ i)
          do
-           (setf (gethash a h) b))
-      (loop for b in aa
-         do
-           ;; (dump-hash)
-           (unless (eql b (gethash b h))
-               (progn
-                 ;; (format t "swapping ~A ~A~%" b (gethash b h) )
-                 (swap-pos b (gethash b h))))))
+           (setf (gethash a hi) i))
+
+      (dump-hash)
+
+      (swapme 0)
+      (swap-pos (cons 2 0) (cons 1 3))
+      (dump-hash)
+
+      )
 
     (format t "~A~%" swaps)))
-
-;; 2531
-;; 1532
-;; 1235
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
