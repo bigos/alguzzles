@@ -19,42 +19,29 @@
                  (combinator cc (- k 1)))
             (combinator (cdr cc) k)))))
 
-(defun solve-me (n k aaa)
-  (let ((aa (loop for ax in aaa collect (mod ax k)))
-        (h (make-hash-table)))
-    (format t "=========== ~A ~A ~A~%" n k aa)
-    (loop for x in aa do (incf (gethash x h 0)))
+(defun solve-me (n k lis)
+  (let ((buckets (make-hash-table))
+        (count 0))
+    (loop for i in lis
+       do
+         (incf (gethash (mod i k) buckets 0)))
 
-    (maphash (lambda (hk hv)
-               (format T "~A found ~A - ~A~%" hk hv
-                       (if (gethash (- k hk) h)
-                           (list (- k hk)
-                                 (gethash (- k hk) h ))
-                           nil)))
-             h)
+    (when (> (gethash 0 buckets 0) 0)
+      (incf count))
 
-    ))
+    (loop
+       for i from 1 to (floor (/ k 2))
+       for tmp = (max (gethash i buckets 0)
+                      (gethash (- k i) buckets 0))
+       do
+         (if (and (zerop (mod k 2))
+                  (eql i (floor (/ k 2)))
+                  (> (gethash (floor (/ k 2)) buckets 0) 0))
+             (incf count)
+             (incf count tmp)))
 
-;; for case 03
-;; with limit 5 we can have
-;; 2 sets of 4 and 1
-;; 2 sets of 3 and 2
-;; 10 - 4 = 6
+    (format t "~A~%" count)))
 
-;; for case 02
-;; with limit 9 we can have
-;; 1 set of 7 and 2
-;; 6 - 1 = 5
-
-;; for case 01
-;; with limit 5 we can have
-;; 0 sets of 2 and 3
-;; 5 - 0 = 5
-
-;; for case 0
-;; with limit 3 we can have
-;; 1 set of 2 and 1
-;; 4 - 1 = 3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -81,7 +68,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input09" :type "txt"))
     (solution s)))
 
 (main)
