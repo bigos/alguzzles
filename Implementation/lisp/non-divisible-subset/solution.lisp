@@ -22,7 +22,8 @@
 (defun solve-me (n k aaa)
   (let ((aa (loop for ax in aaa collect (mod ax k)))
         (h (make-hash-table))
-        (useful-numbers-hash (make-hash-table)))
+        (useful-numbers-hash (make-hash-table))
+        (result))
     ;; (format t "=========== ~A ~A ~A~%" n k aa)
     (loop for x in aa do (incf (gethash x h 0)))
 
@@ -34,47 +35,21 @@
                    (setf (gethash hk useful-numbers-hash)
                          (list (- k hk)
                                (if (eql hk (- k hk))
-                                   (/ (gethash hk h) 2)
+                                   (gethash hk h)
                                    (min (gethash hk h)
                                         (gethash (- k hk) h)))))))
              h)
     ;; (maphash (lambda (uk uv) (format T "^^^^ ~A ~A~%" uk uv))
     ;;          useful-numbers-hash)
-    (format t "~A~%"
-            (- n
-               (loop for x from (ceiling (/ k 2)) below k
-                  sum (if (gethash x useful-numbers-hash)
-                          (cadr (gethash x useful-numbers-hash))
-                          0))))))
-
-;; for case 03
-;; with limit 5 we can have
-;; 2 sets of 4 and 1
-;; 2 sets of 3 and 2
-;; 10 - 4 = 6
-
-;; for case 02
-;; with limit 9 we can have
-;; 1 set of 7 and 2
-;; 6 - 1 = 5
-
-;; for case 01
-;; with limit 5 we can have
-;; 0 sets of 2 and 3
-;; 5 - 0 = 5
-
-;; for case 0
-;; with limit 3 we can have
-;; 1 set of 2 and 1
-;; 4 - 1 = 3
-
-;;; unverified
-;; for case 0a
-;; with limit 6 we can have
-;; 1 set of 5 and 1
-;; 2 sets of 4 and 2
-;; 1 set of 3 and 3 !!!
-;; 10 - 4 = 6
+    (setf result
+          (loop for x from (ceiling (/ k 2)) below k
+             collect (if (gethash x useful-numbers-hash)
+                         (cadr (gethash x useful-numbers-hash))
+                         0)))
+    (format t "~A~%" (if result
+                         (- n (loop for r in result
+                                 sum r))
+                         1))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -102,7 +77,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0a" :type "txt"))
+                      :name "input03" :type "txt"))
     (solution s)))
 
 (main)
