@@ -13,9 +13,26 @@
                                                   (cadr positions))
                                           acc)))))
 
+(defun find-pos (str start seek-chars)
+  (let ((acc))
+    (loop
+       for c across (subseq str start)
+       for p = start then (1+ p)
+       do
+         (when (member c seek-chars)
+           (push p acc))
+       until (upper-case-p c))
+    acc))
+
 (defun solve-me (a b)
   (format t "~A ~A~%~%" a b)
+  (let ((found))
 
+    (loop for p = 0 then (1+ p)
+
+
+         )
+    )
   ;; starting at pos 0 find all 'a' or first 'A' without finding other upper case character
   ;; for all finds of 'a'/'A' find all 'b' or first 'B' without finding other upper case character
   ;; for all finds of 'b'/'B' find all 'c' or first 'C' without finding other upper case character
