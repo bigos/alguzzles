@@ -1,6 +1,26 @@
+(defparameter *char-a-upper-pos-list* nil)
+(defparameter *char-a-split* nil)
+
+(defun split-string-at-positions (str positions acc)
+  (cond ((or (null positions)
+             (equalp str ""))
+         (reverse acc))
+        (T
+         (split-string-at-positions str
+                                    (cdr positions)
+                                    (push (subseq str
+                                                  (car positions)
+                                                  (cadr positions))
+                                          acc)))))
+
 (defun solve-me (a b)
-  (format t "~A ~A~%~%" a b )
-  (princ "YES"))
+  (format t "~A ~A~%~%" a b)
+
+  ;; starting at pos 0 find all 'a' or first 'A' without finding other upper case character
+  ;; for all finds of 'a'/'A' find all 'b' or first 'B' without finding other upper case character
+  ;; for all finds of 'b'/'B' find all 'c' or first 'C' without finding other upper case character
+
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -21,8 +41,12 @@
     (loop for x from 1 to q
        do
          (solve-me
-          (car (split-by-one-space (read-line stream)))
-          (car (split-by-one-space (read-line stream)))))))
+          (loop for c across
+                (car (split-by-one-space (read-line stream)))
+                collect c)
+          (loop for c across
+               (car (split-by-one-space (read-line stream)))
+               collect c)))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
