@@ -1,5 +1,4 @@
-(defparameter *char-a-upper-pos-list* nil)
-(defparameter *char-a-split* nil)
+(defparameter *found* nil)
 
 (defun split-string-at-positions (str positions acc)
   (cond ((or (null positions)
@@ -14,6 +13,7 @@
                                           acc)))))
 
 (defun find-pos (str start seek-chars)
+  ;; (format t "~&seeking ~S~%" seek-chars)
   (let ((acc))
     (loop
        for c across (subseq str start)
@@ -21,23 +21,33 @@
        do
          (when (member c seek-chars)
            (push p acc))
-       until (upper-case-p c))
+       until (upper-case-p c)
+       finally
+         (when (and (null seek-chars)
+                    (eql (1+ p) (length str))
+                    (lower-case-p (elt str p)))
+           (push (1+ p) acc)))
     acc))
 
-(defun solve-me (a b)
-  (format t "~A ~A~%~%" a b)
-  (let ((found))
-
-    (loop for p = 0 then (1+ p)
-
-
-         )
-    )
-  ;; starting at pos 0 find all 'a' or first 'A' without finding other upper case character
-  ;; for all finds of 'a'/'A' find all 'b' or first 'B' without finding other upper case character
-  ;; for all finds of 'b'/'B' find all 'c' or first 'C' without finding other upper case character
-
-  )
+;;; (solve-me "daBcd" "ABC" 0 0  )
+(defun solve-me (a b  ap bp  )
+  ;; (format t "~A ~A  ~A ~A  ~%~%" a b ap bp )
+  (if (or
+          (>= bp (length b)))
+      'zzz
+      (progn
+        (let ((apx-positions (find-pos a ap (list (elt b bp)
+                                                  (char-downcase
+                                                   (elt b bp))))))
+          (loop for apx in apx-positions
+             do
+               ;(format t "~%------ ~s~%" apx)
+               (solve-me a b (1+ apx) (1+ bp)))
+           (when (eql (car apx-positions)
+                      (1- (length a)))
+             (progn
+               ;; (format t "~&fouuuunnnnddd~%")
+               (setf *found* T)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -57,13 +67,13 @@
   (let ((q (parse-integer (read-line stream))))
     (loop for x from 1 to q
        do
+         (setf *found* nil)
          (solve-me
-          (loop for c across
-                (car (split-by-one-space (read-line stream)))
-                collect c)
-          (loop for c across
-               (car (split-by-one-space (read-line stream)))
-               collect c)))))
+          (format nil "~a " (car (split-by-one-space (read-line stream))))
+          (format nil "~a " (car (split-by-one-space (read-line stream))))
+          0
+          0)
+         (format t "~A~%"     (if *found* "YES" "NO")))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
