@@ -1,5 +1,32 @@
+(defun n-pos (n rq cq)
+  (loop for rx from rq to n collect (list rx cq)))
+(defun e-pos (n rq cq)
+  (loop for cx from cq to n collect (list rq cx)))
+(defun s-pos (n rq cq)
+  (loop for rx from rq downto 1 collect (list rx cq)))
+(defun w-pos (n rq cq)
+  (loop for cx from cq downto 1 collect (list rq cx)))
+
+(defun ne-pos (n rq cq)
+  (loop for rx from rq to n
+       for cx from cq to n
+     collect (list rx cx)))
+(defun se-pos (n rq cq)
+  (loop for rx from rq to n
+       for cx from cq downto 1
+     collect (list rx cx)))
+(defun sw-pos (n rq cq)
+  (loop for rx from rq downto 1
+       for cx from cq downto 1
+     collect (list rx cx)))
+(defun nw-pos (n rq cq)
+  (loop for rx from rq downto 1
+       for cx from cq to n
+     collect (list rx cx)))
+
 (defun solve-me (n k rq cq ii)
-  (format t "=== ~A ~A ~A ~A ~A~%" n k rq cq ii))
+  (format t "=== ~A ~A ~A ~A ~A~%" n k rq cq ii)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
