@@ -1,28 +1,52 @@
 (defun n-pos (n rq cq)
-  (cdr (loop for rx from rq to n collect (list rx cq) until (obstaclep rx cq) )))
+  (cdr (loop for rx from rq to n
+          until (obstaclep rx cq)
+          collect (list rx cq)
+            )))
 (defun e-pos (n rq cq)
-  (cdr (loop for cx from cq to n collect (list rq cx) until (obstaclep rq cx) )))
+  (cdr (loop for cx from cq to n
+          until (obstaclep rq cx)
+          collect (list rq cx)
+            )))
 (defun s-pos (n rq cq)
-  (cdr (loop for rx from rq downto 1 collect (list rx cq) until (obstaclep rx cq) )))
+  (cdr (loop for rx from rq downto 1
+          until (obstaclep rx cq)
+          collect (list rx cq)
+            )))
 (defun w-pos (n rq cq)
-  (cdr (loop for cx from cq downto 1 collect (list rq cx) until (obstaclep rq cx) )))
+  (cdr (loop for cx from cq downto 1
+          until (obstaclep rq cx)
+          collect (list rq cx)
+            )))
 
 (defun ne-pos (n rq cq)
   (cdr (loop for rx from rq to n
           for cx from cq to n
-          collect (list rx cx) until (obstaclep rx cx) )))
+
+          until (obstaclep rx cx)
+          collect (list rx cx)
+            )))
 (defun se-pos (n rq cq)
   (cdr (loop for rx from rq to n
           for cx from cq downto 1
-          collect (list rx cx) until (obstaclep rx cx) )))
+
+          until (obstaclep rx cx)
+          collect (list rx cx)
+            )))
 (defun sw-pos (n rq cq)
   (cdr (loop for rx from rq downto 1
           for cx from cq downto 1
-          collect (list rx cx) until (obstaclep rx cx) )))
+
+          until (obstaclep rx cx)
+          collect (list rx cx)
+            )))
 (defun nw-pos (n rq cq)
   (cdr (loop for rx from rq downto 1
           for cx from cq to n
-          collect (list rx cx) until (obstaclep rx cx) )))
+
+          until (obstaclep rx cx)
+          collect (list rx cx)
+            )))
 
 (defun obstaclep (x y)
   (get-from-hh x y))
@@ -37,7 +61,6 @@
     (gethash y (gethash x *r*))))
 
 (defun solve-me (n k rq cq )
-  ;; (format t "=== ~A ~A ~A ~A ~%" n k rq cq )
   (format t "~A~%"
           (loop for a in '(n-pos e-pos s-pos w-pos ne-pos se-pos sw-pos nw-pos)
              sum (length (funcall a n rq cq )))))
@@ -78,7 +101,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input1" :type "txt"))
     (solution s)))
 
 (main)
