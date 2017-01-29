@@ -1,32 +1,46 @@
 (defun n-pos (n rq cq)
-  (loop for rx from rq to n collect (list rx cq)))
+  (cdr (loop for rx from rq to n collect (list rx cq) until (obstaclep rx cq) )))
 (defun e-pos (n rq cq)
-  (loop for cx from cq to n collect (list rq cx)))
+  (cdr (loop for cx from cq to n collect (list rq cx) until (obstaclep rq cx) )))
 (defun s-pos (n rq cq)
-  (loop for rx from rq downto 1 collect (list rx cq)))
+  (cdr (loop for rx from rq downto 1 collect (list rx cq) until (obstaclep rx cq) )))
 (defun w-pos (n rq cq)
-  (loop for cx from cq downto 1 collect (list rq cx)))
+  (cdr (loop for cx from cq downto 1 collect (list rq cx) until (obstaclep rq cx) )))
 
 (defun ne-pos (n rq cq)
-  (loop for rx from rq to n
-       for cx from cq to n
-     collect (list rx cx)))
+  (cdr (loop for rx from rq to n
+          for cx from cq to n
+          collect (list rx cx) until (obstaclep rx cx) )))
 (defun se-pos (n rq cq)
-  (loop for rx from rq to n
-       for cx from cq downto 1
-     collect (list rx cx)))
+  (cdr (loop for rx from rq to n
+          for cx from cq downto 1
+          collect (list rx cx) until (obstaclep rx cx) )))
 (defun sw-pos (n rq cq)
-  (loop for rx from rq downto 1
-       for cx from cq downto 1
-     collect (list rx cx)))
+  (cdr (loop for rx from rq downto 1
+          for cx from cq downto 1
+          collect (list rx cx) until (obstaclep rx cx) )))
 (defun nw-pos (n rq cq)
-  (loop for rx from rq downto 1
-       for cx from cq to n
-     collect (list rx cx)))
+  (cdr (loop for rx from rq downto 1
+          for cx from cq to n
+          collect (list rx cx) until (obstaclep rx cx) )))
 
-(defun solve-me (n k rq cq ii)
-  (format t "=== ~A ~A ~A ~A ~A~%" n k rq cq ii)
-  )
+(defun obstaclep (x y)
+  (get-from-hh x y))
+
+(defun add-to-hh (x y)
+  (unless (gethash x *r*)
+    (setf (gethash x *r*) (make-hash-table)))
+  (setf (gethash y (gethash x *r*)) T ))
+
+(defun get-from-hh (x y)
+  (when (gethash x *r*)
+    (gethash y (gethash x *r*))))
+
+(defun solve-me (n k rq cq )
+  ;; (format t "=== ~A ~A ~A ~A ~%" n k rq cq )
+  (format t "~A~%"
+          (loop for a in '(n-pos e-pos s-pos w-pos ne-pos se-pos sw-pos nw-pos)
+             sum (length (funcall a n rq cq )))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -49,8 +63,13 @@
          (rqcq (split-and-parse (read-line stream)))
          (rq (car rqcq))
          (cq (cadr rqcq))
-         (ii (loop for x from 1 to k collect (split-and-parse (read-line stream)))))
-    (solve-me n k rq cq ii)))
+         (ii))
+    (defparameter *r* (make-hash-table))
+    (loop for x from 1 to k
+       do
+         (setf ii (split-and-parse (read-line stream)))
+         (add-to-hh (car ii) (cadr ii)))
+    (solve-me n k rq cq )))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
