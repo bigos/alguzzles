@@ -1,17 +1,15 @@
-(use 'clojure.java.io 'clojure.pprint)
+(use 'clojure.java.io 'clojure.pprint, 'clojure.core)
 
 (defn solve-me
   [aa bb]
-  (cl-format true "~&solving ~s ~s ~%" aa bb)
-  (loop [a aa
-         b bb
-         ac 0
-         bc 0 ]
-    (when (> (count a) 0)
-      (cl-format true "pair ~S ~S ~s ~s   ~s ~s~%" a b ac bc  (+ a ac) (+ b bc))
-      (recur (rest a) (rest b)
-             (if (> (first a) (first b)) (+ ac 1) ac)
-             (if (< (first a) (first b)) (+ bc 1) bc)))))
+  ;; (cl-format true "~&solving ~s ~s ~%" aa bb)
+  (let [pairs
+        (mapv (fn [x y] (cond (> x y) (list 1 0)
+                              (< x y) (list 0 1)
+                              :else (list 0 0))) aa bb)]
+    (cl-format true "~A ~A~%"
+               (reduce + (map (fn [a] (first a)) pairs))
+               (reduce + (map (fn [b] (first (rest b))) pairs)))))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
