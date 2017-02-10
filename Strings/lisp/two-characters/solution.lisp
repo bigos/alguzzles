@@ -8,7 +8,29 @@
          (incf (gethash c letter-counts 0))
          (setf (gethash i index-letters) c))
 
+    (princ
+     (sort
+      (loop for k
+         being the hash-keys
+         in letter-counts
+         using (hash-value v)
+         collect (list k v))
+      (lambda (x y) (>= (cadr x) (cadr y)))))
+    (terpri)
 
+    (princ
+
+     (loop for v
+        being the hash-values
+        in index-letters
+        using (hash-key k)
+
+        when (or (eql v #\a) (eql v #\b))
+
+        collect (list k v ))
+
+      )
+    (terpri)
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
