@@ -3,7 +3,16 @@
 
 (defn solve-me
   [sl s]
-  (cl-format true "===== ~A ~S~%" sl s))
+  (cl-format true "===== ~A ~S~%" sl s)
+  (let [h {}]
+    (cl-format true "---- ~s~%" h)
+
+    (cl-format true "---- ~s~%"
+               (map (fn [x y] (assoc h x (cons y (get h x))) )
+                    s
+                    (range 0 (.length s))))
+    (cl-format true "---- ~s~%" h)
+    ))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
