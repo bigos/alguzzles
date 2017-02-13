@@ -1,17 +1,28 @@
 ;;
 (use 'clojure.java.io 'clojure.pprint)
 
+(defn indexes-hash
+  [s]
+  (reduce (fn [acc [i ch]]
+            (update acc ch conj i))
+          {}
+          (map-indexed list s)))
+
+(defn counts-hash
+  [s]
+  (reduce (fn [a x]
+            (update a x (fn [y]
+                          (+ 1 (get a x 0)))))
+          {}
+          s))
+
 (defn solve-me
   [sl s]
   (cl-format true "===== ~A ~S~%" sl s)
-  (let [h {}]
-    (cl-format true "---- ~s~%" h)
-
-    (cl-format true "---- ~s~%"
-               (map (fn [x y] (assoc h x (cons y (get h x))) )
-                    s
-                    (range 0 (.length s))))
-    (cl-format true "---- ~s~%" h)
+  (let [hi (indexes-hash s)
+        hc (counts-hash s)]
+    (cl-format true "---- ~s~%" hi)
+    (cl-format true "---- ~s~%" hc)
     ))
 
 ;; ---------- functions for reading the inputs ---------------------------------
