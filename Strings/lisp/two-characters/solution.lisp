@@ -1,36 +1,38 @@
+(defun dump-hash (h)
+  (loop for k being the hash-keys
+     in h
+     using (hash-value v) do
+       (format t "~&~a => ~a~%" k v)))
+
 (defun solve-me (sl s)
   (format t "~A ~A~%" sl s)
   (let ((letter-counts (make-hash-table))
-        (index-letters (make-hash-table)))
+        (count-letters (make-hash-table))
+        (letter-indexes (make-hash-table)))
     (loop
        for c across s
        for i = 0 then (1+ i) do
          (incf (gethash c letter-counts 0))
-         (setf (gethash i index-letters) c))
+         (push i (gethash c letter-indexes)))
 
-    (princ
-     (sort
-      (loop for k
-         being the hash-keys
-         in letter-counts
-         using (hash-value v)
-         collect (list k v))
-      (lambda (x y) (>= (cadr x) (cadr y)))))
+    (loop
+       for p in
+         (sort
+          (loop for k
+             being the hash-keys
+             in letter-counts
+             using (hash-value v)
+             collect (list k v))
+          (lambda (x y) (>= (cadr x) (cadr y))))
+       do
+         (push (car p) (gethash (cadr p) count-letters)))
+
+    (dump-hash count-letters)
     (terpri)
 
-    (princ
-
-     (loop for v
-        being the hash-values
-        in index-letters
-        using (hash-key k)
-
-        when (or (eql v #\a) (eql v #\b))
-
-        collect (list k v ))
-
-      )
+    (dump-hash letter-indexes)
     (terpri)
+
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
