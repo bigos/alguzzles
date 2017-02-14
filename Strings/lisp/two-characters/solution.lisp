@@ -15,6 +15,22 @@
      using (hash-value v) do
        (format t "~&~a => ~a~%" k v)))
 
+(defun hash-keys (h)
+  (loop for k being the hash-keys in h collect k))
+
+(defun hash-values (h)
+  (loop for k being the hash-keys in h using (hash-value v) collect v))
+
+(defun sort-letter-indexes (h)
+  (sort-indexes (hash-values h)))
+
+(defun sort-indexes (i)
+  (sort i
+        (lambda (x y)
+          (if (eq (length x) (length y))
+              (> (car x) (car y))
+              (> (length x) (length y))))))
+
 (defun solve-me (sl s)
   (format t "~A ~A~%" sl s)
   (let ((letter-counts (make-hash-table))
@@ -40,9 +56,13 @@
 
     (dump-hash count-letters)
     (terpri)
+    (defparameter zzz count-letters)
 
     (dump-hash letter-indexes)
     (terpri)
+    (defparameter aaa letter-indexes)
+    (defparameter qqq (comb 2 (sort-letter-indexes letter-indexes)))
+
 
     ))
 
