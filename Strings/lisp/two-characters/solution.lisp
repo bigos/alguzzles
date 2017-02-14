@@ -25,11 +25,23 @@
   (sort-indexes (hash-values h)))
 
 (defun sort-indexes (i)
-  (sort i
+  (sort (copy-seq i)
         (lambda (x y)
           (if (eq (length x) (length y))
               (> (car x) (car y))
               (> (length x) (length y))))))
+
+(defun zipme (p)
+  (let ((a (car p))
+        (b (cadr p)))
+    (format t "~&--- ~a ~a~%" a b)
+    (if (> (car a) (car b))
+        (zipme-2 a b)
+        (zipme-2 b a))
+    ))
+
+(defun zipme-2 (x y)
+  (format t "~&=== ~A ~A~%" x y))
 
 (defun solve-me (sl s)
   (format t "~A ~A~%" sl s)
@@ -62,7 +74,8 @@
     (terpri)
     (defparameter aaa letter-indexes)
     (defparameter qqq (comb 2 (sort-letter-indexes letter-indexes)))
-
+    (defparameter *found* nil)
+    (defparameter www (map 'list 'sort-indexes (comb 2 (sort-letter-indexes letter-indexes))))
 
     ))
 
