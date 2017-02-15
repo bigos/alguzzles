@@ -31,17 +31,39 @@
               (> (car x) (car y))
               (> (length x) (length y))))))
 
+(defparameter *maxnum* 1000000)
+
+;; (loop for p in www do (zipme p) )
 (defun zipme (p)
   (let ((a (car p))
         (b (cadr p)))
     (format t "~&--- ~a ~a~%" a b)
-    (if (> (car a) (car b))
-        (zipme-2 a b)
-        (zipme-2 b a))
-    ))
+    (let ((la (length a))
+          (lb (length b)))
+      (cond ((eq la lb)
+             (foo a b))
+            ((eq (1+ la) lb)
+             (foo (cons *maxnum* a) b))
+            ((eq la (1+ lb))
+             (foo a (cons *maxnum* b)))
+            ((eq T T)
+             (format t "~&-------------------------~%"))))))
 
-(defun zipme-2 (x y)
-  (format t "~&=== ~A ~A~%" x y))
+(defun foo (x y)
+  (format t "====== ~A ~A    ~A~%" x y
+          (if (> (car x)
+                 (car y))
+              (bar x y)
+              (bar y x))))
+
+(defun bar (a b)
+  (let ((res (loop for ia in a
+                for ib in b
+                collect ia
+                collect ib)))
+    (if (eq (car res ) *maxnum*)
+        (cdr res)
+        res)))
 
 (defun solve-me (sl s)
   (format t "~A ~A~%" sl s)
@@ -76,6 +98,7 @@
     (defparameter qqq (comb 2 (sort-letter-indexes letter-indexes)))
     (defparameter *found* nil)
     (defparameter www (map 'list 'sort-indexes (comb 2 (sort-letter-indexes letter-indexes))))
+    (loop for p in www do (zipme p))
 
     ))
 
