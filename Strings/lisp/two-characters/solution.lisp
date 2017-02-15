@@ -33,40 +33,50 @@
 
 (defparameter *maxnum* 1000000)
 
-;; (loop for p in www do (zipme p) )
 (defun zipme (p)
   (let ((a (car p))
         (b (cadr p)))
-    (format t "~&--- ~a ~a~%" a b)
-    (let ((la (length a))
-          (lb (length b)))
-      (cond ((eq la lb)
-             (foo a b))
-            ((eq (1+ la) lb)
-             (foo (cons *maxnum* a) b))
-            ((eq la (1+ lb))
-             (foo a (cons *maxnum* b)))
-            ((eq T T)
-             (format t "~&-------------------------~%"))))))
+    (let* ((la (length a))
+           (lb (length b))
+           (res (cond ((eq la lb)
+                       (foo a b))
+                      ((eq (1+ la) lb)
+                       (foo (cons *maxnum* a) b))
+                      ((eq la (1+ lb))
+                       (foo a (cons *maxnum* b)))
+                      ((eq T T)
+                       nil))))
+      (if (and res
+               (compare-sorted res))
+          (progn
+            (setf *found* T)
+            (length res))
+          0))))
 
 (defun foo (x y)
-  (format t "====== ~A ~A    ~A~%" x y
-          (if (> (car x)
-                 (car y))
-              (bar x y)
-              (bar y x))))
+  (let ((a (if (> (car x)
+                  (car y))
+               x
+               y))
+        (b (if (< (car x)
+                  (car y))
+               x
+               y)))
+      (let ((res (loop
+                    for ia in a
+                    for ib in b
+                    collect ia
+                    collect ib)))
+        (if (eq (car res ) *maxnum*)
+            (cdr res)
+            res))))
 
-(defun bar (a b)
-  (let ((res (loop for ia in a
-                for ib in b
-                collect ia
-                collect ib)))
-    (if (eq (car res ) *maxnum*)
-        (cdr res)
-        res)))
+(defun compare-sorted (l)
+  (equalp l (sort (copy-seq l) '>)))
 
 (defun solve-me (sl s)
-  (format t "~A ~A~%" sl s)
+  (declare (ignore sl))
+  ;; (format t "~A ~A~%" sl s)
   (let ((letter-counts (make-hash-table))
         (count-letters (make-hash-table))
         (letter-indexes (make-hash-table)))
@@ -88,18 +98,18 @@
        do
          (push (car p) (gethash (cadr p) count-letters)))
 
-    (dump-hash count-letters)
-    (terpri)
-    (defparameter zzz count-letters)
+    ;; (dump-hash count-letters)
+    ;; (terpri)
+    ;; (defparameter zzz count-letters)
 
-    (dump-hash letter-indexes)
-    (terpri)
-    (defparameter aaa letter-indexes)
-    (defparameter qqq (comb 2 (sort-letter-indexes letter-indexes)))
+    ;; (dump-hash letter-indexes)
+    ;; (terpri)
+    ;; (defparameter aaa letter-indexes)
+    ;; (defparameter qqq (comb 2 (sort-letter-indexes letter-indexes)))
     (defparameter *found* nil)
     (defparameter www (map 'list 'sort-indexes (comb 2 (sort-letter-indexes letter-indexes))))
-    (loop for p in www do (zipme p))
-
+    (format t "~A~%"
+            (loop for p in www maximize (zipme p)  until *found*))
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
