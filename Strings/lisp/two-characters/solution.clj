@@ -16,6 +16,20 @@
           {}
           s))
 
+(defn sort-indexes
+  [ii]
+  (sort (fn [x y] (if (= (count x) (count y))
+                    (> (first x) (first y))
+                    (> (count x) (count y))))
+        ii))
+
+(defn combinations-wrep
+  "Combinations with repetition"
+  [l]
+  (for [x l
+        y l]
+    [x y]))
+
 (defn solve-me
   [sl s]
   (cl-format true "===== ~A ~S~%" sl s)
@@ -23,7 +37,11 @@
         hc (counts-hash s)]
     (cl-format true "---- ~s~%" hi)
     (cl-format true "---- ~s~%" hc)
-    ))
+    (cl-format true "---- ~s~%" (sort-indexes (vals hi)))
+
+    (cl-format true "---- ~s~%"
+               (remove (fn [x] (= (first x) (last x)))
+                       (combinations-wrep (sort-indexes (vals hi)))))))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
