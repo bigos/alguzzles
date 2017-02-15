@@ -33,9 +33,13 @@
 
 (defparameter *maxnum* 1000000)
 
+(defun compare-sorted (l)
+  (equalp l (sort (copy-seq l) '>)))
+
 (defun zipme (p)
   (let ((a (car p))
         (b (cadr p)))
+    ;; (format t "~&+++++ ~A~%" p)
     (let* ((la (length a))
            (lb (length b))
            (res (cond ((eq la lb)
@@ -45,7 +49,9 @@
                       ((eq la (1+ lb))
                        (foo a (cons *maxnum* b)))
                       ((eq T T)
+                       ;; (format t "aaaaaaaaaa    ~A~%" p)
                        nil))))
+      ;; (format t "---- ~A   ~A   ~A~%" p res (length res ))
       (if (and res
                (compare-sorted res))
           (progn
@@ -71,9 +77,6 @@
             (cdr res)
             res))))
 
-(defun compare-sorted (l)
-  (equalp l (sort (copy-seq l) '>)))
-
 (defun solve-me (sl s)
   (declare (ignore sl))
   ;; (format t "~A ~A~%" sl s)
@@ -98,18 +101,20 @@
        do
          (push (car p) (gethash (cadr p) count-letters)))
 
-    ;; (dump-hash count-letters)
-    ;; (terpri)
-    ;; (defparameter zzz count-letters)
-
     ;; (dump-hash letter-indexes)
     ;; (terpri)
-    ;; (defparameter aaa letter-indexes)
-    ;; (defparameter qqq (comb 2 (sort-letter-indexes letter-indexes)))
+    ;; (dump-hash count-letters)
+    ;; (defparameter aaa (hash-values letter-indexes))
+
     (defparameter *found* nil)
+    ;; the error is here
+    ;; not all combinations are used
+    ;; input1a illustrates the problem
+    ;; until *found* is the suspect
     (defparameter www (map 'list 'sort-indexes (comb 2 (sort-letter-indexes letter-indexes))))
+
     (format t "~A~%"
-            (loop for p in www maximize (zipme p)  until *found*))
+            (loop for p in www maximize (zipme p)  ))
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -137,7 +142,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input15" :type "txt"))
     (solution s)))
 
 (main)
