@@ -94,6 +94,7 @@
 
 ;;; this closure reads the data and sends it to solve-me
 (defn solution []
+  (cl-format true "~&===================== ~S~%" *source-path*)
   (let [[sl] (read-lines as-ints 1)
         [s] (doall (read-lines identity 1))]
     (solve-me sl s)))
