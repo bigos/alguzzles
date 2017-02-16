@@ -32,10 +32,12 @@
 
 (defn compare-sorted [l]
   (= l
-     (sort (fn [x y] (> x y)) l)))
+     (sort (fn [x y] (> x y))
+           l)))
 
 (defn first-choice [x y f]
-  (if (apply f [(first x) (first y)])
+  (if (apply f [(first x)
+                (first y)])
     x
     y))
 
