@@ -93,9 +93,15 @@
   (map as-int (split-line line)))
 
 ;;; this closure reads the data and sends it to solve-me
+(defn solution []
+  (let [[sl] (read-lines as-ints 1)
+        [s] (doall (read-lines identity 1))]
+    (solve-me sl s)))
 
 ;;; uncomment the following code for hackerrank and lein exec
+;; commenting it out can be useful in reloading all the functions
+(solution)
 
-(let [[sl] (read-lines as-ints 1)
-      [s] (doall (read-lines identity 1))]
-  (solve-me sl s))
+;; if you uncomment the above and load-file the file then
+;; when clojure repl asks you for Stdin: in the mini buffer you can paste there
+;; the content of the input file
