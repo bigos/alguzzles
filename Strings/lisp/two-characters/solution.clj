@@ -63,18 +63,10 @@
 
 (defn solve-me
   [sl s]
-  (cl-format true "===== ~A ~S~%" sl s)
+  ;; (cl-format true "===== ~A ~S~%" sl s)
   (let [hi (indexes-hash s)
         hc (counts-hash s)]
-    ;; (cl-format true "---- ~s~%" hi)
-    ;; (cl-format true "---- ~s~%" hc)
-    ;; (cl-format true "---- ~s~%" (sort-indexes (vals hi)))
-
-    ;; (cl-format true "---- ~s~%"
-    ;;            (remove (fn [x] (= (first x) (last x)))
-    ;;                    (combinations-wrep (sort-indexes (vals hi)))))
-
-    (cl-format true "----> ~s~%"
+    (cl-format true "~s~%"
                (first
                 (sort >
                       (map zipme
@@ -102,6 +94,6 @@
 
 ;;; uncomment the following code for hackerrank and lein exec
 
-;; (let [[sl] (read-lines as-ints 1)
-;;       [s] (doall (read-lines identity 1))]
-;;   (solve-me sl s))
+(let [[sl] (read-lines as-ints 1)
+      [s] (doall (read-lines identity 1))]
+  (solve-me sl s))
