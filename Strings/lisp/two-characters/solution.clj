@@ -67,13 +67,15 @@
   [sl s]
   ;; (cl-format true "===== ~A ~S~%" sl s)
   (let [hi (indexes-hash s)
-        hc (counts-hash s)]
-    (cl-format true "~s~%"
-               (first
-                (sort >
-                      (map zipme
-                           (remove (fn [x] (= (first x) (last x)))
-                                   (combinations-wrep (sort-indexes (vals hi))))))))))
+        hc (counts-hash s)
+        res (first
+             (sort >
+                   (map zipme
+                        (remove (fn [x] (= (first x) (last x)))
+                                (combinations-wrep (sort-indexes (vals hi)))))))]
+    (cl-format true "~S~%"   (if res
+                               res
+                               0))))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
@@ -94,12 +96,11 @@
 
 ;;; this closure reads the data and sends it to solve-me
 (defn solution []
-  (cl-format true "~&===================== ~S~%" *source-path*)
   (let [[sl] (read-lines as-ints 1)
         [s] (doall (read-lines identity 1))]
     (solve-me sl s)))
 
-;;; uncomment the following code for hackerrank and lein exec
+;; remember to uncomment the following code for hackerrank and lein exec
 ;; commenting it out can be useful in reloading all the functions
 (solution)
 
