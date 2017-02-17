@@ -1,6 +1,27 @@
 ;; new puzzle https://www.hackerrank.com/challenges/sherlock-and-valid-string
 
+(use 'clojure.java.io
+     'clojure.pprint)
 
+(defn solve-me [s]
+  (let [ff  (frequencies s)
+        gff (group-by (fn [x] (val x)) ff)
+        dgff (into {}
+                   (for [[k v] gff] [k (count v)]))
+        cc  (vals ff)
+        dc  (distinct cc)
+        cdc (count dc)]
+    (cl-format true "------------ ~S   ~S  ~S ~s ~S ~S~%" s cc dc ff gff dgff)
+    (cl-format true "~A~%"
+               (if (cond (= cdc 1)                           true
+                         (> cdc 2)                           false
+                         (and (= cdc 2)
+                              (or (= 1 (first (vals dgff)))
+                                  (= 1 (last (vals dgff))))
+                              (= (Math/abs (apply - dc)) 1)) true
+                         :else                               false)
+                 "YES"
+                 "NO"))))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
@@ -21,12 +42,12 @@
 
 ;;; this closure reads the data and sends it to solve-me
 (defn solution []
-  (let [[sl] (read-lines as-ints 1)
-        [s] (doall (read-lines identity 1))]
-    (solve-me sl s)))
+  (let [[s] (doall (read-lines identity 1))]
+    (solve-me s)))
 
 ;; remember to uncomment the following code for hackerrank and lein exec
 ;; commenting it out can be useful in reloading all the functions
+
 (solution)
 
 ;; if you uncomment the above and load-file the file then
