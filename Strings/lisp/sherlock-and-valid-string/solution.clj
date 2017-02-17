@@ -4,23 +4,22 @@
      'clojure.pprint)
 
 (defn solve-me [s]
-  (let [ff  (frequencies s)
-        gff (group-by (fn [x] (val x)) ff)
+  (let [ff   (frequencies s)
+        gff  (group-by (fn [x] (val x)) ff)
         dgff (into {}
                    (for [[k v] gff] [k (count v)]))
-        cc  (vals ff)
-        dc  (distinct cc)
-        cdc (count dc)]
-    ;; (cl-format true "------------ ~S   ~S  ~S ~s ~S ~S~%" s cc dc ff gff dgff)
+        cc   (vals ff)
+        dc   (distinct cc)
+        cdc  (count dc)]
+    ;;(cl-format true "------------ ~S   ~S  ~S ~s ~S ~S~%" s cc dc ff gff dgff)
     (cl-format true "~A~%"
-               (if (cond (= cdc 1)                           true
-                         (> cdc 2)                           false
+               (if (cond (= cdc 1)                                    true
+                         (> cdc 2)                                    false
                          (and (= cdc 2)
                               (or (= 1 (first (vals dgff)))
                                   (= 1 (last (vals dgff))))
-                              (= (count (gff 1)) 1)
-                              (= (last (first (gff 1))) 1)) true
-                         :else                               false)
+                              ) true
+                         :else                                        false)
                  "YES"
                  "NO"))))
 
