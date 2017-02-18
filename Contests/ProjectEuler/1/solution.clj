@@ -1,10 +1,13 @@
 ;; solution in Clojure
 (use 'clojure.java.io 'clojure.pprint)
 
-(defn triangular [n] (/ (+ (* n n) n) 2))
+(defn triangular [n]
+  (/ (+ (* n n) n) 2))
 
 (defn fifteenator [n]
-  (* 3 5 (+ (* (+ 1 n) 3) (* (triangular n) 7))))
+  (* 15 (+ (* (+ 1 n) 3) (*
+                           (/ (+ (* n n) n) 2)
+                           7))))
 
 (defn recursive [n acc l steps]
   (let [ss (if (= steps '()) '(3 2 1 3 1 2 3) steps) ]
@@ -19,7 +22,7 @@
     (if (>= n l)
       acc
       (do
-        (recur (+  n (first ss))
+        (recur (+ n (first ss))
                (+ n acc)
                l
                (rest ss))))))
@@ -28,7 +31,7 @@
   (cl-format true "~A~%"
              (if (< l 15)
                (recursive 0 0 l '())
-               (let [fm (- l (mod l 15))
+               (let [fm  (- l (mod l 15))
                      acc (fifteenator (- (/ fm 15) 1))]
                  ;; (cl-format true "~A   -- ~A     ~A~%" fm acc (/ fm 15))
                  (recursive fm acc l '())))))
