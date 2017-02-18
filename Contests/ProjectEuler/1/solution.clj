@@ -21,6 +21,7 @@
     ;; where first part is the key and the value becomes x two lines above
     ;;  21 is 3*7, 42 is 6*7, 70 is 10*7, 105 is 15*7, 147 is 21*7, 196 is 28*7, 252 is 36*7
     ;; 1*3*7, 2*3*7, 2*5*7, 3*5*7, 3*7*7, 4*7*7, 4*9*7
+    ;; triangular numbers?
     (if (>= n l)
       acc
       (do
