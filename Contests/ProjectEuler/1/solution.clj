@@ -1,6 +1,11 @@
 ;; solution in Clojure
 (use 'clojure.java.io 'clojure.pprint)
 
+(defn triangular [n] (/ (+ (* n n) n) 2))
+
+(defn fifteenator [n]
+  (* 3 5 (+ (* (+ 1 n) 3) (* (triangular n) 7))))
+
 (defn recursive [n acc l steps]
   (let [ss (if (= steps '()) '(3 2 1 3 1 2 3) steps) ]
     (cl-format true "-- ~A ~A ~A ~A~%" n acc l ss)
@@ -22,6 +27,11 @@
     ;;  21 is 3*7, 42 is 6*7, 70 is 10*7, 105 is 15*7, 147 is 21*7, 196 is 28*7, 252 is 36*7
     ;; 1*3*7, 2*3*7, 2*5*7, 3*5*7, 3*7*7, 4*7*7, 4*9*7
     ;; triangular numbers?
+    ;; triangular number 45 times 7 plus 30 gives expected 345 which multiplied
+    ;; by 3 and 5 gives correct result (* 3 5 (+ 315 30))
+    ;; or (* 3 5 (+ 30 (* 45 7)))
+    ;; fifteenator solves the problem
+
     (if (>= n l)
       acc
       (do
