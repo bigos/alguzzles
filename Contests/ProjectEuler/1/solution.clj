@@ -3,6 +3,17 @@
 
 (defn recursive [n acc l steps]
   (let [ss (if (= steps '()) '(3 2 1 3 1 2 3) steps) ]
+    ;;(cl-format true "-- ~A ~A ~A ~A~%" n acc l ss)
+    (if (= 7 (count ss))
+      (cl-format true "!!! ~A  zzz ~A~%" acc (/ (/ (- acc 0 ) 5) 3) ))
+    ;; values of zzz - old-zzz differ by 7
+    ;; starting with 3
+    ;; previous zzz + zzz + 7 = new zzz
+    ;; 3 + 7 + 7 + 7 or
+    ;; for all positions except the first
+    ;; 7 * pos - 4, so
+    ;;  7 * 1 - 4 = 3, 7 * 2 - 4 = 10, 7 * 3 - 4 = 17, 7 * 4 -4 = 23
+    ;; 3*3*5 = 45, 13*3*5 = 195, 30*3*5=450
     (if (>= n l)
       acc
       (do
