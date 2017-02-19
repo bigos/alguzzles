@@ -25,13 +25,13 @@
 (def sums (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0)))))
 (def sum-keys (map first sums))
 (def hash-sums (reduce (fn [a x] (update a (first x) (fn [y] (last x)))) {} sums))
+(def argval (doall (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0))))))
 
-(defn hhh [n h]
-  (last (last (take-while (fn [[a b]] (<= a n)) (map (fn [x y] (list x y)) h (rest (zzz h '(0))))))))
+(defn hhh [n]
+  (last (last (take-while (fn [[a b]] (<= a n)) argval))))
 
 (defn solve-me [n]
-  (cl-format true "~A~%" (hhh n even-fib) )
-  )
+  (cl-format true "~A~%" (hhh n) ))
 
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
