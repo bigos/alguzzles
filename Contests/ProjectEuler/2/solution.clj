@@ -22,13 +22,10 @@
            (cons (+ (first l) (first a)) a))))
 
 ;;; close to the solution
-(def sums (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0)))))
-(def sum-keys (map first sums))
-(def hash-sums (reduce (fn [a x] (update a (first x) (fn [y] (last x)))) {} sums))
-(def argval (doall (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0))))))
+(def sums   (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0)))))
 
 (defn hhh [n]
-  (last (last (take-while (fn [[a b]] (<= a n)) argval))))
+  (last (last (take-while (fn [[a b]] (<= a n)) sums))))
 
 (defn solve-me [n]
   (cl-format true "~A~%" (hhh n) ))
