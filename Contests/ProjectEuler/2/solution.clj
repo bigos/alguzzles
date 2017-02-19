@@ -23,9 +23,16 @@
 
 ;;; close to the solution
 (def sums (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0)))))
+(def sum-keys (map first sums))
+(def hash-sums (reduce (fn [a x] (update a (first x) (fn [y] (last x)))) {} sums))
 
-(defn solve-me (n)
-  (cl-format true "=========== ~a~%" n))
+(defn hhh [n h]
+  (last (last (take-while (fn [[a b]] (<= a n)) (map (fn [x y] (list x y)) h (rest (zzz h '(0))))))))
+
+(defn solve-me [n]
+  (cl-format true "~A~%" (hhh n even-fib) )
+  )
+
 ;; ---------- functions for reading the inputs ---------------------------------
 (defn read-lines
   [f n]
