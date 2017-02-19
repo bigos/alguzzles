@@ -1,6 +1,29 @@
 ;; solution in Clojure
 (use 'clojure.java.io 'clojure.pprint)
 
+(defn exp [x n]
+  (reduce * (repeat n x)))
+
+(def limit (* 4 (exp 10 16)))
+
+(defn fib [n a]
+  (if (or (> (first a) n)
+          (> (first a) limit))
+    (drop 3 (reverse (rest a)))
+    (recur n (cons (+ (first a) (second a)) a))))
+
+(def all-fib (fib limit '(0 1)))
+(def even-fib (filter even? all-fib))
+
+(defn zzz [l a ]
+  (if (= (count l) 0)
+    (reverse a)
+    (recur (rest l)
+           (cons (+ (first l) (first a)) a))))
+
+;;; close to the solution
+(def sums (map (fn [x y] (list x y)) even-fib (rest (zzz even-fib '(0)))))
+
 (defn solve-me (n)
   (cl-format true "=========== ~a~%" n))
 ;; ---------- functions for reading the inputs ---------------------------------
