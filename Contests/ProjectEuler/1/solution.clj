@@ -5,9 +5,7 @@
   (/ (+ (* n n) n) 2))
 
 (defn fifteenator [n]
-  (* 15 (+ (* (+ 1 n) 3) (*
-                           (/ (+ (* n n) n) 2)
-                           7))))
+  (* 15 (+ (* (+ 1 n) 3) (* (/ (+ (* n n) n) 2) 7))))
 
 (defn recursive [n acc l steps]
   (let [ss (if (= steps '()) '(3 2 1 3 1 2 3) steps) ]
