@@ -12,8 +12,10 @@
 (defn puzzle [n]
   (first (primefactors n)))
 
+(def mempuzzle (memoize puzzle))
+
 (defn solve-me [n]
-  (cl-format true "~A~%" (puzzle n)))
+  (cl-format true "~A~%" (mempuzzle n)))
 
 ;;; -----------------------------------------------------------------------------
 (defn solution []
