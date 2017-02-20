@@ -1,4 +1,5 @@
 ;;;
+(declaim (optimize (speed 3) (safety 0)))
 
 (defun primefactors (n &optional (candidate 2) (acc nil))
   (cond ((<= n 1)acc)
