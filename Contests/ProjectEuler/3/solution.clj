@@ -1,13 +1,19 @@
 (use '[clojure.string :only (split triml)]
      'clojure.pprint)
 
-(defn factors [n]
-  (filter #(zero? (rem n %)) (range 1 (inc n))))
+(defn primefactors
+  ([n]
+   (primefactors n 2 '()))
+  ([n candidate acc]
+   (cond (<= n 1)  acc
+         (zero? (rem n candidate)) (recur (/ n candidate) candidate (cons candidate acc))
+         :else (recur n (inc candidate) acc))))
 
-(defn recfactors [n c a])
+(defn puzzle [n]
+  (first (primefactors n)))
 
 (defn solve-me [n]
-  (cl-format true "==== ~A~%" n))
+  (cl-format true "~A~%" (puzzle n)))
 
 ;;; -----------------------------------------------------------------------------
 (defn solution []
