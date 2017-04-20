@@ -1,15 +1,14 @@
-;;;
 (declaim (optimize (speed 3) (safety 0)))
 
-(defun primefactors (n &optional (candidate 2) (acc nil))
-  (cond ((<= n 1)acc)
-        ((zerop (rem n candidate))
-         (primefactors (/ n candidate) candidate (cons candidate acc)))
-        (T
-         (primefactors n (1+ candidate) acc))))
+(defun lpf (x lpfi)
+  (if (<= x lpfi)
+      lpfi
+      (if (zerop (mod x lpfi))
+          (lpf (/ x lpfi) 2)
+          (lpf x (1+ lpfi)))))
 
 (defun solve-me (n)
-  (format t "~A~%" (car (primefactors n))))
+  (format t "~A~%" (lpf n 2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
