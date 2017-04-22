@@ -1,7 +1,6 @@
-(defun naive-divisors (n)
-  (reverse
-   (loop for d from (ceiling (/ n 2)) downto 1
-      when (zerop (mod n d)) collect d)))
+(defun divisors (n)
+  (loop for d from 1 to (ceiling (/ n 2))
+        when (zerop (mod n d)) collect d))
 
 (defun subsequent-numbers (nl &optional acc)
   (if (and (cdr nl)
@@ -11,9 +10,26 @@
       (cons (car nl)
             acc)))
 
+(defun almost-subsequent (nl &optional acc missing)
+  (cond ((and (cdr nl)
+              (eq (1+ (car nl))
+                  (cadr nl)))
+         (almost-subsequent (cdr nl) (push (car nl) acc) missing))
+        ((and (cdr nl)
+              (null  missing)
+              (eq (+ 2 (car nl))
+                  (cadr nl)))
+         (almost-subsequent (cdr nl) (push (car nl) acc) (1+ (car nl))))
+        (t (list 'missing missing (reverse (cons (car nl)
+                                                 acc))))))
+(defun zzz (ns)
+  (let* ((nn  (apply '* ns))
+         (nnd (divisors nn)))
+      (list 'divisors nn nnd 'almost (almost-subsequent nnd))    ))
+
 (defun seek (n)
   (loop for x from 1 to (expt 10 4)
-     for zzz = (length (subsequent-numbers (naive-divisors x)))
+     for zzz = (length (subsequent-numbers (divisors x)))
      until (eq zzz n)
      finally (return x)))
 
