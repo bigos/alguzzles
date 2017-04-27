@@ -15692,6 +15692,12 @@
  384691064908550400 461629277890260480 577036597362825600 769382129817100800
  1154073194725651200 2308146389451302400))
 
+;;; trying to reduce the candidates for subsequent divisors
+;; (loop for x in (subseq *secret-divisors* 0)
+;;    for y =  (subsequent-numbers (divisors x))
+;;    when (>= (length y) 10)
+;;    collect (list x y))
+
 (defun small-divisors (n)
   (reverse
    (loop for d from 1 to (sqrt n)
@@ -15699,7 +15705,7 @@
 
 (defun divisors (n)
   (let* ((sd (small-divisors n))
-         (rd (if (eq (car sd) (floor (sqrt n)))
+         (rd (if (eq (expt (car sd) 2) n)
                  (cdr sd)
                  sd)))
     (loop for x in sd do
