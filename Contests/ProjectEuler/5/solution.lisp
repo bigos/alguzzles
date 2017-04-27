@@ -15693,10 +15693,15 @@
  1154073194725651200 2308146389451302400))
 
 ;;; trying to reduce the candidates for subsequent divisors
-;; (loop for x in (subseq *secret-divisors* 0)
-;;    for y =  (subsequent-numbers (divisors x))
-;;    when (>= (length y) 10)
-;;    collect (list x y))
+;; (let ((zz))
+;;   (loop for x in (subseq *secret-divisors* 0 )
+;;      for y =  (subsequent-numbers (divisors x))
+;;      do
+;;        (when (> (length y) (length zz))
+;;          (format t "~&~A~%" (list x y))
+;;          (push (list x  (reverse y) ) zz)))
+;;   (format t "---------------~%")
+;;   zz)
 
 (defun small-divisors (n)
   (reverse
