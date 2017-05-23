@@ -4,18 +4,52 @@
 (defun median (data)
   (let* ((data-length (length data))
          (data-length-halved (/ data-length 2))
-         (sorted-data (sort data #'<)))
+         (sorted-data (sort (copy-seq data) #'<)))
     (if (oddp (length sorted-data))
         (elt sorted-data (floor data-length-halved))
         (mean (subseq sorted-data
                       (1- data-length-halved)
-                      (1+ data-length-halved)
-                      )))))
+                      (1+ data-length-halved))))))
+
+(defun mode (data)
+  (let ((hash (make-hash-table)))
+    (loop for d in data
+       do (incf (gethash d hash 0)))
+    (loop for k being each hash-key of hash
+       for val = (gethash k hash)
+       for largest-count = (cons k val)
+       then (cond ((> val (cdr largest-count))
+                   (cons k val))
+                  ((and (eq val (cdr largest-count))
+                        (< k (car largest-count)))
+                   (cons k val))
+                  (T
+                   largest-count))
+       finally (return (car largest-count)))))
+
+;;; sigma
+(defun standard-deviation (sample-values)
+  (let* ((n (length sample-values))
+         (mu (mean sample-values))
+         (variance-raw (loop for x in sample-values
+                          collect (expt (- x mu) 2)))
+         (variance (* (/ 1 n) (apply #'+ variance-raw)))
+         (standard-deviation  (sqrt variance)))
+    ;; (list 'mu mu 'sigma standard-deviation 'xxx variance-raw variance)
+    standard-deviation))
+
+
+(defun lower-upper-boundary (data)
+  (format T "~,1f ~,1f~%"
+          (- (mean data)  (* 1.96 (/ (standard-deviation data) (sqrt (length data)))) )
+          (+ (mean data)  (* 1.96 (/ (standard-deviation data) (sqrt (length data)))) )))
 
 (defun solve-me (data)
-  (loop for r in (list (mean data)
-                       (median data))
-       do (format t "~a~%" (* 1.0 r))))
+  (format t "~A~%" (* 1.0 (mean data)))
+  (format t "~A~%" (* 1.0 (median data)))
+  (format t "~A~%" (mode data))
+  (format t "~A~%" (* 1.0 (standard-deviation data)))
+  (lower-upper-boundary data))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
