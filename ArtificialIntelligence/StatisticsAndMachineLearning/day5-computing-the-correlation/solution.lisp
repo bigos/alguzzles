@@ -1,9 +1,35 @@
+(defun pearson-correlation-coefficient (datax datay)
+  (let ((meanx (mean datax))
+        (meany (mean datay)))
+    (/
+     (loop
+        for xi in datax
+        for yi in datay
+        summing (* (- xi meanx) (- yi meany)))
+     (* (sqrt
+         (loop for xi in datax summing (expt (- xi meanx) 2)))
+        (sqrt
+         (loop for yi in datay summing (expt (- yi meany) 2)))))))
+
+(defun mean (data)
+  (/ (loop for d in data summing d) (length data)))
+
+(defun sample (a b)
+  (pearson-correlation-coefficient a b))
+
 (defun solve-me (data)
-  (format t "data ~a~%" data))
+  (let ((x (loop for d in data collect (first  d)))
+        (y (loop for d in data collect (second d)))
+        (z (loop for d in data collect (third  d))))
+    ;; (format t "data ~% ~a~% ~a~% ~a~%" x y z)
+    (format t "~&~,2f~%~,2f~%~,2f~%"
+            (sample x y)
+            (sample y z)
+            (sample z x))))
 
 (defun split-by-one-tab (string)
-  (loop for i = 0 then (+ j 2)
-     as j = (position #\Space string :start i)  ; remember to change #\Space to #\Tab when submitting
+  (loop for i = 0 then (+ j 1)
+     as j = (position #\Tab string :start i)  ; remember to change #\Space to #\Tab when submitting
      collect (subseq string i j)
      while j))
 
@@ -55,7 +81,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input01" :type "txt"))
     (solution s)))
 
 (main)
