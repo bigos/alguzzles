@@ -1,10 +1,8 @@
 import Control.Monad
 
-
 princessColumn n "" = -1
 princessColumn n ( 'p' : _) = n
 princessColumn n str = princessColumn  (succ n) (drop 1 str)
-
 princessPosition n grid = head $ filter (\(a,b) -> b >= 0) coords
   where
   columns = (map (\x -> princessColumn 0 x) grid)
