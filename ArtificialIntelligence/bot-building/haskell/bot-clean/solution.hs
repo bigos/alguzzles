@@ -2,47 +2,53 @@ import Control.Monad
 import Data.Char
 import Data.List
 
--- - clean cell
--- d dirty cell
--- d bot on dirty cell
--- b bot on clean cell
--- task move bot to clean all the dirty cells
-
 testgrid = ["b---d", "-d--d", "--dd-", "--d--", "----d"]
 testgrid2 = ["b---d", "-d--d", "-----", "--d--", "----d"]
 
-rowCoordinates :: Int -> [String] -> [(Int, Int)]
-rowCoordinates r grid = filter (\x -> fst x >= 0) $ zip columns [0..4]
+dpos pos offset = (fst pos + fst offset, snd pos + snd offset)
+
+botVector pos goal = (fst goal - fst pos, snd goal - snd pos)
+
+cellAtPosition pos grid = row !! snd pos
+  where row = grid !! fst pos
+
+onDirt pos grid = cellAtPosition pos grid == 'd'
+
+positions radius = join [ne, es, sw, wn]
   where
-    columns = map (\x -> if x=='d' then r else -1) (grid !! r)
+    zeroRadius = [0 .. radius]
+    radiusZero = reverse zeroRadius
+    negRadiusZero = [(negate radius) .. 0]
+    zeroNegRadius = reverse negRadiusZero
+    ne = init $ zip zeroRadius negRadiusZero
+    es = init $ zip radiusZero zeroRadius
+    sw = init $ zip zeroNegRadius radiusZero
+    wn = init $ zip negRadiusZero zeroNegRadius
 
-dirtCoordinates grid = map (\x -> rowCoordinates x grid) [0..4]
-
-onDirt r c grid = any (\x -> x == True) results
+dirtPositions botPos radius grid = filter relevant dPoses
   where
-    rowDirts = (dirtCoordinates grid) !! r
-    results = map (\x -> x == (r, c)) rowDirts
+    radiusPositions = positions radius
+    dPoses = map (\p -> dpos botPos p) radiusPositions
+    relevant d = ((elem (fst d) [0..4] && elem (snd d) [0..4]) && onDirt d grid)
 
-findDirt :: Int -> Int -> [String] -> (Int, Int)
-findDirt r c grid = (1,1)
+direction vector
+  | fst vector < 0 = "LEFT"
+  | fst vector > 0 = "RIGHT"
+  | snd vector < 0 = "UP"
+  | snd vector > 0 = "DOWN"
+
+getDirection :: (Int, Int) -> [String] -> String
+getDirection pos grid = direction (botVector pos (head dirty))
   where
-    dirts = dirtCoordinates grid
+    dirtsCoord = join $ map (\r -> dirtPositions pos r grid) [1..8]
+    dirty = filter (\dc -> onDirt dc grid) dirtsCoord
 
-getDirection :: Int -> Int -> (Int, Int) -> String
-getDirection r c dirt
-  | yd > 0 = "LEFT"
-  | yd < 0 = "RIGHT"
-  | xd > 0 = "UP"
-  | xd < 0 = "DOWN"
-  | otherwise = "ERROR"
-  where
-    xd = r - fst dirt
-    yd = c - snd dirt
 
-nextMove r c grid =
-  if (onDirt r c grid)
+nextMove :: (Int, Int) -> [String] -> String
+nextMove pos grid =
+  if (onDirt pos grid)
   then "CLEAN"
-  else getDirection r c (findDirt r c grid)
+  else getDirection pos grid
 
 main :: IO ()
 main = do
@@ -57,4 +63,4 @@ main = do
   -- print r
   -- print c
   -- print grid
-  print (nextMove r c grid)
+  print (nextMove (r, c) grid)
