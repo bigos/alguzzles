@@ -1,5 +1,14 @@
 (defun solve-me (d)
-  (format t "~A~%" d))
+  (format t "~s ~a~%" d (length d))
+  ;; find a word starting with a capital letter, could be quoted
+  ;; put start mark there
+  ;; find an end of the sentence .!? and put end mark there
+  ;; problem of quoted sentences
+  ;; quoted sentence can have >?" said<
+  ;; some space separated words are chunks of words joined by
+  ;; punctuation "force?No!" which should be ("force" ? "No" !)
+  ;; natural language tokenization is an interesting problem
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -20,7 +29,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((d (read-all-data stream)))
+  (let ((d (split-by-one-space (car (read-all-data stream)))))
     (solve-me d)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
