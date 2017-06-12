@@ -8,6 +8,9 @@
   ;; some space separated words are chunks of words joined by
   ;; punctuation "force?No!" which should be ("force" ? "No" !)
   ;; natural language tokenization is an interesting problem
+
+  ;; https://en.wikipedia.org/wiki/Augmented_transition_network
+  ;; file:///home/jacek/Documents/Manuals/Lisp/onlisp.html#SEC141
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
