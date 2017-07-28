@@ -1,3 +1,8 @@
+(defun first-words ()
+  "Beginning of experimenting with natural language parsing."
+  (loop for c across (subseq *words* 0 25)
+        do (format T "~A~%" c)))
+
 (defun solve-me (d)
   (format t "~s ~a~%" d (length d))
   ;; find a word starting with a capital letter, could be quoted
@@ -8,6 +13,7 @@
   ;; some space separated words are chunks of words joined by
   ;; punctuation "force?No!" which should be ("force" ? "No" !)
   ;; natural language tokenization is an interesting problem
+  ;; punctuation and quotation rules http://www.grammarbook.com/punctuation/quotes.asp
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -29,7 +35,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((d (split-by-one-space (car (read-all-data stream)))))
+  (let ((d (read-all-data stream)))
+    (defparameter *words* (car d))
     (solve-me d)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
