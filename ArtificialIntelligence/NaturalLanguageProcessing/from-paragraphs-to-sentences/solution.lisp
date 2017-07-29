@@ -3,6 +3,18 @@
   (loop for c across (subseq *words* 0 25)
         do (format T "~A~%" c)))
 
+;;; think of rule 7 'quotations within quotations'
+;;; also rule 9 can be tricky
+(defparameter my-data '(data
+                        (sentence-ends ".?!")
+                        (quote-ends (list
+                                     (#\? #\")
+                                     (#\! #\")
+                                     (#\, #\")
+                                     (#\. #\")
+                                     (#\. #\' #\") ; rule 7
+                                     ))))
+
 (defun solve-me (d)
   (format t "~s ~a~%" d (length d))
   ;; find a word starting with a capital letter, could be quoted
