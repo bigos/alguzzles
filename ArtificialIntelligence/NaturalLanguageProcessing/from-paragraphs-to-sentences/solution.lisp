@@ -1,3 +1,20 @@
+(defun first-words ()
+  "Beginning of experimenting with natural language parsing."
+  (loop for c across (subseq *words* 0 25)
+        do (format T "~A~%" c)))
+
+;;; think of rule 7 'quotations within quotations'
+;;; also rule 9 can be tricky
+(defparameter my-data '(data
+                        (sentence-ends ".?!")
+                        (quote-ends (list
+                                     (#\? #\")
+                                     (#\! #\")
+                                     (#\, #\")
+                                     (#\. #\")
+                                     (#\. #\' #\") ; rule 7
+                                     ))))
+
 (defun solve-me (d)
   (format t "~s ~a~%" d (length d))
   ;; find a word starting with a capital letter, could be quoted
@@ -11,6 +28,8 @@
 
   ;; https://en.wikipedia.org/wiki/Augmented_transition_network
   ;; file:///home/jacek/Documents/Manuals/Lisp/onlisp.html#SEC141
+
+  ;; punctuation and quotation rules http://www.grammarbook.com/punctuation/quotes.asp
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -32,7 +51,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((d (split-by-one-space (car (read-all-data stream)))))
+  (let ((d (read-all-data stream)))
+    (defparameter *words* (car d))
     (solve-me d)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
