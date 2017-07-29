@@ -1,0 +1,163 @@
+* Task Notes
+
+** Sound system
+
+The English sound system is a bit tricky, because there it no direct mapping
+between the letters and sounds. For our purpose the letter Y is particularly
+tricky.
+
+*** vowels
+
+| a | e | i | o | u |
+
+**** long vowels
+
+seen
+
+**** joined vowels
+
+flying
+
+*** consonants
+
+| b | c | d | f | g | h | j | k | l | m | n | p | q | r | s | t | v | w | x | z |
+
+*** letter Y
+
+Letter 'y' sometimes is not a vowel as in 'yacht'.
+
+| y |
+
+*** silent letters
+
+Some letters, notably E are sometimes not pronounced, as in 'are'.
+
+| e |
+
+
+** experiments
+
+*** two sentences
+
+| letters | vowels |
+|---------+--------|
+| Y       |        |
+| e       | y      |
+| s       |        |
+| t       |        |
+| e       | y      |
+| r       |        |
+| d       |        |
+| a       | y      |
+| y       |        |
+|         |        |
+| t       |        |
+| h       |        |
+| e       | y      |
+|         |        |
+| y       |        |
+| e       | y      |
+| l       |        |
+| l       |        |
+| o       | y      |
+| w       |        |
+|         |        |
+| y       |        |
+| a       | y      |
+| c       |        |
+| h       |        |
+| t       |        |
+|         |        |
+| w       |        |
+| a       | y      |
+| s       |        |
+|         |        |
+| s       |        |
+| e       | y      |
+| e       | +      |
+| n       |        |
+|         |        |
+| f       |        |
+| l       |        |
+| y       | y      |
+| i       | y+     |
+| n       |        |
+| g       |        |
+|         |        |
+| i       | y      |
+| n       |        |
+|         |        |
+| t       |        |
+| h       |        |
+| e       | y      |
+|         |        |
+| s       |        |
+| k       |        |
+| y       | y      |
+| .       |        |
+|         |        |
+| A       | y      |
+| n       |        |
+|         |        |
+| n       |        |
+| o       | y      |
+|         |        |
+| o       | y      |
+| n       |        |
+| e       | silent |
+|         |        |
+| k       |        |
+| n       |        |
+| o       | y      |
+| w       |        |
+| s       |        |
+|         |        |
+| w       |        |
+| h       |        |
+| y       | y      |
+| .       |        |
+
+
+*** word syllables
+
+**** yesterday
+
+#+BEGIN_SRC emacs-lisp
+  '((ye
+     (ste
+      (rday))
+     (ster
+      (day))
+     (sterd
+      ay))
+    (yes
+     (te
+      (rday))
+     (ter
+      (day))
+     (terd
+      (ay)))
+    (yest
+     (er
+      (day))
+     (erd
+      (ay))))
+#+END_SRC
+
+**** tomorrow
+
+#+BEGIN_SRC emacs-lisp
+  '((to
+     (mo
+      (rrow))
+     (mor
+      (row))
+     (morr
+      (ow)))
+    (tom
+     (or
+      (row))
+     (orr
+      (ow))))
+
+#+END_SRC
