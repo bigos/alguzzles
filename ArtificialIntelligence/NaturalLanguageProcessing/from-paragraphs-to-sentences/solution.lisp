@@ -21,6 +21,33 @@
               (nil
                (skip))))
 
+(defvar ddd2 '(kpw-p
+               (T
+                (next-char
+                 (space-p
+                  (next-char
+                   (space-p
+                    (next-char
+                     (space-p
+                      (nextichar ..............))
+                     (upcase-p
+                      (end-of-sentence))
+                     (else
+                      (skip))))
+                   (upcase-p
+                    (end-of-sentence))
+                   (else
+                    skip)))
+                 (upcase-p
+                  (t
+                   (end-of-sentence))
+                  (else
+                   (skip)))
+                 (else
+                  (skip))))
+               (else
+                (skip))))
+
 (defun first-words ()
   "Beginning of experimenting with natural language parsing."
   (loop for c across (subseq *words* 0 25)
