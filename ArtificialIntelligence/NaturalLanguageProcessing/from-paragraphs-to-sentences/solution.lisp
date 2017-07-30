@@ -1,52 +1,83 @@
 ;;; experiment with encoding the rules
-(defvar ddd '(kpw-p
-              (T
-               (next-char
-                (space-p
-                 (next-char
-                  (space-p
-                   (next-char ...))
-                  (up-case-p
-                   (t
-                    (end-of-sentence))
-                   (nil
-                    (skip)))))
-                (up-case-p
-                 (t
-                  (end-of-sentence))
-                 (nil
-                  (skip)))
-                (digit-p
-                 (skip))))
-              (nil
-               (skip))))
 
-(defvar ddd2 '(kpw-p
-               (T
+(defvar ddd3 '(cond
+               (kpw-p
                 (next-char
-                 (space-p
-                  (next-char
+                 (cond
                    (space-p
                     (next-char
-                     (space-p
-                      (nextichar ..............))
-                     (upcase-p
-                      (end-of-sentence))
-                     (else
-                      (skip))))
+                     (cond
+                       (space-p
+                        (next-char
+                         (cond
+                           (space-p
+                            (end-of-sentence))
+                           (upcase-p
+                            (end-of-sentence))
+                           (else
+                            (skip)))))
+                       (upcase-p
+                        (end-of-sentence))
+                       (else
+                        (skip)))))
                    (upcase-p
                     (end-of-sentence))
                    (else
-                    skip)))
-                 (upcase-p
-                  (t
-                   (end-of-sentence))
-                  (else
-                   (skip)))
-                 (else
-                  (skip))))
+                    (skip)))))
                (else
                 (skip))))
+
+(defun else ()
+  T)
+
+(defun qudoex-p (char)
+  (some (lambda (x) (eq x char))
+        '(#\? #\! #\.)))
+
+(defun space-p (char)
+  (some (lambda (x) (eq x char))
+        '(#\Space #\Newline #\Tab)))
+
+(defun upcase-p (char)
+  (search "CAPITAL_LETTER" (char-name char)))
+
+(defun find-sentence-end (string start)
+  "Find sentence end in a STRING starting at START."
+  (let ((cur (aref string start)))
+    (macrolet
+        ((skip (string char)
+           (find-sentence-end string (1+ char)))
+         (next-char (n body)
+           (let ((cur (aref string (+ start n))))
+             body))
+         (end-of-sentence (cur)
+           (1- cur)))
+      (cond
+        ((qudoex-p cur)
+         (next-char 1
+                    (cond
+                      ((space-p cur)
+                       (next-char 2
+                                  (cond
+                                    ((space-p cur)
+                                     (next-char 3
+                                                (cond
+                                                  ((space-p cur)
+                                                   (end-of-sentence cur))
+                                                  ((upcase-p cur)
+                                                   (end-of-sentence cur))
+                                                  ((else)
+                                                   (skip string (+ 1 start))))))
+                                    ((upcase-p cur)
+                                     (end-of-sentence cur))
+                                    ((else)
+                                     (skip string (+ 1 start))))))
+                      ((upcase-p cur)
+                       (end-of-sentence cur))
+                      ((else)
+                       (skip string (+ 1 start))))))
+        ((else)
+         (skip string (+ 1 start)))))))
 
 (defun first-words ()
   "Beginning of experimenting with natural language parsing."
