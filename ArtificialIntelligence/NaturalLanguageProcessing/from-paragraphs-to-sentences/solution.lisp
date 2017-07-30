@@ -1,3 +1,26 @@
+;;; experiment with encoding the rules
+(defvar ddd '(kpw-p
+              (T
+               (next-char
+                (space-p
+                 (next-char
+                  (space-p
+                   (next-char ...))
+                  (up-case-p
+                   (t
+                    (end-of-sentence))
+                   (nil
+                    (skip)))))
+                (up-case-p
+                 (t
+                  (end-of-sentence))
+                 (nil
+                  (skip)))
+                (digit-p
+                 (skip))))
+              (nil
+               (skip))))
+
 (defun first-words ()
   "Beginning of experimenting with natural language parsing."
   (loop for c across (subseq *words* 0 25)
