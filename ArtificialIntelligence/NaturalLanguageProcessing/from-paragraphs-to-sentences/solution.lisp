@@ -8,12 +8,12 @@
 (defparameter my-data '(data
                         (sentence-ends ".?!")
                         (quote-ends (list
+                                     (#\. #\' #\") ; rule 7
                                      (#\? #\")
                                      (#\! #\")
                                      (#\, #\")
-                                     (#\. #\")
-                                     (#\. #\' #\") ; rule 7
-                                     ))))
+                                     (#\. #\")))
+                        (brackets-ends ")]}")))
 
 (defun solve-me (d)
   (format t "~s ~a~%" d (length d))
