@@ -31,9 +31,31 @@
 (defun else ()
   T)
 
-(defun qudoex-p (char)
-  (some (lambda (x) (eq x char))
-        '(#\? #\! #\.)))
+(defun beginning-of-word (string start)
+  (loop for i from (1- start) downto 0
+        for c = (aref string i)
+        while (search "LETTER" (char-name c))
+        finally (return (subseq string (1+ i) start))))
+
+(defun qudoex-p (string start)
+  (let ((char (aref string start)))
+    (some (lambda (x) (eq x char))
+          '(#\? #\! ))
+    (cond
+      ((eq char #\!)
+       T)
+      ((eq char #\?)
+       T)
+      ((eq char #\.)
+       (let ((word (beginning-of-word string start)))
+         (cond ((eq (length word) 1)
+                nil)
+               ((equalp word "Dr")
+                nil)
+               (T
+                T))))
+      (T
+       nil))))
 
 (defun space-p (char)
   (some (lambda (x) (eq x char))
@@ -56,7 +78,7 @@
       (cond
         ((>= start (1- (length string)))
          (end-of-sentence))
-        ((qudoex-p cur)
+        ((qudoex-p string start)
          (next-char 1
                     (cond
                       ((space-p cur)
