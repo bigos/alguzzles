@@ -50,7 +50,9 @@
        (let ((word (beginning-of-word string start)))
          (cond ((eq (length word) 1)
                 nil)
-               ((equalp word "Dr")
+               ;; bad for the sentence division without sentence parsing
+               ;; https://english.stackexchange.com/questions/8382/when-etc-is-at-the-end-of-a-phrase-do-you-place-a-period-after-it
+               ((equalp word "Dr") ; add abbreviations ending with dot here
                 nil)
                (T
                 T))))
