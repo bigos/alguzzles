@@ -1,31 +1,32 @@
+(declaim (optimize (debug 3)))
 ;;; experiment with encoding the rules
 
-(defvar ddd3 '(cond
-               (kpw-p
-                (next-char
-                 (cond
-                   (space-p
-                    (next-char
-                     (cond
-                       (space-p
-                        (next-char
-                         (cond
-                           (space-p
-                            (end-of-sentence))
-                           (upcase-p
-                            (end-of-sentence))
-                           (else
-                            (skip)))))
-                       (upcase-p
-                        (end-of-sentence))
-                       (else
-                        (skip)))))
-                   (upcase-p
-                    (end-of-sentence))
-                   (else
-                    (skip)))))
-               (else
-                (skip))))
+;; (defvar ddd3 '(cond
+;;                (kpw-p
+;;                 (next-char
+;;                  (cond
+;;                    (space-p
+;;                     (next-char
+;;                      (cond
+;;                        (space-p
+;;                         (next-char
+;;                          (cond
+;;                            (space-p
+;;                             (end-of-sentence))
+;;                            (upcase-p
+;;                             (end-of-sentence))
+;;                            (else
+;;                             (skip)))))
+;;                        (upcase-p
+;;                         (end-of-sentence))
+;;                        (else
+;;                         (skip)))))
+;;                    (upcase-p
+;;                     (end-of-sentence))
+;;                    (else
+;;                     (skip)))))
+;;                (else
+;;                 (skip))))
 
 (defun else ()
   T)
@@ -45,14 +46,16 @@
   "Find sentence end in a STRING starting at START."
   (let ((cur (aref string start)))
     (macrolet
-        ((skip (string char)
-           (find-sentence-end string (1+ char)))
+        ((skip (char)
+           `(find-sentence-end string (1+ ,char)))
          (next-char (n body)
-           (let ((cur (aref string (+ start n))))
-             body))
-         (end-of-sentence (cur)
-           (1- cur)))
+           `(let ((cur (aref string (+ start ,n))))
+              ,body))
+         (end-of-sentence ()
+           `(+ start 1)))
       (cond
+        ((>= start (1- (length string)))
+         (end-of-sentence))
         ((qudoex-p cur)
          (next-char 1
                     (cond
@@ -63,21 +66,21 @@
                                      (next-char 3
                                                 (cond
                                                   ((space-p cur)
-                                                   (end-of-sentence cur))
+                                                   (end-of-sentence ))
                                                   ((upcase-p cur)
-                                                   (end-of-sentence cur))
+                                                   (end-of-sentence ))
                                                   ((else)
-                                                   (skip string (+ 1 start))))))
+                                                   (skip start)))))
                                     ((upcase-p cur)
-                                     (end-of-sentence cur))
+                                     (end-of-sentence))
                                     ((else)
-                                     (skip string (+ 1 start))))))
+                                     (skip start)))))
                       ((upcase-p cur)
-                       (end-of-sentence cur))
+                       (end-of-sentence ))
                       ((else)
-                       (skip string (+ 1 start))))))
+                       (skip start)))))
         ((else)
-         (skip string (+ 1 start)))))))
+         (skip start))))))
 
 (defun first-words ()
   "Beginning of experimenting with natural language parsing."
@@ -111,6 +114,9 @@
   ;; file:///home/jacek/Documents/Manuals/Lisp/onlisp.html#SEC141
 
   ;; punctuation and quotation rules http://www.grammarbook.com/punctuation/quotes.asp
+
+  ;; beginning of sentences except the last one
+  ;; (loop for x = 0 then (find-sentence-end *words* x) while (< x (length *words*))  collect x)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,8 +139,8 @@
 
 (defun solution (&optional stream)
   (let ((d (read-all-data stream)))
-    (defparameter *words* (car d))
-    (solve-me d)))
+    (defparameter *words* (concatenate 'string (car d) ""))
+    (solve-me *words*)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
