@@ -63,49 +63,60 @@
   (some (lambda (x) (eq x char))
         '(#\Space #\Newline #\Tab)))
 
+(defun quote-p (char)
+  (some (lambda (x) (eq x char))
+        '(#\" #\')))
+
 (defun upcase-p (char)
   (search "CAPITAL_LETTER" (char-name char)))
 
 ;;; need to add handling of sentences starting with >. "Capital<
 (defun find-sentence-end (string start)
   "Find sentence end in a STRING starting at START."
-  (let ((cur (aref string start)))
-    (macrolet
-        ((skip (char)
-           `(find-sentence-end string (1+ ,char)))
-         (next-char (n body)
-           `(let ((cur (aref string (+ start ,n))))
-              ,body))
-         (end-of-sentence ()
-           `(+ start 1)))
-      (cond
-        ((>= start (1- (length string)))
-         (end-of-sentence))
-        ((qudoex-p string start)
-         (next-char 1
-                    (cond
-                      ((space-p cur)
-                       (next-char 2
-                                  (cond
-                                    ((space-p cur)
-                                     (next-char 3
-                                                (cond
-                                                  ((space-p cur)
-                                                   (end-of-sentence ))
-                                                  ((upcase-p cur)
-                                                   (end-of-sentence ))
-                                                  ((else)
-                                                   (skip start)))))
-                                    ((upcase-p cur)
-                                     (end-of-sentence))
-                                    ((else)
-                                     (skip start)))))
-                      ((upcase-p cur)
-                       (end-of-sentence ))
-                      ((else)
-                       (skip start)))))
-        ((else)
-         (skip start))))))
+
+  (macrolet
+      ((skip (char)
+         `(find-sentence-end string (1+ ,char)))
+       (next-char (n body)
+         `(let ((cur (aref string (+ start ,n))))
+            ,body))
+       (end-of-sentence ()
+         `(+ start 1)))
+    (cond
+      ((>= start (1- (length string)))
+       (end-of-sentence))
+      ((qudoex-p string start)
+       (next-char 1
+                  (cond
+                    ((space-p cur)
+                     (next-char 2
+                                (cond
+                                  ((space-p cur)
+                                   (next-char 3
+                                              (cond
+                                                ((space-p cur)
+                                                 (end-of-sentence ))
+                                                ((upcase-p cur)
+                                                 (end-of-sentence ))
+                                                ((else)
+                                                 (skip start)))))
+                                  ((upcase-p cur)
+                                   (end-of-sentence))
+                                  ((quote-p cur)
+                                   (next-char 3
+                                              (cond
+                                                ((upcase-p cur)
+                                                 (end-of-sentence))
+                                                ((else)
+                                                 (skip start)))))
+                                  ((else)
+                                   (skip start)))))
+                    ((upcase-p cur)
+                     (end-of-sentence ))
+                    ((else)
+                     (skip start)))))
+      ((else)
+       (skip start)))))
 
 (defun list-to-pairs (l &optional acc)
   (if (null l)
@@ -118,15 +129,15 @@
                       acc))))
 
 (defun solve-me (d)
-  (format t "~s ~a~%" d (length d))
-
+  ;; (format t "~s ~a~%" d (length d))
   (let ((indexes (loop for y = 0 then (find-sentence-end *words* y)
                        collect y
                        until (>= y (length *words*)))))
-    (format t "indexes ~a~%" indexes)
+    ;; (format t "indexes ~a~%" indexes)
     (loop for p in (list-to-pairs indexes)
           do
-          (format t "~a~%" (subseq d (car p) (cdr p))))))
+             (format t "~a~%" (string-trim '(#\Space)
+                                           (subseq d (car p) (cdr p)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
