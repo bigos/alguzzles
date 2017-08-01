@@ -1,33 +1,3 @@
-(declaim (optimize (debug 3)))
-;;; experiment with encoding the rules
-
-;; (defvar ddd3 '(cond
-;;                (kpw-p
-;;                 (next-char
-;;                  (cond
-;;                    (space-p
-;;                     (next-char
-;;                      (cond
-;;                        (space-p
-;;                         (next-char
-;;                          (cond
-;;                            (space-p
-;;                             (end-of-sentence))
-;;                            (upcase-p
-;;                             (end-of-sentence))
-;;                            (else
-;;                             (skip)))))
-;;                        (upcase-p
-;;                         (end-of-sentence))
-;;                        (else
-;;                         (skip)))))
-;;                    (upcase-p
-;;                     (end-of-sentence))
-;;                    (else
-;;                     (skip)))))
-;;                (else
-;;                 (skip))))
-
 (defun else ()
   T)
 
@@ -70,15 +40,19 @@
 (defun upcase-p (char)
   (search "CAPITAL_LETTER" (char-name char)))
 
+(defun arefy (seq i)
+  (if (>= i (length seq))
+      (aref seq (1- (length seq)))
+      (aref seq i)))
+
 ;;; need to add handling of sentences starting with >. "Capital<
 (defun find-sentence-end (string start)
   "Find sentence end in a STRING starting at START."
-
   (macrolet
       ((skip (char)
          `(find-sentence-end string (1+ ,char)))
        (next-char (n body)
-         `(let ((cur (aref string (+ start ,n))))
+         `(let ((cur (arefy string (+ start ,n))))
             ,body))
        (end-of-sentence ()
          `(+ start 1)))
@@ -130,14 +104,16 @@
 
 (defun solve-me (d)
   ;; (format t "~s ~a~%" d (length d))
-  (let ((indexes (loop for y = 0 then (find-sentence-end *words* y)
+  (let ((indexes (loop for y = 0 then (find-sentence-end d y)
                        collect y
-                       until (>= y (length *words*)))))
+                       until (>= y (length d)))))
     ;; (format t "indexes ~a~%" indexes)
     (loop for p in (list-to-pairs indexes)
+          for res = (format nil "~a~%" (string-trim '(#\Space)
+                                                    (subseq d (car p) (cdr p))))
           do
-             (format t "~a~%" (string-trim '(#\Space)
-                                           (subseq d (car p) (cdr p)))))))
+             (unless (equalp res "")
+               (format t "~a" res)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -158,9 +134,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((d (read-all-data stream)))
-    (defparameter *words* (concatenate 'string (car d) ""))
-    (solve-me *words*)))
+  (let ((d (read-line stream nil 'eof)))
+    (solve-me d)))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
