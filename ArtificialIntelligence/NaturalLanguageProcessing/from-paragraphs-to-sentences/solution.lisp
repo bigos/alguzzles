@@ -66,6 +66,7 @@
 (defun upcase-p (char)
   (search "CAPITAL_LETTER" (char-name char)))
 
+;;; need to add handling of sentences starting with >. "Capital<
 (defun find-sentence-end (string start)
   "Find sentence end in a STRING starting at START."
   (let ((cur (aref string start)))
@@ -106,13 +107,26 @@
         ((else)
          (skip start))))))
 
+(defun list-to-pairs (l &optional acc)
+  (if (null l)
+      (reverse (cdr acc))
+      (list-to-pairs (cdr l)
+                     (cons
+                      (when (cadr l)
+                        (cons (car l)
+                              (cadr l)))
+                      acc))))
+
 (defun solve-me (d)
   (format t "~s ~a~%" d (length d))
 
   (let ((indexes (loop for y = 0 then (find-sentence-end *words* y)
                        collect y
                        until (>= y (length *words*)))))
-    (format t "~a" indexes)))
+    (format t "indexes ~a~%" indexes)
+    (loop for p in (list-to-pairs indexes)
+          do
+          (format t "~a~%" (subseq d (car p) (cdr p))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
