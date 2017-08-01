@@ -106,42 +106,13 @@
         ((else)
          (skip start))))))
 
-(defun first-words ()
-  "Beginning of experimenting with natural language parsing."
-  (loop for c across (subseq *words* 0 25)
-        do (format T "~A~%" c)))
-
-;;; think of rule 7 'quotations within quotations'
-;;; also rule 9 can be tricky
-(defparameter my-data '(data
-                        (sentence-ends ".?!")
-                        (quote-ends (list
-                                     (#\. #\' #\") ; rule 7
-                                     (#\? #\")
-                                     (#\! #\")
-                                     (#\, #\")
-                                     (#\. #\")))
-                        (brackets-ends ")]}")))
-
 (defun solve-me (d)
   (format t "~s ~a~%" d (length d))
-  ;; find a word starting with a capital letter, could be quoted
-  ;; put start mark there
-  ;; find an end of the sentence .!? and put end mark there
-  ;; problem of quoted sentences
-  ;; quoted sentence can have >?" said<
-  ;; some space separated words are chunks of words joined by
-  ;; punctuation "force?No!" which should be ("force" ? "No" !)
-  ;; natural language tokenization is an interesting problem
 
-  ;; https://en.wikipedia.org/wiki/Augmented_transition_network
-  ;; file:///home/jacek/Documents/Manuals/Lisp/onlisp.html#SEC141
-
-  ;; punctuation and quotation rules http://www.grammarbook.com/punctuation/quotes.asp
-
-  ;; beginning of sentences except the last one
-  ;; (loop for x = 0 then (find-sentence-end *words* x) while (< x (length *words*))  collect x)
-  )
+  (let ((indexes (loop for y = 0 then (find-sentence-end *words* y)
+                       collect y
+                       until (>= y (length *words*)))))
+    (format t "~a" indexes)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
