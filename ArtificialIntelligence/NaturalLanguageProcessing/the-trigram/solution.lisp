@@ -1,6 +1,9 @@
 ;;; not solved yet
 
-
+(with-input-from-string (s (format nil "Lorem ipsum.~%Dolor sic amet."))
+  (format t "read ~s" (loop for l = (read-line s nil 'eof nil)
+                            until (eql l 'eof)
+                            collect l)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -17,7 +20,7 @@
 (defun read-all-data (stream)
   (loop for line = (read-line stream nil 'eof)
         until (equal line 'eof)
-        collect line))
+        collect (string-downcase line)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
