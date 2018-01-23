@@ -1,6 +1,8 @@
 (declaim (optimize (debug 3)))
 
 ;;; not solved yet
+
+;;; find-sentence-end helpers
 (defun else ()
   T)
 
@@ -98,19 +100,22 @@
 (defun indexes-to-sentences (indexes text &optional sentences)
   (if (null indexes)
       (reverse sentences)
-      (indexes-to-sentences (cdr indexes)
-                            text (push (subseq text
-                                               (car indexes)
-                                               (cadr indexes))
-                                       sentences))))
+      (let ((sent
+              (string-trim '(#\Space #\Newline)
+                           (subseq text
+                                   (car indexes)
+                                   (cadr indexes))) ))
+        (indexes-to-sentences (cdr indexes)
+                              text
+                              (if (equalp sent "")
+                                  sentences
+                                  (push sent sentences))))))
 
 (defun split-to-sentences (text)
   (let ((indexes (loop for y = 0 then (find-sentence-end text y)
                        collect y
                        until (>= y (length text)))))
-    (format t "indexes ~a~%" indexes)
     (indexes-to-sentences indexes text)))
-
 
 (defun solve-me (d)
   (format t "the data: ~s~%" d)
