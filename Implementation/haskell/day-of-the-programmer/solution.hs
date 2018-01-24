@@ -27,6 +27,4 @@ solve y
   | y == 1918 = "26.09.1918"
   | otherwise = if (leapYear y) then "12.09." ++ ys y else "13.09." ++ ys y
 
-main = do
-  y <- inputYear
-  putStrLn (solve y)
+main = inputYear >>= putStrLn . solve
