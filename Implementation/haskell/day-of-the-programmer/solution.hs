@@ -25,6 +25,6 @@ ys y = show y
 
 solve y
   | y == 1918 = "26.09.1918"
-  | otherwise = if (leapYear y) then "12.09." ++ ys y else "13.09." ++ ys y
+  | otherwise = if leapYear y then "12.09." else "13.09." ++ ys y
 
 main = inputYear >>= putStrLn . solve
