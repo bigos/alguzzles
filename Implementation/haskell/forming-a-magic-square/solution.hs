@@ -33,10 +33,7 @@ readLineInts :: IO [Int]
 readLineInts = getLine >>=
   (\l -> return (map (\x -> (read x) :: Int) (words l)))
 
--- main :: IO ()
--- main = do
---   d <- replicateM r readLineInts
---   print d
+
 main = do
   a <- replicateM 3 readLineInts
   print $ mindist (join a)
