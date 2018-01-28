@@ -3,14 +3,24 @@
 import Data.List
 import Debug.Trace
 
-sm :: [Int] -> Int -> Int -> Int -> Int -> Int
-sm [] prev sct pct maxes = max maxes (sct+pct)
-sm (x:xs) prev sct pct maxes
-  | x == prev = sm xs x (succ sct) pct maxes
-  | x /= prev = sm xs x 1          sct newmaxes
-  where newmaxes = if ((sct + pct) > maxes) then (sct + pct) else maxes
+sm :: [Int] -> Int -> Int -> Int -> Int -> Int -> Int
+sm [] prev pv sct pct maxes = (newmaxes (-9) prev pv sct pct maxes)
+sm (x:xs) prev pv sct pct maxes
+  | x == prev = sm xs x pv   (succ sct) pct maxes
+  | x /= prev = sm xs x prev 1          sct (newmaxes x prev pv sct pct maxes)
 
-smq d = sm (sort d) 0 0 0 0
+newmaxes x prev pv sct pct maxes =
+  if (pv == pred prev)
+  then
+    (if ((sct + pct) > maxes)
+     then (sct + pct)
+     else maxes)
+  else
+    (if ((sct ) > maxes)
+     then (sct)
+     else maxes)
+
+smq d = sm (sort d) 0 0 0 0 0
 
 readLineInts :: IO [Int]
 readLineInts = getLine >>=
