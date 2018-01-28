@@ -8,13 +8,13 @@ comb _ []     = []
 comb m (x:xs) = map (x:) (comb (m-1) xs) ++ comb m xs
 
 --solve :: Int -> [Int] -> Int
-solve t d = maximum $ map (\x -> maximum x) pairs
+solve t d = maximum $ map (\x ->  maximum x) pairs
   where downto = reverse [2..(pred t)]
         multisets = map (\z -> comb z d) downto
-        abz z = abs (z!!0 - z!!1)
+        max1 a  = maximum a - minimum a <= 1
         pairs = map (\x ->
                        map (\y ->
-                         (if (all (\e -> e<2) (map (\z -> abz z) (comb 2 y))) then length y else 0)
+                              if (max1 y) then length y else 0
                            ) x) multisets
 
 readLineInts :: IO [Int]
