@@ -1,7 +1,7 @@
 -- climbing the leaderboard
 
 rank :: Int -> [Int] -> Int -> Int
-rank r [] a = a
+rank _ [] a = a
 rank r (s:ss) a =
   if (r >= s)
   then a
@@ -9,8 +9,7 @@ rank r (s:ss) a =
                   then a
                   else (succ a))
 
-solve :: t1 -> [Int] -> t -> [Int] -> [Int]
-solve n ss m as = map (\x -> rank x ss 1) as
+solve _ ss _ as = mapM_ (\x -> print (rank x ss 1)) as
 
 readNumber :: IO Int
 readNumber = getLine >>= (\n -> return (read n))
@@ -18,10 +17,10 @@ readNumber = getLine >>= (\n -> return (read n))
 readInts :: IO [Int]
 readInts = getLine >>= (\ln -> return (map (\x -> read x) (words ln)))
 
---main :: IO ()
+main :: IO ()
 main =
   readNumber >>=
   (\n -> readInts >>=
   (\ss -> readNumber >>=
   (\m -> readInts >>=
-  (\as -> mapM_ (\z-> print z) (solve n ss m as)))))
+  (\as -> solve n ss m as))))
