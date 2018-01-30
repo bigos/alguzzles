@@ -2,22 +2,21 @@
 
 import Debug.Trace
 
-leader :: [Int] -> [Int] -> Int -> Int -> [Int] -> [Int]
-leader ss rs prev pl a = --trace ("--- " ++ show (ss,rs,"--",prev,pl,a)) $
-  if rs == []
-  then a
-  else
-    if ss == []
-    then leader ss (tail rs) prev (1+pl) (pl:a)
-    else
-      if prev == head ss
-      then  leader (tail ss) rs (head ss) pl a
-      else
-        if head rs >= head ss
-        then  leader ss (tail rs) (head ss) (1+pl) (pl:a)
-        else  leader (tail ss) rs (head ss) (1+pl) a
+remdup :: [Int] -> [Int] -> [Int]
+remdup [] aa = reverse aa
+remdup ee aa = remdup (tail ee) (if aa/= [] && (head ee)==(head aa) then aa else ((head ee):aa))
 
-solve _ ss _ as = (leader ss (reverse as) (1 + (head (reverse as))) 1 [])
+unq l = remdup l []
+
+leader :: [Int] -> [Int] -> Int -> [Int] -> [Int]
+leader [] (r:rs) pl aa = leader [r] rs (0+pl) (pl:aa)
+leader _ [] _ aa = aa
+leader (s:ss) (r:rs) pl az
+  | s >  r =  leader ss (r:rs) (1+pl) (az)
+  | s == r =  leader ss rs     (1+pl) (pl:az)
+  | s <  r =  leader (s:ss) rs (0+pl) (pl:az)
+
+solve _ ss _ as = (leader (unq ss) (reverse as) 1 [])
 
 readNumber :: IO Int
 readNumber = getLine >>= (\n -> return (read n))
@@ -33,4 +32,6 @@ main =
   (\m  -> readInts   >>=
   (\as -> mapM_ print (solve n ss m as)))))
 
-zzz = solve 7 [100, 100, 50, 40, 40, 20, 10] 4 [5, 25, 50, 120]
+zzz = solve 7 [100, 100, 50, 40, 40, 20, 10] 4 [4,5,5, 25, 50, 120, 120]
+
+qqq = remdup [100, 100, 50, 40, 40, 20, 10] []
