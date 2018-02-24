@@ -12,7 +12,7 @@ unq l = remdup l []
 
 leader :: [Int] -> [Int] -> Int -> [Int] -> [Int]
 leader _  [] _ aa = aa
-leader [] (r:rs) pl aa = leader [] rs (if r== (head rs) then 0+pl else  1+pl) (pl:aa)
+leader [] (r:rs) pl aa = leader [] rs (if r== (head rs) then 0+pl else  0+pl) (pl:aa)
 leader (s:ss) (r:rs) pl az
   | s >  r    =  leader ss (r:rs) (1+pl) (az)
   | otherwise =  leader (s:ss) rs (0+pl) (pl:az)
@@ -39,6 +39,7 @@ aaa = solve 7 [100, 100, 50, 40, 40, 20, 10, 4, 3] 4 [5, 25, 50, 120]
 qqq = solve 7 [100, 100, 50, 40, 40, 20, 10] 4 [1,3,3,5, 25, 50, 98]
 www = solve 7 [100, 100, 98, 98, 97, 97] 4 [97, 97, 98, 98, 98,  99, 99,  120]
 eee = solve 7 [100, 100, 98, 98, 97, 97,90,0] 4 [2,3,4,96,97, 97, 98, 98, 98,  99, 99,  120]
+rrr = solve 7 [100, 100, 98, 98, 97, 97, 90] 4 [1,2,3,4,5,6,7]
 
 -- figured out how to create arrays in Haskell
 ary = array (0, 9) [(i-1,i) | i<- [1..10]]
