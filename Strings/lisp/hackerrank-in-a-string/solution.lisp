@@ -1,7 +1,15 @@
 ;;;
 
 (defun solve-me (a)
-  (format t "~A~%" a))
+  (format t "~A~%" a)
+  (let* ((hash (make-hash-table))
+         )
+    (loop for c across a
+          for i = 0 then (1+ i)
+          do
+             (setf (gethash c hash)
+                   (cons i (gethash c hash))))
+    hash))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
