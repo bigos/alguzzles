@@ -1,15 +1,12 @@
-;;;
+(defun same-begins (s1 s2)
+  (equalp (subseq s1 0 1) (subseq s2 0 1)))
 
-(defun solve-me (a)
-  (format t "~A~%" a)
-  (let* ((hash (make-hash-table))
-         )
-    (loop for c across a
-          for i = 0 then (1+ i)
-          do
-             (setf (gethash c hash)
-                   (cons i (gethash c hash))))
-    hash))
+(defun solve-me (s w)
+  (if (equalp w "")
+      (format T "YES~%")
+      (if (equalp s "")
+          (format t "NO~%")
+          (solve-me (subseq s 1) (if (same-begins s w) (subseq w 1) w)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -27,7 +24,7 @@
 (defun solution (&optional stream)
   (let* ((tc (parse-integer (read-line stream))))
     (dotimes (x tc)
-      (solve-me (read-line stream)))))
+      (solve-me (read-line stream) "hackerrank"))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
