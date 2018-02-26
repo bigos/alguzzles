@@ -31,7 +31,8 @@
     (let ((sorted-keys (sort unsorted-keys '<)))
       (loop for k in sorted-keys
             do
-               (loop for z in (sort (gethash k hash) 'string<)
+               (loop for z in (sort (gethash k hash)
+                                    'string<)
                      do
                         (princ z)
                         (terpri))))))
