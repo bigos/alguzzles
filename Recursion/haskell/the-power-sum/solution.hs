@@ -1,12 +1,6 @@
 -- solution
 import Data.List
 
-combinations 0 lst = [[]]
-combinations k lst = do
-    (x:xs) <- tails lst
-    rest   <- combinations (k-1) xs
-    return $ x : rest
-
 comb :: Int -> [a] -> [[a]]
 comb m xs = combsBySize xs !! m
  where
