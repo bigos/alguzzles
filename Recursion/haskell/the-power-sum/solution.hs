@@ -1,21 +1,20 @@
 -- solution
 import Data.List
 
+-- not used here
 comb :: Int -> [a] -> [[a]]
 comb m xs = combsBySize xs !! m
  where
    combsBySize = foldr f ([[]] : repeat [])
    f x next = zipWith (++) (map (map (x:)) ([]:next)) next
 
-power a b = filter (\y-> y <= a) (map (\x-> x^b) [1..a])
+totNum :: Integer -> Integer -> Integer -> Integer
+totNum x n a
+  | a^n < x = (totNum x n (succ a)) + (totNum (x-a^n) n (succ a))
+  | a^n == x = 1
+  | otherwise = 0
 
-solveMe a b = if (a==800 && b==2) then cheat else luss
-  where pwr = power a b
-        poss = map (\l-> comb l pwr) [1..(length pwr)]
-        sums = map (\z -> (map (\i-> if (sum i == a) then i else []) z)) poss
-        fuss = filter (\z-> z /= []) $ map (\x -> (filter (\y-> y/=[]) x)) sums
-        luss = sum $ map (\x-> length x) fuss
-        cheat = 561
+solution a b = totNum a b 1
 
 readData :: IO (Integer, Integer)
 readData = do
@@ -25,4 +24,4 @@ readData = do
 
 main = do
   dat <- readData
-  putStrLn (show (solveMe (fst dat) (snd dat)))
+  putStrLn (show (solution (fst dat) (snd dat)))
