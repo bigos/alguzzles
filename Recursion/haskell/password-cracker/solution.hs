@@ -2,6 +2,21 @@
 
 import Data.List
 
+guess _      "" a = reverse a
+guess []     la a = []
+guess (n:ns) la a = if (isPrefixOf n la)
+  then (guess (n:ns) (drop (length n) la) (n:a))
+  else (guess ns la a)
+
+runner2 [] la a = a
+runner2 (n:ns) la a = runner2 ns la ((guess (n:ns) la []) : a)
+
+runner ns la a = if (null filz) then ["WRONG","PASSWORD"] else head filz
+  where
+    dat = runner2 ns la a
+    filz =  filter (\x-> x/=[]) dat
+
+
 solve :: [String] -> [String] -> String -> [String] -> [String]
 solve _ _  "" acc = reverse acc
 solve _ [] _  _   = ["WRONG","PASSWORD"]
@@ -23,4 +38,4 @@ readTestCase = do
 main :: IO ()
 main = do
   t <- testCases
-  mapM_ (\_ -> (readTestCase >>= (\(_, ns, la) -> putStrLn  (unwords(solve ns ns la []))))) [1..t]
+  mapM_ (\_ -> (readTestCase >>= (\(_, ns, la) -> putStrLn  (unwords(runner ns la []))))) [1..t]
