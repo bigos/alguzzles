@@ -1,11 +1,22 @@
+(defparameter *wrong* nil)
+
 (defun solve-me (n keys pass)
-  (format t "~&==== ~A~A~A~%" n keys pass)
-  (format t "---------- ~A~%" (loop for k in keys collect (list k (find-indexes k pass nil))))
-  (crack pass keys '()))
+  (setf *wrong* nil)
+  ;; (format t "~&==== ~A~A~A~%" n keys pass)
+  (format nil "---------- ~A~%" (loop for k in keys
+                                    collect (list k (find-indexes k pass nil))))
+  (if *wrong*
+      (format t "wrong~%")
+      (format t "!!! ~A~%"  (loop for i from 0 below (length pass)
+                                  for nv = (find-keys pass keys i)
+                                  when nv collect (list i nv))))
+  ;; (crack pass keys '())
+  )
 
 
-(let ((cache (make-hash-table)))
-  (defun crack (password keys res)
+
+(defun crack (password keys res)
+  (let ((cache (make-hash-table)))
 
     (loop for k in keys do
       (or (gethash k cache)
@@ -21,7 +32,10 @@
                 (search substring string))))
 
     (if (null nv)
-        acc
+        (progn
+          (when (null acc)
+            (setf *wrong* T))
+          acc)
         (find-indexes substring
                       string
                       (cons nv acc)))))
@@ -30,8 +44,7 @@
   (loop for k in keys
         for nv = (search k string :start2 i)
         when (eq nv i)
-          collect
-          (list k i)))
+          collect k))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -62,7 +75,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input0" :type "txt"))
+                      :name "input21" :type "txt"))
     (solution s)))
 
 (main)
