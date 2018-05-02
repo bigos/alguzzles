@@ -1,19 +1,18 @@
 -- password cracker
 
 import Data.List
--- import Debug.Trace
 
-solve ns "" = ""
-solve ns la =
-  if findpass
-  then ""
-  else la
-  where findpass = (any (\x->  x == "") (map (\s -> if (isPrefixOf s la)
-                                               then (solve ns (drop (length s) la) )
-                                               else la )
-                                          ns))
+--guess :: [String] -> String -> [String]
+guess []     "" acc = reverse acc
+guess []     la acc = ["WRONG", "PASSWORD"]
+guess _      "" acc = reverse acc
+guess (n:ns) la acc =
+  if (isPrefixOf n la)
+  then guess ns (drop (length n) la) (n : acc)
+  else guess ns la acc
 
-solve2 _ ns la = if (solve ns la == "") then la else "WRONG PASSWORD"
+guess2 :: [String] -> String -> String
+guess2 ns la = unwords (guess ns la [])
 
 testCases :: IO Integer
 testCases = getLine >>= (\x -> return (read x))
@@ -27,4 +26,4 @@ readTestCase = do
 
 main = do
   t <- testCases
-  mapM_ (\_ -> (readTestCase >>= (\(n,ns,la) -> putStrLn (solve2 n ns la )))) [1..t]
+  mapM_ (\_ -> (readTestCase >>= (\(_, ns, la) -> putStrLn (guess2 ns la)))) [1..t]
