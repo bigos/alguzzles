@@ -2,17 +2,13 @@
 
 import Data.List
 
---guess :: [String] -> String -> [String]
-guess []     "" acc = reverse acc
-guess []     la acc = ["WRONG", "PASSWORD"]
-guess _      "" acc = reverse acc
-guess (n:ns) la acc =
+solve :: [String] -> [String] -> String -> [String] -> [String]
+solve _ _  "" acc = reverse acc
+solve _ [] _  _   = ["WRONG","PASSWORD"]
+solve ngo (n:ns) la acc  =
   if (isPrefixOf n la)
-  then guess ns (drop (length n) la) (n : acc)
-  else guess ns la acc
-
-guess2 :: [String] -> String -> String
-guess2 ns la = unwords (guess ns la [])
+  then solve ngo ngo (drop (length n) la) (n:acc)
+  else solve ngo ns la acc
 
 testCases :: IO Integer
 testCases = getLine >>= (\x -> return (read x))
@@ -24,6 +20,7 @@ readTestCase = do
   la <- getLine
   return ((read n), words ns, la)
 
+main :: IO ()
 main = do
   t <- testCases
-  mapM_ (\_ -> (readTestCase >>= (\(_, ns, la) -> putStrLn (guess2 ns la)))) [1..t]
+  mapM_ (\_ -> (readTestCase >>= (\(_, ns, la) -> putStrLn  (unwords(solve ns ns la []))))) [1..t]
