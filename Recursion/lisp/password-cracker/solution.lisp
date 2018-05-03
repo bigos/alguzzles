@@ -1,51 +1,30 @@
-(defparameter *wrong* nil)
+(defun solve-me (n keys pass acc)
+  (if (equalp pass "")
+      (reverse acc)
+      (loop for k in keys
+            when
+            (let ((d (search k pass)))
+              (if (null d)
+                  nil
+                  (zerop d)))
+            collect
+            (solve-me n
+                      keys
+                      (subseq pass (length k))
+                      (cons k acc)))))
 
-(defun solve-me (n keys pass)
-  (setf *wrong* nil)
-  ;; (format t "~&==== ~A~A~A~%" n keys pass)
-  (format nil "---------- ~A~%" (loop for k in keys
-                                    collect (list k (find-indexes k pass nil))))
-  (if *wrong*
-      (format t "wrong~%")
-      (format t "!!! ~A~%"  (loop for i from 0 below (length pass)
-                                  for nv = (find-keys pass keys i)
-                                  when nv collect (list i nv))))
-  ;; (crack pass keys '())
-  )
+(defun unwind (l)
+  (if (consp (car l))
+      (unwind (car l))
+      l))
 
-
-
-(defun crack (password keys res)
-  (let ((cache (make-hash-table)))
-
-    (loop for k in keys do
-      (or (gethash k cache)
-          (setf (gethash k cache) k)))
-
-    (maphash (lambda (k v)
-               (format t "~A ~A~%" k v)  )
-             cache)))
-
-(defun find-indexes (substring string acc)
-  (let ((nv (if acc
-                (search substring string :start2 (1+ (car acc)))
-                (search substring string))))
-
-    (if (null nv)
-        (progn
-          (when (null acc)
-            (setf *wrong* T))
-          acc)
-        (find-indexes substring
-                      string
-                      (cons nv acc)))))
-
-(defun find-keys (string keys i)
-  (loop for k in keys
-        for nv = (search k string :start2 i)
-        when (eq nv i)
-          collect k))
-
+(defun list-to-string (my-list &optional (separator " "))
+  (let ((result))
+    (dolist (item my-list)
+      (setf result (concatenate 'string
+                                result
+                                (format nil "~A~a" separator item))))
+    (subseq result 1)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun split-by-one-space (string)
@@ -63,10 +42,17 @@
 (defun solution (&optional stream)
   (let ((tc (parse-integer (read-line stream))))
     (loop for c from 1 to tc
-          do (solve-me
-              (parse-integer (read-line stream))
-              (split-by-one-space (read-line stream))
-              (read-line stream)))))
+          do (progn
+               (let ((result
+                       (unwind
+                        (solve-me
+                         (parse-integer (read-line stream))
+                         (split-by-one-space (read-line stream))
+                         (read-line stream)
+                         nil))))
+                 (if (equal result '(nil))
+                     (format t "WRONG PASSWORD~%")
+                     (format t "~a~%" (list-to-string result))))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
@@ -75,7 +61,7 @@
                       :directory
                       (pathname-directory
                        (parse-namestring *load-pathname*))
-                      :name "input21" :type "txt"))
+                      :name "input0" :type "txt"))
     (solution s)))
 
 (main)
