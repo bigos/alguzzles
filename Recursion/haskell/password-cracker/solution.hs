@@ -1,15 +1,6 @@
 -- password cracker
 
 import Data.List
-
-guess :: [String] -> String -> [String] -> [String]
-guess keys "" acc = acc
-guess keys str acc = map (\k -> if (isPrefixOf k str)
-                           then (guess keys (drop (length k) str) (k:acc))
-                           else [])
-                     keys
-
-
 solve :: [String] -> [String] -> String -> [String] -> [String]
 solve _ _  "" acc = reverse acc
 solve _ [] _  _   = []
