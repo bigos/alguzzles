@@ -1,21 +1,29 @@
 -- import Debug.Trace
-import Prelude
+-- import Prelude
 -- import Control.Monad
 
+numbers :: String
 numbers = "0123456789"
+
+lower_case :: String
 lower_case = "abcdefghijklmnopqrstuvwxyz"
+
+upper_case :: String
 upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+special_characters :: String
 special_characters = "!@#$%^&*()-+"
 
-member c s =  not (null found)
-  where found = filter ( == c) s
+member :: Char -> String -> Bool
+member c s = c `elem` s
 
+solve :: [String] -> Int
 solve l =
-  if (pl < 6)
+  if pl < 6
   then 6 - cs
   else 4 - cs
   where
-    c = read (head l) :: Integer
+    -- ignore head l
     p = last l
     lf fn = length $ filter (`member` fn) p
     pl = length p
@@ -27,4 +35,4 @@ solve l =
 
 main :: IO ()
 main =
-  getContents >>=  putStrLn . show . solve . lines
+  getContents >>=  print . solve . lines
