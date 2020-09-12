@@ -25,8 +25,9 @@
 
 (defn -main []
   (let [lines (read-data-lines)
-        n (Integer/parseInt (nth lines 0))
-        arr (vec (map #(Integer/parseInt %)
-                        (clojure.string/split (nth lines 1) #" ")))]
+        n     (Integer/parseInt (nth lines 0))
+        arr   (vec (map
+                    #(Integer/parseInt %)
+                    (clojure.string/split (nth lines 1) #" ")))]
     (println
      (str (findMedian arr)))))
