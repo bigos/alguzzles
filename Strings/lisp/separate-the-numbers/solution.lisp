@@ -1,20 +1,38 @@
-(declaim (optimize (speed 0) (debug 3)))
+(declaim (optimize (speed 3)))
 
 (defun add-1-str (s)
   (format nil "~a" (1+ (parse-integer s))))
 
 ;; (solve-inner "12345" 0 1)
 (defun solve-inner (str begi en)
-  (let ((nx (add-1-str (subseq str begi en))))
-    (format t "~A~%" nx)
-    (solve-inner str
-                 en
-                 (+ en 1))))
+  (let* ((nx (add-1-str (subseq str begi en)))
+         (lx (length nx))
+         (ne (+ en lx)))
+
+    (if (<= ne (length str))
+        (let* ((nb  en)
+               (expstr (subseq str nb ne)))
+          ;; (format t "~A ~A ~A ~A ~A --- ~S~%" str nx lx nb ne expstr)
+
+          (if (equalp expstr nx)
+              (solve-inner str en ne)
+              'failure2))
+        (progn
+          (if (eq en (length str))
+              'success
+              'failure1)))))
 
 (defun solve-me (s)
-  (format t "~A ------~%" s)
+  ;; (format t "~A ------~%" s)
+  (let ((outcome
+          (loop for l from 1 below (length s)
+                for res = (solve-inner s 0 l)
+                until (eq res 'success)
+                finally (return (cons res (subseq s 0 l))))))
 
-  )
+    (if (eq (car outcome) 'success)
+        (format t "YES ~A~%" (cdr outcome))
+        (format t "NO~%"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
@@ -30,7 +48,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let (sl )
+  (let ((sl (parse-integer (read-line stream))))
     (loop for x from 1 to sl do
       (solve-me
        (read-line stream)))))
