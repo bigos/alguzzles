@@ -1,13 +1,21 @@
-(defparameter opening-brackets "({[")
-(defparameter closing-brackets ")}]")
+(defparameter brackets
+  '( (#\( . #\)) (#\{ . #\}) (#\[ . #\])))
 
 (defun balanced? (str &optional stack)
-  (format t "solving ~A - ~A~%" str stack)
   (if (zerop (length str))
-      T
-      (balanced? (subseq str 1)
-                 (cons (car str)
-                       stack ))))
+      (zerop (length stack))
+      (let ((c (car (member (car str)
+                            brackets :key #'cdr))))
+        (if c
+            (if
+             (equalp (car c)
+                     (car stack))
+             (balanced? (subseq str 1)
+                        (cdr stack))
+             nil)
+            (balanced? (subseq str 1)
+                       (cons (car str)
+                             stack ))))))
 
 (defun solve-me (str)
   (format t "~A~%" (if (balanced? str)
