@@ -12,7 +12,7 @@
 
   ;; (println (list "==== " str " === " stack))
 
-  (if (zero? (count str))
+  (if (= str '())
     (empty? stack)
 
     (let [fc (first str)
