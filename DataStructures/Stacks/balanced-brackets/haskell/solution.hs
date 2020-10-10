@@ -15,13 +15,10 @@ mb c stack =
   (c == '}' && '{' == head stack) ||
   (c == ']' && '[' == head stack)
 
-isEmptyStack :: String -> Bool
-isEmptyStack stack = words stack == []
-
 balanced :: String -> String -> Bool
 balanced str stack =
   if str == ""
-  then isEmptyStack stack
+  then stack == ""
   else
     balanced (tail str) ns
     where
