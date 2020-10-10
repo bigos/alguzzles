@@ -34,8 +34,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solution (&optional stream)
-  (let ((d (read-all-data stream)))
-    (solve-me d)))
+  (let ((n (parse-integer (read-line stream))))
+    (dotimes (x n)
+      (let ((nd (parse-integer (read-line stream))))
+        (solve-me
+         (loop for x from 1 to nd
+               collect (read-line stream)))))))
 
 ;; (solution) ; uncomment this when running on hacker-rank
 
