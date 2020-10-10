@@ -36,8 +36,8 @@ isBalanced s =
 
 main :: IO()
 main = do
-    stdout <- getEnv "OUTPUT_PATH"
-    fptr <- openFile stdout WriteMode
+    stdout1 <- getEnv "OUTPUT_PATH"
+    fptr <- openFile stdout1 WriteMode
 
     t <- readLn :: IO Int
 
