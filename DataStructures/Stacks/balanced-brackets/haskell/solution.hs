@@ -20,11 +20,12 @@ balanced str stack =
   if str == ""
   then stack == ""
   else
-    balanced (tail str) ns
+    if qt then False else balanced (tail str) ns
     where
       fc = head str
       c = fc == ')' ||  fc == '}' || fc == ']'
       f = c && mb fc stack
+      qt = c && (not (mb fc stack))
       ns = if f then tail stack else fc : stack
 
 -- Complete the isBalanced function below.
