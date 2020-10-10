@@ -1,7 +1,5 @@
 -- solution
 
-{-# LANGUAGE FlexibleInstances, UndecidableInstances, DuplicateRecordFields #-}
-
 module Main where
 
 import Control.Monad
