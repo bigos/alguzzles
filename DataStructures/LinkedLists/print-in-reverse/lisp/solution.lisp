@@ -1,12 +1,9 @@
 ;; https://www.hackerrank.com/challenges/print-the-elements-of-a-linked-list-in-reverse/problem
 
 (defun solve-me (d)
-
-  (if (null (cdr d))
-      (format t "~A~%" (car d))
-      (progn
-        (solve-me (cdr d))
-        (format t "~A~%" (car d)))))
+  (when (cdr d)
+    (solve-me (cdr d)))
+  (format t "~A~%" (car d)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)

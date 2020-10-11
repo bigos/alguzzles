@@ -61,9 +61,9 @@
                                         ;
                                         ;
 (defn reversePrint [head]
-
-(println (str head))
-
+  (when (.getnext head)
+    (reversePrint (.getnext head)))
+  (println (str (.getdata head)))
   )
 
 
