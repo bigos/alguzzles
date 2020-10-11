@@ -60,8 +60,8 @@ readMultipleLinesAsStringArray n = do
 -- cat ./input0.txt | stack runhaskell ./solution.hs
 main :: IO()
 main = do
-    let fromStdin = True -- False --True or False
-    handle <- if fromStdin then pure stdin else openFile "input0.txt" ReadMode
+    let fromStdin = False --True or False
+    handle <- if fromStdin then pure stdin else openFile "./input0.txt" ReadMode
     --line <- hGetLine handle
 
     tests2 <- (hGetLine handle)
