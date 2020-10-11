@@ -60,11 +60,16 @@ readMultipleLinesAsStringArray n = do
 -- cat ./input0.txt | stack runhaskell ./solution.hs
 main :: IO()
 main = do
+    let fromStdin = True -- False --True or False
+    handle <- if fromStdin then pure stdin else openFile "input0.txt" ReadMode
+    --line <- hGetLine handle
 
-    tests <- readLn :: IO Int
+    tests2 <- (hGetLine handle)
+    let tests =  read tests2
 
     forM_ [1..tests] $ \tests_itr -> do
-        llistTempCount <- readLn :: IO Int
+        nnn <- (hGetLine handle)
+        let llistTempCount = read nnn
 
         llistTempTemp <- readMultipleLinesAsStringArray llistTempCount
         let llistTemp = Data.List.map (read :: String -> Int) llistTempTemp
