@@ -1,7 +1,5 @@
 ;; https://www.hackerrank.com/challenges/print-the-elements-of-a-linked-list-in-reverse/problem
 
-(declaim (optimize (speed 0) (debug 3)))
-
 (defun solve-me (d)
 
   (if (null (cdr d))
