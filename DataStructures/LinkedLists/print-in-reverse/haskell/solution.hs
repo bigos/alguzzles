@@ -41,7 +41,13 @@ instance {-# OVERLAPPING #-} Show (SinglyLinkedListNode, String) where
 -- }
 --
 --
+
+reversePrint :: SinglyLinkedListNode -> IO ()
+reversePrint SinglyLinkedListNodeNil = return ()
 reversePrint llist = do
+    reversePrint (next llist)
+    putStrLn (show (nodeData llist))
+
 
 readMultipleLinesAsStringArray :: Int -> IO [String]
 readMultipleLinesAsStringArray 0 = return []
