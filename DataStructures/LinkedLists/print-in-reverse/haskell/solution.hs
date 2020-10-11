@@ -6,7 +6,7 @@ import Control.Monad
 import Data.Array
 import Data.Bits
 import Data.List
-import Data.List.Split
+
 import Data.Set
 import Debug.Trace
 import System.Environment
@@ -56,8 +56,11 @@ readMultipleLinesAsStringArray n = do
     rest <- readMultipleLinesAsStringArray(n - 1)
     return (line : rest)
 
+-- got shell output with
+-- cat ./input0.txt | stack runhaskell ./solution.hs
 main :: IO()
 main = do
+
     tests <- readLn :: IO Int
 
     forM_ [1..tests] $ \tests_itr -> do
