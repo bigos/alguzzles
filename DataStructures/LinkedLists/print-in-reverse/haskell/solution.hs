@@ -64,8 +64,10 @@ main = do
     handle <- if fromStdin then pure stdin else openFile "./input0.txt" ReadMode
     --line <- hGetLine handle
 
-    -- tests2 <- hGetLine handle
-    -- let tests = read tests2
+    --1 tests <- readLn :: IO Int
+    -- up orig - down 1st version
+    --2 tests2 <- hGetLine handle
+    --2 let tests = read tests2
     tests <- fmap read (hGetLine handle)
 
     forM_ [1..tests] $ \tests_itr -> do
