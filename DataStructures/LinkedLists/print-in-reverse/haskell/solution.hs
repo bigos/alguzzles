@@ -49,11 +49,11 @@ reversePrint llist = do
     putStrLn (show (nodeData llist))
 
 
-readMultipleLinesAsStringArray :: Int -> IO [String]
-readMultipleLinesAsStringArray 0 = return []
-readMultipleLinesAsStringArray n = do
-    line <- getLine
-    rest <- readMultipleLinesAsStringArray(n - 1)
+readMultipleLinesAsStringArray :: Handle -> Int -> IO [String]
+readMultipleLinesAsStringArray handle 0 = return []
+readMultipleLinesAsStringArray handle n = do
+    line <- hGetLine handle
+    rest <- readMultipleLinesAsStringArray handle (n - 1)
     return (line : rest)
 
 -- got shell output with
@@ -64,16 +64,17 @@ main = do
     handle <- if fromStdin then pure stdin else openFile "./input0.txt" ReadMode
     --line <- hGetLine handle
 
-    tests2 <- (hGetLine handle)
-    let tests =  read tests2
+    tests2 <- hGetLine handle
+    let tests = read tests2
 
     forM_ [1..tests] $ \tests_itr -> do
-        nnn <- (hGetLine handle)
+        nnn <- hGetLine handle
         let llistTempCount = read nnn
 
-        llistTempTemp <- readMultipleLinesAsStringArray llistTempCount
+        llistTempTemp <- readMultipleLinesAsStringArray handle llistTempCount
         let llistTemp = Data.List.map (read :: String -> Int) llistTempTemp
 
         let llist = createSinglyLinkedList llistTemp
 
         reversePrint llist
+    hClose handle
