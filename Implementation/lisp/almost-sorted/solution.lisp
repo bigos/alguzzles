@@ -15,8 +15,8 @@
           (let* ((dir (and a b  (if (< a b) 'up 'dn)))
                  (zzz (cond
                         ;; here I can work on the logic to solve the puzzle
-                        ((and (eq dir 'up) (null prevdir)) (list n a 'u))
-                        ((and (eq dir 'dn) (null prevdir)) (list n a 'd))
+                        ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u) prevzz))
+                        ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd) prevzz))
                         ((and (eq dir 'up) (eq prevdir 'up)) prevzz)
                         ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir) prevzz))
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
@@ -24,19 +24,49 @@
                         ;; ((and (null dir) (eq prevdir 'up)) prevzz)
                         ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
                         (T (list 'finish prevzz)))))
-            (format t "~A~%" (list n d dir prevdir zzz))
+            (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
             (if (eq 'finish (car zzz))
                 (let* ((res (cadr zzz))
                        (r1 (nth 0 res))
                        (r2 (nth 1 res))
                        (r3 (nth 2 res)))
                   (cond
-                    ((eq r3 'u)
+                    ((equalp res '((1 1 u)))
                      (format t ">>> OK~%"))
-                    ((eq r3 'd)
-                     (format t ">>> reverse ~A ~A~%" 1 n))
+
+                    ((eq (length res) 1)
+                     (destructuring-bind (nx ax dx) r1
+                       (cond
+                         ((and (eq nx 1)
+                               (eq dx 'd))
+                          (format t ">>> reverse ~A ~A~%" 1 ax))
+                         (t
+                          (format t "l1==== ~A~%" (cadr zzz))))))
+
+                    ((eq (length res) 2)
+                     (break "qqqqqqqqqq222222222222")
+                     (cond
+                       (t
+                        (format t "l2==== ~A~%" (cadr zzz)))))
+
+                    ((eq (length res) 3)
+                     (destructuring-bind ((an aa ad) (bn ba bd) (cn ca cd)) res
+                       (progn
+                         (break "qqqqqqqqqq33333 ~A" (list an aa ad 'I bn ba bd 'I cn ca cd))
+                         (cond
+                           ((and (equalp r3 '(1 1 u))
+                                 (eq bd 'dn)
+                                 (eq ad 'up))
+                            (format t "l3aaa==== ~A~%" (cadr zzz))
+                            (format t ">>> reverse ~A ~A~%" aa ba))
+                           (t
+                            (format t "l3==== ~A~%" (cadr zzz)))))))
                     (t
-                     (format t "==== ~A~%" (cadr zzz))))))
+                     (format t "==== ~A~%" (cadr zzz))))
+
+                  (break  "finally ~A ~A ~A" r1 r2 r3)
+
+                  ))
 
             (sortone (1+ n) (cdr d) dir zzz))))))
 
