@@ -63,7 +63,7 @@
                                  (eq ad 'dn)
                                  (< paa (car d))
                                  )
-                            ;; (break "2 before print ~A~%" (list an aa ad paa 'I bn ba bd pba))
+                            ;; (break "2 before print ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
                             ;; (format t "l2aaa==== ~A~%" (cadr zzz))
                             (swap-reverse an n))
 
@@ -72,10 +72,11 @@
                                  (eq ad 'up)
                                  (> naa ba)
                                  )
-                            ;; (break "2 before print2 ~A~%" (list an aa ad paa 'I bn ba bd pba))
+                            ;; (break "2 before print2 ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
                             ;; (format t "l2aaa2==== ~A~%" (cadr zzz))
                             (swap-reverse bn an))
                            (t
+                            ;; (break "2 ELSE ~A~%" (list an aa ad paa naa'I bn ba bd pba nba))
                             (format t "no~%"))))))
 
                     ((eq (length res) 3)
@@ -105,13 +106,13 @@
 
 (defun sortmany ()
   (loop for l in '((11 12) (11 12 13)
-                   (14 12) (14 13 12)
-                   (11 12 13 15 14) (11 12 13 16 15 14)
-                   (11 12 13 15 14 16 17) (11 12 13 16 15 14 17)
-                   (11 12 13 25 24)
-                   (11 13 18 16 14)
-                   (7 11 13 18 16 14 12) ; broken
-                   (7 11 13 18 16 14 12 19) ; broken
+                   ;; (14 12) (14 13 12)
+                   ;; (11 12 13 15 14) (11 12 13 16 15 14)
+                   ;; (11 12 13 15 14 16 17) (11 12 13 16 15 14 17)
+                   ;; (11 12 13 25 24)
+                   ;; (11 13 18 16 14)
+                   ;; (7 11 13 18 16 14 12) ; broken
+                   ;; (7 11 13 18 16 14 12 19) ; broken
                    (15 13 11 14 17 18)
                    (15 13 11 16 17 18)
                    )
