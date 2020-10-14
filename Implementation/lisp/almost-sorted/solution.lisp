@@ -10,7 +10,7 @@
           b))
 
 (defun sortone (n d &optional pd prevdir prevzz)
-  ;; (declare (optimize (speed 0) (debug 3)))
+  (declare (optimize (speed 0) (debug 3)))
 
   (if (null d)
       (progn
@@ -23,12 +23,12 @@
           (let* ((dir (and a b  (if (< a b) 'up 'dn)))
                  (zzz (cond
                         ;; here I can work on the logic to solve the puzzle
-                        ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u pd) prevzz))
-                        ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd pd) prevzz))
+                        ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u pd (cadr d)) prevzz))
+                        ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd pd (cadr d)) prevzz))
                         ((and (eq dir 'up) (eq prevdir 'up)) prevzz)
-                        ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir pd) prevzz))
+                        ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz))
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
-                        ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd) prevzz))
+                        ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
                         ;; ((and (null dir) (eq prevdir 'up)) prevzz)
                         ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
                         (T (list 'finish prevzz)))))
@@ -41,7 +41,7 @@
                        (r3 (nth 2 res)))
                   (cond
                     ((eq (length res) 1)
-                     (destructuring-bind (nx ax dx pax) r1
+                     (destructuring-bind (nx ax dx pax nax) r1
                                         ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
                        (cond
                          ((and (eq nx 1)
@@ -54,23 +54,32 @@
                           (format t "l1==== ~A~%" (cadr zzz))))))
 
                     ((eq (length res) 2)
-                     (destructuring-bind ((an aa ad paa) (bn ba bd pba)) res
+                     (destructuring-bind ((an aa ad paa naa) (bn ba bd pba nba)) res
                        (progn
-                         ;; (break "qqqqqqqqqq2222 ~A" (list an aa ad 'I bn ba bd ))
+                         ;; (break "qqqqqqqqqq2222 ~A" (list an aa ad paa naa 'I bn ba bd pba nba))
                          (cond
                            ((and (eq bn 1)
                                  (eq bd 'u)
                                  (eq ad 'dn)
                                  (< paa (car d))
                                  )
-                            ;; (break "2 before print")
+                            ;; (break "2 before print ~A~%" (list an aa ad paa 'I bn ba bd pba))
                             ;; (format t "l2aaa==== ~A~%" (cadr zzz))
                             (swap-reverse an n))
+
+                           ((and (eq bn 1)
+                                 (eq bd 'd)
+                                 (eq ad 'up)
+                                 (> naa ba)
+                                 )
+                            ;; (break "2 before print2 ~A~%" (list an aa ad paa 'I bn ba bd pba))
+                            ;; (format t "l2aaa2==== ~A~%" (cadr zzz))
+                            (swap-reverse bn an))
                            (t
                             (format t "no~%"))))))
 
                     ((eq (length res) 3)
-                     (destructuring-bind ((an aa ad paa) (bn ba bd pba) (cn ca cd pca)) res
+                     (destructuring-bind ((an aa ad paa naa) (bn ba bd pba nba) (cn ca cd pca nca)) res
                        (progn
                          ;; (break "qqqqqqqqqq33333 ~A" (list  ((list an aa ad paa) (list bn ba bd pba) (list cn ca cd pca)))
                          (cond
@@ -103,9 +112,10 @@
                    (11 13 18 16 14)
                    (7 11 13 18 16 14 12) ; broken
                    (7 11 13 18 16 14 12 19) ; broken
+                   (15 13 11 14 17 18)
+                   (15 13 11 16 17 18)
                    )
         do (solve-me l)))
-
 
 (defun sorthr ()
   (loop for l in '((4 2)
@@ -113,6 +123,7 @@
                    (1 5 4 3 2 6)
                    )
         do (solve-me l)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
