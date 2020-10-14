@@ -8,8 +8,8 @@
           a
           b))
 
-(defun sortone (n d &optional prevdir prevzz)
-  (declare (optimize (debug 3)))
+(defun sortone (n d &optional pd prevdir prevzz)
+  (declare (optimize (speed 0) (debug 3)))
 
   (if (null d)
       (progn
@@ -21,12 +21,12 @@
           (let* ((dir (and a b  (if (< a b) 'up 'dn)))
                  (zzz (cond
                         ;; here I can work on the logic to solve the puzzle
-                        ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u) prevzz))
-                        ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd) prevzz))
+                        ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u pd) prevzz))
+                        ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd pd) prevzz))
                         ((and (eq dir 'up) (eq prevdir 'up)) prevzz)
-                        ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir) prevzz))
+                        ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir pd) prevzz))
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
-                        ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir) prevzz))
+                        ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd) prevzz))
                         ;; ((and (null dir) (eq prevdir 'up)) prevzz)
                         ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
                         (T (list 'finish prevzz)))))
@@ -39,7 +39,7 @@
                        (r3 (nth 2 res)))
                   (cond
                     ((eq (length res) 1)
-                     (destructuring-bind (nx ax dx) r1
+                     (destructuring-bind (nx ax dx pax) r1
                       ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
                        (cond
                          ((and (eq nx 1)
@@ -52,38 +52,43 @@
                           (format t "l1==== ~A~%" (cadr zzz))))))
 
                     ((eq (length res) 2)
-                     (destructuring-bind ((an aa ad) (bn ba bd)) res
+                     (destructuring-bind ((an aa ad paa) (bn ba bd pba)) res
                        (progn
                          (break "qqqqqqqqqq2222 ~A" (list an aa ad 'I bn ba bd ))
                          (cond
                            ((and (eq bn 1)
                                  (eq bd 'u)
                                  (eq ad 'dn)
+                                 (< paa (car d))
                                  )
+                            ; (break "2 before print")
                             (format t "l2aaa==== ~A~%" (cadr zzz))
                             (swap-reverse an n))
                            (t
-                            (format t "l2==== ~A~%" (cadr zzz)))))))
+                            (format t "l2====NO ~A~%" (cadr zzz)))))))
 
                     ((eq (length res) 3)
-                     (destructuring-bind ((an aa ad) (bn ba bd) (cn ca cd)) res
+                     (destructuring-bind ((an aa ad paa) (bn ba bd pba) (cn ca cd pca)) res
                        (progn
-                                        ;(break "qqqqqqqqqq33333 ~A" (list an aa ad 'I bn ba bd 'I cn ca cd))
-                         (cond
-                           ((and (equalp r3 '(1 1 u))
-                                 (eq bd 'dn)
-                                 (eq ad 'up))
-                            (format t "l3aaa==== ~A~%" (cadr zzz))
-                            (swap-reverse (car r2) (car r1)))
-                           (t
-                            (format t "l3==== ~A~%" (cadr zzz)))))))
+                         ;; (break "qqqqqqqqqq33333 ~A" (list  ((list an aa ad paa) (list bn ba bd pba) (list cn ca cd pca)))
+                                (cond
+                                  ((and (eq cn 1)
+                                        (eq cd 'u)
+                                        (eq bd 'dn)
+                                        (eq ad 'up)
+                                        (< pba aa))
+                                   (break "333333 333 33 ~A" (list paa pba pca ))
+                                   (format t "l3aaa==== ~A~%" (cadr zzz))
+                                   (swap-reverse (car r2) (car r1)))
+                                  (t
+                                   (format t "l3====NO ~A~%" (cadr zzz)))))))
                     (t
                      (format t "==== ~A~%" (cadr zzz))))
 
                   ;; (break  "finally ~A ~A ~A" r1 r2 r3)
                   ))
 
-            (sortone (1+ n) (cdr d) dir zzz))))))
+            (sortone (1+ n) (cdr d) (car d) dir zzz))))))
 
 
 (defun solve-me (d)
@@ -95,8 +100,10 @@
                    (14 12) (14 13 12)
                    (11 12 13 15 14) (11 12 13 16 15 14)
                    (11 12 13 15 14 16 17) (11 12 13 16 15 14 17)
-                   (11 12 13 15 14)
-                   (11 12 13 15 4) ;first broken
+                   (11 12 13 25 24)
+                   (11 13 18 16 14)
+                   (7 11 13 18 16 14 12) ; broken
+                   (7 11 13 18 16 14 12 19) ; broken
                    )
         do (solve-me l)))
 
