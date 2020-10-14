@@ -43,7 +43,7 @@
 
                     ((eq (length res) 1)
                      (destructuring-bind (nx ax dx) r1
-                       (break "qqqqqqqqqq11111~A" (list nx ax dx ))
+                      ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
                        (cond
                          ((and (eq nx 1)
                                (eq dx 'd))
@@ -55,9 +55,9 @@
                      (destructuring-bind ((an aa ad) (bn ba bd)) res
                        (progn
                          (break "qqqqqqqqqq2222 ~A" (list an aa ad 'I bn ba bd ))
-
                          (cond
-                           ((and (equalp r2 '(1 1 u))
+                           ((and (eq bn 1)
+                                 (eq bd 'u)
                                  (eq ad 'dn)
                                  )
                             (format t "l2aaa==== ~A~%" (cadr zzz))
@@ -91,10 +91,10 @@
   (sortone 1 d ))
 
 (defun sortmany ()
-  (loop for l in '((1 2) (1 2 3)
-                   (4 2) (4 3 2)
-                   (1 2 3 5 4) (1 2 3 6 5 4)
-                   (1 2 3 5 4 6 7) (1 2 3 6 5 4 7)
+  (loop for l in '((11 12) (11 12 13)
+                   (14 12) (14 13 12)
+                   (11 12 13 15 14) (11 12 13 16 15 14)
+                   (11 12 13 15 14 16 17) (11 12 13 16 15 14 17)
                    (11 12 13 15 14)
                    (11 12 13 15 4) ;first broken
                    )
