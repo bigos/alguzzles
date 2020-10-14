@@ -24,6 +24,7 @@
                         ;; ((and (null dir) (eq prevdir 'up)) prevzz)
                         ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
                         (T (list 'finish prevzz)))))
+
             (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
             (if (eq 'finish (car zzz))
                 (let* ((res (cadr zzz))
@@ -52,13 +53,13 @@
                     ((eq (length res) 3)
                      (destructuring-bind ((an aa ad) (bn ba bd) (cn ca cd)) res
                        (progn
-                         (break "qqqqqqqqqq33333 ~A" (list an aa ad 'I bn ba bd 'I cn ca cd))
+                         ;(break "qqqqqqqqqq33333 ~A" (list an aa ad 'I bn ba bd 'I cn ca cd))
                          (cond
                            ((and (equalp r3 '(1 1 u))
                                  (eq bd 'dn)
                                  (eq ad 'up))
                             (format t "l3aaa==== ~A~%" (cadr zzz))
-                            (format t ">>> reverse ~A ~A~%" aa ba))
+                            (format t ">>> reverse ~A ~A~%" (car r2) (car r1)))
                            (t
                             (format t "l3==== ~A~%" (cadr zzz)))))))
                     (t
