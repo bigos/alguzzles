@@ -38,13 +38,13 @@
                        (r2 (nth 1 res))
                        (r3 (nth 2 res)))
                   (cond
-                    ((equalp res '((1 1 u)))
-                     (format t ">>> OK~%"))
-
                     ((eq (length res) 1)
                      (destructuring-bind (nx ax dx) r1
                       ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
                        (cond
+                         ((and (eq nx 1)
+                               (eq dx 'u))
+                          (format t "=== OK~%"))
                          ((and (eq nx 1)
                                (eq dx 'd))
                           (swap-reverse nx n))
