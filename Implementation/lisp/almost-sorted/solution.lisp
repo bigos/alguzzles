@@ -1,6 +1,6 @@
 ;;; solution for: https://www.hackerrank.com/challenges/almost-sorted/problem
 
-;;; possibilities ok swap sort no
+
 
 (defun swap-reverse (a b)
   (format t "yes~%")
@@ -9,8 +9,11 @@
           a
           b))
 
+;; after unlocking one failing test I relised I have misunderstood the concept of swapping
+;; look like we do not only swap the neighbours but distant elements as well
+
 (defun sortone (n d &optional pd prevdir prevzz)
-  ;; (declare (optimize (speed 0) (debug 3)))
+  (declare (optimize (speed 0) (debug 3)))
 
   (if (null d)
       (progn
@@ -27,8 +30,10 @@
                         ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd pd) prevzz))
                         ((and (eq dir 'up) (eq prevdir 'up)) prevzz)
                         ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir pd) prevzz))
+                        ((and (eq dir 'dn) (eq prevdir 'd)) (cons (list n a dir pd) prevzz))
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
                         ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd) prevzz))
+                        ((and (eq dir 'dn) (eq prevdir 'u)) (cons (list n a dir pd) prevzz))
                         ;; ((and (null dir) (eq prevdir 'up)) prevzz)
                         ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
                         (T (list 'finish prevzz)))))
@@ -56,7 +61,7 @@
                     ((eq (length res) 2)
                      (destructuring-bind ((an aa ad paa) (bn ba bd pba)) res
                        (progn
-                         ;; (break "qqqqqqqqqq2222 ~A" (list an aa ad 'I bn ba bd ))
+                         ;; (break "qqqqqqqqqq2222 ~A" (list an aa ad paa 'I bn ba bd pba))
                          (cond
                            ((and (eq bn 1)
                                  (eq bd 'u)
