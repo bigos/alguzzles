@@ -3,17 +3,19 @@
 ;;; possibilities ok swap sort no
 
 (defun swap-reverse (a b)
+  (format t "yes~%")
   (format t "~A ~A ~A~%"
           (if (eq (1+ a) b) "swap" "reverse")
           a
           b))
 
 (defun sortone (n d &optional pd prevdir prevzz)
-  (declare (optimize (speed 0) (debug 3)))
+  ;; (declare (optimize (speed 0) (debug 3)))
 
   (if (null d)
       (progn
-        (format t "finished"))
+        ;; (format t "finished")
+        )
       (progn
 
         (let ((a (car d))
@@ -31,7 +33,7 @@
                         ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
                         (T (list 'finish prevzz)))))
 
-                                         (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
+            ;; (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
             (if (eq 'finish (car zzz))
                 (let* ((res (cadr zzz))
                        (r1 (nth 0 res))
@@ -40,11 +42,11 @@
                   (cond
                     ((eq (length res) 1)
                      (destructuring-bind (nx ax dx pax) r1
-                      ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
+                                        ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
                        (cond
                          ((and (eq nx 1)
                                (eq dx 'u))
-                          (format t "=== OK~%"))
+                          (format t "OK~%"))
                          ((and (eq nx 1)
                                (eq dx 'd))
                           (swap-reverse nx n))
@@ -54,45 +56,42 @@
                     ((eq (length res) 2)
                      (destructuring-bind ((an aa ad paa) (bn ba bd pba)) res
                        (progn
-                         (break "qqqqqqqqqq2222 ~A" (list an aa ad 'I bn ba bd ))
+                         ;; (break "qqqqqqqqqq2222 ~A" (list an aa ad 'I bn ba bd ))
                          (cond
                            ((and (eq bn 1)
                                  (eq bd 'u)
                                  (eq ad 'dn)
                                  (< paa (car d))
                                  )
-                            ; (break "2 before print")
-                            (format t "l2aaa==== ~A~%" (cadr zzz))
+                            ;; (break "2 before print")
+                            ;; (format t "l2aaa==== ~A~%" (cadr zzz))
                             (swap-reverse an n))
                            (t
-                            (format t "l2====NO ~A~%" (cadr zzz)))))))
+                            (format t "no~%"))))))
 
                     ((eq (length res) 3)
                      (destructuring-bind ((an aa ad paa) (bn ba bd pba) (cn ca cd pca)) res
                        (progn
                          ;; (break "qqqqqqqqqq33333 ~A" (list  ((list an aa ad paa) (list bn ba bd pba) (list cn ca cd pca)))
-                                (cond
-                                  ((and (eq cn 1)
-                                        (eq cd 'u)
-                                        (eq bd 'dn)
-                                        (eq ad 'up)
-                                        (< pba aa))
-                                   (break "333333 333 33 ~A" (list paa pba pca ))
-                                   (format t "l3aaa==== ~A~%" (cadr zzz))
-                                   (swap-reverse (car r2) (car r1)))
-                                  (t
-                                   (format t "l3====NO ~A~%" (cadr zzz)))))))
+                         (cond
+                           ((and (eq cn 1)
+                                 (eq cd 'u)
+                                 (eq bd 'dn)
+                                 (eq ad 'up)
+                                 (< pba aa))
+                            ;; (break "333333 333 33 ~A" (list paa pba pca ))
+                            ;; (format t "l3aaa==== ~A~%" (cadr zzz))
+                            (swap-reverse (car r2) (car r1)))
+                           (t
+                            (format t "no~%"))))))
                     (t
-                     (format t "==== ~A~%" (cadr zzz))))
-
-                  ;; (break  "finally ~A ~A ~A" r1 r2 r3)
-                  ))
+                     (format t "no~%")))))
 
             (sortone (1+ n) (cdr d) (car d) dir zzz))))))
 
 
 (defun solve-me (d)
-  (format t " ~A -------------~%" d)
+  ;; (format t " ~A -------------~%" d)
   (sortone 1 d ))
 
 (defun sortmany ()
@@ -107,6 +106,13 @@
                    )
         do (solve-me l)))
 
+
+(defun sorthr ()
+  (loop for l in '((4 2)
+                   (3 1 2)
+                   (1 5 4 3 2 6)
+                   )
+        do (solve-me l)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
   (loop for i = 0 then (1+ j)
