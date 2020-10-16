@@ -42,7 +42,7 @@
               (eq ad 'dn)
               (< paa an)
               )
-         ;; (break "2 before print ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
+         (break "2 before print a ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
          ;; (format t "l2aaa==== ~A~%" (cadr zzz))
          (swap-reverse an nba))
 
@@ -51,11 +51,11 @@
               (eq ad 'up)
               (> naa ba)
               )
-         ;; (break "2 before print2 ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
+         (break "2 before print2 b ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
          ;; (format t "l2aaa2==== ~A~%" (cadr zzz))
          (swap-reverse bn an))
         (t
-         ;; (break "2 ELSE ~A~%" (list an aa ad paa naa'I bn ba bd pba nba))
+         (break "2 ELSE ~A~%" (list an aa ad paa naa'I bn ba bd pba nba))
          (format t "no~%"))))))
 
 (defun res3 (res)
@@ -65,18 +65,28 @@
                        (cn ca cd pca nca))
       res
     (progn
-      (break "qqqqqqqqqq33333 ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca )
+      (break "qqqqqqqqqq33333 ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca ))
       (cond
-        ((and (eq cn 1)
-              (eq cd 'u)
-              (eq bd 'dn)
-              (eq ad 'up)
-              (< pba aa))
-         ;; (break "333333 333 33 ~A" (list paa pba pca ))
+        ;; --swap ends with middle descending
+        ((and
+          (eq bd 'dn)
+          (> naa ba)
+          (< ca aa))
+         (break "333333 a ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca ))
+         (format t "yes~%swap ~A ~A~%" cn (1+ an)))
+        ;; --swap or rotate middle
+        ((and
+          (eq bd 'dn)
+          (eq cn 1)
+          (eq cd 'u)
+          (eq ad 'up)
+          (< pba aa))
+         (break "333333 b ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca ))
          ;; (format t "l3aaa==== ~A~%" (cadr zzz))
          (swap-reverse (car (nth 1 res)) (car (nth 0  res))))
         (t
-         (format t "no~%")))))))
+         (break "333333 else ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca ))
+         (format t "no~%"))))))
 
 (defun res4 (res)
   (declare (optimize (speed 0) (debug 3)))
@@ -119,11 +129,15 @@
         ;; (format t "finished")
         )
       (progn
-
+        ;; (format t "===== ~A~%" d)
         (let ((a (car d))
               (b (cadr d)))
-          (let* ((dir (and a b  (if (< a b) 'up 'dn)))
+          (let* ((dir (cond
+                        ((and a b) (if (< a b) 'up 'dn))
+                        (T 'l)))
                  (zzz (cond
+                                        ; THIS NEEDS REVIEW
+
                         ;; here I can work on the logic to solve the puzzle
                         ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u pd (cadr d)) prevzz))
                         ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd pd (cadr d)) prevzz))
@@ -131,14 +145,18 @@
                         ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz))
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
                         ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
-                        ;; ((and (null dir) (eq prevdir 'up)) prevzz)
-                        ;; ((and (null dir) (eq prevdir 'dn)) prevzz)
-                        (T (list 'finish prevzz)))))
+                        ((and (eq dir 'l)   (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
+                        ((and (eq dir 'l)   (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz))
+                        (T
+                         (list 'finish prevzz)))))
+
+            (break "aaaaaaaaaaaaaa~%")
 
             ;; (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
             (if (eq 'finish (car zzz))
                 (let* ((res (cadr zzz))
                        (r1 (nth 0 res)))
+                  (break "FFFFFFFFFFFFFFFFFFFFF")
                   (cond
                     ((eq (length res) 1)
                      (res1 r1))
@@ -157,13 +175,15 @@
 
                     (t
                      (format t "no~%")))))
-
-            (sortone (1+ n) (cdr d) (car d) dir zzz))))))
+            (progn
+              (break "eeeeeeeeeeeeee")
+              (sortone (1+ n) (cdr d) (car d) dir zzz)))))))
 
 
 (defun solve-me (d)
-  (format t "~% ~A -------------~%" d)
-  (sortone 1 d ))
+  (progn
+    (format t "~&~A -------------~%" d)
+    (sortone 1 d )))
 
 (defun sortmany ()
   (loop for l in '((11 12) (11 12 13)
@@ -176,10 +196,10 @@
                    ;; (7 11 13 18 16 14 12 19) ; broken
                    ;; (15 13 11 16 17 18)
                    ;; (15 13 11 14 17 18) ; broken
-                   (3 1 2)
-                   (11 15 14 13 12 16)
-                   (1 4 3 2)
-                   (4 2 3 1)
+                   (13 11 12) ; no
+                   (11 15 14 13 12 16) ; swap 11 16 or reverse 15 12 - v
+                   (11 14 13 12) ; swap 14 12
+                   (14 12 13 11) ; reverse 14 11
                    (11 14 13 12 15)
                    (15 12 13 14 11)
                    (18 13 16 15 14 17 12 11)
