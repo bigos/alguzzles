@@ -35,11 +35,11 @@
         ((and (eq bn 1)
               (eq bd 'u)
               (eq ad 'dn)
-              (< paa (car d))
+              (< paa an)
               )
          ;; (break "2 before print ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
          ;; (format t "l2aaa==== ~A~%" (cadr zzz))
-         (swap-reverse an n))
+         (swap-reverse an nba))
 
         ((and (eq bn 1)
               (eq bd 'd)
@@ -66,7 +66,7 @@
               (< pba aa))
          ;; (break "333333 333 33 ~A" (list paa pba pca ))
          ;; (format t "l3aaa==== ~A~%" (cadr zzz))
-         (swap-reverse (car r2) (car r1)))
+         (swap-reverse (car (nth 1 res)) (car (nth 0  res))))
         (t
          (format t "no~%"))))))
 
