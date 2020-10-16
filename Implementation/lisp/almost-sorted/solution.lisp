@@ -136,7 +136,7 @@
                         ((and a b) (if (< a b) 'up 'dn))
                         (T 'l)))
                  (zzz (cond
-                                        ; THIS NEEDS REVIEW
+                        ;; THIS NEEDS REVIEW -  we need proper formal solution
 
                         ;; here I can work on the logic to solve the puzzle
                         ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u pd (cadr d)) prevzz))
