@@ -14,7 +14,10 @@
 
 (defun res1 (r1)
   (declare (optimize (speed 0) (debug 3)))
-  (destructuring-bind (nx ax dx pax nax) r1
+  (destructuring-bind (nx ax dx pax nax)
+      r1
+
+    (declare (ignore ax pax))
                                         ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
     (cond
       ((and (eq nx 1)
@@ -24,13 +27,15 @@
             (eq dx 'd))
        (swap-reverse nx nax))
       (t
-       (format t "l1==== ~A~%" (cadr zzz))))))
+       (format t "l1==== ~A~%" r1)))))
 
 (defun res2 (res)
   (declare (optimize (speed 0) (debug 3)))
-  (destructuring-bind ((an aa ad paa naa) (bn ba bd pba nba)) res
+  (destructuring-bind ((an aa ad paa naa)
+                       (bn ba bd pba nba))
+      res
     (progn
-      ;; (break "qqqqqqqqqq2222 ~A" (list an aa ad paa 'I bn ba bd pba))
+      (break "qqqqqqqqqq2222 ~A" (list an aa ad paa naa bn ba bd pba nba ))
       (cond
         ((and (eq bn 1)
               (eq bd 'u)
@@ -55,9 +60,12 @@
 
 (defun res3 (res)
   (declare (optimize (speed 0) (debug 3)))
-  (destructuring-bind ((an aa ad paa naa) (bn ba bd pba nba) (cn ca cd pca nca)) res
+  (destructuring-bind ((an aa ad paa naa)
+                       (bn ba bd pba nba)
+                       (cn ca cd pca nca))
+      res
     (progn
-      ;; (break "qqqqqqqqqq33333 ~A" (list  ((list an aa ad paa) (list bn ba bd pba) (list cn ca cd pca)))
+      (break "qqqqqqqqqq33333 ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca )
       (cond
         ((and (eq cn 1)
               (eq cd 'u)
@@ -68,7 +76,40 @@
          ;; (format t "l3aaa==== ~A~%" (cadr zzz))
          (swap-reverse (car (nth 1 res)) (car (nth 0  res))))
         (t
-         (format t "no~%"))))))
+         (format t "no~%")))))))
+
+(defun res4 (res)
+  (declare (optimize (speed 0) (debug 3)))
+  (destructuring-bind ((an aa ad paa naa)
+                       (bn ba bd pba nba)
+                       (cn ca cd pca nca)
+                       (dn da dd pda nda))
+      res
+    (progn
+      (break "qqqqqqqqqq4444 ~A" (list  an aa ad paa naa
+                                        bn ba bd pba nba
+                                        cn ca cd pca nca
+                                        dn da dd pda nda)
+             (cond
+               (t
+                (format t "no~%")))))))
+(defun res5 (res)
+  (declare (optimize (speed 0) (debug 3)))
+  (destructuring-bind ((an aa ad paa naa)
+                       (bn ba bd pba nba)
+                       (cn ca cd pca nca)
+                       (dn da dd pda nda)
+                       (en ea ed pea nea))
+      res
+    (progn
+      (break "qqqqqqqqqq555 ~A" (list an aa ad paa naa
+                                      bn ba bd pba nba
+                                      cn ca cd pca nca
+                                      dn da dd pda nda
+                                      en ea ed pea nea)
+             (cond
+               (t
+                (format t "no~%")))))))
 
 (defun sortone (n d &optional pd prevdir prevzz)
   (declare (optimize (speed 0) (debug 3)))
@@ -97,9 +138,7 @@
             ;; (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
             (if (eq 'finish (car zzz))
                 (let* ((res (cadr zzz))
-                       (r1 (nth 0 res))
-                       (r2 (nth 1 res))
-                       (r3 (nth 2 res)))
+                       (r1 (nth 0 res)))
                   (cond
                     ((eq (length res) 1)
                      (res1 r1))
@@ -109,6 +148,13 @@
 
                     ((eq (length res) 3)
                      (res3 res))
+
+                    ((eq (length res) 4)
+                     (res4 res))
+
+                    ((eq (length res) 5)
+                     (res5 res))
+
                     (t
                      (format t "no~%")))))
 
