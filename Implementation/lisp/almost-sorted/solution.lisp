@@ -145,8 +145,10 @@
                         ((and (eq dir 'up) (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz))
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
                         ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
-                        ((and (eq dir 'l)   (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
-                        ((and (eq dir 'l)   (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz))
+                        ;; change handling of the last
+                        ;; ((and (eq dir 'l)   (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
+                        ;; ((and (eq dir 'l)   (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz)
+                         )
                         (T
                          (list 'finish prevzz)))))
 
