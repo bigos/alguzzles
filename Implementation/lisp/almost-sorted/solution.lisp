@@ -5,7 +5,7 @@
 (defun swap-reverse (a b)
   (format t "yes~%")
   (format t "~A ~A ~A~%"
-          (if (eq (1+ a) b) "swap" "reverse")
+          (if (< (- b a) 3) "swap" "reverse")
           a
           b))
 
