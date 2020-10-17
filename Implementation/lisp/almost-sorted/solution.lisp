@@ -16,17 +16,10 @@
   (declare (optimize (speed 0) (debug 3)))
   (destructuring-bind (nx ax dx pax nax)
       r1
-
     (declare (ignore ax pax))
-                                        ; (break "qqqqqqqqqq11111~A" (list nx ax dx ))
     (cond
-      ((and (eq nx 1)
-            (eq dx 'u))
-       (format t "OK~%"))
-      ((and (eq nx 1)
-            (eq dx 'd))
-       (swap-reverse nx nax))
       (t
+       (break "1 ELSE ~A~%" r1)
        (format t "l1==== ~A~%" r1)))))
 
 (defun res2 (res)
@@ -37,23 +30,35 @@
     (progn
       (break "qqqqqqqqqq2222 ~A" (list an aa ad paa naa bn ba bd pba nba ))
       (cond
-        ((and (eq bn 1)
-              (eq bd 'u)
-              (eq ad 'dn)
-              (< paa an)
-              )
-         (break "2 before print a ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
+        ((and (eq bd 'u)
+              (eq ad 'l))
+         (break "2 before print -1 ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
          ;; (format t "l2aaa==== ~A~%" (cadr zzz))
-         (swap-reverse an nba))
+         (format t "ok~%"))
 
-        ((and (eq bn 1)
-              (eq bd 'd)
-              (eq ad 'up)
-              (> naa ba)
-              )
-         (break "2 before print2 b ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
-         ;; (format t "l2aaa2==== ~A~%" (cadr zzz))
+        ((and (eq bd 'd)
+              (eq ad 'l))
+         (break "2 before print 0 ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
+         ;; (format t "l2aaa==== ~A~%" (cadr zzz))
          (swap-reverse bn an))
+
+        ;; ((and (eq bn 1)
+        ;;       (eq bd 'u)
+        ;;       (eq ad 'dn)
+        ;;       (< paa an)
+        ;;       )
+        ;;  (break "2 before print a ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
+        ;;  ;; (format t "l2aaa==== ~A~%" (cadr zzz))
+        ;;  (swap-reverse an nba))
+
+        ;; ((and (eq bn 1)
+        ;;       (eq bd 'd)
+        ;;       (eq ad 'up)
+        ;;       (> naa ba)
+        ;;       )
+        ;;  (break "2 before print2 b ~A~%" (list an aa ad paa naa 'I bn ba bd pba nba))
+        ;;  ;; (format t "l2aaa2==== ~A~%" (cadr zzz))
+        ;;  (swap-reverse bn an))
         (t
          (break "2 ELSE ~A~%" (list an aa ad paa naa'I bn ba bd pba nba))
          (format t "no~%"))))))
@@ -67,6 +72,17 @@
     (progn
       (break "qqqqqqqqqq33333 ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca ))
       (cond
+        ;; --zzzz
+        ((and
+          (eq cd 'u)
+          (eq bd 'dn)
+
+          (eq cn 1)
+          )
+         (break "333333 0 ~A" (list   an aa ad paa naa  bn ba bd pba nba  cn ca cd pca nca ))
+         ;; (format t "l3aaa==== ~A~%" (cadr zzz))
+         (swap-reverse (car (nth 1 res)) (car (nth 0  res))))
+
         ;; --swap ends with middle descending
         ((and
           (eq bd 'dn)
@@ -90,6 +106,7 @@
 
 (defun res4 (res)
   (declare (optimize (speed 0) (debug 3)))
+
   (destructuring-bind ((an aa ad paa naa)
                        (bn ba bd pba nba)
                        (cn ca cd pca nca)
@@ -123,7 +140,6 @@
 
 (defun sortone (n d &optional pd prevdir prevzz)
   (declare (optimize (speed 0) (debug 3)))
-
   (if (null d)
       (progn
         ;; (format t "finished")
@@ -137,7 +153,6 @@
                         (T 'l)))
                  (zzz (cond
                         ;; THIS NEEDS REVIEW -  we need proper formal solution
-
                         ;; here I can work on the logic to solve the puzzle
                         ((and (eq dir 'up) (null prevdir)) (cons (list n a 'u pd (cadr d)) prevzz))
                         ((and (eq dir 'dn) (null prevdir)) (cons (list n a 'd pd (cadr d)) prevzz))
@@ -146,41 +161,25 @@
                         ((and (eq dir 'dn) (eq prevdir 'dn)) prevzz)
                         ((and (eq dir 'dn) (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
                         ;; change handling of the last
-                        ;; ((and (eq dir 'l)   (eq prevdir 'up)) (cons (list n a dir pd (cadr d)) prevzz))
-                        ;; ((and (eq dir 'l)   (eq prevdir 'dn)) (cons (list n a dir pd (cadr d)) prevzz)
-                         )
-                        (T
-                         (list 'finish prevzz)))))
+                        ((and (eq dir 'l))                (list 'finish (cons (list n a dir pd (cadr d)) prevzz)))
 
-            (break "aaaaaaaaaaaaaa~%")
+                        (T (list 'weird prevzz)))))
 
-            ;; (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
+            (format t "<<<<<<<<<<<< ~A~%" (list n d dir prevdir zzz))
             (if (eq 'finish (car zzz))
                 (let* ((res (cadr zzz))
                        (r1 (nth 0 res)))
-                  (break "FFFFFFFFFFFFFFFFFFFFF")
+
                   (cond
-                    ((eq (length res) 1)
-                     (res1 r1))
-
-                    ((eq (length res) 2)
-                     (res2 res))
-
-                    ((eq (length res) 3)
-                     (res3 res))
-
-                    ((eq (length res) 4)
-                     (res4 res))
-
-                    ((eq (length res) 5)
-                     (res5 res))
-
+                    ((eq (length res) 1) (res1 r1))
+                    ((eq (length res) 2) (res2 res))
+                    ((eq (length res) 3) (res3 res))
+                    ((eq (length res) 4) (res4 res))
+                    ((eq (length res) 5) (res5 res))
                     (t
                      (format t "no~%")))))
-            (progn
-              (break "eeeeeeeeeeeeee")
-              (sortone (1+ n) (cdr d) (car d) dir zzz)))))))
 
+            (sortone (1+ n) (cdr d) (car d) dir zzz))))))
 
 (defun solve-me (d)
   (progn
@@ -200,8 +199,9 @@
                    ;; (15 13 11 14 17 18) ; broken
                    (13 11 12) ; no
                    (11 15 14 13 12 16) ; swap 11 16 or reverse 15 12 - v
+                   (11 15 13 14 12) ; swap 15 12
                    (11 14 13 12) ; swap 14 12
-                   (14 12 13 11) ; reverse 14 11
+                   (14 12 13 11) ; swap 14 11
                    (11 14 13 12 15)
                    (15 12 13 14 11)
                    (18 13 16 15 14 17 12 11)
