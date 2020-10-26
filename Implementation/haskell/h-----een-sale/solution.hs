@@ -8,10 +8,10 @@ solve2    p      d      m      s       acc =
   where
     endCond   = s < p
     retVal = if acc > 0 then acc - 1 else 0
-    again = if priceDesc then descAgain else regAgain
+    again = solve2 newp d m (s-p) (1 + acc)
     priceDesc = p > m
-    descAgain = solve2 (p-d) d m (s-p) (1 + acc)
-    regAgain  = solve2 p d m (s-p) (1 + acc)
+    newp = if priceDesc then p - d else p
+
 
 solve :: [Int] -> Int
 solve (p:d:m:s:[]) = solve2 p d m s 0
