@@ -21,15 +21,8 @@
          (uniques (remove-duplicates classification)))
     ;(format t "=== ~A  ~A~%" (length classification) (length uniques))
     (format t "~A~%"
-            (cond
-              ((and (< (length s) 6)
-                    (< (length uniques) 4))
-               (- 6 (length  uniques)))
-              ((< (length s) 6)
-               (- 6 (length uniques) ))
-              ((< (length uniques) 4)
-               (- 4 (length uniques)))
-              (t 0)))))
+            (max (- 4 (length uniques))
+                 (- 6 (length s))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun split-by-one-space (string)
