@@ -1,17 +1,20 @@
--- https://www.hackerrank.com/challenges/countingsort1/problem
+--{-# LANGUAGE FlexibleInstances, UndecidableInstances, DuplicateRecordFields #-}
 
 module Main where
 
+-- import Control.Monad
 import Data.Array
-import System.Environment (getEnv)
+-- import Data.Bits
+import Data.List
+-- import Data.Set
+import System.Environment
 import System.IO
 
 -- λ> accumArray (+) 0 (0,5) [(1,1),(1,1),(1,1),(1,1),(3,1),(3,1)]
 -- array (0,5) [(0,0),(1,4),(2,0),(3,2),(4,0),(5,0)]
 
 recsol :: Integer -> [Integer] -> Array Integer Integer -> Array Integer Integer
-recsol n d ar =
-  if null d
+recsol n d ar = if null d
   then ar
   else recsol n (tail d) (ar // [(i, nv)])
   where
@@ -26,22 +29,24 @@ solution n d = unwords $ map show (elems res)
   where
     res = recsol n d (zeroed n)
 
--- results are ok but problem with IO in main
+-- Complete the countingSort function below.
+countingSort _arr = undefined
 
-main :: IO ()
+main :: IO()
 main = do
-  let fromStdin = True --must be True for submission or False for development
-  handle <- if fromStdin then pure stdin else openFile "./input0.txt" ReadMode
-  contents <- hGetContents handle
-  let linez = lines contents
-  let num = read (head linez) :: Integer
-  let dat = map read (words (linez!!1)) :: [Integer]
-  let !res = solution num dat
-  hClose handle
+    stdout <- getEnv "OUTPUT_PATH"
+    fptr <- openFile stdout WriteMode
 
-  stdout <- getEnv "OUTPUT_PATH"
-  fptr <- openFile stdout WriteMode
+    n <- readLn :: IO Integer
 
-  hPutStrLn fptr res
-  hFlush fptr
-  hClose fptr
+    arrTemp <- getLine
+
+    let arr = Data.List.map (read :: String -> Int) . words $ arrTemp
+
+
+    let result = solution (n-1) (map read (words arrTemp))
+
+    hPutStrLn fptr result
+
+    hFlush fptr
+    hClose fptr
