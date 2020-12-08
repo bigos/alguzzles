@@ -3,6 +3,7 @@
 module Main where
 
 import Data.Array
+import System.Environment (getEnv)
 import System.IO
 
 -- λ> accumArray (+) 0 (0,5) [(1,1),(1,1),(1,1),(1,1),(3,1),(3,1)]
@@ -29,7 +30,7 @@ solution n d = unwords $ map show (elems res)
 
 main :: IO ()
 main = do
-  let fromStdin = not True --must be True for submission or False for development
+  let fromStdin = True --must be True for submission or False for development
   handle <- if fromStdin then pure stdin else openFile "./input0.txt" ReadMode
   contents <- hGetContents handle
   let linez = lines contents
@@ -37,4 +38,10 @@ main = do
   let dat = map read (words (linez!!1)) :: [Integer]
   let !res = solution num dat
   hClose handle
-  print res
+
+  stdout <- getEnv "OUTPUT_PATH"
+  fptr <- openFile stdout WriteMode
+
+  hPutStrLn fptr res
+  hFlush fptr
+  hClose fptr
