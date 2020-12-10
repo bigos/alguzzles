@@ -9,8 +9,8 @@ import Data.Array
 solve :: String -> String
 solve arg = unwords $ map show srt
   where
-    dat = map read $ tail $ words arg
-    arr = accumArray (+) 0 (0, 99) (zip dat (repeat 1)) :: Array Integer Int
+    dat = map read $ tail $ words arg :: [Int]
+    arr = accumArray (+) 0 (0, 99) (zip dat (repeat 1))
     srt = concat [replicate times n | (n, times) <- assocs arr]
 
 main :: IO ()
