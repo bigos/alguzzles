@@ -2,6 +2,6 @@
 
 export OUTPUT_PATH=./out.txt
 
-cat ./input0.txt | clj -Srepro ./solution.clj
-
+> ./out.txt
+cat ./input0.txt | clojure -M ./solution.clj
 cat ./out.txt
