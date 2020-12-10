@@ -3,4 +3,4 @@
 
 main :: IO ()
 main = do
-  print "hello"
+  interact id
