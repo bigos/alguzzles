@@ -18,4 +18,4 @@ https://github.com/kumarshantanu/lein-exec
 
 run in terminal
 
-    $ cat ./input0.txt | lein exec ./solution.clj
+    cat ./input0.txt | clojure -M ./solution.clj
