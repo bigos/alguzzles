@@ -20,6 +20,6 @@ run in terminal
 
 Emacs REPL
 
-    cider-load-file
-
-could be the way to go
+Using the runme.sh script and modified solution code we can print the arguments
+needed to solve the problem. At this point we can use the usual REPL workflow to
+solve the puzzle
