@@ -13,9 +13,13 @@ In order to use this repo you need Common Lisp and Haskell to be installed on yo
 
 ### Running clojure programs  ###
 
-Install lein-exec:
-https://github.com/kumarshantanu/lein-exec
-
 run in terminal
 
     cat ./input0.txt | clojure -M ./solution.clj
+
+
+Emacs REPL
+
+    cider-load-file
+
+could be the way to go
