@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleInstances, UndecidableInstances, DuplicateRecordFields #-}
 
 module Main where
+# https://www.hackerrank.com/challenges/weighted-uniform-string/problem
 
 import Control.Monad
 import Data.Array
