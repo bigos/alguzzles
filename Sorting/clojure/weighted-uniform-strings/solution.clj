@@ -3,18 +3,33 @@
 (def char-weights (zipmap
                    (map (fn [x] (char (+ 96 x))) (range 1 27))
                    (range 1 27)))
+(defn freqs [str]
+  (frequencies (map (fn [y] (get char-weights y)) str)))
 
-(defn weigth-nums2 [s]
-  (map (fn [x]
-         (let [firnum (get char-weights (first x))]
-           [firnum
-            (range firnum (+ 1 (* firnum (count x))) firnum)]))
-       (vals (group-by identity s))))
+(defn recme [q ff n ne]
+  ;; (print "\n\n")
+  ;; (print q " >>>>>>>>>>>\n")
+  ;; (print ff "\n")
+  ;; (print n "\n")
+  ;; (print  ne " <<<<<<<<<<<<<<<\n")
+  (if (> n ne)
+    false
+    (let [v (get ff n)
+          r (range n (+ 1 (* v n)) n)]
+      (if (some (fn [a] (= a q)) r)
+        true
+        (recur q ff (+ 1 n) ne)))))
+
+(defn qmatch [q ff]
+  (recme q ff 1 (last (keys ff))))
 
 ;; (weightedUniformStrings "abccddde" [1 3 12 5 9 10])
 (defn weightedUniformStrings [s queries]
-  (let [scores (flatten (map (fn [a] (first (rest a)) ) (weigth-nums2 s)))]
-    (map (fn [q]  (if (some #(= % q) scores) "Yes" "No")) queries)))
+  (let [ff (freqs s)]
+      (map (fn [q]
+             (if (qmatch q ff)
+               "Yes"
+               "No")) queries)))
 
 (def fptr (get (System/getenv) "OUTPUT_PATH"))
 
