@@ -6,8 +6,33 @@ import Data.Maybe
 
 theInput = "abccddde\n6\n1\n3\n12\n5\n9\n10\n"
 
+--(defn recme [q ff n ne]
+--  ;; (print "\n\n")
+--  ;; (print q " >>>>>>>>>>>\n")
+--  ;; (print ff "\n")
+--  ;; (print n "\n")
+--  ;; (print  ne " <<<<<<<<<<<<<<<\n")
+--  (if (> n ne)
+--    false
+--    (let [v (get ff n)
+--          r (range n (+ 1 (* v n)) n)]
+--      (if (some (fn [a] (= a q)) r)
+--        true
+--        (recur q ff (+ 1 n) ne)))))
+--
+--(defn qmatch [q ff]
+--  (recme q ff 1 (last (keys ff))))
+
+recm q gg n ne =
+  if n > ne
+  then False
+  else tb
+  where tb = finishme
+
 solution s qn dd = unlines $ yesno results
-  where results = map odd [1..5]
+  where gg = map doChar s
+        qmatch q gg = recm q gg 1 qn
+        results = map (\q -> qmatch q gg) dd
 
 groupWeights s = group $ map doChar $ tri1 $ mydata s
 
