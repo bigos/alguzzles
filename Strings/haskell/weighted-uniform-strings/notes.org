@@ -1,0 +1,11 @@
+* notes
+
+** cider
+
+M-x cider-jack-in-clj
+
+Confirm we want cider without a project
+
+** clojure file
+
+M-x cider-load-buffer
