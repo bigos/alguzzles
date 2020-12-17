@@ -22,4 +22,9 @@ Emacs REPL
 
 Using the runme.sh script and modified solution code we can print the arguments
 needed to solve the problem. At this point we can use the usual REPL workflow to
-solve the puzzle
+solve the puzzle.
+
+* Open the clojure file
+* M-x cider-jack-in
+* In the clojure file do C-c M-z
+* Play with the REPL

@@ -30,9 +30,10 @@ recm q gg n ne =
   where tb = finishme
 
 solution s qn dd = unlines $ yesno results
-  where gg = map doChar s
-        qmatch q gg = recm q gg 1 qn
-        results = map (\q -> qmatch q gg) dd
+  where
+    gg = map doChar s
+    qmatch q gg = recm q gg 1 qn
+    results = map (\q -> qmatch q gg) dd
 
 groupWeights s = group $ map doChar $ tri1 $ mydata s
 
