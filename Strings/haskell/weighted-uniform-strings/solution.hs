@@ -70,3 +70,62 @@ main = do
   let qn = tri2 d
   let dd = tri3 d
   putStrLn $ solution s qn dd
+
+-- interesting solutions
+-- https://www.hackerrank.com/rest/contests/master/challenges/weighted-uniform-string/hackers/kadoban/download_solution
+-- https://www.hackerrank.com/rest/contests/master/challenges/weighted-uniform-string/hackers/marcor/download_solution?primary=true
+-- import Control.Applicative
+-- import Control.Monad
+-- import System.IO
+-- import Data.Char (ord)
+-- import Data.List
+-- import qualified Data.IntSet as IntSet
+
+-- weigthUniformSubstrings [] = IntSet.empty
+-- weigthUniformSubstrings s = IntSet.fromList $ do
+--     s'@(c:_) <- group s
+--     let n = length s'
+--     let w = weight c
+--     i <- [1..n]
+--     return $ i * w
+
+-- weight :: Char -> Int
+-- weight c = (ord c) - (ord 'a') + 1
+
+-- main :: IO ()
+-- main = do
+--     s <- getLine
+--     n_temp <- getLine
+--     let n = read n_temp :: Int
+--     let u = weigthUniformSubstrings s
+--     forM_ [1..n] $ \a0  -> do
+--         x_temp <- getLine
+--         let x = read x_temp :: Int
+--         putStrLn $ if x `IntSet.member` u then "Yes" else "No"
+
+-- https://www.hackerrank.com/rest/contests/master/challenges/weighted-uniform-string/hackers/_Jie_/download_solution
+-- import qualified Data.Set as S
+-- import Data.Char
+-- import Data.List
+
+-- main = do
+--   word <- getLine
+--   getLine
+--   q <- map read . lines <$> getContents
+--   let s = subStrSums word
+--   mapM_ (putStrLn . (\n -> if S.member n s then "Yes" else "No" )) q
+
+-- subStrSums :: String -> S.Set Int
+-- subStrSums = S.fromList . concatMap (scanl1 (+)) . group . map (\c -> ord c - ord 'a' +1)
+
+-- https://www.hackerrank.com/rest/contests/master/challenges/weighted-uniform-string/hackers/hurryabit/download_solution
+-- import Data.Char
+-- import Data.List
+-- import qualified Data.Set as Set
+-- weights = Set.fromList . concatMap f . group where
+--   f cs@(c:_) = let k = ord c - ord 'a' + 1
+--                in  [ k*i | i <- [1..length cs] ]
+-- main = do
+--   cs:_:qs <- lines <$> getContents
+--   let w = weights cs
+--   mapM_ (\q -> putStrLn $ if read q `Set.member` w then "Yes" else "No") qs
