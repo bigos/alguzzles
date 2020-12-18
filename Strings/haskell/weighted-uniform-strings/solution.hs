@@ -7,28 +7,11 @@ import Debug.Trace
 
 theInput = "abccddde\n6\n1\n3\n12\n5\n9\n10\n"
 
---(defn recme [q ff n ne]
---  ;; (print "\n\n")
---  ;; (print q " >>>>>>>>>>>\n")
---  ;; (print ff "\n")
---  ;; (print n "\n")
---  ;; (print  ne " <<<<<<<<<<<<<<<\n")
---  (if (> n ne)
---    false
---    (let [v (get ff n)
---          r (range n (+ 1 (* v n)) n)]
---      (if (some (fn [a] (= a q)) r)
---        true
---        (recur q ff (+ 1 n) ne)))))
---
---(defn qmatch [q ff]
---  (recme q ff 1 (last (keys ff))))
-
 huh1 = groupSame [1,2,3] 0 [] []
 huh2 = groupSame [1,2,2,2,3] 0 [] []
 huh3 = groupSame [1,2,2,3,3,3,4,4,5,4,4,4,3,3,2,2,2,2] 0 [] []
 
-groupSame seqn lastel sames acc = trace (show (seqn,lastel,sames," acc ",acc)) $
+groupSame seqn lastel sames acc = --trace (show (seqn,lastel,sames," acc ",acc)) $
   if null seqn
   then init endacc2
   else (if lastel == head seqn
@@ -40,21 +23,26 @@ groupSame seqn lastel sames acc = trace (show (seqn,lastel,sames," acc ",acc)) $
       then [lastel] : acc
       else (scanl (+) lastel  sames) : acc
 
-recm q gg n ne =
-  if n > ne
-  then False
-  else tb
-  where tb = False
-
-solution s qn dd = unlines $ yesno results
+chval :: Char -> Integer
+chval ch = res
   where
-    gg = map doChar s
-    qmatch q gg = recm q gg 1 qn
-    results = map (\q -> qmatch q gg) dd
+    lu = find (\(k,_) -> k == ch) (zip ['a'..'z'] [1..])
+    res = case lu of
+      Nothing -> -1
+      Just n -> snd n
 
-groupWeights s = group $ map doChar $ tri1 $ mydata s
+solution s qn dd = --trace (show (s, qn, dd)) $
+  unlines $ yesno results
+  where
+    ans = map chval s
+    rns = concat $ groupSame ans 0 [] []
+    gg = map maybebool $ map (\n -> find ( == n) rns) dd
+    --aa = trace (show ("AAAAAAAAAAAAAa", gg)) $ 1
+    results = gg
 
-doChar c = fromMaybe (-1) $ lookup c (zip ['a'..'z'] [1..26])
+maybebool v = case v of
+  Nothing -> False
+  Just n -> True
 
 yesno bb =  map (\b -> if b then "Yes" else "No") bb
 
@@ -62,7 +50,7 @@ tri1 (a, _, _) = a
 tri2 (_, a, _) = a
 tri3 (_, _, a) = a
 
-mydata :: String -> (String, Int, [Int])
+mydata :: String -> (String, Int, [Integer])
 mydata ll = (s, cnt, dat)
   where (s : c : d) = lines ll
         cnt = read c
