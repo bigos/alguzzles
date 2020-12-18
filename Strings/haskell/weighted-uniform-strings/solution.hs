@@ -3,6 +3,7 @@ module Main where
 
 import Data.List
 import Data.Maybe
+import Debug.Trace
 
 theInput = "abccddde\n6\n1\n3\n12\n5\n9\n10\n"
 
@@ -23,11 +24,28 @@ theInput = "abccddde\n6\n1\n3\n12\n5\n9\n10\n"
 --(defn qmatch [q ff]
 --  (recme q ff 1 (last (keys ff))))
 
+huh = groupSame [1,2,3] 0 [] []
+
+huh2 = groupSame [1,2,2,2,3] 0 [] []
+
+groupSame seqn lastel sames acc = trace (show (seqn,lastel,sames," acc ",acc)) $
+  if null seqn
+  then init endacc2
+  else (if lastel == head seqn
+        then groupSame nv (head seqn) (head seqn : sames) acc
+        else groupSame nv (head seqn) [] endacc2)
+  where
+    nv = if null seqn then [endval] else tail seqn
+    endval = -999
+    endacc2 = if null sames
+      then [lastel] : acc
+      else (lastel : sames) : acc
+
 recm q gg n ne =
   if n > ne
   then False
   else tb
-  where tb = finishme
+  where tb = False
 
 solution s qn dd = unlines $ yesno results
   where
