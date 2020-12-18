@@ -24,9 +24,9 @@ theInput = "abccddde\n6\n1\n3\n12\n5\n9\n10\n"
 --(defn qmatch [q ff]
 --  (recme q ff 1 (last (keys ff))))
 
-huh = groupSame [1,2,3] 0 [] []
-
+huh1 = groupSame [1,2,3] 0 [] []
 huh2 = groupSame [1,2,2,2,3] 0 [] []
+huh3 = groupSame [1,2,2,3,3,3,4,4,5,4,4,4,3,3,2,2,2,2] 0 [] []
 
 groupSame seqn lastel sames acc = trace (show (seqn,lastel,sames," acc ",acc)) $
   if null seqn
@@ -35,11 +35,10 @@ groupSame seqn lastel sames acc = trace (show (seqn,lastel,sames," acc ",acc)) $
         then groupSame nv (head seqn) (head seqn : sames) acc
         else groupSame nv (head seqn) [] endacc2)
   where
-    nv = if null seqn then [endval] else tail seqn
-    endval = -999
+    nv = tail seqn
     endacc2 = if null sames
       then [lastel] : acc
-      else (lastel : sames) : acc
+      else (scanl (+) lastel  sames) : acc
 
 recm q gg n ne =
   if n > ne
