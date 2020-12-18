@@ -1,4 +1,24 @@
 ;;; solution
 
+;; Complete the weightedUniformStrings function below.
+(defn weightedUniformStrings [s queries]
 
-(print "solution will go here")
+
+  )
+
+
+(def s (read-line))
+
+(def queries-count (Integer/parseInt (clojure.string/trim (read-line))))
+
+(def queries [])
+
+(doseq [_ (range queries-count)]
+  (def queries (conj queries (Integer/parseInt (read-line))))
+  )
+
+(def result (weightedUniformStrings s queries))
+
+(def fptr (get (System/getenv) "OUTPUT_PATH"))
+(spit fptr (clojure.string/join "\n" result) :append true)
+(spit fptr "\n" :append true)
