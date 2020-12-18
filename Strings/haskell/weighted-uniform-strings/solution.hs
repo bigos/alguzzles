@@ -21,7 +21,7 @@ groupSame seqn lastel sames acc = --trace (show (seqn,lastel,sames," acc ",acc))
     nv = tail seqn
     endacc2 = if null sames
       then [lastel] : acc
-      else (scanl (+) lastel  sames) : acc
+      else scanl (+) lastel  sames : acc
 
 chval :: Char -> Integer
 chval ch = res
