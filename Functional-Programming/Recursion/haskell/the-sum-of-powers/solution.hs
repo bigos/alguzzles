@@ -20,7 +20,6 @@ solve = findRootCeil
 main = do
   contents <- getContents
   --let contents = "10\n2"
-
-  let x = read ((lines contents)!!0)::Integer
-  let n = read ((lines contents)!!1)::Integer
+  let x = read (head (lines contents))::Integer
+  let n = read (lines contents !! 1)::Integer
   putStrLn  (show (solve x n))
