@@ -18,8 +18,10 @@ solve :: Integer -> Integer -> Int
 solve = findRootCeil
 
 main = do
-  contents <- getContents
-  --let contents = "10\n2"
+  --contents <- getContents
+  -- let contents = "10\n2"
+  let contents = "100\n2"
+  -- let contents = "100\n3"
   let x = read (head (lines contents))::Integer
   let n = read (lines contents !! 1)::Integer
   putStrLn  (show (solve x n))
