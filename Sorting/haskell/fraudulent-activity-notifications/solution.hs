@@ -18,7 +18,7 @@ nc hr h2 count =
   case mv of
     Nothing -> count
     Just x  -> if hr >= x then (count + 1) else count
-  where mv = median (map fromIntegral h2)
+  where mv = median (map (\a -> a / 1) h2)
 
 recurse :: Integer -> Integer -> [Integer] -> [Integer] -> Integer -> Integer
 recurse n d [] remainingE count = recurse    n d [] (drop 1 remainingE) count
