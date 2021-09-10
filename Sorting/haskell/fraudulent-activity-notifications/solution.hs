@@ -4,21 +4,19 @@ module Main where
 
 import Data.List
 
-medianFromSorted :: Fractional a => [a] -> Maybe a
-medianFromSorted [] = Nothing
-medianFromSorted [a] = Just a
-medianFromSorted [a,b] = Just ((a + b) / 2)
-medianFromSorted (a:xs) = medianFromSorted (init xs) -- init is not efficient
+--med x = if odd (length x) then medodd x else medeven x
+halfIndex l = ceiling (l / 2)
 
-median :: Ord a => Fractional a => [a] -> Maybe a
-median = medianFromSorted . sort
+med :: [Integer] -> a
+med x = if odd lenx then medodd x else medeven x
+  where lenx = length x
 
-nc :: Integer -> [Integer] -> Integer -> Integer
-nc hr h2 count =
-  case mv of
-    Nothing -> count
-    Just x  -> if hr >= x then (count + 1) else count
-  where mv = median (map (\a -> a / 1) h2)
+medodd x =  last (splitAt (halfIndex lenx) (sort x))
+  where lenx = length x
+medeven x = x
+  where lenx = length x
+
+nc a b c = 1
 
 recurse :: Integer -> Integer -> [Integer] -> [Integer] -> Integer -> Integer
 recurse n d [] remainingE count = recurse    n d [] (drop 1 remainingE) count
