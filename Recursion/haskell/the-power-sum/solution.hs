@@ -1,20 +1,13 @@
 -- solution
 import Data.List
 
--- not used here
-comb :: Int -> [a] -> [[a]]
-comb m xs = combsBySize xs !! m
- where
-   combsBySize = foldr f ([[]] : repeat [])
-   f x next = zipWith (++) (map (map (x:)) ([]:next)) next
+       -- not used
+combinations k ns = filter ((k==).length) $ subsequences ns
 
-totNum :: Integer -> Integer -> Integer -> Integer
-totNum x n a
-  | a^n < x = (totNum x n (succ a)) + (totNum (x-a^n) n (succ a))
-  | a^n == x = 1
-  | otherwise = 0
+powers nx p = map (^p) [1..nx]
 
-solution a b = totNum a b 1
+solution a b = length (filter (\x-> x== a) (map sum (subsequences (powers 1000 b))))
+
 
 readData :: IO (Integer, Integer)
 readData = do
