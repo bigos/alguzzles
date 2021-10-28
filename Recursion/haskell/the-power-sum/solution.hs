@@ -4,12 +4,11 @@ import Data.List
        -- not used
 combinations k ns = filter ((k==).length) $ subsequences ns
 
-powers nx p = map (^p) [1..nx]
+powers nx p = filter (<= nx) $ map (^p) (take nx [1,2..])
 
-solution a b = length (filter (\x-> x== a) (map sum (subsequences (powers 1000 b))))
+solution a b = length (filter (== a) sx)
+  where sx = (map sum (subsequences (powers a b)))
 
-
-readData :: IO (Integer, Integer)
 readData = do
   l1 <- getLine
   l2 <- getLine
